@@ -49,7 +49,7 @@ function setCookie(res, name, value, maxAgeSec) {
   res.setHeader("Set-Cookie", (Array.isArray(prev) ? prev : prev ? [prev] : []).concat(parts.join("; ")));
 }
 
-const USER_COOKIE = "dm_session", ADMIN_COOKIE = "dm_admin";
+const USER_COOKIE = "dm_session", ADMIN_COOKIE = "dm_admin", STAFF_COOKIE = "dm_staff";
 const DAY = 86400e3;
 
 function startUserSession(res, email) {
@@ -58,14 +58,31 @@ function startUserSession(res, email) {
 function startAdminSession(res) {
   setCookie(res, ADMIN_COOKIE, sign({ admin: 1, exp: Date.now() + 12 * 3600e3 }), 12 * 3600);
 }
+/** Phiên nhân viên: ghi kèm "phiên bản" để đổi mật khẩu / khóa tài khoản là đăng xuất ngay. */
+function startStaffSession(res, staff) {
+  setCookie(res, STAFF_COOKIE, sign({ s: staff.id, v: staff.sessionVersion || 1, exp: Date.now() + 7 * DAY }), 7 * 86400);
+}
 function clearSession(res, name) { setCookie(res, name, "", 0); }
 
-/** Gắn req.userEmail và req.isAdmin từ cookie. */
+/* ---------- Mật khẩu nhân viên (scrypt, có muối) ---------- */
+function hashPassword(pw) {
+  const salt = crypto.randomBytes(16).toString("hex");
+  return "scrypt$" + salt + "$" + crypto.scryptSync(String(pw), salt, 64).toString("hex");
+}
+function checkPassword(pw, stored) {
+  const [alg, salt, hash] = String(stored || "").split("$");
+  if (alg !== "scrypt" || !salt || !hash) return false;
+  return safeEqual(crypto.scryptSync(String(pw), salt, 64).toString("hex"), hash);
+}
+
+/** Gắn req.userEmail, req.isAdmin và req.staffSession (chưa kiểm tra tài khoản còn hoạt động) từ cookie. */
 function sessionMiddleware(req, res, next) {
   const c = parseCookies(req);
   const u = verify(c[USER_COOKIE]);
   req.userEmail = u ? u.e : null;
   req.isAdmin = !!(ADMIN_PASSWORD && verify(c[ADMIN_COOKIE]));
+  const st = verify(c[STAFF_COOKIE]);
+  req.staffSession = st && st.s ? { id: st.s, v: st.v } : null;
   next();
 }
 
@@ -102,6 +119,7 @@ function sameOrigin(req, res, next) {
 
 module.exports = {
   sha256, randomToken, safeEqual,
-  startUserSession, startAdminSession, clearSession, USER_COOKIE, ADMIN_COOKIE,
+  startUserSession, startAdminSession, startStaffSession, clearSession, USER_COOKIE, ADMIN_COOKIE, STAFF_COOKIE,
+  hashPassword, checkPassword,
   sessionMiddleware, rateLimit, sameOrigin
 };

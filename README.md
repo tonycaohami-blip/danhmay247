@@ -50,6 +50,19 @@ Chưa có `SMTP_PASS` thì website vẫn nhận và lưu đơn bình thường, 
 4. Khách xem đơn tại `/tai-khoan`, qua liên kết trong email hoặc đăng nhập bằng email.
 5. Tệp tự xóa 30 ngày sau khi đơn hoàn thành hoặc hủy, đúng như Chính sách bảo mật.
 
+## Giao đơn cho nhân viên
+
+1. **Tạo tài khoản:** `/quan-tri` → tab **Nhân viên** → nhập họ tên, tên đăng nhập (vd `lan.nv`), email (để nhận thông báo giao việc) và mật khẩu ban đầu. Gửi cho nhân viên địa chỉ `https://danhmay247.com/nhan-vien` cùng tên đăng nhập và mật khẩu.
+2. **Giao đơn:** mở đơn → ô **Giao cho nhân viên** → chọn người → **Giao đơn**. Nhân viên nhận email (nếu đã cấu hình SMTP và có email).
+3. **Nhân viên làm việc** tại `/nhan-vien`: xem đơn được giao, tải tài liệu gốc, bấm **Bắt đầu làm**, tải tệp kết quả lên, ghi chú cho quản trị, rồi bấm **Gửi quản trị kiểm tra**.
+4. **Quản trị duyệt:** đơn hiện nút **Kiểm tra**. Tải tệp của nhân viên về xem, rồi bấm **Duyệt & hoàn thành đơn** (khách nhận email và tải được tệp) hoặc nhắn lại nhân viên trong khung trao đổi nội bộ.
+
+**Nhân viên KHÔNG thấy:** tên, email, số điện thoại của khách; giá, mã giảm giá, số tiền đã trả; tin nhắn giữa khách và quản trị; ghi chú riêng của quản trị. **Khách KHÔNG thấy:** nhân viên phụ trách, trao đổi nội bộ, tệp nhân viên chưa được duyệt.
+
+Lưu ý: nếu khách tự ghi thông tin cá nhân vào phần hướng dẫn hoặc tên tệp, nhân viên vẫn đọc được phần đó.
+
+Nhân viên chỉ thấy đơn được giao cho mình, không tự hoàn thành đơn được. Khi khóa tài khoản hoặc đặt lại mật khẩu, nhân viên bị đăng xuất ngay.
+
 ## Chạy trên máy
 
 Cần Node.js 20 trở lên.
@@ -57,7 +70,7 @@ Cần Node.js 20 trở lên.
 ```bash
 npm install
 npm start      # http://localhost:3000
-npm test       # 51 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
+npm test       # 87 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
 ```
 
 Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_PASSWORD` để vào được trang quản trị.
@@ -72,7 +85,7 @@ Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_
 
 ```
 server.js                  Khởi động website + API
-server/api.js              API: đơn hàng, tệp, tài khoản, tin nhắn, liên hệ, đánh giá, webhook, quản trị, xuất Excel
+server/api.js              API: đơn hàng, tệp, tài khoản, tin nhắn, liên hệ, đánh giá, webhook, quản trị, nhân viên, xuất Excel
 server/db.js               Chọn nơi lưu: tệp (mặc định) hoặc MySQL
 server/store-json.js       Lưu trữ tệp db.json + sao lưu hằng ngày
 server/store-mysql.js      Lưu trữ MySQL (tùy chọn)

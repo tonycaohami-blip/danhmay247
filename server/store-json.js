@@ -15,7 +15,7 @@ const config = require("./config");
 
 const FILE = path.join(config.DATA_DIR, "db.json");
 const BACKUP_DIR = path.join(config.DATA_DIR, "backups");
-const EMPTY = () => ({ orders: [], users: {}, contacts: [], reviews: [], loginTokens: {}, payments: [], settings: {} });
+const EMPTY = () => ({ orders: [], users: {}, contacts: [], reviews: [], loginTokens: {}, payments: [], settings: {}, staff: [] });
 
 let data = EMPTY();
 let ready = false;
@@ -66,6 +66,8 @@ async function init() {
   }
   // Dữ liệu từ phiên bản đầu tiên: users lưu theo dạng đối tượng, loginTokens có exp…
   if (!data.settings) data.settings = {};
+  if (!data.staff) data.staff = [];
+  data.orders.forEach((o) => { if (!o.internal) o.internal = []; });
   if (!config.SESSION_SECRET) {
     if (!data.settings.session_secret) data.settings.session_secret = crypto.randomBytes(48).toString("hex");
     config.SESSION_SECRET = data.settings.session_secret;
@@ -81,18 +83,19 @@ process.on("exit", () => { if (timer) flush(); });
 
 /* ---------- Đơn hàng ---------- */
 const find = (id) => data.orders.find((o) => o.id === id);
-const PATCHABLE = ["status", "name", "email", "phone", "notes", "paidAt", "paidAmount", "paySource", "receivedAmount", "deadline"];
+const PATCHABLE = ["status", "name", "email", "phone", "notes", "paidAt", "paidAmount", "paySource", "receivedAmount", "deadline", "assignedTo", "assignedAt"];
 
 const orders = {
   async exists(id) { return !!find(id); },
   async create(o) {
     const copy = clone(o);
-    copy.files = copy.files || []; copy.messages = copy.messages || []; copy.history = copy.history || [];
+    copy.files = copy.files || []; copy.messages = copy.messages || []; copy.history = copy.history || []; copy.internal = copy.internal || [];
     copy.receivedAmount = copy.receivedAmount || 0;
     data.orders.push(copy);
     flush(); // đơn mới: ghi xuống đĩa ngay, không chờ gộp
   },
   async get(id) { return clone(find(id)) || null; },
+  async byStaff(staffId) { return clone(data.orders.filter((o) => o.assignedTo === staffId).sort((a, b) => b.created - a.created)); },
   async byEmail(email) { return clone(data.orders.filter((o) => o.email === email).sort((a, b) => b.created - a.created)); },
   async all(limit) { return clone(data.orders.slice().sort((a, b) => b.created - a.created).slice(0, limit || 1000)); },
   async update(id, patch, onlyIfStatus) {
@@ -106,6 +109,15 @@ const orders = {
   async addHistory(id, status, at) { const o = find(id); if (o) { o.history.push({ status, at: at || Date.now() }); save(); } },
   async addMessage(id, me, from, text, at) { const o = find(id); if (o) { o.messages.push({ me: !!me, from, text, at: at || Date.now() }); save(); } },
   async addFile(id, f) { const o = find(id); if (o) { o.files.push(clone(f)); save(); } },
+  /** Ghi chú nội bộ giữa quản trị và nhân viên (khách không thấy). */
+  async addInternal(id, n) { const o = find(id); if (o) { o.internal.push({ role: n.role, from: n.from, text: n.text, at: n.at || Date.now() }); save(); } },
+  async setFileShared(id, fileId, shared) {
+    const o = find(id), f = o && o.files.find((x) => x.id === fileId);
+    if (!f) return false;
+    f.shared = !!shared;
+    save();
+    return true;
+  },
   async closedWithFiles(before) {
     const out = [];
     for (const o of data.orders) {
@@ -130,6 +142,21 @@ const orders = {
       revenue: paid.reduce((s, o) => s + (o.paidAmount || o.price.total), 0),
       toVerify: data.orders.filter((o) => o.status === "verifying").length
     };
+  }
+};
+
+/* ---------- Nhân viên ---------- */
+const staff = {
+  async list() { return clone(data.staff); },
+  async get(id) { return clone(data.staff.find((x) => x.id === id)) || null; },
+  async byUsername(u) { return clone(data.staff.find((x) => x.username === u)) || null; },
+  async create(st) { data.staff.push(clone(st)); flush(); },
+  async update(id, patch) {
+    const st = data.staff.find((x) => x.id === id);
+    if (!st) return false;
+    ["name", "email", "active", "passHash", "sessionVersion", "lastLogin"].forEach((k) => { if (k in patch) st[k] = patch[k]; });
+    save();
+    return true;
   }
 };
 
@@ -197,4 +224,4 @@ const settings = {
   async set(name, value) { data.settings[name] = value; save(); }
 };
 
-module.exports = { kind: "json", file: FILE, _raw: () => data, init, close, isReady, flush, orders, users, loginTokens, contacts, reviews, payments, settings };
+module.exports = { kind: "json", file: FILE, _raw: () => data, init, close, isReady, flush, orders, staff, users, loginTokens, contacts, reviews, payments, settings };

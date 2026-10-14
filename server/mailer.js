@@ -117,6 +117,25 @@ module.exports = {
       <p style="font-size:13px;color:#888">Nếu bạn không yêu cầu đăng nhập, hãy bỏ qua email này.</p>`);
   },
 
+  /** Báo nhân viên có đơn mới — tuyệt đối KHÔNG kèm thông tin khách hay giá. */
+  staffAssigned(st, o) {
+    if (!st.email) return;
+    send(st.email, `[Giao việc] Đơn #${o.id} — ${o.typeLabel}`, "Bạn được giao một đơn mới",
+      `<p>Chào ${esc(st.name)},</p><p>Quản trị vừa giao cho bạn đơn <b>#${esc(o.id)}</b>:</p>
+      <table style="border-collapse:collapse;font-size:14.5px;margin:6px 0 10px">
+        ${row("Dịch vụ", esc(o.serviceLabel + " — " + o.typeLabel))}
+        ${row("Khối lượng", esc(o.qty + " " + o.unit + (o.speakers ? " · " + o.speakers : "")))}
+        ${row("Hạn hoàn thành", o.deadline ? esc(new Date(o.deadline).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })) : "Chờ khách thanh toán")}
+      </table>${btn(SITE_URL + "/nhan-vien?order=" + encodeURIComponent(o.id), "Mở đơn hàng")}`);
+  },
+
+  /** Nhân viên gửi ghi chú / gửi kiểm tra → báo quản trị. */
+  staffUpdate(o, st, text) {
+    send(ADMIN_EMAIL, `[Nhân viên] ${st.name} — đơn #${o.id}`, "Cập nhật từ nhân viên",
+      `<p><b>${esc(st.name)}</b> cập nhật đơn <b>#${esc(o.id)}</b>:</p>
+      <p style="white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:8px">${esc(text)}</p>${btn(SITE_URL + "/quan-tri", "Mở trang quản trị")}`);
+  },
+
   contact(c) {
     send(ADMIN_EMAIL, `[Liên hệ] ${c.subject} — ${c.name}`, "Tin nhắn liên hệ mới",
       `<table style="font-size:14.5px">${row("Họ tên", esc(c.name))}${row("Email", esc(c.email))}${row("Điện thoại", esc(c.phone || "—"))}${row("Chủ đề", esc(c.subject))}</table>

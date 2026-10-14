@@ -11,13 +11,16 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
   <link rel="stylesheet" href="/assets/css/style.css">
   <style>
-    .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+    .kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 24px; }
     .kpi { background: #fff; border-radius: 12px; box-shadow: var(--shadow-sm); padding: 18px 20px; }
     .kpi small { color: var(--muted); font-size: 13px; }
     .kpi b { display: block; font: 700 22px var(--sans); color: #000; margin-top: 4px; }
     .kpi.warn b { color: var(--red); }
     .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
     .toolbar .input, .toolbar .select { height: 40px; width: auto; min-width: 200px; }
+    .msg--staff { background: #eef7ef; align-self: flex-start; }
+    .msg--sys { background: transparent; box-shadow: none; color: var(--muted); font-size: 13px; align-self: center; text-align: center; }
+    .staff-off { opacity: .55; }
     .sys { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
     @media (max-width: 900px) { .kpis { grid-template-columns: 1fr 1fr; } }
   </style>
@@ -32,7 +35,8 @@
   <script>
   (function () {
     var $ = DM.$, $$ = DM.$$, app = $("#app");
-    var tab = "orders", filter = "", q = "", data = null, timer = null;
+    var tab = "orders", filter = "", staffFilter = "", q = "", data = null, timer = null;
+    var staffName = function (sid) { var st = data.staff.find(function (x) { return x.id === sid; }); return st ? st.name : ""; };
     var ST = DM.orders.status;
     var chip = function (st) { var s = ST[st] || { label: st, chip: "chip--grey" }; return '<span class="chip ' + s.chip + '">' + s.label + "</span>"; };
     var size = function (b) { return b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; };
@@ -71,17 +75,18 @@
         '<div class="kpis">' +
         '<div class="kpi"><small>Tổng đơn</small><b>' + s.orders + "</b></div>" +
         '<div class="kpi' + (s.toVerify ? " warn" : "") + '"><small>Cần đối soát</small><b>' + s.toVerify + "</b></div>" +
+        '<div class="kpi' + (s.toReview ? " warn" : "") + '"><small>Nhân viên gửi kiểm tra</small><b>' + s.toReview + "</b></div>" +
         '<div class="kpi"><small>Đã thanh toán</small><b>' + s.paid + "</b></div>" +
         '<div class="kpi"><small>Doanh thu</small><b>' + DM.fmt(s.revenue) + "</b></div>" +
         '<div class="kpi' + (s.newContacts ? " warn" : "") + '"><small>Liên hệ mới</small><b>' + s.newContacts + "</b></div></div>" +
         '<div class="filter-pills" style="margin-bottom:20px">' +
-        [["orders", "Đơn hàng"], ["payments", "Giao dịch ngân hàng"], ["contacts", "Liên hệ (" + data.contacts.length + ")"], ["reviews", "Đánh giá (" + s.pendingReviews + " chờ duyệt)"]].map(function (t) {
+        [["orders", "Đơn hàng"], ["staff", "Nhân viên (" + data.staff.filter(function (x) { return x.active; }).length + ")"], ["payments", "Giao dịch ngân hàng"], ["contacts", "Liên hệ (" + data.contacts.length + ")"], ["reviews", "Đánh giá (" + s.pendingReviews + " chờ duyệt)"]].map(function (t) {
           return '<button type="button" data-t="' + t[0] + '" class="' + (tab === t[0] ? "is-active" : "") + '">' + t[1] + "</button>";
         }).join("") +
         '<button type="button" data-out>Đăng xuất</button></div><div id="pane"></div>';
       $$("[data-t]").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.t; render(); }); });
       $("[data-out]").addEventListener("click", function () { DM.api("/admin/logout", { method: "POST" }).then(function () { gate(); }); });
-      ({ orders: orders, payments: payments, contacts: contacts, reviews: reviews })[tab]();
+      ({ orders: orders, staff: staffPane, payments: payments, contacts: contacts, reviews: reviews })[tab]();
     }
 
     /* ---------- Đơn hàng ---------- */
@@ -89,26 +94,30 @@
       var pane = $("#pane");
       var norm = function (x) { return String(x || "").toLowerCase(); };
       var list = data.orders.filter(function (o) {
-        return (!filter || o.status === filter) && (!q || norm(o.id + " " + o.name + " " + o.email + " " + o.phone).indexOf(norm(q)) > -1);
+        return (!filter || o.status === filter) && (!staffFilter || (staffFilter === "none" ? !o.assignedTo : o.assignedTo === staffFilter)) && (!q || norm(o.id + " " + o.name + " " + o.email + " " + o.phone).indexOf(norm(q)) > -1);
       });
       pane.innerHTML = '<div class="order-card" style="padding:20px">' +
         '<div class="toolbar"><label class="sr-only" for="f-q">Tìm đơn</label><input class="input" id="f-q" type="search" placeholder="Tìm mã đơn, tên, email, SĐT…" value="' + DM.esc(q) + '">' +
         '<label class="sr-only" for="f-st">Lọc trạng thái</label><select class="select" id="f-st"><option value="">Tất cả trạng thái</option>' +
         Object.keys(ST).map(function (k) { return '<option value="' + k + '"' + (k === filter ? " selected" : "") + ">" + ST[k].label + "</option>"; }).join("") + "</select>" +
+        '<label class="sr-only" for="f-sf">Lọc nhân viên</label><select class="select" id="f-sf"><option value="">Mọi nhân viên</option><option value="none"' + (staffFilter === "none" ? " selected" : "") + '>Chưa giao</option>' +
+        data.staff.map(function (x) { return '<option value="' + x.id + '"' + (x.id === staffFilter ? " selected" : "") + ">" + DM.esc(x.name) + "</option>"; }).join("") + "</select>" +
         '<button type="button" class="button button--sm button--black" id="reload">Làm mới</button>' +
         '<a class="button button--sm" href="/api/admin/export.csv" download>Tải danh sách đơn (Excel)</a></div>' +
-        (list.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Dịch vụ</th><th>Thời hạn</th><th>Tổng</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
+        (list.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Dịch vụ</th><th>Thời hạn</th><th>Tổng</th><th>Nhân viên</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
           list.map(function (o) {
             return "<tr><td><b>#" + o.id + '</b><br><small style="color:var(--muted)">' + DM.dateTime(o.created) + "</small></td>" +
               "<td>" + DM.esc(o.name) + "<br><small>" + DM.esc(o.email) + "<br>" + DM.esc(o.phone) + "</small></td>" +
               "<td>" + DM.esc(o.typeLabel) + "<br><small>" + o.qty + " " + o.unit + " · " + o.files.filter(function (f) { return f.by === "customer"; }).length + " tệp</small></td>" +
               "<td>" + (o.deadline ? DM.dateTime(o.deadline) : "—") + "</td><td><b>" + DM.fmt(o.price.total) + "</b>" + (o.receivedAmount ? '<br><small style="color:var(--green)">Đã nhận ' + DM.fmt(o.receivedAmount) + "</small>" : "") + "</td>" +
+              "<td>" + (o.assignedTo ? DM.esc(staffName(o.assignedTo)) : '<small style="color:var(--muted)">Chưa giao</small>') + "</td>" +
               "<td>" + chip(o.status) + "</td>" +
-              '<td><button type="button" class="button button--sm' + (o.status === "verifying" ? "" : " button--black") + '" data-manage="' + o.id + '">' + (o.status === "verifying" ? "Đối soát" : "Quản lý") + "</button></td></tr>";
+              '<td><button type="button" class="button button--sm' + (o.status === "verifying" || o.status === "review" ? "" : " button--black") + '" data-manage="' + o.id + '">' + (o.status === "verifying" ? "Đối soát" : o.status === "review" ? "Kiểm tra" : "Quản lý") + "</button></td></tr>";
           }).join("") + "</tbody></table></div>" : '<div class="empty">' + DM.icon.file + "<p>Không có đơn hàng phù hợp.</p></div>") + "</div>";
       var deb;
       $("#f-q").addEventListener("input", function () { var v = this.value; clearTimeout(deb); deb = setTimeout(function () { q = v; orders(); var i = $("#f-q"); i.focus(); i.setSelectionRange(v.length, v.length); }, 250); });
       $("#f-st").addEventListener("change", function () { filter = this.value; orders(); });
+      $("#f-sf").addEventListener("change", function () { staffFilter = this.value; orders(); });
       $("#reload").addEventListener("click", load);
       $$("[data-manage]").forEach(function (b) { b.addEventListener("click", function () { manage(b.dataset.manage); }); });
     }
@@ -127,6 +136,14 @@
           return '<li><span class="ext">' + DM.esc(f.name.split(".").pop().slice(0, 4)) + '</span><a class="meta" href="' + fileUrl(f) + '" download><b>' + DM.esc(f.name) + "</b><small>" + size(f.size) + " · tải về</small></a></li>";
         }).join("") + "</ul>" : '<p class="field__hint" style="margin-bottom:14px">Chưa có tệp.</p>';
       };
+      var staffFiles = function () {
+        var l = o.files.filter(function (f) { return f.by === "staff"; });
+        return l.length ? '<ul class="files" style="margin:0 0 14px">' + l.map(function (f) {
+          return '<li><span class="ext">' + DM.esc(f.name.split(".").pop().slice(0, 4)) + '</span><a class="meta" href="' + fileUrl(f) + '" download><b>' + DM.esc(f.name) + "</b><small>" + size(f.size) + " · " + (f.shared ? "đã chuyển cho khách" : "chờ duyệt") + "</small></a>" +
+            (f.purged ? "" : f.shared ? '<button type="button" class="link" data-unshare="' + f.id + '" style="white-space:nowrap">Thu hồi</button>'
+              : '<span style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="button button--sm" data-share="' + f.id + '" data-complete="1">Duyệt &amp; hoàn thành đơn</button><button type="button" class="button button--sm button--black" data-share="' + f.id + '">Chỉ gửi tệp</button></span>') + "</li>";
+        }).join("") + "</ul>" : '<p class="field__hint" style="margin-bottom:14px">Nhân viên chưa tải tệp nào.</p>';
+      };
       var unpaid = o.status === "unpaid" || o.status === "verifying";
       var m = DM.modal.open(
         '<h2 class="modal__title">Đơn #' + o.id + " " + chip(o.status) + "</h2>" +
@@ -137,18 +154,27 @@
         "<div><span>Tổng tiền</span><b>" + DM.fmt(o.price.total) + (o.promo ? " (mã " + DM.esc(o.promo) + ")" : "") + "</b></div><div><span>Đã nhận</span><b>" + (o.paidAt ? DM.fmt(o.paidAmount) + " lúc " + DM.dateTime(o.paidAt) + " (" + (o.paySource === "sepay" ? "tự động" : "thủ công") + ")" : o.receivedAmount ? DM.fmt(o.receivedAmount) + " (chưa đủ)" : "Chưa") + "</b></div>" +
         "</div>" +
         (unpaid ? '<div class="alert alert--info">Kiểm tra tài khoản ' + DM.esc(DM.site.bank.shortName) + " " + DM.esc(DM.site.bank.account) + " có giao dịch <b>" + DM.fmt(o.price.total) + "</b> nội dung <b>" + o.id + '</b>. <button type="button" class="button button--sm" data-confirm style="margin-top:10px">Xác nhận đã nhận tiền</button></div>' : "") +
+        '<div class="field" style="background:var(--bg-grey);border-radius:10px;padding:14px 16px"><label class="field__label" for="m-staff">Giao cho nhân viên <span class="tip" tabindex="0">?<span class="tip__text">Nhân viên chỉ thấy nội dung công việc, tệp khách gửi và hướng dẫn — không thấy tên, email, số điện thoại của khách và giá. Lưu ý: nếu khách ghi thông tin cá nhân trong phần hướng dẫn hoặc tên tệp, nhân viên vẫn đọc được.</span></span></label>' +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap"><select class="select" id="m-staff" style="flex:1;min-width:200px"><option value="">— Chưa giao —</option>' +
+        data.staff.filter(function (x) { return x.active || x.id === o.assignedTo; }).map(function (x) { return '<option value="' + x.id + '"' + (x.id === o.assignedTo ? " selected" : "") + ">" + DM.esc(x.name) + (x.active ? "" : " (đã khóa)") + "</option>"; }).join("") +
+        '</select><button type="button" class="button button--sm" data-assign>' + (o.assignedTo ? "Đổi người" : "Giao đơn") + "</button></div>" +
+        (o.assignedAt ? '<div class="field__hint">Giao lúc ' + DM.dateTime(o.assignedAt) + "</div>" : "") +
+        (!data.staff.length ? '<div class="field__hint">Chưa có nhân viên — tạo ở tab “Nhân viên”.</div>' : "") + "</div>" +
         (o.instructions ? '<div class="field__label">Hướng dẫn của khách</div><div style="background:var(--bg-grey);border-radius:8px;padding:12px;font-size:14px;white-space:pre-wrap;margin-bottom:14px">' + DM.esc(o.instructions) + "</div>" : "") +
         '<div class="field__label">Tệp khách gửi</div>' + files("customer") +
-        '<div class="field__label">Tệp đã bàn giao</div>' + files("admin") +
+        '<div class="field__label">Tệp nhân viên tải lên</div>' + staffFiles() +
+        '<div class="field__label">Tệp quản trị gửi trực tiếp</div>' + files("admin") +
         '<div class="field"><label class="field__label" for="m-status">Trạng thái</label><select class="select" id="m-status">' +
         Object.keys(ST).map(function (k) { return '<option value="' + k + '"' + (k === o.status ? " selected" : "") + ">" + ST[k].label + "</option>"; }).join("") + "</select></div>" +
-        '<div class="field"><label class="field__label" for="m-notes">Ghi chú nội bộ (khách không thấy)</label><textarea class="textarea" id="m-notes" style="min-height:70px">' + DM.esc(o.notes || "") + "</textarea></div>" +
+        '<div class="field"><label class="field__label" for="m-notes">Ghi chú riêng của quản trị (khách và nhân viên đều không thấy)</label><textarea class="textarea" id="m-notes" style="min-height:70px">' + DM.esc(o.notes || "") + "</textarea></div>" +
         '<button type="button" class="button button--sm button--black" data-save>Lưu trạng thái &amp; ghi chú</button>' +
         '<div class="field__label" style="margin-top:22px">Gửi tệp hoàn thành cho khách</div>' +
         '<form id="m-up" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><input type="file" id="m-file" multiple class="input" style="padding:8px;flex:1;min-width:200px">' +
         '<label class="check"><input type="checkbox" id="m-done" checked><span class="check__box"></span><span>Đánh dấu hoàn thành</span></label>' +
         '<button type="submit" class="button button--sm">Gửi tệp</button></form>' +
-        '<div class="field__label" style="margin-top:22px">Tin nhắn</div><div class="thread" id="a-thread"></div>' +
+        '<div class="field__label" style="margin-top:22px">Trao đổi nội bộ với nhân viên (khách không thấy)</div><div class="thread" id="i-thread"></div>' +
+        '<form class="chat-box__form" id="i-msg" style="padding:0;border:0;margin-bottom:8px"><label class="sr-only" for="i-input">Ghi chú cho nhân viên</label><input class="input" id="i-input" placeholder="Nhắn nhân viên phụ trách…"><button class="button" type="submit" aria-label="Gửi">' + DM.icon.send + "</button></form>" +
+        '<div class="field__label" style="margin-top:22px">Tin nhắn với khách</div><div class="thread" id="a-thread"></div>' +
         '<form class="chat-box__form" id="a-msg" style="padding:0;border:0"><label class="sr-only" for="a-input">Trả lời khách</label><input class="input" id="a-input" placeholder="Trả lời khách hàng (khách sẽ nhận email)…"><button class="button" type="submit" aria-label="Gửi">' + DM.icon.send + "</button></form>"
       );
       m._onclose = function () { render(); };
@@ -158,9 +184,36 @@
         }).join("");
         $("#a-thread", m).scrollTop = 1e6;
       };
-      draw();
+      var drawInternal = function () {
+        $("#i-thread", m).innerHTML = (o.internal || []).map(function (n) {
+          var cls = n.role === "admin" ? "msg--me" : n.role === "system" ? "msg--sys" : "msg--bot msg--staff";
+          return '<div class="msg ' + cls + '">' + (n.role === "system" ? "" : '<b style="display:block;font-size:12px;opacity:.8">' + DM.esc(n.role === "admin" ? "Quản trị" : n.from) + "</b>") + DM.esc(n.text) + "<time>" + DM.dateTime(n.at) + "</time></div>";
+        }).join("") || '<div class="msg msg--sys">Chưa có trao đổi nội bộ.</div>';
+        $("#i-thread", m).scrollTop = 1e6;
+      };
+      draw(); drawInternal();
       var reopen = function (x) { updateOrder(x); m._onclose = null; DM.modal.close(m); manage(x.id); };
       var fail = function (er) { DM.toast(er.message, "error"); };
+      $("[data-assign]", m).addEventListener("click", function () {
+        var sid = $("#m-staff", m).value;
+        DM.api("/admin/orders/" + o.id, { method: "PATCH", body: { assignedTo: sid || null } }).then(function (d) {
+          DM.toast(sid ? "Đã giao đơn cho " + staffName(sid) + "." : "Đã bỏ giao đơn."); reopen(d.order);
+        }, fail);
+      });
+      $("#i-msg", m).addEventListener("submit", function (e) {
+        e.preventDefault(); var i = $("#i-input", m); if (!i.value.trim()) return;
+        DM.api("/admin/orders/" + o.id + "/internal", { body: { text: i.value.trim() } }).then(function (d) { o = d.order; updateOrder(o); i.value = ""; drawInternal(); }, fail);
+      });
+      m.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-share],[data-unshare]");
+        if (!b) return;
+        var fid = b.dataset.share || b.dataset.unshare, share = !!b.dataset.share;
+        if (share && b.dataset.complete && !confirm("Chuyển tệp này cho khách và đánh dấu đơn hoàn thành? Khách sẽ nhận email.")) return;
+        b.disabled = true;
+        DM.api("/admin/orders/" + o.id + "/files/" + fid + "/share", { body: { shared: share, complete: !!b.dataset.complete } }).then(function (d) {
+          DM.toast(share ? (b.dataset.complete ? "Đã gửi tệp và hoàn thành đơn." : "Đã gửi tệp cho khách.") : "Đã thu hồi tệp."); reopen(d.order);
+        }, function (er) { b.disabled = false; fail(er); });
+      });
       var c = $("[data-confirm]", m);
       if (c) c.addEventListener("click", function () {
         DM.api("/admin/orders/" + o.id, { method: "PATCH", body: { status: "paid" } }).then(function (d) { DM.toast("Đã xác nhận thanh toán #" + o.id + " và gửi email cho khách."); reopen(d.order); }, fail);
@@ -181,6 +234,64 @@
         fd.append("complete", $("#m-done", m).checked ? "1" : "0");
         var btn = $("button[type=submit]", this); btn.disabled = true; btn.textContent = "Đang tải lên…";
         DM.api("/admin/orders/" + o.id + "/result", { body: fd }).then(function (d) { DM.toast("Đã gửi tệp cho khách."); reopen(d.order); }, function (er) { btn.disabled = false; btn.textContent = "Gửi tệp"; fail(er); });
+      });
+    }
+
+    /* ---------- Nhân viên ---------- */
+    function staffPane() {
+      var pane = $("#pane");
+      var count = function (sid, sts) { return data.orders.filter(function (o) { return o.assignedTo === sid && sts.indexOf(o.status) > -1; }).length; };
+      pane.innerHTML =
+        '<div class="order-card" style="padding:20px"><h2 class="order-card__title">Thêm nhân viên</h2>' +
+        '<form id="st-new" novalidate><div id="st-msg"></div><div class="order-row">' +
+        '<div class="field"><label class="field__label" for="st-name">Họ và tên <span class="req">*</span></label><input class="input" id="st-name" required maxlength="100"><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="st-user">Tên đăng nhập <span class="req">*</span></label><input class="input" id="st-user" required autocapitalize="none" placeholder="vd: lan.nv" data-pattern="^[a-z0-9._-]{3,40}$" data-pattern-msg="3–40 ký tự: chữ thường không dấu, số, dấu chấm, gạch."><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="st-email">Email (nhận thông báo giao việc)</label><input class="input" id="st-email" type="email"><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="st-pass">Mật khẩu ban đầu <span class="req">*</span></label><input class="input" id="st-pass" required minlength="8" autocomplete="new-password"><div class="field__error"></div></div>' +
+        '</div><button class="button button--sm" type="submit">Tạo tài khoản</button>' +
+        '<p class="field__hint" style="margin-top:10px">Gửi cho nhân viên đường dẫn <b>' + location.origin + '/nhan-vien</b> cùng tên đăng nhập và mật khẩu. Nhân viên nên tự đổi mật khẩu sau lần đăng nhập đầu.</p></form></div>' +
+        '<div class="order-card" style="padding:20px"><h2 class="order-card__title">Danh sách nhân viên</h2>' +
+        (data.staff.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Nhân viên</th><th>Đăng nhập</th><th>Đang xử lý</th><th>Đã xong</th><th>Lần cuối đăng nhập</th><th></th></tr></thead><tbody>' +
+          data.staff.map(function (x) {
+            return '<tr class="' + (x.active ? "" : "staff-off") + '"><td><b>' + DM.esc(x.name) + "</b>" + (x.active ? "" : ' <span class="chip chip--red">Đã khóa</span>') + "<br><small>" + DM.esc(x.email || "—") + "</small></td>" +
+              "<td>" + DM.esc(x.username) + "</td><td>" + count(x.id, ["paid", "progress", "review"]) + "</td><td>" + count(x.id, ["done"]) + "</td>" +
+              "<td>" + (x.lastLogin ? DM.dateTime(x.lastLogin) : "Chưa đăng nhập") + "</td>" +
+              '<td style="white-space:nowrap"><button type="button" class="link" data-orders="' + x.id + '">Xem đơn</button> · <button type="button" class="link" data-edit="' + x.id + '">Sửa / đặt lại mật khẩu</button> · ' +
+              '<button type="button" class="link" data-active="' + x.id + '" data-v="' + (x.active ? "0" : "1") + '">' + (x.active ? "Khóa" : "Mở khóa") + "</button></td></tr>";
+          }).join("") + "</tbody></table></div>" : '<div class="empty">' + DM.icon.users + "<p>Chưa có nhân viên nào.</p></div>") + "</div>";
+
+      $("#st-new").addEventListener("submit", function (e) {
+        e.preventDefault();
+        $("#st-user").value = $("#st-user").value.trim().toLowerCase();
+        if (!DM.validate(this)) return;
+        DM.api("/admin/staff", { body: { name: $("#st-name").value.trim(), username: $("#st-user").value, email: $("#st-email").value.trim(), password: $("#st-pass").value } })
+          .then(function (d) { DM.toast("Đã tạo tài khoản cho " + d.staff.name + "."); load(); },
+            function (er) { $("#st-msg").innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
+      });
+      $("[data-orders]").forEach(function (b) { b.addEventListener("click", function () { staffFilter = b.dataset.orders; tab = "orders"; render(); }); });
+      $("[data-active]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var off = b.dataset.v === "0";
+          if (off && !confirm("Khóa tài khoản này? Nhân viên sẽ bị đăng xuất ngay và không xem được đơn nào nữa.")) return;
+          DM.api("/admin/staff/" + b.dataset.active, { method: "PATCH", body: { active: !off } }).then(function () { DM.toast(off ? "Đã khóa tài khoản." : "Đã mở khóa."); load(); }, function (er) { DM.toast(er.message, "error"); });
+        });
+      });
+      $("[data-edit]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var x = data.staff.find(function (y) { return y.id === b.dataset.edit; });
+          var m = DM.modal.open('<h2 class="modal__title">' + DM.esc(x.name) + '</h2><form id="st-edit" novalidate><div id="se-msg"></div>' +
+            '<div class="field"><label class="field__label" for="se-name">Họ và tên</label><input class="input" id="se-name" required value="' + DM.esc(x.name) + '"><div class="field__error"></div></div>' +
+            '<div class="field"><label class="field__label" for="se-email">Email</label><input class="input" id="se-email" type="email" value="' + DM.esc(x.email) + '"><div class="field__error"></div></div>' +
+            '<div class="field"><label class="field__label" for="se-pass">Mật khẩu mới (để trống nếu không đổi)</label><input class="input" id="se-pass" minlength="8" autocomplete="new-password"><div class="field__error"></div><div class="field__hint">Đặt lại mật khẩu sẽ đăng xuất nhân viên khỏi mọi thiết bị.</div></div>' +
+            '<button class="button button--sm" type="submit">Lưu</button></form>', { small: true });
+          $("#st-edit", m).addEventListener("submit", function (e) {
+            e.preventDefault(); if (!DM.validate(this)) return;
+            var body = { name: $("#se-name", m).value.trim(), email: $("#se-email", m).value.trim() };
+            if ($("#se-pass", m).value) body.password = $("#se-pass", m).value;
+            DM.api("/admin/staff/" + x.id, { method: "PATCH", body: body }).then(function () { DM.toast("Đã lưu."); DM.modal.close(m); load(); },
+              function (er) { $("#se-msg", m).innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
+          });
+        });
       });
     }
 

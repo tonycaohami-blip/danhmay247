@@ -159,6 +159,103 @@ async function cleanup() {
   ok("xuất danh sách đơn ra Excel (CSV, tiếng Việt)", r.ok && bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf && csv.includes(id) && csv.includes("Lê Văn Đạt") && /attachment/.test(r.headers.get("content-disposition")));
   if (db.kind === "json") ok("có bản sao lưu hằng ngày", fs.readdirSync(path.join(DATA, "backups")).some((n) => /^db-\d{4}-\d{2}-\d{2}\.json$/.test(n)));
 
+  // ================= NHÂN VIÊN =================
+  // Đơn thứ hai, đã thanh toán, có tệp khách gửi
+  const f2 = mk({ name: "Trần Bí Mật", email: "bimat@khach.vn", phone: "0911222333", promo: "DANHMAY10", instructions: "Gõ lại 3 trang đầu" });
+  f2.append("files", new Blob(["anh goc"]), "Trang 1.jpg");
+  r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: f2 });
+  d = await r.json();
+  const id2 = d.order.id, token2 = d.token;
+  await j("PATCH", "/api/admin/orders/" + id2, { status: "paid" }, { Cookie: admin });
+
+  // Tạo tài khoản
+  ok("chỉ quản trị mới tạo được nhân viên", (await j("POST", "/api/admin/staff", { username: "x.y", name: "X", password: "matkhau123" })).status === 401);
+  r = await j("POST", "/api/admin/staff", { username: "lan.nv", name: "Nguyễn Thị Lan", email: "lan@nv.vn", password: "matkhau123" }, { Cookie: admin });
+  d = await r.json();
+  const sid = d.staff && d.staff.id;
+  ok("quản trị tạo tài khoản nhân viên", r.status === 201 && !!sid && !("passHash" in d.staff));
+  r = await j("POST", "/api/admin/staff", { username: "lan.nv", name: "Trùng", password: "matkhau123" }, { Cookie: admin });
+  ok("không cho trùng tên đăng nhập", r.status === 409);
+  r = await j("POST", "/api/admin/staff", { username: "hoa", name: "Hoa", password: "123" }, { Cookie: admin });
+  ok("từ chối mật khẩu ngắn", r.status === 400);
+  await j("POST", "/api/admin/staff", { username: "minh.nv", name: "Lê Minh", password: "matkhau456" }, { Cookie: admin });
+
+  // Đăng nhập nhân viên
+  r = await j("POST", "/api/staff/login", { username: "lan.nv", password: "sai-mat-khau" });
+  ok("nhân viên sai mật khẩu → 401", r.status === 401);
+  r = await j("POST", "/api/staff/login", { username: "LAN.NV", password: "matkhau123" });
+  let staffCk = (r.headers.get("set-cookie") || "").split(";")[0];
+  ok("nhân viên đăng nhập", r.ok && staffCk.startsWith("dm_staff="));
+  r = await j("POST", "/api/staff/login", { username: "minh.nv", password: "matkhau456" });
+  const minhCk = (r.headers.get("set-cookie") || "").split(";")[0];
+  ok("nhân viên chưa được giao thì không thấy đơn nào", (await (await fetch(B + "/api/staff/orders", { headers: { Cookie: staffCk } })).json()).orders.length === 0);
+
+  // Giao đơn
+  r = await j("PATCH", "/api/admin/orders/" + id2, { assignedTo: sid }, { Cookie: admin });
+  d = await r.json();
+  ok("quản trị giao đơn cho nhân viên", d.order.assignedTo === sid && d.order.internal.some((n) => /Nguyễn Thị Lan/.test(n.text)));
+  r = await fetch(B + "/api/staff/orders", { headers: { Cookie: staffCk } });
+  d = await r.json();
+  ok("nhân viên thấy đơn được giao", d.orders.length === 1 && d.orders[0].id === id2);
+  const sv = d.orders[0], svJson = JSON.stringify(sv);
+  ok("nhân viên KHÔNG thấy tên/email/SĐT khách", !("name" in sv) && !("email" in sv) && !("phone" in sv) && !/Trần Bí Mật|bimat@khach\.vn|0911222333/.test(svJson));
+  ok("nhân viên KHÔNG thấy giá, mã giảm giá, tiền đã nhận", !("price" in sv) && !("promo" in sv) && !("paidAmount" in sv) && !("receivedAmount" in sv) && !/DANHMAY10|"total"|%\)/.test(svJson));
+  ok("nhân viên KHÔNG thấy tin nhắn với khách và ghi chú riêng của quản trị", !("messages" in sv) && !("notes" in sv) && !("tokenHash" in sv));
+  ok("nhân viên thấy thông tin chuyên môn", sv.typeLabel === "Phỏng vấn / Hội thảo / Tọa đàm" && sv.qty === 30 && sv.instructions === "Gõ lại 3 trang đầu" && sv.extras[0] === "Gắn mốc thời gian" && !!sv.deadline);
+  r = await fetch(B + "/api/staff/orders/" + id2 + "/files/" + sv.files[0].id, { headers: { Cookie: staffCk } });
+  ok("nhân viên tải được tệp khách gửi", r.ok && (await r.text()) === "anh goc");
+  ok("nhân viên khác không xem được đơn này", (await fetch(B + "/api/staff/orders/" + id2, { headers: { Cookie: minhCk } })).status === 404);
+  ok("nhân viên không gọi được API quản trị", (await fetch(B + "/api/admin/summary", { headers: { Cookie: staffCk } })).status === 401);
+  ok("nhân viên không xem được đơn qua API khách", (await fetch(B + "/api/orders/" + id2, { headers: { Cookie: staffCk } })).status === 404);
+
+  // Nhân viên làm việc
+  r = await j("PATCH", "/api/staff/orders/" + id2, { status: "done" }, { Cookie: staffCk });
+  ok("nhân viên không tự hoàn thành đơn được", r.status === 400);
+  r = await j("PATCH", "/api/staff/orders/" + id2, { status: "progress" }, { Cookie: staffCk });
+  ok("nhân viên bắt đầu làm → đang thực hiện", (await r.json()).order.status === "progress");
+  r = await j("POST", "/api/staff/orders/" + id2 + "/notes", { text: "Trang 2 bị mờ, em đánh dấu [?]" }, { Cookie: staffCk });
+  ok("nhân viên ghi chú nội bộ", (await r.json()).order.internal.some((n) => n.role === "staff" && /bị mờ/.test(n.text)));
+  const up2 = new FormData(); up2.append("files", new Blob(["ban danh may"]), "Kết quả nhân viên.docx");
+  r = await fetch(B + "/api/staff/orders/" + id2 + "/files", { method: "POST", headers: Object.assign({ Cookie: staffCk }, H), body: up2 });
+  d = await r.json();
+  const staffFile = d.order.files.find((f) => f.by === "staff");
+  ok("nhân viên tải tệp kết quả lên", r.ok && !!staffFile && !staffFile.shared);
+  r = await j("PATCH", "/api/staff/orders/" + id2, { status: "review" }, { Cookie: staffCk });
+  ok("nhân viên gửi kiểm tra", (await r.json()).order.status === "review");
+
+  // Khách chưa thấy tệp, ghi chú nội bộ, người được giao
+  r = await fetch(B + "/api/orders/" + id2, { headers: { "X-Order-Token": token2 } });
+  d = await r.json();
+  ok("khách KHÔNG thấy tệp nhân viên chưa duyệt", !d.order.files.some((f) => f.name === "Kết quả nhân viên.docx"));
+  ok("khách KHÔNG thấy ghi chú nội bộ và nhân viên phụ trách", !("internal" in d.order) && !("assignedTo" in d.order) && !/Nguyễn Thị Lan|bị mờ/.test(JSON.stringify(d.order)));
+  r = await fetch(B + "/api/orders/" + id2 + "/files/" + staffFile.id + "?t=" + token2);
+  ok("khách không tải được tệp chưa duyệt (đoán mã tệp)", r.status === 404);
+
+  // Quản trị duyệt & chuyển cho khách
+  r = await fetch(B + "/api/admin/summary", { headers: { Cookie: admin } });
+  d = await r.json();
+  ok("quản trị thấy tệp nhân viên + ghi chú + số đơn chờ kiểm tra", d.stats.toReview === 1 && d.staff.length === 2 && d.orders.find((x) => x.id === id2).internal.length >= 4);
+  r = await j("POST", "/api/admin/orders/" + id2 + "/files/" + staffFile.id + "/share", { complete: true }, { Cookie: admin });
+  ok("quản trị duyệt tệp → đơn hoàn thành", (await r.json()).order.status === "done");
+  r = await fetch(B + "/api/orders/" + id2 + "/files/" + staffFile.id + "?t=" + token2);
+  ok("khách tải được tệp đã duyệt", r.ok && (await r.text()) === "ban danh may");
+  d = await (await fetch(B + "/api/orders/" + id2, { headers: { "X-Order-Token": token2 } })).json();
+  ok("khách thấy tệp như do Đánh máy 247 gửi", d.order.files.some((f) => f.name === "Kết quả nhân viên.docx" && f.by === "admin"));
+
+  // Đổi mật khẩu & khóa tài khoản
+  r = await j("POST", "/api/staff/password", { old: "matkhau123", password: "matkhaumoi789" }, { Cookie: staffCk });
+  const newCk = (r.headers.get("set-cookie") || "").split(";")[0];
+  ok("nhân viên đổi mật khẩu", r.ok);
+  ok("phiên cũ bị đăng xuất sau khi đổi mật khẩu", (await fetch(B + "/api/staff/me", { headers: { Cookie: staffCk } })).status === 401);
+  ok("phiên mới vẫn dùng được", (await fetch(B + "/api/staff/me", { headers: { Cookie: newCk } })).ok);
+  await j("PATCH", "/api/admin/staff/" + sid, { active: false }, { Cookie: admin });
+  ok("khóa tài khoản → đăng xuất ngay", (await fetch(B + "/api/staff/orders", { headers: { Cookie: newCk } })).status === 401);
+  ok("tài khoản bị khóa không đăng nhập được", (await j("POST", "/api/staff/login", { username: "lan.nv", password: "matkhaumoi789" })).status === 401);
+  r = await j("PATCH", "/api/admin/orders/" + id2, { assignedTo: sid }, { Cookie: admin });
+  ok("không giao đơn cho nhân viên đã khóa", r.status === 400 || (await r.json()).order.assignedTo === sid);
+  const raw = db.kind === "json" ? JSON.stringify(db._raw().staff) : JSON.stringify(await db.staff.list());
+  ok("mật khẩu nhân viên lưu dạng băm", !/matkhau123|matkhaumoi789|matkhau456/.test(raw) && /scrypt\$/.test(raw));
+
   // --- Tự xóa tệp sau 30 ngày
   await j("PATCH", "/api/admin/orders/" + id, { status: "done" }, { Cookie: admin });
   if (db.kind === "mysql") await db.query("UPDATE `" + db.TABLES.history + "` SET created_at = DATE_SUB(NOW(), INTERVAL 31 DAY) WHERE order_id = ?", [id]);

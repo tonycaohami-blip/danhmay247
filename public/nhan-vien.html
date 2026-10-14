@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Khu vực nhân viên — Đánh máy 247</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .kpi { background: #fff; border-radius: 12px; box-shadow: var(--shadow-sm); padding: 18px 20px; }
+    .kpi small { color: var(--muted); font-size: 13px; }
+    .kpi b { display: block; font: 700 24px var(--sans); color: #000; margin-top: 4px; }
+    .late { color: var(--red); font-weight: 700; }
+    .file-link:hover b { color: var(--red); text-decoration: underline; }
+    .msg--staff { background: var(--navy); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .msg--sys { background: transparent; box-shadow: none; color: var(--muted); font-size: 13px; align-self: center; text-align: center; }
+    @media (max-width: 900px) { .kpis { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+  <main id="main" class="order-page"><div class="container" id="app"></div></main>
+  <div id="site-footer"></div>
+
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$, app = $("#app");
+    var me = null, view = DM.param("order") ? "order" : "list", openId = DM.param("order"), filter = "active", timer = null;
+    var ST = DM.orders.status;
+    var chip = function (st) { var s = ST[st] || { label: st, chip: "chip--grey" }; return '<span class="chip ' + s.chip + '">' + s.label + "</span>"; };
+    var size = function (b) { return b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; };
+    var fail = function (e) { if (e.status === 401) return login(); DM.toast(e.message, "error"); };
+    var dueText = function (o) {
+      if (!o.deadline) return "Chờ khách thanh toán";
+      var left = o.deadline - Date.now(), late = left < 0 && ["done", "cancelled", "review"].indexOf(o.status) < 0;
+      var h = Math.round(Math.abs(left) / 3600e3);
+      return '<span class="' + (late ? "late" : "") + '">' + DM.dateTime(o.deadline) + "</span><br><small style=\"color:var(--muted)\">" +
+        (["done", "cancelled"].indexOf(o.status) > -1 ? "" : late ? "Trễ " + h + " giờ" : "Còn " + (h >= 48 ? Math.round(h / 24) + " ngày" : h + " giờ")) + "</small>";
+    };
+    function go(v, id) {
+      view = v; openId = id || null;
+      history.replaceState(null, "", "/nhan-vien" + (id ? "?order=" + encodeURIComponent(id) : ""));
+      render(); window.scrollTo(0, 0);
+    }
+
+    /* ---------- Đăng nhập ---------- */
+    function login(msg) {
+      clearInterval(timer); me = null;
+      app.innerHTML = '<div class="order-card" style="max-width:420px;margin:40px auto"><h1 class="order-card__title">Khu vực nhân viên</h1>' +
+        '<p style="color:var(--muted);font-size:14.5px">Đăng nhập bằng tài khoản quản trị đã cấp cho bạn.</p>' +
+        '<form id="lg" novalidate><div id="lg-msg">' + (msg ? '<div class="alert alert--error">' + DM.esc(msg) + "</div>" : "") + "</div>" +
+        '<div class="field"><label class="field__label" for="lg-u">Tên đăng nhập</label><input class="input" id="lg-u" required autocomplete="username" autocapitalize="none"><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="lg-p">Mật khẩu</label><div class="password"><input class="input" id="lg-p" type="password" required autocomplete="current-password"><button type="button" class="password__eye" aria-label="Hiện mật khẩu">' + DM.icon.eye + '</button></div><div class="field__error"></div></div>' +
+        '<button class="button button--w100" type="submit">Đăng nhập</button></form>' +
+        '<p class="field__hint" style="margin-top:14px">Quên mật khẩu? Liên hệ quản trị để đặt lại.</p></div>';
+      DM.bindEye($(".password__eye"));
+      $("#lg").addEventListener("submit", function (e) {
+        e.preventDefault(); if (!DM.validate(this)) return;
+        var btn = $("button[type=submit]", this); btn.disabled = true;
+        DM.api("/staff/login", { body: { username: $("#lg-u").value.trim(), password: $("#lg-p").value } })
+          .then(function (d) { me = d.staff; render(); }, function (er) { login(er.message); });
+      });
+    }
+
+    function render() {
+      clearInterval(timer);
+      app.innerHTML =
+        '<div class="account"><aside class="account__side">' +
+        '<div class="account__user"><span class="login__avatar" style="background:var(--green)" aria-hidden="true">' + DM.esc(DM.initials(me.name)) + "</span><div><b>" + DM.esc(me.name) + "</b><small>Nhân viên · " + DM.esc(me.username) + "</small></div></div>" +
+        '<nav class="account__tabs" aria-label="Nhân viên"><button type="button" data-tab="list" class="' + (view !== "password" ? "is-active" : "") + '">Đơn được giao</button>' +
+        '<button type="button" data-tab="password" class="' + (view === "password" ? "is-active" : "") + '">Đổi mật khẩu</button>' +
+        '<button type="button" data-out>Đăng xuất</button></nav>' +
+        '<p class="field__hint" style="margin-top:14px;padding:0 6px">Bạn chỉ thấy nội dung công việc. Thông tin khách hàng và giá được bảo mật theo quy định.</p></aside>' +
+        '<section id="pane"></section></div>';
+      $$("[data-tab]").forEach(function (b) { b.addEventListener("click", function () { go(b.dataset.tab); }); });
+      $("[data-out]").addEventListener("click", function () { DM.api("/staff/logout", { method: "POST" }).then(function () { login(); }); });
+      if (view === "order" && openId) renderOrder(openId);
+      else if (view === "password") renderPassword();
+      else renderList();
+    }
+
+    /* ---------- Danh sách đơn được giao ---------- */
+    function renderList() {
+      var pane = $("#pane");
+      pane.innerHTML = '<div class="order-card"><div class="empty"><span class="typing-dots"><i></i><i></i><i></i></span></div></div>';
+      DM.api("/staff/orders").then(function (d) {
+        var all = d.orders;
+        var active = all.filter(function (o) { return ["paid", "progress", "review"].indexOf(o.status) > -1; });
+        var list = filter === "active" ? active : filter === "done" ? all.filter(function (o) { return o.status === "done"; }) : all;
+        pane.innerHTML =
+          '<div class="kpis">' +
+          '<div class="kpi"><small>Cần làm</small><b>' + all.filter(function (o) { return o.status === "paid"; }).length + "</b></div>" +
+          '<div class="kpi"><small>Đang làm</small><b>' + all.filter(function (o) { return o.status === "progress"; }).length + "</b></div>" +
+          '<div class="kpi"><small>Chờ kiểm tra</small><b>' + all.filter(function (o) { return o.status === "review"; }).length + "</b></div>" +
+          '<div class="kpi"><small>Đã hoàn thành</small><b>' + all.filter(function (o) { return o.status === "done"; }).length + "</b></div></div>" +
+          '<div class="order-card" style="padding:20px"><div class="filter-pills" style="margin-bottom:16px">' +
+          [["active", "Đang xử lý (" + active.length + ")"], ["done", "Đã hoàn thành"], ["all", "Tất cả"]].map(function (t) {
+            return '<button type="button" data-f="' + t[0] + '" class="' + (filter === t[0] ? "is-active" : "") + '">' + t[1] + "</button>";
+          }).join("") + "</div>" +
+          (list.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Mã đơn</th><th>Công việc</th><th>Hạn hoàn thành</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
+            list.slice().sort(function (a, b) { return (a.deadline || 9e15) - (b.deadline || 9e15); }).map(function (o) {
+              return '<tr><td><b>#' + o.id + '</b><br><small style="color:var(--muted)">Giao lúc ' + (o.assignedAt ? DM.dateTime(o.assignedAt) : "—") + "</small></td>" +
+                "<td>" + DM.esc(o.typeLabel) + '<br><small style="color:var(--muted)">' + o.qty + " " + o.unit + (o.speakers ? " · " + DM.esc(o.speakers) : "") + "</small></td>" +
+                "<td>" + dueText(o) + "</td><td>" + chip(o.status) + "</td>" +
+                '<td><button type="button" class="button button--sm' + (o.status === "paid" ? "" : " button--black") + '" data-open="' + o.id + '">' + (o.status === "paid" ? "Bắt đầu" : "Mở") + "</button></td></tr>";
+            }).join("") + "</tbody></table></div>"
+            : '<div class="empty">' + DM.icon.file + "<p>" + (filter === "active" ? "Chưa có đơn nào cần xử lý. Quản trị sẽ giao đơn cho bạn khi có việc." : "Không có đơn nào.") + "</p></div>") + "</div>";
+        $$("[data-f]").forEach(function (b) { b.addEventListener("click", function () { filter = b.dataset.f; renderList(); }); });
+        $$("[data-open]").forEach(function (b) { b.addEventListener("click", function () { go("order", b.dataset.open); }); });
+        timer = setInterval(function () { if (view === "list" && !document.hidden) renderList(); }, 60000);
+      }, fail);
+    }
+
+    /* ---------- Chi tiết đơn ---------- */
+    function renderOrder(id) {
+      var pane = $("#pane");
+      pane.innerHTML = '<div class="order-card"><div class="empty"><span class="typing-dots"><i></i><i></i><i></i></span></div></div>';
+      DM.api("/staff/orders/" + encodeURIComponent(id)).then(draw, function (e) {
+        if (e.status === 401) return login();
+        pane.innerHTML = '<div class="order-card"><div class="alert alert--error">' + DM.esc(e.message) + '</div><button type="button" class="link" data-back>← Danh sách đơn</button></div>';
+        $("[data-back]").addEventListener("click", function () { go("list"); });
+      });
+      timer = setInterval(function () {
+        if (document.hidden || $(".modal.is-open")) return;
+        DM.api("/staff/orders/" + encodeURIComponent(id)).then(function (o) {
+          var cur = $("#notes");
+          if (cur && o.order.internal.length !== $$("#notes .msg").length) { var t = $("#note-input").value; draw(o); $("#note-input").value = t; }
+        }, function () { /* thử lại sau */ });
+      }, 20000);
+    }
+    function draw(d) {
+      var o = d.order, pane = $("#pane");
+      var fileUrl = function (f) { return "/api/staff/orders/" + encodeURIComponent(o.id) + "/files/" + encodeURIComponent(f.id); };
+      var list = function (arr, empty) {
+        return arr.length ? '<ul class="files" style="margin:0 0 18px">' + arr.map(function (f) {
+          var ext = '<span class="ext">' + DM.esc(f.name.split(".").pop().slice(0, 4)) + "</span>";
+          if (f.purged) return "<li>" + ext + '<span class="meta"><b>' + DM.esc(f.name) + "</b><small>Đã xóa theo chính sách lưu trữ</small></span></li>";
+          var tag = f.by === "staff" ? (f.shared ? " · đã chuyển cho khách" : " · chờ quản trị duyệt") : "";
+          return "<li>" + ext + '<a class="meta file-link" href="' + fileUrl(f) + '" download><b>' + DM.esc(f.name) + "</b><small>" + size(f.size) + tag + " · bấm để tải</small></a></li>";
+        }).join("") + "</ul>" : '<p class="field__hint" style="margin-bottom:18px">' + empty + "</p>";
+      };
+      var canWork = ["paid", "progress", "review"].indexOf(o.status) > -1;
+      pane.innerHTML =
+        '<div class="order-card">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px"><div>' +
+        '<button type="button" class="link" data-back style="margin-bottom:10px">← Danh sách đơn</button>' +
+        '<h1 class="order-card__title" style="margin:0">Đơn #' + o.id + "</h1></div>" + chip(o.status) + "</div>" +
+        (o.status === "review" ? '<div class="alert alert--info">Đã gửi quản trị kiểm tra. Bạn vẫn có thể tải thêm tệp hoặc ghi chú nếu cần.</div>' : "") +
+        (o.status === "done" ? '<div class="alert alert--success">Đơn đã hoàn thành và được giao cho khách. Cảm ơn bạn!</div>' : "") +
+        (["unpaid", "verifying"].indexOf(o.status) > -1 ? '<div class="alert alert--info">Đơn đang chờ khách thanh toán — bạn có thể xem trước tài liệu, nhưng chưa bắt đầu làm.</div>' : "") +
+        '<div class="detail-grid">' +
+        "<div><span>Công việc</span><b>" + DM.esc(o.serviceLabel + " — " + o.typeLabel) + "</b></div>" +
+        "<div><span>Khối lượng</span><b>" + o.qty + " " + o.unit + (o.speakers ? " · " + DM.esc(o.speakers) : "") + "</b></div>" +
+        "<div><span>Hạn hoàn thành</span><b>" + dueText(o) + "</b></div>" +
+        "<div><span>Loại tài liệu</span><b>" + DM.esc(o.docType) + "</b></div>" +
+        "<div><span>Yêu cầu thêm</span><b>" + (o.extras.length ? DM.esc(o.extras.join(", ")) : "Không") + "</b></div>" +
+        "<div><span>Thời hạn gốc</span><b>" + DM.esc(o.urgencyLabel) + "</b></div></div>" +
+        '<div class="field__label">Hướng dẫn của khách</div><div style="background:var(--bg-grey);border-radius:8px;padding:12px 14px;font-size:14.5px;white-space:pre-wrap;margin-bottom:18px">' + (o.instructions ? DM.esc(o.instructions) : "<i>Không có hướng dẫn thêm.</i>") + "</div>" +
+        '<div class="field__label">Tài liệu gốc của khách</div>' + list(o.files.filter(function (f) { return f.by === "customer"; }), "Khách chưa gửi tệp — xem ghi chú nội bộ hoặc hỏi quản trị.") +
+        '<div class="field__label">Tệp kết quả</div>' + list(o.files.filter(function (f) { return f.by !== "customer"; }), "Chưa có tệp kết quả.") +
+        (canWork ? '<form id="up" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px"><label class="sr-only" for="up-file">Chọn tệp kết quả</label><input type="file" id="up-file" multiple class="input" style="padding:8px;flex:1;min-width:200px"><button type="submit" class="button button--sm">Tải tệp kết quả lên</button></form>' : "") +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+        (o.status === "paid" ? '<button type="button" class="button button--sm" data-st="progress">Bắt đầu làm</button>' : "") +
+        (o.status === "progress" ? '<button type="button" class="button button--sm" data-st="review">Đã xong — gửi quản trị kiểm tra</button>' : "") +
+        (o.status === "review" ? '<button type="button" class="button button--sm button--black" data-st="progress">Rút lại để làm tiếp</button>' : "") +
+        "</div></div>" +
+
+        '<div class="order-card"><h2 class="order-card__title">Trao đổi nội bộ với quản trị</h2>' +
+        '<p class="field__hint" style="margin-top:-12px">Khách hàng không thấy phần này. Mọi thắc mắc về tài liệu hãy hỏi quản trị tại đây.</p>' +
+        '<div class="thread" id="notes" aria-live="polite">' + (o.internal.map(function (n) {
+          var cls = n.role === "staff" ? "msg--staff" : n.role === "system" ? "msg--sys" : "msg--bot";
+          return '<div class="msg ' + cls + '">' + (n.role === "admin" ? '<b style="display:block;font-size:12.5px;color:var(--navy)">Quản trị</b>' : "") + DM.esc(n.text) + "<time>" + DM.dateTime(n.at) + "</time></div>";
+        }).join("") || '<div class="msg msg--sys">Chưa có trao đổi nào.</div>') + "</div>" +
+        '<form class="chat-box__form" id="note-form" style="padding:0;border:0"><label class="sr-only" for="note-input">Ghi chú</label><input class="input" id="note-input" placeholder="Hỏi quản trị, báo tiến độ, ghi chú chỗ khó đọc…" autocomplete="off" maxlength="2000"><button class="button" type="submit" aria-label="Gửi">' + DM.icon.send + "</button></form></div>";
+
+      $("#notes").scrollTop = 1e6;
+      $("[data-back]").addEventListener("click", function () { go("list"); });
+      $$("[data-st]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          if (b.dataset.st === "review" && !o.files.some(function (f) { return f.by === "staff" && !f.purged; }) &&
+              !confirm("Bạn chưa tải tệp kết quả nào lên. Vẫn gửi quản trị kiểm tra?")) return;
+          b.disabled = true;
+          DM.api("/staff/orders/" + o.id, { method: "PATCH", body: { status: b.dataset.st } }).then(function (x) {
+            DM.toast(b.dataset.st === "review" ? "Đã gửi quản trị kiểm tra." : "Đã cập nhật trạng thái."); draw(x);
+          }, function (er) { b.disabled = false; fail(er); });
+        });
+      });
+      var up = $("#up");
+      if (up) up.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fl = $("#up-file").files;
+        if (!fl.length) return DM.toast("Hãy chọn tệp cần tải lên.", "error");
+        var fd = new FormData();
+        Array.prototype.forEach.call(fl, function (f) { fd.append("files", f); });
+        var btn = $("button[type=submit]", up); btn.disabled = true; btn.textContent = "Đang tải lên…";
+        DM.api("/staff/orders/" + o.id + "/files", { body: fd }).then(function (x) { DM.toast("Đã tải tệp lên. Khi xong việc, bấm “Gửi quản trị kiểm tra”."); draw(x); },
+          function (er) { btn.disabled = false; btn.textContent = "Tải tệp kết quả lên"; fail(er); });
+      });
+      $("#note-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var i = $("#note-input"), t = i.value.trim();
+        if (!t) return;
+        i.disabled = true;
+        DM.api("/staff/orders/" + o.id + "/notes", { body: { text: t } }).then(function (x) { draw(x); $("#note-input").focus(); }, function (er) { i.disabled = false; fail(er); });
+      });
+    }
+
+    /* ---------- Đổi mật khẩu ---------- */
+    function renderPassword() {
+      $("#pane").innerHTML = '<div class="order-card" style="max-width:560px"><h1 class="order-card__title">Đổi mật khẩu</h1><form id="pw" novalidate><div id="pw-msg"></div>' +
+        '<div class="field"><label class="field__label" for="pw-old">Mật khẩu hiện tại</label><input class="input" id="pw-old" type="password" required autocomplete="current-password"><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="pw-new">Mật khẩu mới (tối thiểu 8 ký tự)</label><input class="input" id="pw-new" type="password" required minlength="8" autocomplete="new-password"><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="pw-re">Nhập lại mật khẩu mới</label><input class="input" id="pw-re" type="password" required minlength="8" autocomplete="new-password"><div class="field__error"></div></div>' +
+        '<button class="button button--sm" type="submit">Cập nhật mật khẩu</button></form></div>';
+      $("#pw").addEventListener("submit", function (e) {
+        e.preventDefault(); if (!DM.validate(this)) return;
+        var msg = $("#pw-msg");
+        if ($("#pw-new").value !== $("#pw-re").value) { msg.innerHTML = '<div class="alert alert--error">Mật khẩu nhập lại không khớp.</div>'; return; }
+        DM.api("/staff/password", { body: { old: $("#pw-old").value, password: $("#pw-new").value } }).then(function () {
+          DM.toast("Đã đổi mật khẩu. Các thiết bị khác đã bị đăng xuất."); go("list");
+        }, function (er) { msg.innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
+      });
+    }
+
+    DM.api("/staff/me").then(function (d) { me = d.staff; render(); }, function () { login(); });
+  })();
+  </script>
+</body>
+</html>

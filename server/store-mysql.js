@@ -18,7 +18,7 @@ const P = config.DB.prefix;
 const T = {
   orders: P + "orders", files: P + "order_files", messages: P + "order_messages", history: P + "order_history",
   users: P + "users", tokens: P + "login_tokens", contacts: P + "contacts", reviews: P + "reviews",
-  payments: P + "payments", settings: P + "settings"
+  payments: P + "payments", settings: P + "settings", staff: P + "staff", internal: P + "order_internal"
 };
 
 let pool = null;
@@ -33,6 +33,27 @@ const fromJSON = (v, d) => { if (v == null) return d; if (typeof v !== "string")
    Lược đồ
    ========================================================= */
 const SCHEMA = [
+  `CREATE TABLE IF NOT EXISTS \`${T.staff}\` (
+    id VARCHAR(20) NOT NULL PRIMARY KEY,
+    username VARCHAR(40) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(160) NULL,
+    pass_hash VARCHAR(200) NOT NULL,
+    active TINYINT(1) NOT NULL DEFAULT 1,
+    session_version INT NOT NULL DEFAULT 1,
+    last_login DATETIME(3) NULL,
+    created_at DATETIME(3) NOT NULL,
+    UNIQUE KEY uq_username (username)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+  `CREATE TABLE IF NOT EXISTS \`${T.internal}\` (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    order_id VARCHAR(12) NOT NULL,
+    role VARCHAR(10) NOT NULL COMMENT 'admin|staff|system',
+    sender VARCHAR(100) NOT NULL,
+    text TEXT NOT NULL,
+    created_at DATETIME(3) NOT NULL,
+    KEY idx_order (order_id)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS \`${T.orders}\` (
     id VARCHAR(12) NOT NULL PRIMARY KEY COMMENT 'Mã đơn, vd DM123456',
     created_at DATETIME(3) NOT NULL,
@@ -64,6 +85,8 @@ const SCHEMA = [
     received_amount INT NOT NULL DEFAULT 0,
     deadline DATETIME(3) NULL,
     notes TEXT NULL COMMENT 'Ghi chú nội bộ',
+    assigned_to VARCHAR(20) NULL COMMENT 'Nhân viên được giao',
+    assigned_at DATETIME(3) NULL,
     KEY idx_email (email),
     KEY idx_status (status),
     KEY idx_created (created_at)
@@ -77,6 +100,7 @@ const SCHEMA = [
     uploaded_by VARCHAR(10) NOT NULL COMMENT 'customer|admin',
     stored VARCHAR(255) NULL COMMENT 'Đường dẫn trong DATA_DIR/uploads; NULL khi đã xóa',
     purged TINYINT(1) NOT NULL DEFAULT 0,
+    shared TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'Tệp nhân viên đã được chuyển cho khách',
     created_at DATETIME(3) NOT NULL,
     KEY idx_order (order_id)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
@@ -159,6 +183,9 @@ async function init() {
   });
   await q("SELECT 1");
   for (const sql of SCHEMA) await q(sql);
+  await addColumnIfMissing(T.orders, "assigned_to", "VARCHAR(20) NULL");
+  await addColumnIfMissing(T.orders, "assigned_at", "DATETIME(3) NULL");
+  await addColumnIfMissing(T.files, "shared", "TINYINT(1) NOT NULL DEFAULT 0");
 
   // Khóa ký phiên: lưu trong MySQL để không đổi sau mỗi lần deploy (khách không bị đăng xuất)
   if (!config.SESSION_SECRET) {
@@ -169,6 +196,10 @@ async function init() {
   await importLegacyJson();
   ready = true;
 }
+async function addColumnIfMissing(table, column, def) {
+  const r = await q("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?", [table, column]);
+  if (!r.length) await q("ALTER TABLE `" + table + "` ADD COLUMN `" + column + "` " + def);
+}
 const close = () => { ready = false; return pool ? pool.end() : Promise.resolve(); };
 const isReady = () => ready;
 
@@ -177,9 +208,10 @@ const isReady = () => ready;
    ========================================================= */
 const ORDER_COLS = {
   status: "status", name: "name", email: "email", phone: "phone", notes: "notes",
-  paidAt: "paid_at", paidAmount: "paid_amount", paySource: "pay_source", receivedAmount: "received_amount", deadline: "deadline"
+  paidAt: "paid_at", paidAmount: "paid_amount", paySource: "pay_source", receivedAmount: "received_amount", deadline: "deadline",
+  assignedTo: "assigned_to", assignedAt: "assigned_at"
 };
-const DATE_FIELDS = new Set(["paidAt", "deadline"]);
+const DATE_FIELDS = new Set(["paidAt", "deadline", "assignedAt"]);
 
 function rowToOrder(r) {
   return {
@@ -192,7 +224,8 @@ function rowToOrder(r) {
     price: fromJSON(r.price, { total: r.total }), promo: r.promo,
     status: r.status, paidAt: toMs(r.paid_at), paidAmount: r.paid_amount, paySource: r.pay_source,
     receivedAmount: r.received_amount || 0, deadline: toMs(r.deadline), notes: r.notes || "",
-    files: [], messages: [], history: []
+    assignedTo: r.assigned_to || null, assignedAt: toMs(r.assigned_at),
+    files: [], messages: [], history: [], internal: []
   };
 }
 
@@ -202,14 +235,16 @@ async function hydrate(rows) {
   if (!list.length) return list;
   const ids = list.map((o) => o.id), by = {};
   list.forEach((o) => { by[o.id] = o; });
-  const [files, msgs, hist] = await Promise.all([
+  const [files, msgs, hist, notes] = await Promise.all([
     q(`SELECT * FROM \`${T.files}\` WHERE order_id IN (?) ORDER BY created_at, id`, [ids]),
     q(`SELECT * FROM \`${T.messages}\` WHERE order_id IN (?) ORDER BY created_at, id`, [ids]),
-    q(`SELECT * FROM \`${T.history}\` WHERE order_id IN (?) ORDER BY created_at, id`, [ids])
+    q(`SELECT * FROM \`${T.history}\` WHERE order_id IN (?) ORDER BY created_at, id`, [ids]),
+    q(`SELECT * FROM \`${T.internal}\` WHERE order_id IN (?) ORDER BY created_at, id`, [ids])
   ]);
-  files.forEach((f) => by[f.order_id].files.push({ id: f.id, name: f.name, size: Number(f.size), type: f.mime, by: f.uploaded_by, at: toMs(f.created_at), stored: f.stored, purged: !!f.purged }));
+  files.forEach((f) => by[f.order_id].files.push({ id: f.id, name: f.name, size: Number(f.size), type: f.mime, by: f.uploaded_by, at: toMs(f.created_at), stored: f.stored, purged: !!f.purged, shared: !!f.shared }));
   msgs.forEach((m) => by[m.order_id].messages.push({ me: !!m.from_customer, from: m.sender, text: m.text, at: toMs(m.created_at) }));
   hist.forEach((h) => by[h.order_id].history.push({ status: h.status, at: toMs(h.created_at) }));
+  notes.forEach((n) => by[n.order_id].internal.push({ role: n.role, from: n.sender, text: n.text, at: toMs(n.created_at) }));
   return list;
 }
 
@@ -245,6 +280,7 @@ const orders = {
     const rows = await q(`SELECT * FROM \`${T.orders}\` WHERE id = ?`, [id]);
     return rows.length ? (await hydrate(rows))[0] : null;
   },
+  async byStaff(staffId) { return hydrate(await q(`SELECT * FROM \`${T.orders}\` WHERE assigned_to = ? ORDER BY created_at DESC`, [staffId])); },
   async byEmail(email) { return hydrate(await q(`SELECT * FROM \`${T.orders}\` WHERE email = ? ORDER BY created_at DESC`, [email])); },
   async all(limit) { return hydrate(await q(`SELECT * FROM \`${T.orders}\` ORDER BY created_at DESC LIMIT ?`, [limit || 1000])); },
 
@@ -265,6 +301,8 @@ const orders = {
   addHistory(id, status, at) { return q(`INSERT INTO \`${T.history}\` SET ?`, [{ order_id: id, status, created_at: toDate(at || Date.now()) }]); },
   addMessage(id, me, from, text, at) { return q(`INSERT INTO \`${T.messages}\` SET ?`, [{ order_id: id, from_customer: me ? 1 : 0, sender: from, text, created_at: toDate(at || Date.now()) }]); },
   addFile(id, f) { return q(`INSERT INTO \`${T.files}\` SET ?`, [fileRow(id, f)]); },
+  addInternal(id, n) { return q(`INSERT INTO \`${T.internal}\` SET ?`, [{ order_id: id, role: n.role, sender: n.from, text: n.text, created_at: toDate(n.at || Date.now()) }]); },
+  async setFileShared(id, fileId, shared) { return (await q(`UPDATE \`${T.files}\` SET shared = ? WHERE id = ? AND order_id = ?`, [shared ? 1 : 0, fileId, id])).affectedRows > 0; },
 
   /** Đơn đã kết thúc (hoàn thành/hủy) trước mốc `before` và vẫn còn tệp trên đĩa. */
   async closedWithFiles(before) {
@@ -285,12 +323,27 @@ const orders = {
   }
 };
 function fileRow(orderId, f) {
-  return { id: f.id, order_id: orderId, name: f.name, size: f.size || 0, mime: f.type || null, uploaded_by: f.by, stored: f.stored || null, purged: f.purged ? 1 : 0, created_at: toDate(f.at || Date.now()) };
+  return { id: f.id, order_id: orderId, name: f.name, size: f.size || 0, mime: f.type || null, uploaded_by: f.by, stored: f.stored || null, purged: f.purged ? 1 : 0, shared: f.shared ? 1 : 0, created_at: toDate(f.at || Date.now()) };
 }
 
 /* =========================================================
    Khách hàng & đăng nhập
    ========================================================= */
+const mapStaff = (r) => ({ id: r.id, username: r.username, name: r.name, email: r.email || "", passHash: r.pass_hash, active: !!r.active, sessionVersion: r.session_version, lastLogin: toMs(r.last_login), created: toMs(r.created_at) });
+const STAFF_COLS = { name: "name", email: "email", active: "active", passHash: "pass_hash", sessionVersion: "session_version", lastLogin: "last_login" };
+const staff = {
+  async list() { return (await q(`SELECT * FROM \`${T.staff}\` ORDER BY created_at`)).map(mapStaff); },
+  async get(id) { const r = await q(`SELECT * FROM \`${T.staff}\` WHERE id = ?`, [id]); return r.length ? mapStaff(r[0]) : null; },
+  async byUsername(u) { const r = await q(`SELECT * FROM \`${T.staff}\` WHERE username = ?`, [u]); return r.length ? mapStaff(r[0]) : null; },
+  create(st) { return q(`INSERT INTO \`${T.staff}\` SET ?`, [{ id: st.id, username: st.username, name: st.name, email: st.email || null, pass_hash: st.passHash, active: st.active ? 1 : 0, session_version: st.sessionVersion || 1, created_at: toDate(st.created) }]); },
+  async update(id, patch) {
+    const set = {};
+    for (const k of Object.keys(patch)) if (STAFF_COLS[k]) set[STAFF_COLS[k]] = k === "lastLogin" ? toDate(patch[k]) : k === "active" ? (patch[k] ? 1 : 0) : patch[k];
+    if (!Object.keys(set).length) return false;
+    return (await q(`UPDATE \`${T.staff}\` SET ? WHERE id = ?`, [set, id])).affectedRows > 0;
+  }
+};
+
 const users = {
   async get(email) {
     const r = await q(`SELECT * FROM \`${T.users}\` WHERE email = ?`, [email]);
@@ -379,4 +432,4 @@ async function importLegacyJson() {
   console.log("[db] Đã nhập " + n + " đơn hàng từ db.json sang MySQL (tệp cũ đổi tên thành db.json.imported).");
 }
 
-module.exports = { init, close, isReady, orders, users, loginTokens, contacts, reviews, payments, settings, TABLES: T, query: (s, p) => q(s, p) };
+module.exports = { init, close, isReady, orders, staff, users, loginTokens, contacts, reviews, payments, settings, TABLES: T, query: (s, p) => q(s, p) };

@@ -65,13 +65,39 @@ async function getOrderOr404(id) {
   return o;
 }
 
-/** Dữ liệu đơn trả về trình duyệt (bỏ thông tin nội bộ). */
+/** Khách chỉ thấy tệp của mình, tệp quản trị gửi, và tệp nhân viên đã được quản trị duyệt chuyển cho khách. */
+const customerCanSeeFile = (f) => f.by === "customer" || f.by === "admin" || (f.by === "staff" && f.shared);
+const fileOut = (f) => ({ id: f.id, name: f.name, size: f.size, by: f.by, at: f.at, purged: !!f.purged, shared: !!f.shared });
+
+/** Dữ liệu đơn trả về trình duyệt. admin=true: đầy đủ; còn lại (khách): bỏ mọi thông tin nội bộ. */
 function publicOrder(o, admin) {
   const out = Object.assign({}, o);
   delete out.tokenHash;
-  out.files = o.files.map((f) => ({ id: f.id, name: f.name, size: f.size, by: f.by, at: f.at, purged: !!f.purged }));
-  if (!admin) delete out.notes;
+  if (admin) {
+    out.files = o.files.map(fileOut);
+    out.internal = o.internal || [];
+    return out;
+  }
+  delete out.notes; delete out.internal; delete out.assignedTo; delete out.assignedAt;
+  out.files = o.files.filter(customerCanSeeFile).map((f) => { const x = fileOut(f); delete x.shared; if (x.by === "staff") x.by = "admin"; return x; });
   return out;
+}
+
+/**
+ * Dữ liệu đơn cho NHÂN VIÊN: chỉ phần chuyên môn.
+ * Không có: tên/email/điện thoại khách, giá, mã giảm giá, tiền đã nhận, tin nhắn với khách, ghi chú riêng của quản trị.
+ */
+function staffView(o) {
+  return {
+    id: o.id, created: o.created, status: o.status,
+    service: o.service, serviceLabel: o.serviceLabel, type: o.type, typeLabel: o.typeLabel,
+    urgency: o.urgency, urgencyLabel: o.urgencyLabel, qty: o.qty, unit: o.unit, speakers: o.speakers,
+    extras: (o.extras || []).map((e) => String(e).replace(/\s*\(\+\d+%\)\s*$/, "")), // bỏ phần trăm phụ phí
+    docType: o.docType, instructions: o.instructions, deadline: o.deadline || null, assignedAt: o.assignedAt || null,
+    history: o.history,
+    files: o.files.map(fileOut),
+    internal: o.internal || []
+  };
 }
 
 /** Đổi trạng thái + ghi lịch sử. `from`: chỉ đổi khi trạng thái hiện tại thuộc danh sách này. */
@@ -229,7 +255,7 @@ router.post("/orders/:id/messages", sec.rateLimit("msg", 30, 600e3), wrap(async 
 router.get("/orders/:id/files/:fileId", wrap(async (req, res) => {
   const o = await getAccessibleOrder(req);
   const f = o.files.find((x) => x.id === req.params.fileId);
-  if (!f) throw new HttpError(404, "Không tìm thấy tệp.");
+  if (!f || (!req.isAdmin && !customerCanSeeFile(f))) throw new HttpError(404, "Không tìm thấy tệp.");
   if (!f.stored) throw new HttpError(410, "Tệp đã được xóa theo chính sách lưu trữ 30 ngày.");
   const full = path.join(config.UPLOAD_DIR, f.stored);
   if (!full.startsWith(config.UPLOAD_DIR + path.sep) || !fs.existsSync(full)) throw new HttpError(404, "Tệp không còn tồn tại trên máy chủ.");
@@ -361,12 +387,13 @@ router.post("/admin/logout", (req, res) => { sec.clearSession(res, sec.ADMIN_COO
 const adminOnly = (req, res, next) => (req.isAdmin ? next() : res.status(401).json({ error: "Vui lòng đăng nhập quản trị." }));
 
 router.get("/admin/summary", adminOnly, wrap(async (req, res) => {
-  const [orders, stats, contacts, newContacts, reviews, pendingReviews, payments] = await Promise.all([
-    db.orders.all(1000), db.orders.stats(), db.contacts.list(), db.contacts.unread(), db.reviews.all(), db.reviews.pending(), db.payments.recent()
+  const [orders, stats, contacts, newContacts, reviews, pendingReviews, payments, staffList] = await Promise.all([
+    db.orders.all(1000), db.orders.stats(), db.contacts.list(), db.contacts.unread(), db.reviews.all(), db.reviews.pending(), db.payments.recent(), db.staff.list()
   ]);
   res.json({
-    stats: Object.assign(stats, { newContacts, pendingReviews }),
+    stats: Object.assign(stats, { newContacts, pendingReviews, toReview: orders.filter((o) => o.status === "review").length }),
     orders: orders.map((o) => publicOrder(o, true)),
+    staff: staffList.map(publicStaff),
     contacts, reviews, payments,
     email: mail.ready, sepay: !!config.SEPAY_API_KEY
   });
@@ -374,9 +401,23 @@ router.get("/admin/summary", adminOnly, wrap(async (req, res) => {
 
 router.patch("/admin/orders/:id", adminOnly, wrap(async (req, res) => {
   const o = await getOrderOr404(req.params.id);
+
+  // Giao / đổi / bỏ giao nhân viên
+  if ("assignedTo" in req.body) {
+    const sid = req.body.assignedTo ? String(req.body.assignedTo) : null;
+    if (sid !== (o.assignedTo || null)) {
+      const st = sid ? await db.staff.get(sid) : null;
+      if (sid && (!st || !st.active)) throw new HttpError(400, "Nhân viên không tồn tại hoặc đã bị khóa.");
+      await db.orders.update(o.id, { assignedTo: sid, assignedAt: sid ? now() : null });
+      await db.orders.addInternal(o.id, { role: "system", from: "Hệ thống", text: st ? "Đã giao đơn cho " + st.name + "." : "Đã bỏ giao đơn." });
+      if (st) mail.staffAssigned(st, o);
+    }
+  }
+
   const status = String(req.body.status || "");
-  if (!STATUS[status]) throw new HttpError(400, "Trạng thái không hợp lệ.");
-  if (status === "paid" && !o.paidAt) await markPaid(o.id, o.price.total, "admin");
+  if (status && !STATUS[status]) throw new HttpError(400, "Trạng thái không hợp lệ.");
+  if (!status) { /* chỉ đổi người phụ trách / ghi chú */ }
+  else if (status === "paid" && !o.paidAt) await markPaid(o.id, o.price.total, "admin");
   else if (status !== o.status) {
     await setStatus(o.id, status);
     await db.orders.addMessage(o.id, false, "Hệ thống", "Trạng thái đơn hàng: “" + STATUS[status] + "”.");
@@ -438,6 +479,164 @@ router.patch("/admin/reviews/:id", adminOnly, wrap(async (req, res) => {
 }));
 router.delete("/admin/reviews/:id", adminOnly, wrap(async (req, res) => {
   res.json({ ok: await db.reviews.remove(req.params.id) });
+}));
+
+/* ---------- Quản trị: ghi chú nội bộ & duyệt tệp của nhân viên ---------- */
+router.post("/admin/orders/:id/internal", adminOnly, wrap(async (req, res) => {
+  const o = await getOrderOr404(req.params.id);
+  const text = str(req.body && req.body.text, 2000);
+  if (!text) throw new HttpError(400, "Ghi chú trống.");
+  await db.orders.addInternal(o.id, { role: "admin", from: "Quản trị", text });
+  res.json({ order: publicOrder(await db.orders.get(o.id), true) });
+}));
+
+/** Chuyển tệp nhân viên làm cho khách (sau khi quản trị kiểm tra). complete=1: đồng thời hoàn thành đơn. */
+router.post("/admin/orders/:id/files/:fileId/share", adminOnly, wrap(async (req, res) => {
+  const o = await getOrderOr404(req.params.id);
+  const f = o.files.find((x) => x.id === req.params.fileId && x.by === "staff");
+  if (!f) throw new HttpError(404, "Không tìm thấy tệp của nhân viên.");
+  const share = req.body.shared !== false;
+  await db.orders.setFileShared(o.id, f.id, share);
+  if (share && req.body.complete && o.status !== "done") {
+    await setStatus(o.id, "done");
+    await db.orders.addMessage(o.id, false, "Chuyên viên Đánh máy 247", "Tài liệu của bạn đã hoàn thành! Bấm vào tệp để tải về. Nếu cần chỉnh sửa, hãy nhắn cho chúng tôi trong vòng 14 ngày.");
+    mail.statusChanged(Object.assign({}, o, { status: "done" }));
+  } else if (share) {
+    await db.orders.addMessage(o.id, false, "Chuyên viên Đánh máy 247", "Đã gửi tệp: " + f.name);
+  }
+  await db.orders.addInternal(o.id, { role: "system", from: "Hệ thống", text: (share ? "Quản trị đã duyệt và chuyển cho khách tệp: " : "Quản trị thu hồi tệp: ") + f.name });
+  res.json({ order: publicOrder(await db.orders.get(o.id), true) });
+}));
+
+/* ---------- Quản trị: tài khoản nhân viên ---------- */
+const USERNAME_RE = /^[a-z0-9._-]{3,40}$/;
+const publicStaff = (st) => ({ id: st.id, username: st.username, name: st.name, email: st.email || "", active: !!st.active, lastLogin: st.lastLogin || null, created: st.created });
+function checkNewPassword(pw) {
+  if (String(pw || "").length < 8) throw new HttpError(400, "Mật khẩu tối thiểu 8 ký tự.");
+}
+
+router.post("/admin/staff", adminOnly, wrap(async (req, res) => {
+  const b = req.body || {};
+  const username = str(b.username, 40).toLowerCase(), name = str(b.name, 100), email = str(b.email, 160).toLowerCase();
+  if (!USERNAME_RE.test(username)) throw new HttpError(400, "Tên đăng nhập 3–40 ký tự, chỉ gồm chữ thường không dấu, số, dấu chấm, gạch.");
+  if (!name) throw new HttpError(400, "Vui lòng nhập họ tên nhân viên.");
+  if (email && !EMAIL_RE.test(email)) throw new HttpError(400, "Email không hợp lệ.");
+  checkNewPassword(b.password);
+  if (await db.staff.byUsername(username)) throw new HttpError(409, "Tên đăng nhập đã tồn tại.");
+  const st = { id: "NV" + sec.randomToken(6).replace(/[^a-zA-Z0-9]/g, "x"), username, name, email, passHash: sec.hashPassword(b.password), active: true, sessionVersion: 1, created: now() };
+  await db.staff.create(st);
+  res.status(201).json({ staff: publicStaff(st) });
+}));
+
+router.patch("/admin/staff/:id", adminOnly, wrap(async (req, res) => {
+  const st = await db.staff.get(req.params.id);
+  if (!st) throw new HttpError(404, "Không tìm thấy nhân viên.");
+  const b = req.body || {}, patch = {};
+  if ("name" in b) { patch.name = str(b.name, 100); if (!patch.name) throw new HttpError(400, "Vui lòng nhập họ tên."); }
+  if ("email" in b) { patch.email = str(b.email, 160).toLowerCase(); if (patch.email && !EMAIL_RE.test(patch.email)) throw new HttpError(400, "Email không hợp lệ."); }
+  if ("active" in b) patch.active = !!b.active;
+  if (b.password) { checkNewPassword(b.password); patch.passHash = sec.hashPassword(b.password); }
+  // Khóa tài khoản hoặc đặt lại mật khẩu → đăng xuất nhân viên khỏi mọi thiết bị
+  if (patch.passHash || patch.active === false) patch.sessionVersion = (st.sessionVersion || 1) + 1;
+  await db.staff.update(st.id, patch);
+  res.json({ staff: publicStaff(await db.staff.get(st.id)) });
+}));
+
+/* =========================================================
+   NHÂN VIÊN — chỉ thấy đơn được giao, không thấy thông tin khách và giá
+   ========================================================= */
+router.post("/staff/login", sec.rateLimit("staff-login", 10, 900e3), wrap(async (req, res) => {
+  const username = str(req.body && req.body.username, 40).toLowerCase();
+  const st = username && (await db.staff.byUsername(username));
+  if (!st || !st.active || !sec.checkPassword(String((req.body && req.body.password) || ""), st.passHash)) {
+    throw new HttpError(401, "Sai tên đăng nhập hoặc mật khẩu, hoặc tài khoản đã bị khóa.");
+  }
+  await db.staff.update(st.id, { lastLogin: now() });
+  sec.startStaffSession(res, st);
+  res.json({ staff: publicStaff(st) });
+}));
+router.post("/staff/logout", (req, res) => { sec.clearSession(res, sec.STAFF_COOKIE); res.json({ ok: true }); });
+
+/** Xác thực nhân viên: phiên hợp lệ + tài khoản còn hoạt động + chưa đổi mật khẩu sau khi đăng nhập. */
+const staffOnly = wrap(async (req, res, next) => {
+  const s = req.staffSession;
+  const st = s && (await db.staff.get(s.id));
+  if (!st || !st.active || (st.sessionVersion || 1) !== s.v) {
+    sec.clearSession(res, sec.STAFF_COOKIE);
+    throw new HttpError(401, "Vui lòng đăng nhập tài khoản nhân viên.");
+  }
+  req.staff = st;
+  next();
+});
+async function getStaffOrder(req) {
+  const o = await db.orders.get(String(req.params.id).slice(0, 12));
+  if (!o || o.assignedTo !== req.staff.id) throw new HttpError(404, "Không tìm thấy đơn được giao cho bạn.");
+  return o;
+}
+
+router.get("/staff/me", staffOnly, (req, res) => res.json({ staff: publicStaff(req.staff) }));
+
+router.post("/staff/password", staffOnly, wrap(async (req, res) => {
+  const b = req.body || {};
+  if (!sec.checkPassword(String(b.old || ""), req.staff.passHash)) throw new HttpError(400, "Mật khẩu hiện tại không đúng.");
+  checkNewPassword(b.password);
+  const v = (req.staff.sessionVersion || 1) + 1;
+  await db.staff.update(req.staff.id, { passHash: sec.hashPassword(b.password), sessionVersion: v });
+  sec.startStaffSession(res, Object.assign({}, req.staff, { sessionVersion: v }));
+  res.json({ ok: true });
+}));
+
+router.get("/staff/orders", staffOnly, wrap(async (req, res) => {
+  res.json({ orders: (await db.orders.byStaff(req.staff.id)).map(staffView) });
+}));
+
+router.get("/staff/orders/:id", staffOnly, wrap(async (req, res) => {
+  res.json({ order: staffView(await getStaffOrder(req)) });
+}));
+
+/** Nhân viên chỉ được chuyển: đã thanh toán → đang làm → gửi kiểm tra (quản trị mới hoàn thành đơn). */
+router.patch("/staff/orders/:id", staffOnly, wrap(async (req, res) => {
+  const o = await getStaffOrder(req);
+  const status = String(req.body.status || "");
+  if (!["progress", "review"].includes(status)) throw new HttpError(400, "Trạng thái không hợp lệ.");
+  if (!(await setStatus(o.id, status, ["paid", "progress", "review"]))) {
+    throw new HttpError(400, o.status === "done" ? "Đơn đã hoàn thành." : "Đơn chưa được thanh toán hoặc đã hủy, chưa thể cập nhật.");
+  }
+  const text = status === "review" ? "Đã làm xong, gửi quản trị kiểm tra." : "Bắt đầu thực hiện đơn.";
+  await db.orders.addInternal(o.id, { role: "staff", from: req.staff.name, text });
+  if (status === "review") mail.staffUpdate(o, req.staff, text);
+  res.json({ order: staffView(await db.orders.get(o.id)) });
+}));
+
+router.post("/staff/orders/:id/notes", staffOnly, sec.rateLimit("staff-note", 60, 600e3), wrap(async (req, res) => {
+  const o = await getStaffOrder(req);
+  const text = str(req.body && req.body.text, 2000);
+  if (!text) throw new HttpError(400, "Ghi chú trống.");
+  await db.orders.addInternal(o.id, { role: "staff", from: req.staff.name, text });
+  mail.staffUpdate(o, req.staff, text);
+  res.json({ order: staffView(await db.orders.get(o.id)) });
+}));
+
+/** Nhân viên tải tệp kết quả lên — chưa hiện cho khách cho tới khi quản trị duyệt. */
+router.post("/staff/orders/:id/files", staffOnly, upload.array("files", config.MAX_FILES), wrap(async (req, res) => {
+  let o;
+  try { o = await getStaffOrder(req); } catch (e) { removeTemp(req.files); throw e; }
+  if (!req.files || !req.files.length) throw new HttpError(400, "Chưa chọn tệp.");
+  const files = moveFiles(o.id, req.files, "staff");
+  for (const f of files) await db.orders.addFile(o.id, Object.assign(f, { shared: false }));
+  await db.orders.addInternal(o.id, { role: "staff", from: req.staff.name, text: "Đã tải lên: " + files.map((f) => f.name).join(", ") });
+  res.json({ order: staffView(await db.orders.get(o.id)) });
+}));
+
+router.get("/staff/orders/:id/files/:fileId", staffOnly, wrap(async (req, res) => {
+  const o = await getStaffOrder(req);
+  const f = o.files.find((x) => x.id === req.params.fileId);
+  if (!f) throw new HttpError(404, "Không tìm thấy tệp.");
+  if (!f.stored) throw new HttpError(410, "Tệp đã được xóa theo chính sách lưu trữ 30 ngày.");
+  const full = path.join(config.UPLOAD_DIR, f.stored);
+  if (!full.startsWith(config.UPLOAD_DIR + path.sep) || !fs.existsSync(full)) throw new HttpError(404, "Tệp không còn tồn tại trên máy chủ.");
+  res.setHeader("Cache-Control", "private, no-store");
+  res.download(full, f.name);
 }));
 
 /* =========================================================

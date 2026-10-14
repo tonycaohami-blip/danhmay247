@@ -374,7 +374,7 @@
       '<div class="footer__menu"><div class="footer__title">Công ty</div><ul>' +
       '<li><a href="/gioi-thieu">Giới thiệu</a></li><li><a href="/bang-gia">Bảng giá</a></li><li><a href="/danh-gia">Đánh giá</a></li>' +
       '<li><a href="/hoi-dap">Hỏi đáp</a></li><li><a href="/blog">Blog</a></li><li><a href="/lien-he">Liên hệ</a></li>' +
-      '<li><a href="#" data-legal="cookie">Chính sách cookie</a></li></ul></div>' +
+      '<li><a href="#" data-legal="cookie">Chính sách cookie</a></li><li><a href="/nhan-vien" rel="nofollow">Đăng nhập nhân viên</a></li></ul></div>' +
       '<div class="footer__menu"><div class="footer__title">Dịch vụ</div><ul>' +
       '<li><a href="/#services-section">Đánh máy lại</a></li><li><a href="/dich-vu-chuyen-am">Chuyển âm</a></li>' +
       '<li><a href="/dich-vu?slug=pdf-sang-word">PDF sang Word</a></li><li><a href="/dich-vu?slug=viet-tay-sang-word">Viết tay sang Word</a></li>' +
