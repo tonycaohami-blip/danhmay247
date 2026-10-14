@@ -77,14 +77,18 @@ Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_
 
 ## Chỉnh sửa nội dung
 
-- `public/assets/js/data.js`: giá, mã giảm giá, số điện thoại, email, tài khoản ngân hàng, dịch vụ, câu hỏi thường gặp, blog. Sau khi đổi giá cần **Redeploy** để máy chủ tính theo giá mới.
+- `public/assets/js/data.js`: giá, mã giảm giá, số điện thoại, email, tài khoản ngân hàng, dịch vụ, câu hỏi thường gặp.
+- `public/assets/js/posts.js`: **bài viết blog** (16 bài). Mỗi bài gồm tiêu đề, chuyên mục, ngày, thẻ, tóm tắt và nội dung HTML. Có sẵn các khối trình bày: `<p class="lead">` (đoạn mở đầu), hộp `callout--tip / --warn / --info`, `<figure>`, bảng `class="tbl"`, danh sách bước `class="steps"`, phím `<kbd>`, khung `takeaways` (điểm chính). Mục lục được tạo tự động từ các tiêu đề `<h2>`.
+- Ảnh bìa và hình minh họa blog: `public/assets/img/blog/*.svg`, tạo lại bằng `node scripts/make-blog-images.js`. Bài mới cần thêm ảnh bìa trùng tên với `slug`.
+- `https://danhmay247.com/sitemap.xml` tự cập nhật theo danh sách bài viết; hãy khai báo địa chỉ này trong Google Search Console. Sau khi đổi giá cần **Redeploy** để máy chủ tính theo giá mới.
 - `public/assets/css/style.css`: giao diện.
 - Đánh giá mẫu và số liệu trên trang (trang Giới thiệu, "9.8/10") là nội dung minh họa, nên thay bằng thông tin thật.
 
 ## Cấu trúc mã nguồn
 
 ```
-server.js                  Khởi động website + API
+server.js                  Khởi động website + API + sitemap.xml
+scripts/make-blog-images.js  Tạo ảnh bìa / hình minh họa SVG cho blog
 server/api.js              API: đơn hàng, tệp, tài khoản, tin nhắn, liên hệ, đánh giá, webhook, quản trị, nhân viên, xuất Excel
 server/db.js               Chọn nơi lưu: tệp (mặc định) hoặc MySQL
 server/store-json.js       Lưu trữ tệp db.json + sao lưu hằng ngày

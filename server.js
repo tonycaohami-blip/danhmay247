@@ -23,7 +23,9 @@ const { sameOrigin } = require("./server/security");
 const PUBLIC = config.PUBLIC_DIR;
 const app = express();
 app.disable("x-powered-by");
-app.set("trust proxy", true); // Hostinger chạy sau proxy → lấy đúng IP khách cho giới hạn tần suất
+// Hostinger đặt đúng MỘT lớp proxy (LiteSpeed) trước ứng dụng → chỉ tin địa chỉ do lớp đó ghi,
+// không tin toàn bộ X-Forwarded-For (khách có thể tự giả để né giới hạn số lần thử mật khẩu)
+app.set("trust proxy", 1);
 
 const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
@@ -40,6 +42,33 @@ app.use("/api", (req, res, next) => { res.set("Cache-Control", "no-store"); next
 // Chưa mở được nơi lưu dữ liệu: website vẫn hiển thị, chỉ API tạm báo bảo trì (webhook SePay nhận 503 sẽ tự gửi lại sau)
 app.use("/api", (req, res, next) => (db.isReady() ? next() : res.status(503).json({ error: "Hệ thống đặt hàng đang bảo trì, vui lòng thử lại sau ít phút hoặc gọi 0988 058 030." })));
 app.use("/api", api);
+
+/* ---------- Sitemap cho Google: trang công khai + bài viết blog ---------- */
+app.get("/sitemap.xml", (req, res) => {
+  const base = config.SITE_URL;
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const pages = ["", "bang-gia", "dat-hang", "dich-vu", "dich-vu-chuyen-am", "gioi-thieu", "danh-gia", "mau", "blog", "hoi-dap", "lien-he"];
+  let posts = [];
+  try {
+    const ctx = {}; ctx.window = ctx; require("vm").createContext(ctx);
+    require("vm").runInContext(fs.readFileSync(path.join(PUBLIC, "assets/js/posts.js"), "utf8"), ctx);
+    posts = ctx.DM.posts || [];
+  } catch (e) { console.error("[sitemap]", e.message); }
+  const services = (() => {
+    try {
+      const ctx = {}; ctx.window = ctx; require("vm").createContext(ctx);
+      require("vm").runInContext(fs.readFileSync(path.join(PUBLIC, "assets/js/data.js"), "utf8"), ctx);
+      return Object.keys(ctx.DM.services || {});
+    } catch (e) { return []; }
+  })();
+  const url = (loc, extra) => "<url><loc>" + esc(base + loc) + "</loc>" + (extra || "") + "</url>";
+  const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' +
+    pages.map((p) => url("/" + p)).join("") +
+    services.map((s) => url("/dich-vu?slug=" + s)).join("") +
+    posts.map((p) => url("/bai-viet?slug=" + p.slug, "<lastmod>" + p.date + "</lastmod>" + (p.cover ? "<image:image><image:loc>" + esc(base + p.cover) + "</image:loc></image:image>" : ""))).join("") +
+    "</urlset>";
+  res.set({ "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }).send(xml);
+});
 
 /* ---------- Website tĩnh ---------- */
 const TYPES = {

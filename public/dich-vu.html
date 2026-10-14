@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dịch vụ đánh máy &amp; chuyển đổi tài liệu — DanhMay247</title>
+  <title>Dịch vụ đánh máy &amp; chuyển đổi tài liệu — Đánh máy 247</title>
   <meta name="description" content="Tất cả dịch vụ: PDF sang Word, viết tay sang Word, ảnh sang Word, Word sang Excel, đánh máy LaTeX, công thức, văn bản pháp lý, định dạng, biên tập, chuyển âm.">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,7 +52,7 @@
 
     var s = DM.services[slug];
     if (!s) {
-      document.title = "Tất cả dịch vụ — DanhMay247";
+      document.title = "Tất cả dịch vụ — Đánh máy 247";
       page.innerHTML =
         '<section class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Trang chủ</a><span>/</span><span aria-current="page">Dịch vụ</span></nav>' +
         "<h1>Tất cả dịch vụ</h1><p>Đánh máy lại, chuyển đổi định dạng, biên tập và chuyển âm — mọi công việc với tài liệu, do con người thực hiện.</p></div></section>" +
@@ -65,7 +65,7 @@
       return;
     }
 
-    document.title = s.title + " — Dịch vụ đánh máy DanhMay247";
+    document.title = s.title + " — Đánh máy 247";
     var meta = document.querySelector('meta[name="description"]'); if (meta) meta.content = s.intro;
     var pf = priceFrom(s);
     var sample = DM.samples[s.type === "hand-excel" || s.type === "word-excel" ? 2 : s.type === "hand-word" ? 0 : 1];

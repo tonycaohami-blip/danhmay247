@@ -1,5 +1,5 @@
 /* =========================================================
-   DanhMay247 — Script dùng chung cho mọi trang
+   Đánh máy 247 — Script dùng chung cho mọi trang
    ========================================================= */
 (function () {
   "use strict";
@@ -173,7 +173,7 @@
     { label: "Liên hệ", href: "/lien-he" }
   ];
   DM.logo = function (light) {
-    return '<a href="/" class="logo' + (light ? " logo--light" : "") + '" aria-label="DanhMay247 — Trang chủ">' +
+    return '<a href="/" class="logo' + (light ? " logo--light" : "") + '" aria-label="Đánh máy 247 — Trang chủ">' +
       '<span class="logo__red">ĐÁNH MÁY</span><span class="logo__black">247</span><span class="logo__caret" aria-hidden="true"></span></a>';
   };
 
@@ -429,7 +429,7 @@
   var LEGAL = {
     terms: { title: "Điều khoản & Điều kiện", body:
       "<p><b>" + DM.site.tagline + ".</b></p><p>Cập nhật lần cuối: 01/10/2026. Khi sử dụng website và dịch vụ của Đánh máy 247 (do " + DM.site.owner + " cung cấp), bạn đồng ý với các điều khoản dưới đây.</p>" +
-      "<h4>1. Phạm vi dịch vụ</h4><p>DanhMay247 cung cấp dịch vụ đánh máy lại, chuyển âm, định dạng và biên tập tài liệu theo yêu cầu khách hàng thông qua biểu mẫu đặt hàng trực tuyến.</p>" +
+      "<h4>1. Phạm vi dịch vụ</h4><p>Đánh máy 247 cung cấp dịch vụ đánh máy lại, chuyển âm, định dạng và biên tập tài liệu theo yêu cầu khách hàng thông qua biểu mẫu đặt hàng trực tuyến.</p>" +
       "<h4>2. Đặt hàng và thanh toán</h4><ul><li>Đơn hàng chỉ được bắt đầu xử lý sau khi thanh toán thành công.</li><li>Giá hiển thị đã bao gồm thuế VAT (nếu có) và không phát sinh phí ẩn.</li><li>Thời hạn được tính từ thời điểm xác nhận thanh toán.</li></ul>" +
       "<h4>3. Chỉnh sửa miễn phí</h4><p>Bạn được yêu cầu chỉnh sửa miễn phí trong vòng 14 ngày sau khi nhận tài liệu, với điều kiện yêu cầu nằm trong phạm vi hướng dẫn ban đầu.</p>" +
       "<h4>4. Hoàn tiền</h4><p>Trường hợp trễ hạn hoặc chất lượng không đạt cam kết và không thể khắc phục, bạn được hoàn tiền một phần hoặc toàn bộ. Yêu cầu hoàn tiền được xử lý trong 3–5 ngày làm việc.</p>" +
@@ -495,7 +495,7 @@
     chatBox.setAttribute("role", "dialog");
     chatBox.setAttribute("aria-label", "Chat hỗ trợ");
     chatBox.innerHTML =
-      '<div class="chat-box__head"><span class="login__avatar" style="background:#f24d50" aria-hidden="true">DM</span><div><b>Hỗ trợ DanhMay247</b><small>Đang trực tuyến · phản hồi trong 1 phút</small></div>' +
+      '<div class="chat-box__head"><span class="login__avatar" style="background:#f24d50" aria-hidden="true">DM</span><div><b>Hỗ trợ Đánh máy 247</b><small>Đang trực tuyến · phản hồi trong 1 phút</small></div>' +
       '<button type="button" class="modal__close" aria-label="Đóng chat">×</button></div>' +
       '<div class="chat-box__msgs" aria-live="polite"></div>' +
       '<div class="chat-box__quick"><button type="button">Bảng giá</button><button type="button">Thời gian giao</button><button type="button">Cách thanh toán</button><button type="button">Bảo mật</button></div>' +
@@ -505,7 +505,7 @@
     var msgs = $(".chat-box__msgs", chatBox);
     var history = [];
     try { history = JSON.parse(sessionStorage.getItem("dm247_chat") || "[]"); } catch (e) { history = []; }
-    if (!history.length) history.push({ me: false, text: "Xin chào 👋 Mình là trợ lý của DanhMay247. Bạn cần đánh máy, chuyển âm hay định dạng tài liệu? Hãy hỏi mình bất cứ điều gì nhé!", at: Date.now() });
+    if (!history.length) history.push({ me: false, text: "Xin chào 👋 Mình là trợ lý của Đánh máy 247. Bạn cần đánh máy, chuyển âm hay định dạng tài liệu? Hãy hỏi mình bất cứ điều gì nhé!", at: Date.now() });
     var draw = function () {
       msgs.innerHTML = history.map(function (m) {
         return '<div class="msg ' + (m.me ? "msg--me" : "msg--bot") + '">' + m.text + "<time>" + DM.dateTime(m.at).slice(-5) + "</time></div>";

@@ -55,8 +55,10 @@ const DAY = 86400e3;
 function startUserSession(res, email) {
   setCookie(res, USER_COOKIE, sign({ e: email, exp: Date.now() + 30 * DAY }), 30 * 86400);
 }
+// Phiên quản trị gắn với "dấu vân tay" của mật khẩu hiện tại → đổi ADMIN_PASSWORD là phiên cũ hết hiệu lực
+const adminKey = () => sha256("admin:" + ADMIN_PASSWORD).slice(0, 16);
 function startAdminSession(res) {
-  setCookie(res, ADMIN_COOKIE, sign({ admin: 1, exp: Date.now() + 12 * 3600e3 }), 12 * 3600);
+  setCookie(res, ADMIN_COOKIE, sign({ admin: 1, k: adminKey(), exp: Date.now() + 12 * 3600e3 }), 12 * 3600);
 }
 /** Phiên nhân viên: ghi kèm "phiên bản" để đổi mật khẩu / khóa tài khoản là đăng xuất ngay. */
 function startStaffSession(res, staff) {
@@ -80,7 +82,8 @@ function sessionMiddleware(req, res, next) {
   const c = parseCookies(req);
   const u = verify(c[USER_COOKIE]);
   req.userEmail = u ? u.e : null;
-  req.isAdmin = !!(ADMIN_PASSWORD && verify(c[ADMIN_COOKIE]));
+  const a = ADMIN_PASSWORD && verify(c[ADMIN_COOKIE]);
+  req.isAdmin = !!(a && a.k === adminKey());
   const st = verify(c[STAFF_COOKIE]);
   req.staffSession = st && st.s ? { id: st.s, v: st.v } : null;
   next();

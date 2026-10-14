@@ -1,12 +1,12 @@
 /* =========================================================
-   DanhMay247 — Dữ liệu dùng chung (giá, dịch vụ, nội dung)
+   Đánh máy 247 — Dữ liệu dùng chung (giá, dịch vụ, nội dung)
    Chỉnh sửa giá / nội dung tại đây, toàn bộ trang sẽ tự cập nhật.
    ========================================================= */
 window.DM = window.DM || {};
 
 DM.site = {
-  name: "DanhMay247",
-  domain: "danhmay247.vn",
+  name: "Đánh máy 247",
+  domain: "danhmay247.com",
   email: "trungtamdanhmay247@gmail.com",
   phone: "0988 058 030",
   phoneHref: "0988058030",
@@ -203,7 +203,7 @@ DM.faq = [
   { cat: "Giá & thanh toán", q: "Báo giá đã bao gồm những gì?", a: "<p>Báo giá bao gồm loại dịch vụ tương ứng, khối lượng công việc (số trang/số phút), giao đúng hạn, cam kết chất lượng và sự khớp đúng của sản phẩm cuối cùng so với bản gốc. Không có phí ẩn.</p>" },
   { cat: "Đặt hàng", q: "Tôi gửi tệp đính kèm cho các bạn bằng cách nào?", a: "<p>Bạn có thể tải lên tối đa 6 tệp — từ PDF, JPEG đến MP3, WAV — ngay trên trang đặt hàng.</p><p>Nếu gặp sự cố, hãy tải tệp lên Google Drive, Dropbox hoặc dịch vụ lưu trữ đám mây bất kỳ rồi dán đường dẫn vào phần hướng dẫn. Bạn cũng có thể gửi tệp tới <a href=\"mailto:trungtamdanhmay247@gmail.com\">trungtamdanhmay247@gmail.com</a> và ghi chú trong phần hướng dẫn rằng tệp đã được gửi qua email.</p>" },
   { cat: "Đặt hàng", q: "Làm sao để tôi theo dõi đơn hàng?", a: "<p>Ngay sau khi thanh toán, bạn sẽ có quyền truy cập vào tài khoản cá nhân. Tại đó, bạn có thể trao đổi với người thực hiện đơn, liên hệ đội hỗ trợ và theo dõi tiến độ công việc một cách thuận tiện.</p><p>Khi có tin nhắn từ chuyên viên hoặc trạng thái đơn thay đổi (ví dụ từ “Đang thực hiện” sang “Hoàn thành”), chúng tôi sẽ tự động gửi thông báo qua email.</p>" },
-  { cat: "Bảo mật", q: "Quyền riêng tư và bảo mật thông tin được đảm bảo thế nào?", a: "<p>Mục tiêu của DanhMay247 là xây dựng niềm tin với từng khách hàng. Chúng tôi tôn trọng quyền riêng tư và đảm bảo bảo mật trong suốt quá trình hợp tác.</p><p>Nhân viên đánh máy, thiết kế, biên tập của chúng tôi đều được đào tạo bài bản, tuân thủ quy tắc đạo đức nghề nghiệp và làm việc theo thỏa thuận bảo mật (NDA). Mọi thông tin bạn chia sẻ đều được giữ kín tuyệt đối.</p>" },
+  { cat: "Bảo mật", q: "Quyền riêng tư và bảo mật thông tin được đảm bảo thế nào?", a: "<p>Mục tiêu của Đánh máy 247 là xây dựng niềm tin với từng khách hàng. Chúng tôi tôn trọng quyền riêng tư và đảm bảo bảo mật trong suốt quá trình hợp tác.</p><p>Nhân viên đánh máy, thiết kế, biên tập của chúng tôi đều được đào tạo bài bản, tuân thủ quy tắc đạo đức nghề nghiệp và làm việc theo thỏa thuận bảo mật (NDA). Mọi thông tin bạn chia sẻ đều được giữ kín tuyệt đối.</p>" },
   { cat: "Dịch vụ", q: "Các bạn đảm bảo chất lượng dịch vụ ra sao?", a: "<p>Chúng tôi có đội ngũ chuyên viên với hơn 5 năm kinh nghiệm đánh máy thủ công và chuyển âm, cùng quy trình kiểm soát chất lượng nhiều bước.</p><p>Khi đã nhận hạn chót, chúng tôi sẽ giao đúng hạn. Nếu không đáp ứng được yêu cầu của bạn trong thời gian đã thỏa thuận, bạn sẽ được hoàn tiền.</p>" },
   { cat: "Hỗ trợ", q: "Đội hỗ trợ khách hàng làm việc vào giờ nào?", a: "<p>Đội ngũ chăm sóc khách hàng luôn sẵn sàng qua điện thoại, email, Zalo và chat trực tuyến 24/7. Nếu có bất kỳ thắc mắc nào, đừng ngần ngại liên hệ với chúng tôi bất cứ lúc nào.</p>" },
   { cat: "Giá & thanh toán", q: "Tôi có thể thanh toán bằng những hình thức nào?", a: "<p>Chúng tôi nhận thanh toán bằng chuyển khoản qua mã VietQR vào tài khoản HDBank của công ty chủ quản VietSCI Editing Services. Bạn có thể quét mã bằng ứng dụng của bất kỳ ngân hàng nào, hoặc ví MoMo, ZaloPay. Số tiền và nội dung được điền sẵn, hệ thống tự động xác nhận khi nhận được tiền.</p>" },
@@ -213,33 +213,7 @@ DM.faq = [
   { cat: "Hỗ trợ", q: "Chính sách hoàn tiền như thế nào?", a: "<p>Nếu đơn hàng bị trễ hạn hoặc chất lượng không đạt cam kết và không thể khắc phục, bạn được hoàn tiền một phần hoặc toàn bộ. Yêu cầu hoàn tiền được xử lý trong vòng 3–5 ngày làm việc.</p>" }
 ];
 
-/* ---------- Bài viết blog ---------- */
-DM.posts = [
-  { slug: "ocr-hay-danh-may-thu-cong", cat: "Kiến thức", color: "#2d3078", emoji: "Aa", date: "2026-10-02", read: 6,
-    title: "OCR hay đánh máy thủ công: lựa chọn nào cho tài liệu của bạn?",
-    excerpt: "Phần mềm nhận dạng ký tự (OCR) ngày càng tốt, nhưng vẫn còn nhiều trường hợp con người làm tốt hơn hẳn. Cùng so sánh chi tiết.",
-    body: "<p>OCR (Optical Character Recognition) là công nghệ nhận dạng ký tự từ hình ảnh. Với tài liệu in rõ nét, OCR có thể cho kết quả khá tốt chỉ trong vài giây. Tuy nhiên, thực tế công việc văn phòng hiếm khi “đẹp” như vậy.</p><h2>Khi nào OCR thất bại?</h2><ul><li>Bản scan nghiêng, mờ, thiếu sáng hoặc có vết gấp.</li><li>Tài liệu có dấu mộc, chữ ký, hình mờ đè lên chữ.</li><li>Chữ viết tay — đặc biệt là chữ viết nhanh, viết tắt.</li><li>Bảng biểu phức tạp, nhiều cột, ô gộp.</li><li>Tiếng Việt có dấu: lỗi dấu là lỗi phổ biến nhất của OCR.</li></ul><h2>Chi phí ẩn của OCR</h2><p>Một trang OCR “miễn phí” có thể mất 10–20 phút để soát lỗi và định dạng lại. Với tài liệu 100 trang, đó là cả tuần làm việc. Trong khi đó, dịch vụ đánh máy thủ công giao cho bạn văn bản sạch, đúng bố cục ngay từ đầu.</p><blockquote>Nguyên tắc đơn giản: nếu bạn cần độ chính xác trên 99% và không có thời gian soát lỗi, hãy chọn con người.</blockquote><h2>Kết luận</h2><p>OCR phù hợp để tra cứu nhanh tài liệu in đẹp. Đánh máy thủ công phù hợp khi bạn cần một tài liệu hoàn chỉnh, đáng tin cậy để sử dụng ngay — hợp đồng, luận văn, hồ sơ lưu trữ, sách tái bản.</p>" },
-  { slug: "meo-chup-tai-lieu-bang-dien-thoai", cat: "Mẹo hay", color: "#f24d50", emoji: "📷", date: "2026-09-24", read: 4,
-    title: "7 mẹo chụp tài liệu bằng điện thoại để đánh máy nhanh và chính xác hơn",
-    excerpt: "Một tấm ảnh rõ nét giúp rút ngắn thời gian xử lý và giảm chi phí. Áp dụng ngay 7 mẹo đơn giản sau.",
-    body: "<p>Phần lớn tài liệu khách hàng gửi cho chúng tôi là ảnh chụp từ điện thoại. Chất lượng ảnh ảnh hưởng trực tiếp tới tốc độ và độ chính xác của bản đánh máy.</p><ol><li><b>Chụp ở nơi đủ sáng</b>, ưu tiên ánh sáng tự nhiên, tránh bóng đổ của tay và điện thoại.</li><li><b>Đặt điện thoại song song</b> với mặt giấy để tránh méo hình.</li><li><b>Tắt đèn flash</b> với giấy bóng để không bị lóa.</li><li><b>Chụp từng trang một</b>, không chụp hai trang sách cùng lúc.</li><li><b>Dùng chế độ quét tài liệu</b> có sẵn trong Ghi chú (iPhone) hoặc Google Drive (Android).</li><li><b>Đặt tên tệp theo thứ tự</b>: 01.jpg, 02.jpg… để chúng tôi ghép đúng trình tự.</li><li><b>Gộp thành một tệp PDF</b> nếu có nhiều trang để dễ tải lên.</li></ol><p>Chỉ cần vài giây chuẩn bị, bạn đã giúp bản đánh máy được giao sớm hơn và chính xác hơn.</p>" },
-  { slug: "chuyen-am-phong-van-nghien-cuu", cat: "Chuyển âm", color: "#3bb54a", emoji: "🎙", date: "2026-09-12", read: 5,
-    title: "Chuyển âm phỏng vấn cho nghiên cứu định tính: những điều cần biết",
-    excerpt: "Nguyên văn hay làm sạch? Có cần mốc thời gian? Hướng dẫn chọn đúng kiểu chuyển âm cho luận văn và đề tài nghiên cứu.",
-    body: "<p>Trong nghiên cứu định tính, bản chuyển âm phỏng vấn chính là dữ liệu gốc để phân tích. Chọn sai kiểu chuyển âm có thể khiến bạn mất nhiều thời gian xử lý lại.</p><h2>Nguyên văn (verbatim)</h2><p>Giữ lại mọi từ đệm, ngập ngừng, lặp từ, tiếng cười, khoảng lặng. Phù hợp với phân tích diễn ngôn, tâm lý học, ngôn ngữ học.</p><h2>Làm sạch (clean verbatim)</h2><p>Lược bỏ từ đệm và lỗi nói, giữ nguyên ý. Dễ đọc, phù hợp phần lớn đề tài xã hội học, kinh tế, giáo dục.</p><h2>Mốc thời gian</h2><p>Gắn [00:12:45] theo từng lượt nói giúp bạn nhanh chóng nghe lại đoạn cần trích dẫn — rất hữu ích khi viết báo cáo.</p><h2>Đạo đức nghiên cứu</h2><p>Hãy đảm bảo đơn vị chuyển âm cam kết bảo mật (NDA) và có thể ẩn danh tên người tham gia theo yêu cầu. DanhMay247 hỗ trợ cả hai.</p>" },
-  { slug: "dinh-dang-luan-van-chuan", cat: "Học thuật", color: "#9b51e0", emoji: "🎓", date: "2026-08-30", read: 7,
-    title: "Định dạng luận văn chuẩn: checklist trước ngày nộp",
-    excerpt: "Font, lề, giãn dòng, mục lục tự động, danh mục bảng biểu… Checklist đầy đủ để luận văn của bạn không bị trả về vì lỗi hình thức.",
-    body: "<p>Nhiều luận văn có nội dung tốt nhưng bị trừ điểm vì trình bày. Dưới đây là checklist chúng tôi dùng khi định dạng luận văn cho khách hàng.</p><h2>Trang và chữ</h2><ul><li>Khổ A4, lề trái 3–3,5 cm, lề phải 2 cm, trên/dưới 2–2,5 cm (theo quy định từng trường).</li><li>Font Times New Roman 13–14, giãn dòng 1,3–1,5.</li></ul><h2>Cấu trúc</h2><ul><li>Dùng Heading 1/2/3 cho chương, mục, tiểu mục.</li><li>Mục lục, danh mục bảng, danh mục hình tạo tự động.</li><li>Đánh số trang: phần đầu bằng số La Mã, phần chính bằng số Ả Rập.</li></ul><h2>Trích dẫn</h2><ul><li>Thống nhất một chuẩn: APA, IEEE hoặc Harvard.</li><li>Mọi trích dẫn trong bài đều có trong danh mục tài liệu tham khảo và ngược lại.</li></ul><p>Không có thời gian? Dịch vụ <a href=\"/dich-vu?slug=dinh-dang-tai-lieu\">định dạng tài liệu</a> của chúng tôi xử lý một luận văn 80 trang trong khoảng 24–48 giờ.</p>" },
-  { slug: "so-hoa-tai-lieu-doanh-nghiep", cat: "Doanh nghiệp", color: "#141a27", emoji: "🏢", date: "2026-08-15", read: 5,
-    title: "Số hóa hồ sơ giấy cho doanh nghiệp nhỏ: bắt đầu từ đâu?",
-    excerpt: "Kho hồ sơ giấy chiếm diện tích, khó tra cứu và dễ thất lạc. Lộ trình 4 bước để số hóa hiệu quả mà không tốn kém.",
-    body: "<p>Số hóa không chỉ là scan. Một hồ sơ số thực sự hữu ích phải tìm kiếm được, chỉnh sửa được và được tổ chức khoa học.</p><h2>Bước 1: Phân loại</h2><p>Chia hồ sơ thành nhóm: hợp đồng, hóa đơn, nhân sự, kỹ thuật… và xác định mức độ ưu tiên.</p><h2>Bước 2: Scan và đặt tên</h2><p>Scan 300 dpi, đặt tên tệp theo quy tắc thống nhất, ví dụ <i>HD_2025_KhachHangA.pdf</i>.</p><h2>Bước 3: Chuyển thành văn bản</h2><p>Với tài liệu cần chỉnh sửa hoặc trích xuất dữ liệu, hãy chuyển sang Word/Excel. Đây là bước chúng tôi hỗ trợ tốt nhất.</p><h2>Bước 4: Lưu trữ và phân quyền</h2><p>Đưa lên Google Drive, SharePoint hoặc hệ thống quản lý tài liệu, phân quyền truy cập rõ ràng.</p>" },
-  { slug: "bao-mat-khi-thue-ngoai-danh-may", cat: "Bảo mật", color: "#d49265", emoji: "🔒", date: "2026-07-28", read: 4,
-    title: "Thuê ngoài đánh máy có an toàn không? 5 câu hỏi nên đặt ra",
-    excerpt: "Trước khi gửi tài liệu nhạy cảm cho bất kỳ đơn vị nào, hãy hỏi 5 câu hỏi sau để bảo vệ dữ liệu của bạn.",
-    body: "<p>Tài liệu bạn gửi đi có thể chứa thông tin cá nhân, bí mật kinh doanh hoặc dữ liệu pháp lý. Đây là 5 câu hỏi bạn nên hỏi bất kỳ nhà cung cấp nào:</p><ol><li>Nhân sự có ký thỏa thuận bảo mật (NDA) không?</li><li>Tệp được lưu ở đâu và bao lâu thì bị xóa?</li><li>Có truyền tệp qua kết nối mã hóa (HTTPS) không?</li><li>Ai có quyền truy cập vào tài liệu của tôi?</li><li>Có thể ký hợp đồng bảo mật riêng với doanh nghiệp không?</li></ol><p>Tại DanhMay247, toàn bộ nhân sự làm việc theo NDA, tệp được xóa sau 30 ngày kể từ khi hoàn thành (hoặc sớm hơn theo yêu cầu), và chúng tôi sẵn sàng ký hợp đồng bảo mật riêng.</p>" }
-];
+/* Bài viết blog: xem public/assets/js/posts.js */
 
 /* ---------- Mẫu tài liệu trước / sau ---------- */
 DM.samples = [
