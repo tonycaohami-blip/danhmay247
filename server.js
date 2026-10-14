@@ -110,20 +110,26 @@ async function connectDb() {
 
 async function start() {
   await connectDb();
-  const server = app.listen(config.PORT, config.HOST, () => {
-    console.log("Đánh máy 247 đang chạy tại http://localhost:" + config.PORT);
+  const onListen = () => {
+    console.log("Đánh máy 247 đang chạy tại " + (typeof config.PORT === "number" ? "http://localhost:" + config.PORT : "socket " + config.PORT));
     console.log("  Dữ liệu:   " + (db.kind === "mysql" ? "MySQL " + config.DB.user + "@" + config.DB.host + "/" + config.DB.database + (config.DB.prefix ? " (tiền tố " + config.DB.prefix + ")" : "") : config.DATA_DIR));
     console.log("  Liên kết:  " + config.SITE_URL);
     console.log("  Tệp tải lên: " + config.UPLOAD_DIR);
     console.log("  Email:     " + (config.SMTP ? "đã cấu hình (" + config.SMTP.host + ")" : "CHƯA cấu hình SMTP — email chỉ ghi ra log"));
     console.log("  Quản trị:  " + (config.ADMIN_PASSWORD ? "đã đặt mật khẩu" : "CHƯA đặt ADMIN_PASSWORD — trang /quan-tri bị khóa"));
     console.log("  SePay:     " + (config.SEPAY_API_KEY ? "webhook đang bật" : "tắt (xác nhận thanh toán thủ công)"));
-  });
+  };
+  // Cổng số → nghe trên HOST; đường dẫn socket (LiteSpeed) → nghe trực tiếp trên socket đó
+  const server = typeof config.PORT === "number" ? app.listen(config.PORT, config.HOST, onListen) : app.listen(config.PORT, onListen);
+  server.on("error", (e) => console.error("[server] Không mở được " + config.PORT + ": " + e.message));
   const stop = () => server.close(() => db.close().finally(() => process.exit(0)));
   process.on("SIGINT", stop);
   process.on("SIGTERM", stop);
   return server;
 }
 
-if (require.main === module) start();
+// Tự khởi động cả khi được chạy trực tiếp (node server.js / npm start)
+// lẫn khi được nạp bằng require() — cách LiteSpeed/Hostinger khởi chạy ứng dụng Node.js.
+// Bộ kiểm thử đặt DM_NO_AUTOSTART=1 để tự gọi start().
+if (!process.env.DM_NO_AUTOSTART) start();
 module.exports = { app, start };

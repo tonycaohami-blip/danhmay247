@@ -8,7 +8,7 @@ const path = require("path"), fs = require("fs"), os = require("os");
 const ROOT = path.join(__dirname, "..");
 const DATA = fs.mkdtempSync(path.join(os.tmpdir(), "dm247-"));
 const PREFIX = "t" + Math.random().toString(36).slice(2, 7) + "_";
-Object.assign(process.env, { PORT: "3999", DATA_DIR: DATA, DB_PREFIX: PREFIX, ADMIN_PASSWORD: "mat-khau-thu", SEPAY_API_KEY: "k", SITE_URL: "http://localhost:3999", SMTP_HOST: "", SMTP_USER: "", SMTP_PASS: "", NODE_ENV: "test" });
+Object.assign(process.env, { DM_NO_AUTOSTART: "1", PORT: "3999", DATA_DIR: DATA, DB_PREFIX: PREFIX, ADMIN_PASSWORD: "mat-khau-thu", SEPAY_API_KEY: "k", SITE_URL: "http://localhost:3999", SMTP_HOST: "", SMTP_USER: "", SMTP_PASS: "", NODE_ENV: "test" });
 
 const config = require(path.join(ROOT, "server/config.js"));
 const mailer = require(path.join(ROOT, "server/mailer.js"));

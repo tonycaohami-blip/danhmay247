@@ -38,7 +38,11 @@ function pickDataDir() {
       console.error("[config] Không ghi được vào " + dir + ": " + e.message);
     }
   }
-  throw new Error("Không có thư mục nào ghi được để lưu dữ liệu.");
+  // Không để cả website sập: dùng thư mục tạm và cảnh báo rõ trong log
+  const tmp = path.join(require("os").tmpdir(), "danhmay247-data");
+  fs.mkdirSync(path.join(tmp, "uploads"), { recursive: true });
+  console.error("[config] CẢNH BÁO: đang lưu dữ liệu tạm tại " + tmp + " — hãy đặt biến DATA_DIR tới một thư mục ghi được để không mất đơn.");
+  return tmp;
 }
 const DATA_DIR = pickDataDir();
 
@@ -55,7 +59,8 @@ module.exports = {
   PUBLIC_DIR: path.join(ROOT, "public"),
   DATA_DIR,
   UPLOAD_DIR: path.join(DATA_DIR, "uploads"),
-  PORT: Number(env.PORT) || 3000,
+  // Số cổng (vd 3000) hoặc đường dẫn socket do LiteSpeed/Hostinger cấp — giữ nguyên dạng chuỗi nếu không phải số
+  PORT: /^\d+$/.test(String(env.PORT || "").trim()) ? Number(env.PORT) : (String(env.PORT || "").trim() || 3000),
   HOST: env.HOST || "0.0.0.0",
   IS_PROD: env.NODE_ENV === "production",
   // Địa chỉ công khai của website, dùng cho mọi liên kết trong email.
