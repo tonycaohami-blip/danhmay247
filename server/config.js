@@ -21,8 +21,26 @@ const ROOT = path.join(__dirname, "..");
 })();
 
 const env = process.env;
-const DATA_DIR = path.resolve(ROOT, env.DATA_DIR || "data");
-fs.mkdirSync(path.join(DATA_DIR, "uploads"), { recursive: true });
+
+/**
+ * Thư mục lưu đơn hàng + tệp khách gửi.
+ * Mặc định: <thư mục gốc tài khoản>/danhmay247-data (vd /home/u123456789/danhmay247-data trên Hostinger)
+ * — nằm NGOÀI thư mục code nên deploy lại không bị mất dữ liệu. Không ghi được thì dùng ./data.
+ */
+function pickDataDir() {
+  const candidates = env.DATA_DIR ? [path.resolve(ROOT, env.DATA_DIR)] : [path.join(require("os").homedir(), "danhmay247-data"), path.join(ROOT, "data")];
+  for (const dir of candidates) {
+    try {
+      fs.mkdirSync(path.join(dir, "uploads"), { recursive: true });
+      fs.accessSync(dir, fs.constants.W_OK);
+      return dir;
+    } catch (e) {
+      console.error("[config] Không ghi được vào " + dir + ": " + e.message);
+    }
+  }
+  throw new Error("Không có thư mục nào ghi được để lưu dữ liệu.");
+}
+const DATA_DIR = pickDataDir();
 
 // Đang chạy thật (production) mà SITE_URL vẫn trỏ về máy cục bộ → email sẽ có liên kết hỏng, nên tự sửa
 if (env.NODE_ENV === "production" && /localhost|127\.0\.0\.1/i.test(env.SITE_URL || "")) {

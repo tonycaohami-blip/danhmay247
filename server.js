@@ -37,7 +37,7 @@ app.use((req, res, next) => { res.set(SECURITY_HEADERS); next(); });
 app.use("/api", express.json({ limit: "100kb" }));
 app.use("/api", (req, res, next) => (req.path.startsWith("/webhooks/") ? next() : sameOrigin(req, res, next)));
 app.use("/api", (req, res, next) => { res.set("Cache-Control", "no-store"); next(); });
-// Chưa kết nối được MySQL: website vẫn hiển thị, chỉ API tạm báo bảo trì (webhook SePay nhận 503 sẽ tự gửi lại sau)
+// Chưa mở được nơi lưu dữ liệu: website vẫn hiển thị, chỉ API tạm báo bảo trì (webhook SePay nhận 503 sẽ tự gửi lại sau)
 app.use("/api", (req, res, next) => (db.isReady() ? next() : res.status(503).json({ error: "Hệ thống đặt hàng đang bảo trì, vui lòng thử lại sau ít phút hoặc gọi 0988 058 030." })));
 app.use("/api", api);
 
@@ -97,11 +97,12 @@ async function connectDb() {
   try {
     await db.init();
     startJobs();
-    console.log("[MySQL] Đã kết nối " + config.DB.user + "@" + config.DB.host + "/" + config.DB.database);
+    console.log(db.kind === "mysql" ? "[MySQL] Đã kết nối " + config.DB.user + "@" + config.DB.host + "/" + config.DB.database : "[Lưu trữ] Đơn hàng lưu tại " + db.file + " (sao lưu mỗi ngày trong thư mục backups/)");
     return true;
   } catch (e) {
-    console.error("[KHÔNG KẾT NỐI ĐƯỢC MYSQL] " + e.message);
-    console.error("  Kiểm tra DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME trong biến môi trường. Thử lại sau 30 giây…");
+    console.error("[KHÔNG MỞ ĐƯỢC NƠI LƯU DỮ LIỆU] " + e.message);
+    if (db.kind === "mysql") console.error("  Kiểm tra DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME trong biến môi trường.");
+    console.error("  Thử lại sau 30 giây…");
     setTimeout(connectDb, 30e3).unref();
     return false;
   }
@@ -111,7 +112,7 @@ async function start() {
   await connectDb();
   const server = app.listen(config.PORT, config.HOST, () => {
     console.log("Đánh máy 247 đang chạy tại http://localhost:" + config.PORT);
-    console.log("  MySQL:     " + config.DB.user + "@" + config.DB.host + ":" + config.DB.port + "/" + config.DB.database + (config.DB.prefix ? " (tiền tố bảng " + config.DB.prefix + ")" : ""));
+    console.log("  Dữ liệu:   " + (db.kind === "mysql" ? "MySQL " + config.DB.user + "@" + config.DB.host + "/" + config.DB.database + (config.DB.prefix ? " (tiền tố " + config.DB.prefix + ")" : "") : config.DATA_DIR));
     console.log("  Liên kết:  " + config.SITE_URL);
     console.log("  Tệp tải lên: " + config.UPLOAD_DIR);
     console.log("  Email:     " + (config.SMTP ? "đã cấu hình (" + config.SMTP.host + ")" : "CHƯA cấu hình SMTP — email chỉ ghi ra log"));

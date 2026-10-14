@@ -1,7 +1,7 @@
 /**
- * Kiểm thử tích hợp trên MySQL thật: npm test
- * - Dùng thông tin DB_* trong .env, nhưng tạo bảng với tiền tố riêng (t<ngẫu nhiên>_) và XÓA sạch khi xong,
- *   nên không ảnh hưởng dữ liệu đơn hàng thật.
+ * Kiểm thử tích hợp: npm test
+ * - Mặc định chạy với kho lưu trữ tệp (thư mục tạm, xóa khi xong) — không cần cài gì.
+ * - Nếu .env có DB_USER/DB_NAME: chạy trên MySQL với bảng tiền tố riêng (t<ngẫu nhiên>_) và XÓA sạch khi xong.
  * - Chặn email để lấy liên kết đăng nhập.
  */
 const path = require("path"), fs = require("fs"), os = require("os");
@@ -28,7 +28,7 @@ const j = (method, url, body, headers) => fetch(B + url, { method, headers: Obje
 
 let server;
 async function cleanup() {
-  try { for (const t of Object.values(db.TABLES)) await db.query("DROP TABLE IF EXISTS `" + t + "`"); } catch (e) { console.error("Không xóa được bảng thử:", e.message); }
+  if (db.kind === "mysql") { try { for (const t of Object.values(db.TABLES)) await db.query("DROP TABLE IF EXISTS `" + t + "`"); } catch (e) { console.error("Không xóa được bảng thử:", e.message); } }
   await db.close().catch(() => {});
   if (server) server.close();
   fs.rmSync(DATA, { recursive: true, force: true });
@@ -37,7 +37,7 @@ async function cleanup() {
 (async () => {
   server = await start();
   await new Promise((r) => setTimeout(r, 300));
-  console.log("  (bảng thử nghiệm: " + PREFIX + "*)");
+  console.log(db.kind === "mysql" ? "  (MySQL — bảng thử nghiệm: " + PREFIX + "*)" : "  (lưu trữ tệp — thư mục tạm " + DATA + ")");
 
   // --- Đặt hàng hợp lệ & không hợp lệ
   const mk = (over) => { const f = new FormData(); const v = Object.assign({ service: "transcription", type: "interview", urgency: "48h", qty: "30", speakers: "2", extras: "timestamps", name: "Lê Văn Đạt", email: "Dat.Le@Example.com", phone: "+84 988058030", agree: "on", instructions: "Ghi chú có dấu: Việt Nam 🇻🇳" }, over); for (const k in v) f.append(k, v[k]); return f; };
@@ -48,12 +48,20 @@ async function cleanup() {
   const id = d.order.id, token = d.token;
   ok("email được chuẩn hóa chữ thường", d.order.email === "dat.le@example.com");
 
-  const row = (await db.query("SELECT * FROM `" + db.TABLES.orders + "` WHERE id = ?", [id]))[0];
-  ok("đơn được lưu vào bảng MySQL orders", !!row && row.total === d.order.price.total && row.name === "Lê Văn Đạt");
-  ok("tiếng Việt + emoji lưu đúng (utf8mb4)", row.instructions === "Ghi chú có dấu: Việt Nam 🇻🇳");
-  ok("không lưu mã truy cập dạng rõ", row.token_hash.length === 64 && row.token_hash !== token);
-  const frows = await db.query("SELECT * FROM `" + db.TABLES.files + "` WHERE order_id = ?", [id]);
-  ok("thông tin tệp lưu bảng order_files", frows.length === 1 && frows[0].name === "Biên bản họp.pdf" && fs.existsSync(path.join(config.UPLOAD_DIR, frows[0].stored)));
+  let saved;
+  if (db.kind === "mysql") {
+    const row = (await db.query("SELECT * FROM `" + db.TABLES.orders + "` WHERE id = ?", [id]))[0];
+    saved = row && { total: row.total, name: row.name, instructions: row.instructions, tokenHash: row.token_hash };
+  } else {
+    db.flush();
+    const o = JSON.parse(fs.readFileSync(db.file, "utf8")).orders.find((x) => x.id === id);
+    saved = o && { total: o.price.total, name: o.name, instructions: o.instructions, tokenHash: o.tokenHash };
+  }
+  ok("đơn được ghi xuống " + (db.kind === "mysql" ? "MySQL" : "tệp db.json"), !!saved && saved.total === d.order.price.total && saved.name === "Lê Văn Đạt");
+  ok("tiếng Việt + emoji lưu đúng", saved.instructions === "Ghi chú có dấu: Việt Nam 🇻🇳");
+  ok("không lưu mã truy cập dạng rõ", saved.tokenHash.length === 64 && saved.tokenHash !== token);
+  const frows = (await db.orders.get(id)).files;
+  ok("tệp khách gửi được lưu", frows.length === 1 && frows[0].name === "Biên bản họp.pdf" && fs.existsSync(path.join(config.UPLOAD_DIR, frows[0].stored)));
 
   for (const [k, v, msg] of [["urgency", "14d", "thời hạn không có cho chuyển âm"], ["qty", "0", "số lượng 0"], ["email", "sai", "email sai"], ["agree", "", "chưa đồng ý"], ["type", "abc", "loại sai"]]) {
     r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: mk({ [k]: v }) });
@@ -66,7 +74,7 @@ async function cleanup() {
   r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: bad });
   ok("từ chối tệp .html", r.status === 400, (await r.json()).error);
   ok("không để lại tệp tạm khi lỗi", fs.readdirSync(path.join(DATA, "uploads/_tmp")).length === 0);
-  ok("đơn lỗi không được lưu", (await db.query("SELECT COUNT(*) n FROM `" + db.TABLES.orders + "`"))[0].n === 1);
+  ok("đơn lỗi không được lưu", (await db.orders.all()).length === 1);
 
   // --- Xem đơn
   r = await fetch(B + "/api/orders/" + id); ok("không có mã truy cập → 404", r.status === 404);
@@ -108,7 +116,7 @@ async function cleanup() {
   await hook({ id: 102, transferType: "in", transferAmount: 999999, content: id });
   ok("giao dịch gửi lại không bị cộng trùng", (await db.orders.get(id)).receivedAmount === total);
   const pays = await db.payments.recent();
-  ok("lịch sử giao dịch lưu bảng payments", pays.length === 2 && pays.some((p) => p.result === "Đã xác nhận tự động"));
+  ok("lịch sử giao dịch được lưu", pays.length === 2 && pays.some((p) => p.result === "Đã xác nhận tự động"));
 
   // --- Liên hệ & đánh giá
   r = await j("POST", "/api/contact", { name: "Á", email: "a@b.vn", message: "Cần báo giá 100 trang" });
@@ -124,7 +132,7 @@ async function cleanup() {
   ok("đăng nhập quản trị", r.ok && admin.startsWith("dm_admin="));
   r = await fetch(B + "/api/admin/summary", { headers: { Cookie: admin } });
   d = await r.json();
-  ok("bảng điều khiển đọc từ MySQL", d.stats.orders === 1 && d.stats.paid === 1 && d.stats.revenue === total && d.stats.newContacts === 1 && d.stats.pendingReviews === 1);
+  ok("bảng điều khiển đọc đúng số liệu", d.stats.orders === 1 && d.stats.paid === 1 && d.stats.revenue === total && d.stats.newContacts === 1 && d.stats.pendingReviews === 1);
   r = await j("PATCH", "/api/admin/reviews/" + d.reviews[0].id, { approved: true }, { Cookie: admin });
   r = await fetch(B + "/api/reviews"); ok("duyệt → đánh giá hiển thị", (await r.json()).reviews.length === 1);
   r = await j("PATCH", "/api/admin/contacts/" + d.contacts[0].id, { read: true }, { Cookie: admin });
@@ -145,9 +153,16 @@ async function cleanup() {
   ok("khách không thấy ghi chú nội bộ", !("notes" in (await r.json()).order));
   ok("lịch sử trạng thái đầy đủ", (await db.orders.get(id)).history.map((h) => h.status).join(">") === "unpaid>verifying>paid>done>progress");
 
+  r = await fetch(B + "/api/admin/export.csv"); ok("xuất Excel cần đăng nhập quản trị", r.status === 401);
+  r = await fetch(B + "/api/admin/export.csv", { headers: { Cookie: admin } });
+  const bytes = Buffer.from(await r.arrayBuffer()), csv = bytes.toString("utf8");
+  ok("xuất danh sách đơn ra Excel (CSV, tiếng Việt)", r.ok && bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf && csv.includes(id) && csv.includes("Lê Văn Đạt") && /attachment/.test(r.headers.get("content-disposition")));
+  if (db.kind === "json") ok("có bản sao lưu hằng ngày", fs.readdirSync(path.join(DATA, "backups")).some((n) => /^db-\d{4}-\d{2}-\d{2}\.json$/.test(n)));
+
   // --- Tự xóa tệp sau 30 ngày
   await j("PATCH", "/api/admin/orders/" + id, { status: "done" }, { Cookie: admin });
-  await db.query("UPDATE `" + db.TABLES.history + "` SET created_at = DATE_SUB(NOW(), INTERVAL 31 DAY) WHERE order_id = ?", [id]);
+  if (db.kind === "mysql") await db.query("UPDATE `" + db.TABLES.history + "` SET created_at = DATE_SUB(NOW(), INTERVAL 31 DAY) WHERE order_id = ?", [id]);
+  else db._raw().orders.find((x) => x.id === id).history.forEach((h) => { h.at -= 31 * 86400e3; });
   const n = await purgeOldFiles();
   o = await db.orders.get(id);
   ok("tệp quá 30 ngày đã bị xóa", n === 2 && o.files.every((f) => f.purged && !f.stored) && !fs.existsSync(path.join(config.UPLOAD_DIR, frows[0].stored)));
@@ -155,7 +170,7 @@ async function cleanup() {
   ok("tải tệp đã xóa → 410", r.status === 410);
 
   // --- Khóa phiên lưu trong MySQL (không đổi sau khi khởi động lại)
-  ok("khóa phiên lưu bảng settings", (await db.settings.get("session_secret")) === config.SESSION_SECRET);
+  ok("khóa phiên được lưu (không đăng xuất khách khi khởi động lại)", (await db.settings.get("session_secret")) === config.SESSION_SECRET);
 
   console.log(`\n${pass} đạt, ${fail} lỗi`);
   await cleanup();

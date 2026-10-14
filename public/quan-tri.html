@@ -95,7 +95,8 @@
         '<div class="toolbar"><label class="sr-only" for="f-q">Tìm đơn</label><input class="input" id="f-q" type="search" placeholder="Tìm mã đơn, tên, email, SĐT…" value="' + DM.esc(q) + '">' +
         '<label class="sr-only" for="f-st">Lọc trạng thái</label><select class="select" id="f-st"><option value="">Tất cả trạng thái</option>' +
         Object.keys(ST).map(function (k) { return '<option value="' + k + '"' + (k === filter ? " selected" : "") + ">" + ST[k].label + "</option>"; }).join("") + "</select>" +
-        '<button type="button" class="button button--sm button--black" id="reload">Làm mới</button></div>' +
+        '<button type="button" class="button button--sm button--black" id="reload">Làm mới</button>' +
+        '<a class="button button--sm" href="/api/admin/export.csv" download>Tải danh sách đơn (Excel)</a></div>' +
         (list.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Dịch vụ</th><th>Thời hạn</th><th>Tổng</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
           list.map(function (o) {
             return "<tr><td><b>#" + o.id + '</b><br><small style="color:var(--muted)">' + DM.dateTime(o.created) + "</small></td>" +

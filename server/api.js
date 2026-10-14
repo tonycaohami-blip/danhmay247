@@ -410,6 +410,26 @@ router.post("/admin/orders/:id/result", adminOnly, upload.array("files", config.
   res.json({ order: publicOrder(await db.orders.get(o.id), true) });
 }));
 
+/** Xuất toàn bộ đơn hàng ra tệp CSV mở được bằng Excel (có BOM để hiện đúng tiếng Việt). */
+router.get("/admin/export.csv", adminOnly, wrap(async (req, res) => {
+  const list = await db.orders.all(100000);
+  const vn = (ms) => (ms ? new Date(ms).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" }) : "");
+  const cell = (v) => {
+    let s = String(v == null ? "" : v).replace(/\r?\n/g, " ");
+    if (/^[=+\-@]/.test(s)) s = "'" + s; // chặn công thức Excel độc hại
+    return '"' + s.replace(/"/g, '""') + '"';
+  };
+  const head = ["Mã đơn", "Ngày đặt", "Trạng thái", "Họ tên", "Email", "Điện thoại", "Dịch vụ", "Loại", "Số lượng", "Đơn vị", "Thời hạn", "Bổ sung",
+    "Loại tài liệu", "Mã giảm giá", "Tổng tiền (đ)", "Đã nhận (đ)", "Ngày thanh toán", "Hạn hoàn thành", "Số tệp khách gửi", "Hướng dẫn", "Ghi chú nội bộ"];
+  const rows = list.map((o) => [o.id, vn(o.created), STATUS[o.status] || o.status, o.name, o.email, o.phone, o.serviceLabel, o.typeLabel, o.qty, o.unit,
+    o.urgencyLabel, (o.extras || []).join("; "), o.docType, o.promo || "", o.price.total, o.paidAmount || o.receivedAmount || 0, vn(o.paidAt), vn(o.deadline),
+    o.files.filter((f) => f.by === "customer").length, o.instructions, o.notes || ""].map(cell).join(","));
+  const day = new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
+  res.setHeader("Content-Disposition", 'attachment; filename="don-hang-danhmay247-' + day + '.csv"');
+  res.send("﻿" + [head.map(cell).join(",")].concat(rows).join("\r\n"));
+}));
+
 router.patch("/admin/contacts/:id", adminOnly, wrap(async (req, res) => {
   res.json({ ok: await db.contacts.setRead(req.params.id, !!req.body.read) });
 }));
