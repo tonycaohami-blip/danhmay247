@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bài mẫu đánh máy &amp; chuyển âm — DanhMay247</title>
+  <meta name="description" content="Xem mẫu tài liệu trước và sau khi đánh máy: chữ viết tay, hợp đồng scan, bảng biểu, bản chuyển âm phỏng vấn có mốc thời gian.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Trang chủ</a><span>/</span><span aria-current="page">Bài mẫu</span></nav>
+        <h1>Bài mẫu: trước &amp; sau khi đánh máy</h1>
+        <p>Kéo thanh trượt trên mỗi tài liệu để so sánh bản gốc với bản đánh máy của chúng tôi. Tất cả mẫu đều đã được ẩn danh thông tin.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="filter-pills" id="filters" style="justify-content:center;margin-bottom:40px" role="group" aria-label="Lọc mẫu">
+          <button type="button" class="is-active" data-f="all" aria-pressed="true">Tất cả</button>
+          <button type="button" data-f="doc" aria-pressed="false">Đánh máy tài liệu</button>
+          <button type="button" data-f="audio" aria-pressed="false">Chuyển âm</button>
+        </div>
+        <div class="samples-grid" id="samples"></div>
+      </div>
+    </section>
+
+    <section class="section section--grey">
+      <div class="container cta-band reveal">
+        <h2>Muốn xem mẫu phù hợp với tài liệu của bạn?</h2>
+        <p>Gửi cho chúng tôi 1 trang bất kỳ — chúng tôi sẽ báo giá và thời gian chính xác trong 15 phút.</p>
+        <a href="/lien-he" class="button">Gửi yêu cầu báo giá</a>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$;
+    var docs = DM.samples.map(function (s) {
+      return '<article class="sample reveal" data-kind="doc"><h3>' + s.title + "</h3><p>" + s.desc + "</p>" + DM.compare(s) +
+        '<div class="sample__meta">' + s.tags.map(function (t) { return '<span class="chip chip--grey">' + t + "</span>"; }).join("") + "</div></article>";
+    }).join("");
+    var waves = ""; for (var i = 0; i < 56; i++) waves += '<i style="height:' + (20 + Math.round(Math.abs(Math.sin(i * 1.7) * 70 + Math.cos(i * .6) * 20))) % 100 + '%"></i>';
+    var audio = '<article class="sample reveal" data-kind="audio"><h3>Phỏng vấn nghiên cứu → Văn bản</h3><p>Chuyển âm làm sạch, phân biệt người nói, có mốc thời gian. <i>(Bản phát minh họa, không có âm thanh.)</i></p>' +
+      '<div class="audio-sample"><div class="audio-player"><button type="button" id="play" aria-label="Phát">' + DM.icon.play + '</button><div class="wave" id="wave" aria-hidden="true">' + waves + '</div><span id="time" style="font-size:13px;font-variant-numeric:tabular-nums">00:00</span></div>' +
+      '<div class="transcript" id="transcript">' + DM.transcriptSample.map(function (l, k) { return '<p data-k="' + k + '"><span class="ts">[' + l.ts + ']</span><span class="sp">' + l.sp + ":</span> " + l.text + "</p>"; }).join("") + "</div></div>" +
+      '<div class="sample__meta"><span class="chip chip--grey">Chuyển âm</span><span class="chip chip--grey">Mốc thời gian</span><span class="chip chip--grey">2 người nói</span></div></article>';
+    $("#samples").innerHTML = docs + audio;
+    DM.initCompare($("#samples"));
+
+    $$("#filters button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        $$("#filters button").forEach(function (x) { x.classList.toggle("is-active", x === b); x.setAttribute("aria-pressed", x === b); });
+        $$(".sample").forEach(function (s) { s.classList.toggle("hidden", b.dataset.f !== "all" && s.dataset.kind !== b.dataset.f); s.classList.add("is-in"); });
+      });
+    });
+
+    // Trình phát minh họa
+    var t = 0, timer = null, total = 34, bars = $$("#wave i"), lines = DM.transcriptSample;
+    function tick() {
+      t += 0.25;
+      if (t > total) { stop(); t = 0; }
+      $("#time").textContent = "00:" + String(Math.floor(t)).padStart(2, "0");
+      var on = Math.floor(t / total * bars.length);
+      bars.forEach(function (b, k) { b.classList.toggle("on", k < on); });
+      var cur = -1; lines.forEach(function (l, k) { if (t >= l.t) cur = k; });
+      $$("#transcript p").forEach(function (p, k) {
+        var is = k === cur; p.classList.toggle("is-current", is);
+        if (is && timer) { var box = $("#transcript"); box.scrollTop = p.offsetTop - box.offsetTop - 20; }
+      });
+    }
+    function stop() { clearInterval(timer); timer = null; $("#play").innerHTML = DM.icon.play; $("#play").setAttribute("aria-label", "Phát"); }
+    $("#play").addEventListener("click", function () {
+      if (timer) return stop();
+      timer = setInterval(tick, 250);
+      this.innerHTML = DM.icon.pause; this.setAttribute("aria-label", "Tạm dừng");
+    });
+    $$("#transcript p").forEach(function (p) {
+      p.style.cursor = "pointer";
+      p.addEventListener("click", function () { t = lines[+p.dataset.k].t; tick(); });
+    });
+  })();
+  </script>
+</body>
+</html>

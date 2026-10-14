@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đặt hàng dịch vụ đánh máy — DanhMay247</title>
+  <meta name="description" content="Đặt hàng dịch vụ đánh máy, chuyển âm trực tuyến chỉ trong 3 phút. Báo giá tức thì, thanh toán an toàn.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .mobile-bar { display: none; }
+    @media (max-width: 900px) {
+      .mobile-bar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 200; background: #fff; box-shadow: 0 -6px 20px rgba(0,0,0,.08); padding: 12px 16px; align-items: center; justify-content: space-between; gap: 12px; }
+      .mobile-bar b { font-size: 20px; color: #000; display: block; }
+      .mobile-bar small { color: var(--muted); font-size: 12px; }
+      .mobile-bar .button { width: auto; height: 46px; font-size: 15px; }
+      .order-page { padding-bottom: 120px; }
+      .chat-fab { bottom: 86px; }
+    }
+  </style>
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+
+  <main id="main" class="order-page">
+    <div class="container">
+      <form class="order-layout" id="order-form" novalidate>
+        <div>
+          <!-- Dịch vụ -->
+          <section class="order-card" aria-labelledby="t-service">
+            <h1 class="order-card__title" id="t-service">Chọn dịch vụ</h1>
+            <div class="field">
+              <div class="segmented" role="radiogroup" aria-label="Loại dịch vụ">
+                <button type="button" data-service="retyping" role="radio">Đánh máy lại</button>
+                <button type="button" data-service="transcription" role="radio">Chuyển âm</button>
+              </div>
+            </div>
+            <div class="field"><label class="field__label" for="o-type">Loại chuyển đổi <span class="req">*</span></label><select class="select" id="o-type" name="type"></select></div>
+            <div class="field"><label class="field__label" for="o-urgency">Thời hạn hoàn thành <span class="tip" tabindex="0">?<span class="tip__text">Thời hạn được tính từ lúc thanh toán thành công. Đặt hạn càng xa, giá càng tốt.</span></span></label><select class="select" id="o-urgency" name="urgency"></select></div>
+            <div class="order-row">
+              <div class="field"><label class="field__label" for="o-qty"><span id="qty-label">Số trang</span> <span class="tip" tabindex="0">?<span class="tip__text" id="qty-tip">Một trang tương đương một mặt giấy A4 của tài liệu gốc.</span></span></label>
+                <div class="stepper"><button type="button" data-step="-1" aria-label="Giảm">−</button><input id="o-qty" name="qty" type="number" min="1" max="5000" value="1" inputmode="numeric"><button type="button" data-step="1" aria-label="Tăng">+</button></div>
+              </div>
+              <div class="field hidden" id="sp-wrap"><label class="field__label" for="o-speakers">Số người nói</label><select class="select" id="o-speakers" name="speakers"></select></div>
+            </div>
+            <div class="extras-checks" id="o-extras"></div>
+          </section>
+
+          <!-- Thông tin bổ sung -->
+          <section class="order-card" aria-labelledby="t-info">
+            <h2 class="order-card__title" id="t-info">Thông tin bổ sung</h2>
+            <div class="field"><label class="field__label" for="o-doctype">Loại tài liệu</label><select class="select" id="o-doctype" name="docType"></select></div>
+            <div class="field"><label class="field__label" for="o-instr">Hướng dẫn và tệp đính kèm</label>
+              <textarea class="textarea" id="o-instr" name="instructions" maxlength="5000" placeholder="Mô tả yêu cầu: định dạng mong muốn (Word, Excel, Google Docs…), font chữ, những trang cần làm, đường dẫn Google Drive (nếu có)…"></textarea>
+              <div class="field__hint"><span id="instr-count">0</span>/5000 ký tự</div>
+            </div>
+            <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-describedby="dz-help">
+              <span id="dz-ic"></span>
+              <div><b>Kéo &amp; thả tệp</b> vào đây hoặc bấm để tải lên</div>
+              <small id="dz-help">Tối đa 6 tệp, mỗi tệp ≤ 50MB · PDF, DOC(X), XLS(X), JPG, PNG, HEIC, MP3, WAV, M4A, MP4…</small>
+              <input type="file" id="file-input" multiple hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.rtf,.odt,.jpg,.jpeg,.png,.heic,.webp,.tif,.tiff,.mp3,.wav,.m4a,.aac,.ogg,.mp4,.mov,.avi,.mkv,.zip,.rar">
+            </div>
+            <ul class="files" id="files"></ul>
+          </section>
+
+          <!-- Thông tin cá nhân -->
+          <section class="order-card" aria-labelledby="t-personal">
+            <h2 class="order-card__title" id="t-personal">Thông tin cá nhân</h2>
+            <div class="order-row">
+              <div class="field"><label class="field__label" for="o-name">Họ và tên <span class="req">*</span></label><input class="input" id="o-name" name="name" autocomplete="name" required placeholder="Nguyễn Văn A"><div class="field__error"></div></div>
+              <div class="field"><label class="field__label" for="o-email">Email <span class="req">*</span></label><input class="input" id="o-email" name="email" type="email" autocomplete="email" required placeholder="ban@email.com"><div class="field__error"></div></div>
+            </div>
+            <div class="field"><label class="field__label" for="o-phone">Số điện thoại <span class="req">*</span></label>
+              <div class="phone-group">
+                <label class="sr-only" for="o-cc">Mã quốc gia</label>
+                <select class="select" id="o-cc" name="cc" autocomplete="tel-country-code">
+                  <option value="+84">🇻🇳 +84</option><option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option><option value="+61">🇦🇺 +61</option>
+                  <option value="+81">🇯🇵 +81</option><option value="+82">🇰🇷 +82</option><option value="+65">🇸🇬 +65</option><option value="+886">🇹🇼 +886</option>
+                  <option value="+86">🇨🇳 +86</option><option value="+66">🇹🇭 +66</option><option value="+60">🇲🇾 +60</option><option value="+33">🇫🇷 +33</option><option value="+49">🇩🇪 +49</option>
+                </select>
+                <input class="input" id="o-phone" name="phone" type="tel" autocomplete="tel-national" required placeholder="912 345 678" data-pattern="^[0-9 .\-]{8,14}$" data-pattern-msg="Số điện thoại không hợp lệ.">
+              </div>
+              <div class="field__error"></div>
+            </div>
+            <div class="field"><label class="check"><input type="checkbox" id="o-agree" name="agree" required data-msg="Vui lòng đồng ý với điều khoản để tiếp tục."><span class="check__box"></span><span>Tôi đồng ý với <a href="#" data-legal="terms">Điều khoản &amp; Điều kiện</a> và <a href="#" data-legal="privacy">Chính sách bảo mật</a></span></label><div class="field__error"></div></div>
+          </section>
+        </div>
+
+        <!-- Tóm tắt -->
+        <aside class="summary" id="summary" aria-labelledby="t-summary">
+          <div class="order-card">
+            <h2 class="order-card__title" id="t-summary">Tóm tắt đơn hàng</h2>
+            <div class="summary__row"><span>Loại dịch vụ:</span><span class="green" id="s-service"></span></div>
+            <div class="summary__sub" id="s-type"></div>
+            <div class="summary__row"><span id="s-qty-label">Số trang:</span><span id="s-qty"></span></div>
+            <div class="summary__row"><span>Thời hạn:</span><span id="s-urgency"></span></div>
+            <div class="summary__row hidden" id="s-extras-row"><span>Bổ sung:</span><span id="s-extras"></span></div>
+            <div class="summary__row"><span>Đơn giá:</span><span id="s-unit"></span></div>
+            <div style="margin:6px 0 4px"><button type="button" class="link" id="promo-toggle" aria-expanded="false" aria-controls="promo-box">Mã giảm giá</button></div>
+            <div class="hidden" id="promo-box">
+              <div class="promo"><label class="sr-only" for="o-promo">Mã giảm giá</label><input class="input" id="o-promo" placeholder="Nhập mã" autocomplete="off"><button type="button" class="button" id="promo-apply">Áp dụng</button></div>
+              <div class="field__hint" id="promo-msg" aria-live="polite"></div>
+            </div>
+            <div class="summary__row hidden" id="s-discount-row"><span>Giảm giá:</span><span class="green" id="s-discount"></span></div>
+            <div class="summary__divider"></div>
+            <div class="summary__total"><span>Tổng thanh toán:<br><small style="color:var(--muted)">VNĐ</small></span><div><s id="s-old" class="hidden"></s><b id="s-total">0 đ</b></div></div>
+            <button type="submit" class="button button--w100" id="checkout">Thanh toán</button>
+            <div class="summary__secure"><span id="lock-ic"></span>Thanh toán chuyển khoản VietQR — nhanh, an toàn.</div>
+          </div>
+          <div class="after-pay" id="after-pay">
+            <button type="button" class="link" aria-expanded="false" aria-controls="after-pay-c">Điều gì xảy ra sau khi thanh toán?</button>
+            <div class="after-pay__content" id="after-pay-c">Ngay khi đặt hàng, bạn nhận email kèm liên kết theo dõi đơn. Sau khi chúng tôi xác nhận thanh toán, đơn được phân công cho chuyên viên. Tại trang đơn hàng bạn có thể theo dõi tiến độ, bổ sung hướng dẫn, trao đổi với chuyên viên và tải tài liệu hoàn thành.</div>
+          </div>
+        </aside>
+      </form>
+    </div>
+  </main>
+
+  <div class="mobile-bar" aria-hidden="true"><div><small>Tổng thanh toán</small><b id="m-total">0 đ</b></div><button type="button" class="button" id="m-checkout" tabindex="-1">Thanh toán</button></div>
+
+  <div id="site-footer"></div>
+
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/payment.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$, P = DM.prices;
+    var MAX_FILES = 6, MAX_SIZE = 50 * 1024 * 1024;
+    var draft = DM.store.get("draft", {});
+    var state = {
+      service: DM.param("service") || draft.service || "retyping",
+      type: DM.param("type") || draft.type,
+      urgency: DM.param("urgency") || draft.urgency,
+      qty: DM.param("qty") || draft.qty || 1,
+      speakers: DM.param("speakers") || draft.speakers || "1",
+      extras: DM.param("extras") ? DM.param("extras").split(",") : (draft.extras || []),
+      promo: null,
+      files: []
+    };
+    if (!P[state.service]) state.service = "retyping";
+
+    $("#dz-ic").innerHTML = DM.icon.upload;
+    $("#lock-ic").innerHTML = DM.icon.lock;
+    $("#o-doctype").innerHTML = DM.docTypes.map(function (d) { return "<option>" + d + "</option>"; }).join("");
+
+    /* ---------- Dựng các lựa chọn theo dịch vụ ---------- */
+    function buildService() {
+      var s = P[state.service];
+      $$("[data-service]").forEach(function (b) {
+        var on = b.dataset.service === state.service;
+        b.classList.toggle("is-active", on); b.setAttribute("aria-checked", on);
+      });
+      if (!s.types.some(function (t) { return t.key === state.type; })) state.type = s.types[0].key;
+      $("#o-type").innerHTML = s.types.map(function (t) { return '<option value="' + t.key + '"' + (t.key === state.type ? " selected" : "") + ">" + t.label + "</option>"; }).join("");
+      var urgs = DM.urgencies.filter(function (u) { return s.base[u.key]; });
+      if (!urgs.some(function (u) { return u.key === state.urgency; })) state.urgency = "12h";
+      $("#o-urgency").innerHTML = urgs.map(function (u) {
+        return '<option value="' + u.key + '"' + (u.key === state.urgency ? " selected" : "") + ">" + u.label + " / " + DM.dateLabel(DM.deadline(u.hours)) + "</option>";
+      }).join("");
+      var isT = state.service === "transcription";
+      $("#qty-label").textContent = isT ? "Số phút" : "Số trang";
+      $("#qty-tip").textContent = isT ? "Tổng thời lượng các tệp âm thanh/video, làm tròn lên theo phút." : "Một trang tương đương một mặt giấy A4 của tài liệu gốc.";
+      $("#sp-wrap").classList.toggle("hidden", !isT);
+      if (isT) $("#o-speakers").innerHTML = s.speakers.map(function (x) { return '<option value="' + x.key + '"' + (x.key === state.speakers ? " selected" : "") + ">" + x.label + "</option>"; }).join("");
+      state.extras = state.extras.filter(function (k) { return s.extras.some(function (e) { return e.key === k; }); });
+      $("#o-extras").innerHTML = s.extras.map(function (e) {
+        return '<label class="check"><input type="checkbox" value="' + e.key + '"' + (state.extras.indexOf(e.key) > -1 ? " checked" : "") + '><span class="check__box"></span><span>' + e.label + ' <span class="muted">(+' + e.pct + '%)</span> <span class="tip" tabindex="0">?<span class="tip__text">' + e.tip + "</span></span></span></label>";
+      }).join("");
+      $("#o-qty").value = Math.max(1, parseInt(state.qty, 10) || 1);
+      update();
+    }
+
+    /* ---------- Cập nhật tóm tắt & giá ---------- */
+    function read() {
+      state.type = $("#o-type").value;
+      state.urgency = $("#o-urgency").value;
+      state.qty = Math.min(5000, Math.max(1, parseInt($("#o-qty").value, 10) || 1));
+      state.speakers = $("#o-speakers").value || "1";
+      state.extras = $$("#o-extras input:checked").map(function (i) { return i.value; });
+    }
+    function update() {
+      read();
+      var s = P[state.service];
+      var r = DM.calcPrice(state);
+      var t = s.types.find(function (x) { return x.key === state.type; });
+      var u = DM.urgency(state.urgency);
+      $("#s-service").textContent = state.service === "retyping" ? "Đánh máy lại" : "Chuyển âm";
+      $("#s-type").textContent = t.label + (state.service === "transcription" ? " · " + s.speakers.find(function (x) { return x.key === state.speakers; }).label : "");
+      $("#s-qty-label").textContent = state.service === "retyping" ? "Số trang:" : "Số phút:";
+      $("#s-qty").textContent = state.qty;
+      $("#s-urgency").textContent = u.label + " / " + DM.dateLabel(DM.deadline(u.hours));
+      $("#s-unit").textContent = DM.fmt(r.unitPrice) + " / " + r.unit;
+      $("#s-extras-row").classList.toggle("hidden", !state.extras.length);
+      $("#s-extras").textContent = state.extras.map(function (k) { var e = s.extras.find(function (x) { return x.key === k; }); return "+" + e.pct + "%"; }).join(", ");
+      $("#s-discount-row").classList.toggle("hidden", !r.discount);
+      $("#s-discount").textContent = "−" + DM.fmt(r.discount) + (state.promo ? " (" + state.promo + ")" : "");
+      $("#s-old").classList.toggle("hidden", !r.discount);
+      $("#s-old").textContent = DM.fmt(r.beforeDiscount);
+      $("#s-total").textContent = DM.fmt(r.total);
+      $("#m-total").textContent = DM.fmt(r.total);
+      DM.store.set("draft", { service: state.service, type: state.type, urgency: state.urgency, qty: state.qty, speakers: state.speakers, extras: state.extras,
+        name: $("#o-name").value, email: $("#o-email").value, phone: $("#o-phone").value, cc: $("#o-cc").value, instructions: $("#o-instr").value, docType: $("#o-doctype").value });
+      return r;
+    }
+
+    $$("[data-service]").forEach(function (b) {
+      b.addEventListener("click", function () { if (state.service === b.dataset.service) return; read(); state.service = b.dataset.service; buildService(); });
+    });
+    $$("#order-form [data-step]").forEach(function (b) {
+      b.addEventListener("click", function () { var i = $("#o-qty"); i.value = Math.min(5000, Math.max(1, (parseInt(i.value, 10) || 1) + +b.dataset.step)); update(); });
+    });
+    $("#order-form").addEventListener("change", update);
+    $("#o-qty").addEventListener("input", update);
+    $("#o-instr").addEventListener("input", function () { $("#instr-count").textContent = this.value.length; });
+
+    /* ---------- Mã giảm giá ---------- */
+    $("#promo-toggle").addEventListener("click", function () {
+      var box = $("#promo-box"), open = box.classList.toggle("hidden") === false;
+      this.setAttribute("aria-expanded", open);
+      if (open) $("#o-promo").focus();
+    });
+    function applyPromo() {
+      var code = $("#o-promo").value.trim().toUpperCase();
+      var msg = $("#promo-msg");
+      if (!code) { msg.textContent = "Vui lòng nhập mã."; msg.style.color = "var(--red-dark)"; return; }
+      var p = P.promos[code];
+      if (!p) { state.promo = null; msg.textContent = "Mã giảm giá không hợp lệ hoặc đã hết hạn."; msg.style.color = "var(--red-dark)"; }
+      else { state.promo = code; msg.textContent = "✓ " + p.note + "."; msg.style.color = "var(--green)"; }
+      update();
+    }
+    $("#promo-apply").addEventListener("click", applyPromo);
+    $("#o-promo").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyPromo(); } });
+
+    /* ---------- Tệp đính kèm ---------- */
+    var dz = $("#dropzone"), fi = $("#file-input");
+    var size = function (b) { return b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; };
+    function addFiles(list) {
+      Array.prototype.forEach.call(list, function (f) {
+        if (state.files.length >= MAX_FILES) { DM.toast("Chỉ được tải lên tối đa " + MAX_FILES + " tệp. Hãy gửi thêm qua link Google Drive.", "error"); return; }
+        if (f.size > MAX_SIZE) { DM.toast("Tệp “" + f.name + "” vượt quá 50MB.", "error"); return; }
+        if (state.files.some(function (x) { return x.name === f.name && x.size === f.size; })) return;
+        state.files.push({ name: f.name, size: f.size, type: f.type, file: f });
+      });
+      drawFiles();
+    }
+    function drawFiles() {
+      $("#files").innerHTML = state.files.map(function (f, i) {
+        var ext = (f.name.split(".").pop() || "?").slice(0, 4);
+        return '<li><span class="ext">' + DM.esc(ext) + '</span><span class="meta"><b>' + DM.esc(f.name) + "</b><small>" + size(f.size) + '</small></span><button type="button" data-rm="' + i + '" aria-label="Xóa tệp ' + DM.esc(f.name) + '">×</button></li>';
+      }).join("");
+      $$("[data-rm]").forEach(function (b) { b.addEventListener("click", function () { state.files.splice(+b.dataset.rm, 1); drawFiles(); }); });
+    }
+    dz.addEventListener("click", function () { fi.click(); });
+    dz.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fi.click(); } });
+    fi.addEventListener("change", function () { addFiles(fi.files); fi.value = ""; });
+    ["dragenter", "dragover"].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add("is-drag"); }); });
+    ["dragleave", "drop"].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove("is-drag"); }); });
+    dz.addEventListener("drop", function (e) { addFiles(e.dataTransfer.files); });
+
+    /* ---------- Sau khi thanh toán ---------- */
+    $("#after-pay button").addEventListener("click", function () {
+      var o = $("#after-pay").classList.toggle("is-open"); this.setAttribute("aria-expanded", o);
+    });
+
+    /* ---------- Khôi phục bản nháp / tài khoản ---------- */
+    $("#o-name").value = draft.name || "";
+    $("#o-email").value = draft.email || "";
+    $("#o-phone").value = draft.phone || "";
+    if (draft.cc) $("#o-cc").value = draft.cc;
+    if (draft.docType) $("#o-doctype").value = draft.docType;
+    $("#o-instr").value = draft.instructions || "";
+    $("#instr-count").textContent = $("#o-instr").value.length;
+    DM.authReady.then(function (u) {
+      if (!u) return;
+      if (!$("#o-name").value) $("#o-name").value = u.name;
+      if (!$("#o-email").value) $("#o-email").value = u.email;
+      if (!$("#o-phone").value && u.phone) $("#o-phone").value = u.phone.replace(/^\+\d+\s?/, "");
+    });
+    ["#o-name", "#o-email", "#o-phone", "#o-instr"].forEach(function (s) { $(s).addEventListener("input", update); });
+
+    /* ---------- Gửi đơn lên máy chủ ---------- */
+    $("#m-checkout").addEventListener("click", function () { $("#checkout").click(); });
+    var sending = false;
+    $("#order-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (sending) return;
+      if (!DM.validate($("#order-form"))) { DM.toast("Vui lòng kiểm tra lại các trường được đánh dấu.", "error"); return; }
+      update();
+      var fd = new FormData();
+      fd.append("service", state.service);
+      fd.append("type", state.type);
+      fd.append("urgency", state.urgency);
+      fd.append("qty", state.qty);
+      fd.append("speakers", state.speakers);
+      fd.append("extras", state.extras.join(","));
+      if (state.promo) fd.append("promo", state.promo);
+      fd.append("docType", $("#o-doctype").value);
+      fd.append("instructions", $("#o-instr").value);
+      fd.append("name", $("#o-name").value.trim());
+      fd.append("email", $("#o-email").value.trim());
+      fd.append("phone", $("#o-cc").value + " " + $("#o-phone").value.trim());
+      fd.append("agree", $("#o-agree").checked ? "on" : "");
+      state.files.forEach(function (f) { fd.append("files", f.file, f.name); });
+
+      // Dùng XHR để hiển thị tiến độ tải tệp lên
+      var btn = $("#checkout"), label = btn.textContent;
+      sending = true; btn.disabled = true; $("#m-checkout").disabled = true;
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/orders");
+      xhr.upload.onprogress = function (ev) {
+        if (ev.lengthComputable && state.files.length) btn.textContent = "Đang tải tệp lên… " + Math.round(ev.loaded / ev.total * 100) + "%";
+      };
+      var finish = function () { sending = false; btn.disabled = false; $("#m-checkout").disabled = false; btn.textContent = label; };
+      xhr.onload = function () {
+        var data = {};
+        try { data = JSON.parse(xhr.responseText); } catch (err) { data = {}; }
+        finish();
+        if (xhr.status !== 201) { DM.toast(data.error || "Không gửi được đơn hàng (mã " + xhr.status + "). Vui lòng thử lại.", "error"); return; }
+        var order = data.order;
+        DM.orderTokens.set(order.id, data.token);
+        DM.store.set("draft", {});
+        state.files = []; drawFiles();
+        DM.openPayment(order, function () { location.href = "/tai-khoan?order=" + order.id; });
+      };
+      xhr.onerror = function () { finish(); DM.toast("Mất kết nối khi gửi đơn. Vui lòng kiểm tra mạng và thử lại.", "error"); };
+      xhr.send(fd);
+    });
+
+    buildService();
+  })();
+  </script>
+</body>
+</html>

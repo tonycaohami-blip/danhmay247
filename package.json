@@ -1,0 +1,22 @@
+{
+  "name": "danh-may-247",
+  "version": "1.0.0",
+  "description": "Đánh máy 247 - Sản phẩm của VietSCI Editing Services. Website dịch vụ đánh máy, chuyển âm và định dạng tài liệu.",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test/e2e.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "VietSCI Editing Services",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.22.3",
+    "multer": "^2.4.0",
+    "nodemailer": "^10.1.0"
+  }
+}

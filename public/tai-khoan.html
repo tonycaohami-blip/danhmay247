@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đơn hàng của tôi — Đánh máy 247</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    @media print { .header, .footer, .account__side, .chat-fab, .cookie, .no-print { display: none !important; } body { padding: 0; } .order-page { background: #fff; } .account { display: block; } }
+    .file-link { color: inherit; }
+    .file-link:hover b { color: var(--red); text-decoration: underline; }
+  </style>
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+  <main id="main" class="order-page">
+    <div class="container" id="app"><div class="empty"><span class="typing-dots"><i></i><i></i><i></i></span><p>Đang tải…</p></div></div>
+  </main>
+  <div id="site-footer"></div>
+
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/payment.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$, app = $("#app");
+    var openId = DM.param("order");
+    var view = openId ? "order" : (location.hash === "#profile" ? "profile" : "orders");
+    var pollTimer = null;
+
+    // Liên kết trong email: /tai-khoan?order=DM123456&t=<mã truy cập>
+    if (openId && DM.param("t")) {
+      DM.orderTokens.set(openId, DM.param("t"));
+      history.replaceState(null, "", "/tai-khoan?order=" + encodeURIComponent(openId));
+    }
+
+    var size = function (b) { return b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; };
+    var chip = function (st) { var s = DM.orders.status[st] || { label: st, chip: "chip--grey" }; return '<span class="chip ' + s.chip + '">' + s.label + "</span>"; };
+    var err = function (e) { return '<div class="alert alert--error">' + DM.esc(e.message) + "</div>"; };
+    function go(v, id) {
+      view = v; openId = id || null;
+      history.replaceState(null, "", "/tai-khoan" + (id ? "?order=" + encodeURIComponent(id) : v === "profile" ? "#profile" : ""));
+      render(); window.scrollTo(0, 0);
+    }
+
+    /** Lấy danh sách đơn: của tài khoản (nếu đăng nhập) + các đơn đặt trên thiết bị này. */
+    function loadOrders() {
+      var ids = Object.keys(DM.orderTokens.all());
+      var mine = DM.me ? DM.orders.mine() : Promise.resolve([]);
+      return mine.then(function (list) {
+        var have = {}; list.forEach(function (o) { have[o.id] = 1; });
+        var extra = ids.filter(function (id) { return !have[id]; }).map(function (id) { return DM.orders.get(id).catch(function () { return null; }); });
+        return Promise.all(extra).then(function (more) {
+          return list.concat(more.filter(Boolean)).sort(function (a, b) { return b.created - a.created; });
+        });
+      });
+    }
+
+    function render() {
+      clearInterval(pollTimer);
+      var u = DM.me;
+      app.innerHTML =
+        '<div class="account">' +
+        '<aside class="account__side">' +
+        (u ? '<div class="account__user"><span class="login__avatar" aria-hidden="true">' + DM.esc(DM.initials(u.name)) + "</span><div><b>" + DM.esc(u.name) + "</b><small>" + DM.esc(u.email) + "</small></div></div>"
+           : '<div class="account__user"><span class="login__avatar" aria-hidden="true">?</span><div><b>Khách</b><small>Chưa đăng nhập</small></div></div>') +
+        '<nav class="account__tabs" aria-label="Tài khoản">' +
+        '<button type="button" data-tab="orders" class="' + (view !== "profile" ? "is-active" : "") + '">Đơn hàng</button>' +
+        (u ? '<button type="button" data-tab="profile" class="' + (view === "profile" ? "is-active" : "") + '">Hồ sơ cá nhân</button>' : "") +
+        '<a href="/dat-hang" class="button button--sm" style="margin:8px 0">+ Đặt hàng mới</a>' +
+        (u ? '<button type="button" data-logout>Đăng xuất</button>' : "") + "</nav></aside>" +
+        '<section id="pane"></section></div>';
+      $$("[data-tab]").forEach(function (b) { b.addEventListener("click", function () { go(b.dataset.tab); }); });
+      var lo = $("[data-logout]");
+      if (lo) lo.addEventListener("click", function () { DM.auth.logout().then(function () { DM.renderLogin(); go("orders"); DM.toast("Bạn đã đăng xuất."); }); });
+      if (view === "profile" && u) renderProfile(u);
+      else if (view === "order" && openId) renderOrder(openId);
+      else renderOrders();
+    }
+
+    /* ---------- Danh sách đơn ---------- */
+    function loginBox() {
+      return '<div class="order-card"><h2 class="order-card__title">Đăng nhập để xem tất cả đơn hàng</h2>' +
+        (DM.param("login") === "expired" ? '<div class="alert alert--error">Liên kết đăng nhập đã hết hạn hoặc đã được sử dụng. Vui lòng yêu cầu liên kết mới.</div>' : "") +
+        '<p style="color:var(--muted);font-size:15px">Nhập email bạn đã dùng khi đặt hàng. Chúng tôi sẽ gửi liên kết đăng nhập — không cần mật khẩu.</p>' +
+        '<form id="auth" novalidate><div id="auth-msg" aria-live="polite"></div><div class="phone-group" style="grid-template-columns:1fr auto">' +
+        '<div class="field" style="margin:0"><label class="sr-only" for="a-email">Email</label><input class="input" id="a-email" type="email" required autocomplete="email" placeholder="ban@email.com"><div class="field__error"></div></div>' +
+        '<button class="button" type="submit" style="height:46px;width:auto">Gửi liên kết</button></div></form></div>';
+    }
+    function renderOrders() {
+      var pane = $("#pane");
+      pane.innerHTML = (DM.me ? "" : loginBox()) + '<div class="order-card" id="list"><h1 class="order-card__title">' + (DM.me ? "Đơn hàng của tôi" : "Đơn hàng trên thiết bị này") + '</h1><div class="empty"><span class="typing-dots"><i></i><i></i><i></i></span></div></div>';
+      var f = $("#auth");
+      if (f) f.addEventListener("submit", function (e) { e.preventDefault(); DM.loginSubmit(f, $("#auth-msg")); });
+      loadOrders().then(function (orders) {
+        var box = $("#list");
+        if (!box) return;
+        if (!orders.length) {
+          box.innerHTML = '<h1 class="order-card__title">Đơn hàng</h1><div class="empty">' + DM.icon.file + "<p>" + (DM.me ? "Bạn chưa có đơn hàng nào." : "Chưa có đơn hàng nào trên thiết bị này. Hãy đăng nhập hoặc mở liên kết trong email đơn hàng.") + "</p>" +
+            '<a href="/dat-hang" class="button" style="margin:0 auto">Đặt hàng ngay</a></div>';
+          return;
+        }
+        box.innerHTML = '<h1 class="order-card__title">' + (DM.me ? "Đơn hàng của tôi" : "Đơn hàng trên thiết bị này") + '</h1><div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Mã đơn</th><th>Dịch vụ</th><th>Thời hạn</th><th>Tổng tiền</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
+          orders.map(function (o) {
+            var unpaid = o.status === "unpaid" || o.status === "verifying";
+            return '<tr><td><a class="oid" href="/tai-khoan?order=' + o.id + '" data-open="' + o.id + '">#' + o.id + '</a><br><small style="color:var(--muted)">' + DM.dateTime(o.created) + "</small></td>" +
+              "<td>" + DM.esc(o.typeLabel) + '<br><small style="color:var(--muted)">' + o.qty + " " + o.unit + "</small></td>" +
+              "<td>" + (o.deadline ? DM.dateTime(o.deadline) : o.urgencyLabel + " sau thanh toán") + "</td>" +
+              "<td><b>" + DM.fmt(o.price.total) + "</b></td><td>" + chip(o.status) + "</td>" +
+              "<td>" + (o.status === "unpaid" ? '<button type="button" class="button button--sm" data-pay="' + o.id + '">Thanh toán</button>' : '<a class="button button--sm button--black" href="/tai-khoan?order=' + o.id + '" data-open="' + o.id + '">Chi tiết</a>') + "</td></tr>";
+          }).join("") + "</tbody></table></div>";
+        $$("[data-open]", box).forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); go("order", a.dataset.open); }); });
+        $$("[data-pay]", box).forEach(function (b) {
+          b.addEventListener("click", function () {
+            var o = orders.find(function (x) { return x.id === b.dataset.pay; });
+            DM.openPayment(o, function () { go("order", o.id); });
+          });
+        });
+      }, function (e) { var box = $("#list"); if (box) box.innerHTML = err(e); });
+    }
+
+    /* ---------- Chi tiết đơn ---------- */
+    function renderOrder(id) {
+      var pane = $("#pane");
+      pane.innerHTML = '<div class="order-card"><div class="empty"><span class="typing-dots"><i></i><i></i><i></i></span></div></div>';
+      DM.orders.get(id).then(function (o) { drawOrder(o); pollTimer = setInterval(refresh, 15000); }, function (e) {
+        pane.innerHTML = '<div class="order-card">' + err(e) +
+          "<p>Hãy mở lại liên kết trong email xác nhận đơn hàng, hoặc đăng nhập bằng email đã dùng khi đặt hàng.</p>" +
+          '<button type="button" class="link" data-back>← Quay lại</button></div>' + (DM.me ? "" : loginBox());
+        $("[data-back]").addEventListener("click", function () { go("orders"); });
+        var f = $("#auth");
+        if (f) f.addEventListener("submit", function (ev) { ev.preventDefault(); DM.loginSubmit(f, $("#auth-msg")); });
+      });
+      function refresh() {
+        DM.orders.get(id).then(function (o) {
+          if (!$("#thread")) return clearInterval(pollTimer);
+          var typing = $("#msg-input") && $("#msg-input").value;
+          if (o.messages.length !== $$("#thread .msg").length || o.status !== current.status || o.files.length !== current.files.length) {
+            drawOrder(o);
+            if (typing) $("#msg-input").value = typing;
+          }
+        }, function () { /* thử lại lần sau */ });
+      }
+    }
+    var current = null;
+    function drawOrder(o) {
+      current = o;
+      var pane = $("#pane");
+      var steps = [["unpaid", "Đã tạo đơn"], ["paid", "Đã thanh toán"], ["progress", "Chuyên viên đang thực hiện"], ["review", "Biên tập viên kiểm tra"], ["done", "Hoàn thành & bàn giao"]];
+      var rank = { unpaid: 0, verifying: 0, paid: 1, progress: 2, review: 3, done: 4 };
+      var cur = o.status === "cancelled" ? -1 : rank[o.status];
+      var when = function (st) { var h = o.history.filter(function (x) { return x.status === st; }).pop(); return h ? DM.dateTime(h.at) : ""; };
+      var unpaid = o.status === "unpaid" || o.status === "verifying";
+      var mineFiles = o.files.filter(function (f) { return f.by === "customer"; });
+      var results = o.files.filter(function (f) { return f.by === "admin"; });
+      var fileList = function (list) {
+        return '<ul class="files" style="margin:0 0 18px">' + list.map(function (f) {
+          if (f.purged) return '<li><span class="ext">' + DM.esc(f.name.split(".").pop().slice(0, 4)) + '</span><span class="meta"><b>' + DM.esc(f.name) + "</b><small>Đã xóa sau 30 ngày theo chính sách bảo mật</small></span></li>";
+          return '<li><span class="ext">' + DM.esc(f.name.split(".").pop().slice(0, 4)) + '</span><a class="meta file-link" href="' + DM.orders.fileUrl(o, f) + '" download><b>' + DM.esc(f.name) + "</b><small>" + size(f.size) + " · bấm để tải</small></a></li>";
+        }).join("") + "</ul>";
+      };
+
+      pane.innerHTML =
+        '<div class="order-card">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px"><div><button type="button" class="link no-print" data-back style="margin-bottom:10px">← Tất cả đơn hàng</button>' +
+        '<h1 class="order-card__title" style="margin:0">Đơn hàng #' + o.id + '</h1><small style="color:var(--muted)">Tạo lúc ' + DM.dateTime(o.created) + "</small>" +
+        '<div style="font-size:13px;color:var(--navy);font-weight:600;margin-top:4px">' + DM.esc(DM.site.tagline) + "</div></div>" + chip(o.status) + "</div>" +
+        (o.status === "verifying" ? '<div class="alert alert--info">Chúng tôi đang đối soát giao dịch chuyển khoản của bạn. Trang sẽ tự cập nhật khi xác nhận xong.</div>' : "") +
+        (results.length ? '<div class="alert alert--success"><b>Tài liệu hoàn thành đã sẵn sàng.</b> Bấm vào tệp bên dưới để tải về.</div>' + fileList(results) : "") +
+        '<div class="detail-grid">' +
+        "<div><span>Dịch vụ</span><b>" + DM.esc(o.serviceLabel + " — " + o.typeLabel) + "</b></div>" +
+        "<div><span>Khối lượng</span><b>" + o.qty + " " + o.unit + (o.speakers ? " · " + DM.esc(o.speakers) : "") + "</b></div>" +
+        "<div><span>Thời hạn</span><b>" + (o.deadline ? DM.dateTime(o.deadline) : o.urgencyLabel + " kể từ khi thanh toán") + "</b></div>" +
+        "<div><span>Loại tài liệu</span><b>" + DM.esc(o.docType) + "</b></div>" +
+        "<div><span>Dịch vụ bổ sung</span><b>" + (o.extras.length ? DM.esc(o.extras.join(", ")) : "Không") + "</b></div>" +
+        "<div><span>Tổng thanh toán</span><b>" + DM.fmt(o.price.total) + (o.promo ? " (mã " + DM.esc(o.promo) + ")" : "") + "</b></div>" +
+        "<div><span>Liên hệ</span><b>" + DM.esc(o.name) + " · " + DM.esc(o.phone) + "</b></div>" +
+        "<div><span>Thanh toán</span><b>" + (o.paidAt ? DM.dateTime(o.paidAt) + " · Chuyển khoản" : "Chưa thanh toán") + "</b></div>" +
+        "</div>" +
+        (o.instructions ? '<div class="field__label">Hướng dẫn</div><div style="background:var(--bg-grey);border-radius:8px;padding:12px 14px;font-size:14.5px;white-space:pre-wrap;margin-bottom:18px">' + DM.esc(o.instructions) + "</div>" : "") +
+        '<div class="field__label">Tệp bạn đã gửi</div>' +
+        (mineFiles.length ? fileList(mineFiles) : '<p style="font-size:14.5px;color:var(--muted)">Chưa có tệp. Bạn có thể gửi đường dẫn Google Drive trong tin nhắn bên dưới.</p>') +
+        '<div class="no-print" style="display:flex;gap:10px;flex-wrap:wrap">' +
+        (unpaid ? '<button type="button" class="button button--sm" data-pay>' + (o.status === "verifying" ? "Xem thông tin chuyển khoản" : "Thanh toán ngay") + '</button><button type="button" class="button button--sm button--black" data-cancel>Hủy đơn</button>' : "") +
+        '<button type="button" class="button button--sm button--black" data-print>In / Lưu PDF</button>' +
+        '<a class="button button--sm button--black" href="/dat-hang?service=' + o.service + "&type=" + o.type + "&urgency=" + o.urgency + "&qty=" + o.qty + '">Đặt lại đơn tương tự</a></div>' +
+        "</div>" +
+
+        '<div class="order-card"><h2 class="order-card__title">Tiến độ</h2>' +
+        (o.status === "cancelled" ? '<div class="alert alert--error">Đơn hàng đã bị hủy lúc ' + when("cancelled") + ".</div>" :
+          '<ul class="timeline">' + steps.map(function (s, i) {
+            var cls = i < cur || (i === cur && s[0] === "done") ? "done" : i === cur ? "current" : "";
+            return '<li class="' + cls + '">' + s[1] + "<small>" + (when(s[0]) || (i > cur ? "Đang chờ" : "")) + "</small></li>";
+          }).join("") + "</ul>") + "</div>" +
+
+        '<div class="order-card no-print"><h2 class="order-card__title">Trao đổi với chuyên viên &amp; hỗ trợ</h2>' +
+        '<div class="thread" id="thread" aria-live="polite">' + o.messages.map(function (m) {
+          return '<div class="msg ' + (m.me ? "msg--me" : "msg--bot") + '">' + (m.me ? "" : '<b style="display:block;font-size:12.5px;color:var(--navy)">' + DM.esc(m.from || "Hỗ trợ") + "</b>") + DM.esc(m.text) + "<time>" + DM.dateTime(m.at) + "</time></div>";
+        }).join("") + "</div>" +
+        '<form class="chat-box__form" id="msg-form" style="padding:0;border:0"><label class="sr-only" for="msg-input">Tin nhắn</label><input class="input" id="msg-input" placeholder="Bổ sung hướng dẫn, gửi link tệp, hỏi tiến độ…" autocomplete="off" maxlength="2000"><button class="button" type="submit" aria-label="Gửi tin nhắn">' + DM.icon.send + "</button></form></div>";
+
+      $("#thread").scrollTop = 1e6;
+      $("[data-back]").addEventListener("click", function () { go("orders"); });
+      $("[data-print]").addEventListener("click", function () { window.print(); });
+      var payBtn = $("[data-pay]", pane);
+      if (payBtn) payBtn.addEventListener("click", function () { DM.openPayment(o, function () { DM.orders.get(o.id).then(drawOrder); }); });
+      var cancel = $("[data-cancel]", pane);
+      if (cancel) cancel.addEventListener("click", function () {
+        var m = DM.modal.open('<h2 class="modal__title">Hủy đơn #' + o.id + '?</h2><p>Đơn hàng chưa thanh toán sẽ bị hủy và không thể khôi phục. Nếu bạn đã chuyển khoản, vui lòng liên hệ ' + DM.esc(DM.site.phone) + ' thay vì hủy đơn.</p><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button type="button" class="button button--sm button--black" data-no>Không</button><button type="button" class="button button--sm" data-yes>Hủy đơn</button></div>', { small: true });
+        $("[data-no]", m).addEventListener("click", function () { DM.modal.close(m); });
+        $("[data-yes]", m).addEventListener("click", function () {
+          DM.orders.action(o.id, "cancel").then(function (x) { DM.modal.close(m); DM.toast("Đã hủy đơn #" + o.id + "."); drawOrder(x); }, function (e) { DM.toast(e.message, "error"); });
+        });
+      });
+      $("#msg-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var i = $("#msg-input"), t = i.value.trim();
+        if (!t) return;
+        i.disabled = true;
+        DM.orders.action(o.id, "messages", { text: t }).then(function (x) { drawOrder(x); $("#msg-input").focus(); }, function (er) { i.disabled = false; DM.toast(er.message, "error"); });
+      });
+    }
+
+    /* ---------- Hồ sơ ---------- */
+    function renderProfile(u) {
+      $("#pane").innerHTML =
+        '<div class="order-card"><h1 class="order-card__title">Hồ sơ cá nhân</h1><form id="profile" novalidate>' +
+        '<div class="order-row"><div class="field"><label class="field__label" for="p-name">Họ và tên</label><input class="input" id="p-name" required maxlength="100" value="' + DM.esc(u.name) + '"><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="p-phone">Số điện thoại</label><input class="input" id="p-phone" type="tel" maxlength="30" value="' + DM.esc(u.phone || "") + '"></div></div>' +
+        '<div class="field"><label class="field__label" for="p-email">Email</label><input class="input" id="p-email" value="' + DM.esc(u.email) + '" disabled></div>' +
+        '<button class="button button--sm" type="submit">Lưu thay đổi</button></form></div>';
+      $("#profile").addEventListener("submit", function (e) {
+        e.preventDefault(); if (!DM.validate(this)) return;
+        DM.api("/me", { method: "PATCH", body: { name: $("#p-name").value.trim(), phone: $("#p-phone").value.trim() } }).then(function (d) {
+          DM.me = d.user; DM.renderLogin(); DM.toast("Đã lưu hồ sơ."); render();
+        }, function (er) { DM.toast(er.message, "error"); });
+      });
+    }
+
+    document.addEventListener("dm:auth", render);
+    DM.authReady.then(render);
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blog — Kiến thức đánh máy, chuyển âm &amp; số hóa tài liệu | DanhMay247</title>
+  <meta name="description" content="Mẹo chụp tài liệu, định dạng luận văn, chuyển âm phỏng vấn, số hóa hồ sơ doanh nghiệp và nhiều kiến thức hữu ích khác.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Trang chủ</a><span>/</span><span aria-current="page">Blog</span></nav>
+        <h1>Blog DanhMay247</h1>
+        <p>Kiến thức, mẹo hay và hướng dẫn giúp bạn làm việc với tài liệu hiệu quả hơn.</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="blog-toolbar">
+          <div class="filter-pills" id="cats" role="group" aria-label="Chuyên mục"></div>
+          <div class="search"><span id="search-ic"></span><label class="sr-only" for="q">Tìm bài viết</label><input class="input" id="q" type="search" placeholder="Tìm bài viết…"></div>
+        </div>
+        <div class="blog-grid" id="posts" aria-live="polite"></div>
+        <div class="pagination" id="pages"></div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$, PER = 6, page = 1, cat = "Tất cả", q = DM.param("q") || "";
+    $("#search-ic").innerHTML = DM.icon.search;
+    $("#q").value = q;
+    var norm = function (s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d"); };
+    DM.postCard = function (p) {
+      return '<a class="post-card" href="/bai-viet?slug=' + p.slug + '"><div class="post-card__cover" style="background:' + p.color + '"><span class="chip">' + p.cat + '</span><span aria-hidden="true">' + p.emoji + "</span></div>" +
+        '<div class="post-card__body"><h3>' + p.title + "</h3><p>" + p.excerpt + '</p><div class="post-card__meta"><span>' + p.date.split("-").reverse().join("/") + "</span><span>" + p.read + " phút đọc</span></div></div></a>";
+    };
+    function draw() {
+      var cats = ["Tất cả"].concat(DM.posts.map(function (p) { return p.cat; }).filter(function (c, i, a) { return a.indexOf(c) === i; }));
+      $("#cats").innerHTML = cats.map(function (c) { return '<button type="button" class="' + (c === cat ? "is-active" : "") + '" aria-pressed="' + (c === cat) + '">' + c + "</button>"; }).join("");
+      $$("#cats button").forEach(function (b) { b.addEventListener("click", function () { cat = b.textContent; page = 1; draw(); }); });
+      var list = DM.posts.filter(function (p) {
+        return (cat === "Tất cả" || p.cat === cat) && (!q || norm(p.title + " " + p.excerpt + " " + p.body).indexOf(norm(q)) > -1);
+      }).sort(function (a, b) { return b.date.localeCompare(a.date); });
+      var pages = Math.max(1, Math.ceil(list.length / PER));
+      page = Math.min(page, pages);
+      $("#posts").innerHTML = list.slice((page - 1) * PER, page * PER).map(DM.postCard).join("") ||
+        '<div class="empty" style="grid-column:1/-1">' + DM.icon.search + "<p>Không tìm thấy bài viết phù hợp với “" + DM.esc(q) + "”.</p></div>";
+      $("#pages").innerHTML = pages > 1 ? Array.from({ length: pages }, function (_, i) { return '<button type="button" class="' + (i + 1 === page ? "is-active" : "") + '" aria-label="Trang ' + (i + 1) + '">' + (i + 1) + "</button>"; }).join("") : "";
+      $$("#pages button").forEach(function (b, i) { b.addEventListener("click", function () { page = i + 1; draw(); window.scrollTo({ top: $("#posts").offsetTop - 120 }); }); });
+    }
+    var deb;
+    $("#q").addEventListener("input", function () { clearTimeout(deb); var v = this.value; deb = setTimeout(function () { q = v.trim(); page = 1; draw(); }, 200); });
+    draw();
+  })();
+  </script>
+</body>
+</html>

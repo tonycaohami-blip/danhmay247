@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bảng giá dịch vụ đánh máy &amp; chuyển âm — DanhMay247</title>
+  <meta name="description" content="Bảng giá cố định, minh bạch cho dịch vụ đánh máy lại và chuyển âm. Chỉ từ 19.000đ/trang, không phí ẩn. Tính giá ngay trực tuyến.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <div class="page-prices__header">
+      <div class="container">
+        <h1>Giá cố định và dịch vụ bổ sung hữu ích</h1>
+        <p>Thanh toán chuyển khoản qua mã VietQR, xác nhận tự động. Không phí ẩn.</p>
+        <div class="list-toggle" role="tablist" aria-label="Chọn loại dịch vụ">
+          <button type="button" role="tab" class="is-active" aria-selected="true" data-svc="retyping">Đánh máy lại</button>
+          <button type="button" role="tab" aria-selected="false" data-svc="transcription">Chuyển âm</button>
+        </div>
+
+        <div class="products">
+          <button type="button" class="round-btn products__arrow products__arrow--prev" aria-label="Xem mức giá trước"></button>
+          <div class="products__viewport" id="products-viewport"><ul class="products__items" id="products"></ul></div>
+          <button type="button" class="round-btn products__arrow products__arrow--next" aria-label="Xem mức giá tiếp theo"></button>
+        </div>
+
+        <div class="price-depend">
+          <div class="price-depend__title">Giá phụ thuộc vào những yếu tố nào?</div>
+          <ul class="price-depend__list">
+            <li><div class="icon" id="ic-clock"></div><div class="title">Thời hạn hoàn thành</div>Đơn hàng có thời hạn 6–12 giờ thường có giá cao hơn so với đơn đặt trước nhiều ngày.</li>
+            <li><div class="icon" id="ic-layers"></div><div class="title">Khối lượng công việc</div>Loại dịch vụ đã chọn và số trang / số phút / số người nói cũng ảnh hưởng đến giá.</li>
+            <li><div class="icon" id="ic-award"></div><div class="title">Dịch vụ bổ sung</div>Dịch vụ bổ sung làm tăng tổng giá 10–20% nhưng đảm bảo văn bản bàn giao đạt mọi tiêu chuẩn.</li>
+          </ul>
+        </div>
+        <div class="page-prices__questions">Chưa rõ cách tính tổng giá hoặc cách đặt hàng? <a href="/lien-he">Liên hệ với chúng tôi!</a></div>
+      </div>
+    </div>
+
+    <!-- Máy tính giá -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title reveal">Tính giá nhanh</h2>
+        <div class="calc reveal">
+          <form class="calc__form" id="calc" novalidate>
+            <div class="field"><div class="field__label">Loại dịch vụ</div>
+              <div class="segmented" role="radiogroup" aria-label="Loại dịch vụ">
+                <button type="button" class="is-active" data-calc-svc="retyping" role="radio" aria-checked="true">Đánh máy lại</button>
+                <button type="button" data-calc-svc="transcription" role="radio" aria-checked="false">Chuyển âm</button>
+              </div>
+            </div>
+            <div class="field"><label class="field__label" for="c-type">Loại chuyển đổi</label><select class="select" id="c-type"></select></div>
+            <div class="calc__row">
+              <div class="field"><label class="field__label" for="c-urg">Thời hạn</label><select class="select" id="c-urg"></select></div>
+              <div class="field"><label class="field__label" for="c-qty" id="c-qty-label">Số trang</label>
+                <div class="stepper"><button type="button" data-step="-1" aria-label="Giảm">−</button><input id="c-qty" type="number" min="1" max="5000" value="10" inputmode="numeric"><button type="button" data-step="1" aria-label="Tăng">+</button></div>
+              </div>
+            </div>
+            <div class="field hidden" id="c-sp-wrap"><label class="field__label" for="c-sp">Số người nói</label><select class="select" id="c-sp"></select></div>
+            <div class="extras-checks" id="c-extras"></div>
+          </form>
+          <div class="calc__result" aria-live="polite">
+            <div>Tổng chi phí dự kiến</div>
+            <div class="total" id="c-total">0 đ</div>
+            <div class="per" id="c-per"></div>
+            <a class="button button--w100" id="c-order" href="/dat-hang">Đặt hàng với cấu hình này</a>
+            <div style="font-size:13px;margin-top:14px;text-align:center" id="c-deadline"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--grey extras">
+      <div class="container">
+        <div class="extras__header reveal">
+          <h2 class="section-title">Dịch vụ bổ sung hữu ích</h2>
+          <p>Chuyên viên của chúng tôi có thể cung cấp mọi thứ bạn cần để dự án thành công mà không gặp rắc rối. Dưới đây là một số dịch vụ bổ sung bạn có thể quan tâm:</p>
+        </div>
+        <ul class="extras__list">
+          <li class="reveal"><div class="img" data-ic="layers"></div><div class="title">Định dạng tài liệu</div><p>Từ thêm đầu trang, chân trang đến chèn bảng biểu, đội ngũ của chúng tôi định dạng tài liệu đúng theo yêu cầu, giúp tài liệu trông chuyên nghiệp.</p><div class="price">+10% vào giá</div></li>
+          <li class="reveal"><div class="img" data-ic="edit"></div><div class="title">Biên tập tài liệu</div><p>Cần cấu trúc lại văn bản cho mạch lạc? Hay chỉnh sửa vài đoạn cho rõ ý? Biên tập viên sẽ đảm bảo văn bản rõ ràng, súc tích và đúng văn phong, chuẩn trình bày.</p><div class="price">+20% vào giá</div></li>
+          <li class="reveal"><div class="img" data-ic="mic"></div><div class="title">Chuyển âm nguyên văn</div><p>Giữ lại từng từ, từ đệm, ngập ngừng, tiếng cười và khoảng lặng — phù hợp cho nghiên cứu, pháp lý và phân tích diễn ngôn.</p><div class="price">+10% vào giá</div></li>
+          <li class="reveal"><div class="img" data-ic="clock"></div><div class="title">Mốc thời gian</div><p>Chèn mốc thời gian theo từng đoạn hoặc từng lượt nói để bạn dễ dàng tìm lại vị trí trong tệp âm thanh, video.</p><div class="price">+10% vào giá</div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="faq-section__wrapper">
+          <div class="faq-section__header">
+            <h2 class="section-title faq-section__title">Câu hỏi về giá</h2>
+            <div class="faq-section__description">Những thắc mắc thường gặp về cách tính giá, thanh toán và hoàn tiền.</div>
+          </div>
+          <div class="faq-section__items" data-accordion id="price-faq"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$, P = DM.prices;
+    var ORDER = ["24h", "48h", "3d", "5d", "7d", "10d", "14d", "30d", "6h", "12h"];
+
+    /* ---------- Thẻ giá ---------- */
+    function renderCards(svc) {
+      var s = P[svc];
+      var html = ORDER.filter(function (k) { return s.base[k]; }).map(function (k) {
+        var u = DM.urgency(k), base = s.base[k];
+        var lines = svc === "retyping"
+          ? '<div class="line2">Viết tay sang Word <strong>' + DM.fmt(base * 1.15) + '</strong></div><div class="line2">PDF sang Excel <strong>' + DM.fmt(base * 1.16) + "</strong></div>"
+          : '<div class="line2">Từ 2 người nói <strong>' + DM.fmt(base * 1.08) + '</strong></div><div class="line2">Làm phụ đề SRT <strong>' + DM.fmt(base * 1.2) + "</strong></div>";
+        return '<li class="products__item">' + (k === P.popular ? '<div class="popular">Phổ biến nhất</div>' : "") +
+          '<div class="time">' + u.label + '</div><div class="price">' + DM.fmt(base) + '<span> /' + s.unit + "</span></div>" +
+          '<div class="description">' + (svc === "retyping" ? "PDF / Ảnh sang Word" : "1 người nói") + "</div>" + lines +
+          '<a class="btn" href="/dat-hang?service=' + svc + "&urgency=" + k + '">Đặt hàng ngay</a></li>';
+      }).join("");
+      $("#products").innerHTML = html;
+      $("#products-viewport").scrollLeft = 0;
+    }
+    $$(".list-toggle button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        $$(".list-toggle button").forEach(function (x) { x.classList.toggle("is-active", x === b); x.setAttribute("aria-selected", x === b); });
+        renderCards(b.dataset.svc);
+      });
+    });
+    var vp = $("#products-viewport");
+    $(".products__arrow--prev").innerHTML = DM.icon.left;
+    $(".products__arrow--next").innerHTML = DM.icon.right;
+    $(".products__arrow--prev").addEventListener("click", function () { vp.scrollLeft -= vp.clientWidth * 0.8; });
+    $(".products__arrow--next").addEventListener("click", function () { vp.scrollLeft += vp.clientWidth * 0.8; });
+    renderCards("retyping");
+
+    $("#ic-clock").innerHTML = DM.icon.clock; $("#ic-layers").innerHTML = DM.icon.layers; $("#ic-award").innerHTML = DM.icon.award;
+    $$("[data-ic]").forEach(function (el) { el.innerHTML = DM.icon[el.dataset.ic]; });
+
+    /* ---------- Máy tính giá ---------- */
+    var state = { service: "retyping" };
+    function fillCalc() {
+      var s = P[state.service];
+      $("#c-type").innerHTML = s.types.map(function (t) { return '<option value="' + t.key + '">' + t.label + "</option>"; }).join("");
+      $("#c-urg").innerHTML = DM.urgencies.filter(function (u) { return s.base[u.key]; }).map(function (u) {
+        return '<option value="' + u.key + '"' + (u.key === "3d" ? " selected" : "") + ">" + u.label + "</option>";
+      }).join("");
+      $("#c-qty-label").textContent = state.service === "retyping" ? "Số trang" : "Số phút";
+      $("#c-sp-wrap").classList.toggle("hidden", state.service !== "transcription");
+      if (s.speakers) $("#c-sp").innerHTML = s.speakers.map(function (x) { return '<option value="' + x.key + '">' + x.label + "</option>"; }).join("");
+      $("#c-extras").innerHTML = s.extras.map(function (e) {
+        return '<label class="check"><input type="checkbox" value="' + e.key + '"><span class="check__box"></span><span>' + e.label + ' <span class="muted">(+' + e.pct + "%)</span></span></label>";
+      }).join("");
+      update();
+    }
+    function update() {
+      var o = {
+        service: state.service, type: $("#c-type").value, urgency: $("#c-urg").value,
+        qty: $("#c-qty").value, speakers: $("#c-sp").value,
+        extras: $$("#c-extras input:checked").map(function (i) { return i.value; })
+      };
+      var r = DM.calcPrice(o);
+      if (!r) return;
+      $("#c-total").textContent = DM.fmt(r.total);
+      $("#c-per").textContent = DM.fmt(r.unitPrice) + " / " + r.unit + (r.extrasPct ? " · đã gồm +" + r.extrasPct + "% dịch vụ bổ sung" : "");
+      var u = DM.urgency(o.urgency);
+      $("#c-deadline").textContent = "Nhận tài liệu dự kiến: " + DM.dateLabel(DM.deadline(u.hours)) + " (nếu đặt ngay)";
+      var q = new URLSearchParams({ service: o.service, type: o.type, urgency: o.urgency, qty: Math.max(1, parseInt(o.qty, 10) || 1) });
+      if (o.service === "transcription") q.set("speakers", o.speakers);
+      if (o.extras.length) q.set("extras", o.extras.join(","));
+      $("#c-order").href = "/dat-hang?" + q.toString();
+    }
+    $$("[data-calc-svc]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        state.service = b.dataset.calcSvc;
+        $$("[data-calc-svc]").forEach(function (x) { x.classList.toggle("is-active", x === b); x.setAttribute("aria-checked", x === b); });
+        fillCalc();
+      });
+    });
+    $$("#calc [data-step]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = $("#c-qty"); i.value = Math.min(5000, Math.max(1, (parseInt(i.value, 10) || 1) + +b.dataset.step)); update();
+      });
+    });
+    $("#calc").addEventListener("input", update);
+    $("#calc").addEventListener("change", update);
+    fillCalc();
+
+    $("#price-faq").innerHTML = DM.faq.filter(function (f) { return f.cat === "Giá & thanh toán"; }).concat(DM.faq.filter(function (f) { return /hoàn tiền|chỉnh sửa/.test(f.q); }))
+      .map(function (f, i) { return DM.faqItem(f, i === 0); }).join("");
+  })();
+  </script>
+</body>
+</html>

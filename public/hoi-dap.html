@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Câu hỏi thường gặp — DanhMay247</title>
+  <meta name="description" content="Giải đáp thắc mắc về dịch vụ đánh máy, chuyển âm, giá, thanh toán, bảo mật và chính sách hoàn tiền của DanhMay247.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Trang chủ</a><span>/</span><span aria-current="page">Hỏi đáp</span></nav>
+        <h1>Câu hỏi thường gặp</h1>
+        <p>Bạn có thắc mắc? Hãy tìm câu trả lời bên dưới hoặc liên hệ trực tiếp với chúng tôi 24/7.</p>
+        <div class="search" style="margin:30px auto 0;width:520px"><span id="search-ic"></span><label class="sr-only" for="q">Tìm câu hỏi</label><input class="input" id="q" type="search" placeholder="Nhập từ khóa, ví dụ: thanh toán, bảo mật…" style="height:54px"></div>
+      </div>
+    </section>
+    <section class="section section--grey" style="padding-top:50px">
+      <div class="container" style="max-width:900px">
+        <div class="filter-pills" id="cats" style="justify-content:center;margin-bottom:30px" role="group" aria-label="Chủ đề"></div>
+        <div data-accordion id="faq" aria-live="polite"></div>
+        <div class="page-prices__questions" style="text-align:center">Không tìm thấy câu trả lời? <a href="/lien-he">Liên hệ với chúng tôi</a> hoặc <button type="button" class="link" id="chat">chat trực tuyến</button>.</div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$, cat = "Tất cả", q = "";
+    $("#search-ic").innerHTML = DM.icon.search;
+    $("#chat").addEventListener("click", DM.openChat);
+    var norm = function (s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/<[^>]+>/g, ""); };
+    function draw() {
+      var cats = ["Tất cả"].concat(DM.faq.map(function (f) { return f.cat; }).filter(function (c, i, a) { return a.indexOf(c) === i; }));
+      $("#cats").innerHTML = cats.map(function (c) { return '<button type="button" class="' + (c === cat ? "is-active" : "") + '" aria-pressed="' + (c === cat) + '">' + c + "</button>"; }).join("");
+      $$("#cats button").forEach(function (b) { b.addEventListener("click", function () { cat = b.textContent; draw(); }); });
+      var list = DM.faq.filter(function (f) { return (cat === "Tất cả" || f.cat === cat) && (!q || norm(f.q + " " + f.a).indexOf(norm(q)) > -1); });
+      var acc = $("#faq"); acc._init = false;
+      acc.innerHTML = list.map(function (f, i) { return DM.faqItem(f, i === 0 && !!q); }).join("") || '<div class="empty">' + DM.icon.search + "<p>Không có câu hỏi phù hợp.</p></div>";
+      DM.initAccordions(acc.parentElement);
+    }
+    var deb; $("#q").addEventListener("input", function () { var v = this.value; clearTimeout(deb); deb = setTimeout(function () { q = v.trim(); draw(); }, 200); });
+    draw();
+  })();
+  </script>
+</body>
+</html>

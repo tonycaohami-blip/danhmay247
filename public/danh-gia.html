@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đánh giá của khách hàng — DanhMay247</title>
+  <meta name="description" content="Khách hàng nói gì về dịch vụ đánh máy, chuyển âm và định dạng tài liệu của DanhMay247. Đọc đánh giá thật và chia sẻ trải nghiệm của bạn.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Trang chủ</a><span>/</span><span aria-current="page">Đánh giá</span></nav>
+        <h1>Khách hàng nói gì về chúng tôi</h1>
+        <p>Những chia sẻ thật từ sinh viên, giáo viên, doanh nghiệp và nhà nghiên cứu đã tin tưởng DanhMay247.</p>
+        <div class="rating-summary" id="summary"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="reviews-toolbar">
+          <div class="filter-pills" id="filters" role="group" aria-label="Lọc theo dịch vụ"></div>
+          <button type="button" class="button button--sm" id="write">Viết đánh giá</button>
+        </div>
+        <div class="reviews-grid" id="grid" aria-live="polite"></div>
+        <div style="text-align:center;margin-top:40px"><button type="button" class="button button--black" id="more">Xem thêm đánh giá</button></div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$, PER = 9, shown = PER, filter = "Tất cả", ALL = DM.reviews.slice();
+    var TYPES = ["Đánh máy lại", "Chuyển âm", "Định dạng tài liệu", "Đánh máy LaTeX", "Biên tập tài liệu"];
+
+    function summary() {
+      var all = ALL;
+      var avg = all.reduce(function (s, r) { return s + r.rating; }, 0) / all.length;
+      var bars = [5, 4, 3, 2, 1].map(function (n) {
+        var c = all.filter(function (r) { return r.rating === n; }).length;
+        return "<div><span>" + n + ' sao</span><span class="bar"><i style="width:' + (c / all.length * 100) + '%"></i></span><span>' + c + "</span></div>";
+      }).join("");
+      $("#summary").innerHTML = '<div class="rating-summary__big"><b>' + avg.toFixed(1).replace(".", ",") + "</b>" + DM.stars(Math.round(avg)) + "<small>" + all.length + " đánh giá</small></div><div class=\"bars\">" + bars + "</div>";
+    }
+    function draw() {
+      var all = ALL.slice().sort(function (a, b) { return (b.date || "").localeCompare(a.date || ""); });
+      var types = ["Tất cả"].concat(TYPES.filter(function (t) { return all.some(function (r) { return r.type === t; }); }));
+      $("#filters").innerHTML = types.map(function (t) { return '<button type="button" class="' + (t === filter ? "is-active" : "") + '" aria-pressed="' + (t === filter) + '">' + t + "</button>"; }).join("");
+      $$("#filters button").forEach(function (b) { b.addEventListener("click", function () { filter = b.textContent; shown = PER; draw(); }); });
+      var list = filter === "Tất cả" ? all : all.filter(function (r) { return r.type === filter; });
+      $("#grid").innerHTML = list.slice(0, shown).map(DM.reviewCard).join("") || '<p class="empty">Chưa có đánh giá nào cho dịch vụ này.</p>';
+      $("#more").classList.toggle("hidden", shown >= list.length);
+      summary();
+    }
+    $("#more").addEventListener("click", function () { shown += PER; draw(); });
+
+    $("#write").addEventListener("click", function () {
+      var u = DM.auth.current();
+      var m = DM.modal.open(
+        '<h2 class="modal__title">Chia sẻ trải nghiệm của bạn</h2><form id="rv" novalidate>' +
+        '<div class="field"><div class="field__label">Mức độ hài lòng <span class="req">*</span></div><div class="star-input" role="radiogroup" aria-label="Chấm điểm">' +
+        [5, 4, 3, 2, 1].map(function (n) { return '<input type="radio" name="rating" id="s' + n + '" value="' + n + '"' + (n === 5 ? " checked" : "") + '><label for="s' + n + '" title="' + n + ' sao"><span class="sr-only">' + n + " sao</span></label>"; }).join("") +
+        "</div></div>" +
+        '<div class="order-row"><div class="field"><label class="field__label" for="rv-name">Tên hiển thị <span class="req">*</span></label><input class="input" id="rv-name" name="name" required maxlength="40" value="' + DM.esc(u ? u.name : "") + '"><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="rv-job">Nghề nghiệp</label><input class="input" id="rv-job" name="job" maxlength="40" placeholder="VD: Sinh viên"></div></div>' +
+        '<div class="field"><label class="field__label" for="rv-type">Dịch vụ đã dùng</label><select class="select" id="rv-type" name="type">' + TYPES.map(function (t) { return "<option>" + t + "</option>"; }).join("") + "</select></div>" +
+        '<div class="field"><label class="field__label" for="rv-text">Nội dung đánh giá <span class="req">*</span></label><textarea class="textarea" id="rv-text" name="text" required minlength="20" maxlength="800" placeholder="Bạn thấy chất lượng, tốc độ và cách hỗ trợ thế nào?"></textarea><div class="field__error"></div></div>' +
+        '<button class="button button--w100" type="submit">Gửi đánh giá</button></form>');
+      $("#rv", m).addEventListener("submit", function (e) {
+        e.preventDefault(); if (!DM.validate(this)) return;
+        var d = Object.fromEntries(new FormData(this));
+        var btn = $("button[type=submit]", this); btn.disabled = true;
+        DM.api("/reviews", { body: { name: d.name, job: d.job, type: d.type, rating: +d.rating, text: d.text } }).then(function () {
+          DM.modal.close(m);
+          DM.toast("Cảm ơn bạn! Đánh giá sẽ hiển thị sau khi được kiểm duyệt.");
+        }, function (er) { btn.disabled = false; DM.toast(er.message, "error"); });
+      });
+    });
+    draw();
+    DM.loadReviews().then(function (list) { ALL = list; draw(); });
+  })();
+  </script>
+</body>
+</html>

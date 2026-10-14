@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản trị — Đánh máy 247</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+    .kpi { background: #fff; border-radius: 12px; box-shadow: var(--shadow-sm); padding: 18px 20px; }
+    .kpi small { color: var(--muted); font-size: 13px; }
+    .kpi b { display: block; font: 700 22px var(--sans); color: #000; margin-top: 4px; }
+    .kpi.warn b { color: var(--red); }
+    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+    .toolbar .input, .toolbar .select { height: 40px; width: auto; min-width: 200px; }
+    .sys { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+    @media (max-width: 900px) { .kpis { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+  <main id="main" class="order-page"><div class="container" id="app"></div></main>
+  <div id="site-footer"></div>
+
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$, app = $("#app");
+    var tab = "orders", filter = "", q = "", data = null, timer = null;
+    var ST = DM.orders.status;
+    var chip = function (st) { var s = ST[st] || { label: st, chip: "chip--grey" }; return '<span class="chip ' + s.chip + '">' + s.label + "</span>"; };
+    var size = function (b) { return b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; };
+
+    function gate(msg) {
+      clearInterval(timer);
+      app.innerHTML = '<div class="order-card" style="max-width:420px;margin:40px auto"><h1 class="order-card__title">Khu vực quản trị</h1>' +
+        '<form id="gate" novalidate><div id="g-msg">' + (msg ? '<div class="alert alert--error">' + DM.esc(msg) + "</div>" : "") + '</div>' +
+        '<div class="field"><label class="field__label" for="g-pass">Mật khẩu quản trị</label><div class="password"><input class="input" id="g-pass" type="password" required autocomplete="current-password"><button type="button" class="password__eye" aria-label="Hiện mật khẩu">' + DM.icon.eye + '</button></div><div class="field__error"></div></div>' +
+        '<button class="button button--w100" type="submit">Đăng nhập</button></form></div>';
+      DM.bindEye($(".password__eye"));
+      $("#gate").addEventListener("submit", function (e) {
+        e.preventDefault(); if (!DM.validate(this)) return;
+        DM.api("/admin/login", { body: { password: $("#g-pass").value } }).then(load, function (er) { gate(er.message); });
+      });
+    }
+
+    function load() {
+      return DM.api("/admin/summary").then(function (d) {
+        data = d; render();
+        clearInterval(timer);
+        timer = setInterval(function () {
+          if ($(".modal.is-open")) return; // không làm gián đoạn khi đang thao tác
+          DM.api("/admin/summary").then(function (x) { data = x; render(); }, function () { /* bỏ qua */ });
+        }, 30000);
+      }, function (er) { if (er.status === 401) gate(); else app.innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
+    }
+
+    function render() {
+      var s = data.stats;
+      app.innerHTML =
+        '<h1 class="order-card__title" style="font-size:30px">Bảng điều khiển</h1>' +
+        '<div class="sys">' +
+        (data.email ? '<span class="chip chip--green">Email: đang hoạt động</span>' : '<span class="chip chip--red">Email: chưa cấu hình SMTP</span>') +
+        (data.sepay ? '<span class="chip chip--green">Đối soát tự động SePay: bật</span>' : '<span class="chip chip--amber">Đối soát tự động: tắt — xác nhận thủ công</span>') + "</div>" +
+        '<div class="kpis">' +
+        '<div class="kpi"><small>Tổng đơn</small><b>' + s.orders + "</b></div>" +
+        '<div class="kpi' + (s.toVerify ? " warn" : "") + '"><small>Cần đối soát</small><b>' + s.toVerify + "</b></div>" +
+        '<div class="kpi"><small>Đã thanh toán</small><b>' + s.paid + "</b></div>" +
+        '<div class="kpi"><small>Doanh thu</small><b>' + DM.fmt(s.revenue) + "</b></div>" +
+        '<div class="kpi' + (s.newContacts ? " warn" : "") + '"><small>Liên hệ mới</small><b>' + s.newContacts + "</b></div></div>" +
+        '<div class="filter-pills" style="margin-bottom:20px">' +
+        [["orders", "Đơn hàng"], ["payments", "Giao dịch ngân hàng"], ["contacts", "Liên hệ (" + data.contacts.length + ")"], ["reviews", "Đánh giá (" + s.pendingReviews + " chờ duyệt)"]].map(function (t) {
+          return '<button type="button" data-t="' + t[0] + '" class="' + (tab === t[0] ? "is-active" : "") + '">' + t[1] + "</button>";
+        }).join("") +
+        '<button type="button" data-out>Đăng xuất</button></div><div id="pane"></div>';
+      $$("[data-t]").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.t; render(); }); });
+      $("[data-out]").addEventListener("click", function () { DM.api("/admin/logout", { method: "POST" }).then(function () { gate(); }); });
+      ({ orders: orders, payments: payments, contacts: contacts, reviews: reviews })[tab]();
+    }
+
+    /* ---------- Đơn hàng ---------- */
+    function orders() {
+      var pane = $("#pane");
+      var norm = function (x) { return String(x || "").toLowerCase(); };
+      var list = data.orders.filter(function (o) {
+        return (!filter || o.status === filter) && (!q || norm(o.id + " " + o.name + " " + o.email + " " + o.phone).indexOf(norm(q)) > -1);
+      });
+      pane.innerHTML = '<div class="order-card" style="padding:20px">' +
+        '<div class="toolbar"><label class="sr-only" for="f-q">Tìm đơn</label><input class="input" id="f-q" type="search" placeholder="Tìm mã đơn, tên, email, SĐT…" value="' + DM.esc(q) + '">' +
+        '<label class="sr-only" for="f-st">Lọc trạng thái</label><select class="select" id="f-st"><option value="">Tất cả trạng thái</option>' +
+        Object.keys(ST).map(function (k) { return '<option value="' + k + '"' + (k === filter ? " selected" : "") + ">" + ST[k].label + "</option>"; }).join("") + "</select>" +
+        '<button type="button" class="button button--sm button--black" id="reload">Làm mới</button></div>' +
+        (list.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Dịch vụ</th><th>Thời hạn</th><th>Tổng</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
+          list.map(function (o) {
+            return "<tr><td><b>#" + o.id + '</b><br><small style="color:var(--muted)">' + DM.dateTime(o.created) + "</small></td>" +
+              "<td>" + DM.esc(o.name) + "<br><small>" + DM.esc(o.email) + "<br>" + DM.esc(o.phone) + "</small></td>" +
+              "<td>" + DM.esc(o.typeLabel) + "<br><small>" + o.qty + " " + o.unit + " · " + o.files.filter(function (f) { return f.by === "customer"; }).length + " tệp</small></td>" +
+              "<td>" + (o.deadline ? DM.dateTime(o.deadline) : "—") + "</td><td><b>" + DM.fmt(o.price.total) + "</b>" + (o.receivedAmount ? '<br><small style="color:var(--green)">Đã nhận ' + DM.fmt(o.receivedAmount) + "</small>" : "") + "</td>" +
+              "<td>" + chip(o.status) + "</td>" +
+              '<td><button type="button" class="button button--sm' + (o.status === "verifying" ? "" : " button--black") + '" data-manage="' + o.id + '">' + (o.status === "verifying" ? "Đối soát" : "Quản lý") + "</button></td></tr>";
+          }).join("") + "</tbody></table></div>" : '<div class="empty">' + DM.icon.file + "<p>Không có đơn hàng phù hợp.</p></div>") + "</div>";
+      var deb;
+      $("#f-q").addEventListener("input", function () { var v = this.value; clearTimeout(deb); deb = setTimeout(function () { q = v; orders(); var i = $("#f-q"); i.focus(); i.setSelectionRange(v.length, v.length); }, 250); });
+      $("#f-st").addEventListener("change", function () { filter = this.value; orders(); });
+      $("#reload").addEventListener("click", load);
+      $$("[data-manage]").forEach(function (b) { b.addEventListener("click", function () { manage(b.dataset.manage); }); });
+    }
+
+    function updateOrder(o) {
+      var i = data.orders.findIndex(function (x) { return x.id === o.id; });
+      if (i > -1) data.orders[i] = o;
+    }
+
+    function manage(id) {
+      var o = data.orders.find(function (x) { return x.id === id; });
+      var fileUrl = function (f) { return "/api/orders/" + o.id + "/files/" + f.id; };
+      var files = function (by) {
+        var l = o.files.filter(function (f) { return f.by === by; });
+        return l.length ? '<ul class="files" style="margin:0 0 14px">' + l.map(function (f) {
+          return '<li><span class="ext">' + DM.esc(f.name.split(".").pop().slice(0, 4)) + '</span><a class="meta" href="' + fileUrl(f) + '" download><b>' + DM.esc(f.name) + "</b><small>" + size(f.size) + " · tải về</small></a></li>";
+        }).join("") + "</ul>" : '<p class="field__hint" style="margin-bottom:14px">Chưa có tệp.</p>';
+      };
+      var unpaid = o.status === "unpaid" || o.status === "verifying";
+      var m = DM.modal.open(
+        '<h2 class="modal__title">Đơn #' + o.id + " " + chip(o.status) + "</h2>" +
+        '<div class="detail-grid">' +
+        "<div><span>Khách hàng</span><b>" + DM.esc(o.name) + "</b></div><div><span>Liên hệ</span><b>" + DM.esc(o.email) + "<br>" + DM.esc(o.phone) + "</b></div>" +
+        "<div><span>Dịch vụ</span><b>" + DM.esc(o.serviceLabel + " — " + o.typeLabel) + "</b></div><div><span>Khối lượng</span><b>" + o.qty + " " + o.unit + (o.speakers ? " · " + DM.esc(o.speakers) : "") + "</b></div>" +
+        "<div><span>Thời hạn</span><b>" + DM.esc(o.urgencyLabel) + (o.deadline ? " → " + DM.dateTime(o.deadline) : "") + "</b></div><div><span>Bổ sung</span><b>" + (o.extras.length ? DM.esc(o.extras.join(", ")) : "Không") + "</b></div>" +
+        "<div><span>Tổng tiền</span><b>" + DM.fmt(o.price.total) + (o.promo ? " (mã " + DM.esc(o.promo) + ")" : "") + "</b></div><div><span>Đã nhận</span><b>" + (o.paidAt ? DM.fmt(o.paidAmount) + " lúc " + DM.dateTime(o.paidAt) + " (" + (o.paySource === "sepay" ? "tự động" : "thủ công") + ")" : o.receivedAmount ? DM.fmt(o.receivedAmount) + " (chưa đủ)" : "Chưa") + "</b></div>" +
+        "</div>" +
+        (unpaid ? '<div class="alert alert--info">Kiểm tra tài khoản ' + DM.esc(DM.site.bank.shortName) + " " + DM.esc(DM.site.bank.account) + " có giao dịch <b>" + DM.fmt(o.price.total) + "</b> nội dung <b>" + o.id + '</b>. <button type="button" class="button button--sm" data-confirm style="margin-top:10px">Xác nhận đã nhận tiền</button></div>' : "") +
+        (o.instructions ? '<div class="field__label">Hướng dẫn của khách</div><div style="background:var(--bg-grey);border-radius:8px;padding:12px;font-size:14px;white-space:pre-wrap;margin-bottom:14px">' + DM.esc(o.instructions) + "</div>" : "") +
+        '<div class="field__label">Tệp khách gửi</div>' + files("customer") +
+        '<div class="field__label">Tệp đã bàn giao</div>' + files("admin") +
+        '<div class="field"><label class="field__label" for="m-status">Trạng thái</label><select class="select" id="m-status">' +
+        Object.keys(ST).map(function (k) { return '<option value="' + k + '"' + (k === o.status ? " selected" : "") + ">" + ST[k].label + "</option>"; }).join("") + "</select></div>" +
+        '<div class="field"><label class="field__label" for="m-notes">Ghi chú nội bộ (khách không thấy)</label><textarea class="textarea" id="m-notes" style="min-height:70px">' + DM.esc(o.notes || "") + "</textarea></div>" +
+        '<button type="button" class="button button--sm button--black" data-save>Lưu trạng thái &amp; ghi chú</button>' +
+        '<div class="field__label" style="margin-top:22px">Gửi tệp hoàn thành cho khách</div>' +
+        '<form id="m-up" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><input type="file" id="m-file" multiple class="input" style="padding:8px;flex:1;min-width:200px">' +
+        '<label class="check"><input type="checkbox" id="m-done" checked><span class="check__box"></span><span>Đánh dấu hoàn thành</span></label>' +
+        '<button type="submit" class="button button--sm">Gửi tệp</button></form>' +
+        '<div class="field__label" style="margin-top:22px">Tin nhắn</div><div class="thread" id="a-thread"></div>' +
+        '<form class="chat-box__form" id="a-msg" style="padding:0;border:0"><label class="sr-only" for="a-input">Trả lời khách</label><input class="input" id="a-input" placeholder="Trả lời khách hàng (khách sẽ nhận email)…"><button class="button" type="submit" aria-label="Gửi">' + DM.icon.send + "</button></form>"
+      );
+      m._onclose = function () { render(); };
+      var draw = function () {
+        $("#a-thread", m).innerHTML = o.messages.map(function (x) {
+          return '<div class="msg ' + (x.me ? "msg--bot" : "msg--me") + '"><b style="display:block;font-size:12px;opacity:.8">' + DM.esc(x.me ? o.name : (x.from || "Hỗ trợ")) + "</b>" + DM.esc(x.text) + "<time>" + DM.dateTime(x.at) + "</time></div>";
+        }).join("");
+        $("#a-thread", m).scrollTop = 1e6;
+      };
+      draw();
+      var reopen = function (x) { updateOrder(x); m._onclose = null; DM.modal.close(m); manage(x.id); };
+      var fail = function (er) { DM.toast(er.message, "error"); };
+      var c = $("[data-confirm]", m);
+      if (c) c.addEventListener("click", function () {
+        DM.api("/admin/orders/" + o.id, { method: "PATCH", body: { status: "paid" } }).then(function (d) { DM.toast("Đã xác nhận thanh toán #" + o.id + " và gửi email cho khách."); reopen(d.order); }, fail);
+      });
+      $("[data-save]", m).addEventListener("click", function () {
+        DM.api("/admin/orders/" + o.id, { method: "PATCH", body: { status: $("#m-status", m).value, notes: $("#m-notes", m).value } }).then(function (d) { DM.toast("Đã lưu."); reopen(d.order); }, fail);
+      });
+      $("#a-msg", m).addEventListener("submit", function (e) {
+        e.preventDefault(); var i = $("#a-input", m); if (!i.value.trim()) return;
+        DM.api("/admin/orders/" + o.id + "/messages", { body: { text: i.value.trim() } }).then(function (d) { o = d.order; updateOrder(o); i.value = ""; draw(); }, fail);
+      });
+      $("#m-up", m).addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fl = $("#m-file", m).files;
+        if (!fl.length) return DM.toast("Hãy chọn tệp cần gửi.", "error");
+        var fd = new FormData();
+        Array.prototype.forEach.call(fl, function (f) { fd.append("files", f); });
+        fd.append("complete", $("#m-done", m).checked ? "1" : "0");
+        var btn = $("button[type=submit]", this); btn.disabled = true; btn.textContent = "Đang tải lên…";
+        DM.api("/admin/orders/" + o.id + "/result", { body: fd }).then(function (d) { DM.toast("Đã gửi tệp cho khách."); reopen(d.order); }, function (er) { btn.disabled = false; btn.textContent = "Gửi tệp"; fail(er); });
+      });
+    }
+
+    /* ---------- Giao dịch ngân hàng (SePay) ---------- */
+    function payments() {
+      var pane = $("#pane");
+      pane.innerHTML = '<div class="order-card" style="padding:20px">' + (data.payments.length ?
+        '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Thời gian</th><th>Số tiền</th><th>Nội dung</th><th>Mã đơn</th><th>Kết quả</th></tr></thead><tbody>' +
+        data.payments.map(function (p) {
+          return "<tr><td>" + DM.dateTime(p.at) + "</td><td><b>" + DM.fmt(p.amount) + "</b></td><td>" + DM.esc(p.content) + "</td><td>" + (p.orderId ? "#" + DM.esc(p.orderId) : "—") + "</td><td>" + DM.esc(p.result) + "</td></tr>";
+        }).join("") + "</tbody></table></div>"
+        : '<div class="empty">' + DM.icon.layers + "<p>Chưa có giao dịch nào được ghi nhận qua webhook" + (data.sepay ? "" : " (SePay chưa được bật)") + ".</p></div>") + "</div>";
+    }
+
+    /* ---------- Liên hệ ---------- */
+    function contacts() {
+      var pane = $("#pane");
+      if (!data.contacts.length) { pane.innerHTML = '<div class="order-card"><div class="empty">' + DM.icon.mail + "<p>Chưa có liên hệ nào.</p></div></div>"; return; }
+      pane.innerHTML = data.contacts.map(function (c) {
+        return '<div class="order-card" style="padding:22px 26px' + (c.read ? ";opacity:.75" : "") + '"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><b style="color:#000">' + DM.esc(c.subject) + (c.read ? "" : ' <span class="chip chip--red">Mới</span>') + '</b><small style="color:var(--muted)">' + DM.dateTime(c.at) + "</small></div>" +
+          '<p style="margin:6px 0 10px;font-size:14px">' + DM.esc(c.name) + ' · <a href="mailto:' + DM.esc(c.email) + '" style="color:var(--red)">' + DM.esc(c.email) + "</a>" + (c.phone ? ' · <a href="tel:' + DM.esc(c.phone) + '">' + DM.esc(c.phone) + "</a>" : "") + "</p>" +
+          '<div style="white-space:pre-wrap;font-size:15px;margin-bottom:12px">' + DM.esc(c.message) + "</div>" +
+          '<button type="button" class="link" data-read="' + c.id + '" data-v="' + (c.read ? "0" : "1") + '">' + (c.read ? "Đánh dấu chưa đọc" : "Đánh dấu đã xử lý") + "</button></div>";
+      }).join("");
+      $$("[data-read]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          DM.api("/admin/contacts/" + b.dataset.read, { method: "PATCH", body: { read: b.dataset.v === "1" } }).then(load);
+        });
+      });
+    }
+
+    /* ---------- Đánh giá ---------- */
+    function reviews() {
+      var pane = $("#pane");
+      if (!data.reviews.length) { pane.innerHTML = '<div class="order-card"><div class="empty">' + DM.icon.chat + "<p>Chưa có đánh giá nào từ khách hàng.</p></div></div>"; return; }
+      pane.innerHTML = '<div class="reviews-grid">' + data.reviews.map(function (r) {
+        return "<div>" + DM.reviewCard(r) + '<div style="display:flex;gap:14px;margin-top:10px;align-items:center">' +
+          (r.approved ? '<span class="chip chip--green">Đang hiển thị</span><button type="button" class="link" data-ap="' + r.id + '" data-v="0">Ẩn</button>'
+                      : '<span class="chip chip--amber">Chờ duyệt</span><button type="button" class="link" data-ap="' + r.id + '" data-v="1">Duyệt &amp; hiển thị</button>') +
+          '<button type="button" class="link" data-del="' + r.id + '">Xóa</button></div></div>';
+      }).join("") + "</div>";
+      $$("[data-ap]").forEach(function (b) { b.addEventListener("click", function () { DM.api("/admin/reviews/" + b.dataset.ap, { method: "PATCH", body: { approved: b.dataset.v === "1" } }).then(load); }); });
+      $$("[data-del]").forEach(function (b) { b.addEventListener("click", function () { if (confirm("Xóa vĩnh viễn đánh giá này?")) DM.api("/admin/reviews/" + b.dataset.del, { method: "DELETE" }).then(load); }); });
+    }
+
+    load();
+  })();
+  </script>
+</body>
+</html>
