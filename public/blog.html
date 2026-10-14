@@ -48,11 +48,11 @@
     var vnDate = function (d) { return d.split("-").reverse().join("/"); };
     var meta = function (p) { return '<div class="post-meta"><span>' + DM.icon.clock + p.read + " phút đọc</span><span>" + vnDate(p.date) + "</span></div>"; };
     function card(p) {
-      return '<a class="post-card" href="/bai-viet?slug=' + p.slug + '"><div class="post-card__img"><img src="' + p.cover + '" alt="" loading="lazy" width="1200" height="630"><span class="chip">' + DM.esc(p.cat) + "</span></div>" +
+      return '<a class="post-card" href="/blog/' + p.slug + '"><div class="post-card__img"><img src="' + p.cover + '" alt="" loading="lazy" width="1200" height="630"><span class="chip">' + DM.esc(p.cat) + "</span></div>" +
         '<div class="post-card__body"><h3>' + DM.esc(p.title) + "</h3><p>" + DM.esc(p.excerpt) + "</p>" + meta(p) + "</div></a>";
     }
     function feature(p) {
-      return '<a class="post-feature" href="/bai-viet?slug=' + p.slug + '"><div class="post-feature__img"><img src="' + p.cover + '" alt="" width="1200" height="630"></div>' +
+      return '<a class="post-feature" href="/blog/' + p.slug + '"><div class="post-feature__img"><img src="' + p.cover + '" alt="" width="1200" height="630"></div>' +
         '<div class="post-feature__body"><span class="chip chip--red" style="align-self:flex-start">Bài mới nhất · ' + DM.esc(p.cat) + "</span><h2>" + DM.esc(p.title) + "</h2><p>" + DM.esc(p.excerpt) + "</p>" + meta(p) +
         '<span class="link" style="align-self:flex-start">Đọc bài viết →</span></div></a>';
     }

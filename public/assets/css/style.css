@@ -1078,3 +1078,21 @@ kbd { display: inline-block; min-width: 26px; padding: 2px 8px; border: 1px soli
   .prose .lead { font-size: 17.5px; }
   .post-hero__cover { border-radius: 14px; margin-top: 22px; }
 }
+
+/* =========================================================
+   TRANG DỊCH VỤ (dựng phía máy chủ)
+   ========================================================= */
+.svc-badge { display: inline-grid; place-items: center; width: 74px; height: 84px; border-radius: 10px; color: #fff; font: 800 18px var(--sans); box-shadow: 0 14px 30px rgba(0,0,0,.15); margin-bottom: 26px; }
+.svc-card { display: flex; flex-direction: column; gap: 14px; background: #fff; border-radius: 20px; box-shadow: var(--shadow); padding: 28px; transition: transform .25s, box-shadow .25s; height: 100%; }
+.svc-card:hover { transform: translateY(-5px); box-shadow: 0 18px 40px rgba(0,0,0,.1); }
+.svc-card .svc-badge { width: 52px; height: 60px; font-size: 13px; margin: 0; }
+.svc-card h3 { font: 400 20px/1.4 var(--serif); margin: 0; color: #000; }
+.svc-card p { font-size: 14.5px; line-height: 1.6; margin: 0; flex: 1; }
+.svc-card .from { font-weight: 700; color: var(--red); font-size: 15px; }
+.points { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.points li { display: flex; gap: 14px; align-items: flex-start; background: #fff; border-radius: 14px; box-shadow: var(--shadow-sm); padding: 20px; font-size: 15.5px; }
+.points li i { flex: 0 0 28px; width: 28px; height: 28px; border-radius: 50%; background: #e3f6e6; color: var(--green); display: grid; place-items: center; }
+.points li i svg { width: 14px; height: 14px; }
+.price-from { display: inline-flex; gap: 10px; align-items: baseline; background: #fff; border-radius: 40px; padding: 10px 22px; box-shadow: var(--shadow-sm); margin-top: 24px; }
+.price-from b { font: 700 22px var(--sans); color: #000; }
+@media (max-width: 640px) { .points { grid-template-columns: 1fr; } }

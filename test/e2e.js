@@ -266,6 +266,43 @@ async function cleanup() {
   r = await fetch(B + "/api/orders/" + id + "/files/" + result.id + "?t=" + token);
   ok("tải tệp đã xóa → 410", r.status === 410);
 
+  // ================= SEO: HTML thô (như Google / Facebook / Zalo nhận được, không chạy JS) =================
+  const getRaw = async (u) => { const x = await fetch(B + u, { redirect: "manual" }); return { s: x.status, loc: x.headers.get("location"), h: x.status === 200 ? await x.text() : "" }; };
+  const ld = (h) => [...h.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+  let pg = await getRaw("/blog/go-10-ngon-30-ngay");
+  ok("bài viết dựng sẵn: tiêu đề riêng trong HTML", pg.s === 200 && /<title>Gõ 10 ngón trong 30 ngày[^<]*— Đánh máy 247<\/title>/.test(pg.h));
+  ok("bài viết dựng sẵn: nội dung có trong HTML", pg.h.includes("Nền tảng: hàng phím cơ sở") && pg.h.includes('<article class="prose"'));
+  ok("bài viết: mục lục + id tiêu đề", /<nav class="toc"/.test(pg.h) && /<h2 id="muc-1">/.test(pg.h));
+  ok("bài viết: canonical đường dẫn sạch", pg.h.includes('<link rel="canonical" href="http://localhost:3999/blog/go-10-ngon-30-ngay">'));
+  ok("bài viết: ảnh chia sẻ PNG cho Facebook/Zalo", /<meta property="og:image" content="[^"]+\/assets\/img\/og\/go-10-ngon-30-ngay\.png">/.test(pg.h) && (await fetch(B + "/assets/img/og/go-10-ngon-30-ngay.png")).headers.get("content-type") === "image/png");
+  ok("bài viết: og:type article + mô tả riêng", pg.h.includes('<meta property="og:type" content="article">') && /<meta name="description" content="Gõ mổ cò/.test(pg.h));
+  const pld = ld(pg.h);
+  ok("bài viết: JSON-LD BlogPosting + Breadcrumb hợp lệ", pld.some((x) => x["@type"] === "BlogPosting" && x.headline && x.datePublished) && pld.some((x) => x["@type"] === "BreadcrumbList" && x.itemListElement.length === 3));
+  pg = await getRaw("/bai-viet?slug=telex-hay-vni");
+  ok("đường dẫn cũ /bai-viet?slug= → 301 /blog/…", pg.s === 301 && pg.loc === "/blog/telex-hay-vni");
+  ok("bài không tồn tại → 404", (await getRaw("/blog/khong-co-bai-nay")).s === 404);
+  pg = await getRaw("/blog");
+  ok("trang /blog: danh sách bài có sẵn trong HTML", pg.s === 200 && (pg.h.match(/class="post-card" href="\/blog\/[a-z0-9-]+"/g) || []).length === 9 && pg.h.includes('class="post-feature"'));
+
+  pg = await getRaw("/dich-vu/pdf-sang-word");
+  ok("dịch vụ dựng sẵn: tiêu đề, nội dung, giá", pg.s === 200 && /<title>Chuyển PDF sang Word — Đánh máy 247/.test(pg.h) && pg.h.includes("Bạn nhận được gì?") && pg.h.includes("Chỉ từ"));
+  ok("dịch vụ: JSON-LD Service có giá VND", ld(pg.h).some((x) => x["@type"] === "Service" && x.offers.priceCurrency === "VND" && x.offers.price > 0));
+  ok("đường dẫn cũ /dich-vu?slug= → 301 /dich-vu/…", (await getRaw("/dich-vu?slug=danh-may-latex")).loc === "/dich-vu/danh-may-latex");
+  pg = await getRaw("/dich-vu");
+  ok("danh sách dịch vụ dựng sẵn", pg.s === 200 && (pg.h.match(/class="svc-card" href="\/dich-vu\//g) || []).length >= 10);
+
+  pg = await getRaw("/");
+  const hld = ld(pg.h);
+  ok("trang chủ: JSON-LD Organization (logo, SĐT, email) + WebSite", hld.some((x) => x["@type"] === "Organization" && /logo-512\.png$/.test(x.logo) && x.telephone === "+84988058030") && hld.some((x) => x["@type"] === "WebSite"));
+  ok("trang chủ: canonical + og:image mặc định PNG", pg.h.includes('<link rel="canonical" href="http://localhost:3999/">') && /og\/default\.png/.test(pg.h));
+  ok("trang chủ: không có thẻ og:title trùng lặp", (pg.h.match(/property="og:title"/g) || []).length === 1);
+  ok("không gắn điểm đánh giá giả vào dữ liệu có cấu trúc", !/aggregateRating|"Review"/i.test(pg.h + (await getRaw("/danh-gia")).h));
+  pg = await getRaw("/hoi-dap");
+  ok("hỏi đáp: JSON-LD FAQPage đủ câu hỏi", ld(pg.h).some((x) => x["@type"] === "FAQPage" && x.mainEntity.length >= 10 && !/<[a-z]/i.test(JSON.stringify(x))));
+  ok("trang riêng tư không bị chèn thẻ SEO", !(await getRaw("/quan-tri")).h.includes("og:image") && !(await getRaw("/tai-khoan")).h.includes("canonical"));
+  pg = await getRaw("/sitemap.xml");
+  ok("sitemap: đường dẫn sạch + ảnh PNG, không có trang riêng tư", pg.h.includes("/blog/telex-hay-vni") && pg.h.includes("/dich-vu/pdf-sang-word") && /og\/[a-z0-9-]+\.png/.test(pg.h) && !/bai-viet|\?slug=|dat-hang|tai-khoan/.test(pg.h));
+
   // --- Khóa phiên lưu trong MySQL (không đổi sau khi khởi động lại)
   ok("khóa phiên được lưu (không đăng xuất khách khi khởi động lại)", (await db.settings.get("session_secret")) === config.SESSION_SECRET);
 

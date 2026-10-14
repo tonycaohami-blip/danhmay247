@@ -63,6 +63,18 @@ Lưu ý: nếu khách tự ghi thông tin cá nhân vào phần hướng dẫn h
 
 Nhân viên chỉ thấy đơn được giao cho mình, không tự hoàn thành đơn được. Khi khóa tài khoản hoặc đặt lại mật khẩu, nhân viên bị đăng xuất ngay.
 
+## SEO (đã cài sẵn trong code)
+
+- **Bài viết và trang dịch vụ được máy chủ dựng sẵn HTML** (`server/seo.js`): Google, Cốc Cốc, Bing, Facebook, Zalo đọc được tiêu đề, mô tả, nội dung mà không cần chạy JavaScript.
+- **Đường dẫn đẹp:** `/blog/<slug>`, `/dich-vu/<slug>`. Đường dẫn cũ `/bai-viet?slug=…`, `/dich-vu?slug=…` tự chuyển hướng 301.
+- **Mọi trang công khai** có `canonical`, Open Graph, Twitter card với ảnh PNG 1200×630 (`public/assets/img/og/`).
+- **Dữ liệu có cấu trúc (JSON-LD):** Organization + WebSite (trang chủ), BlogPosting + BreadcrumbList (bài viết), Service (dịch vụ), FAQPage (hỏi đáp). Không gắn điểm đánh giá vì các đánh giá mẫu chưa phải đánh giá thật.
+- **`/sitemap.xml`** tự sinh theo danh sách dịch vụ và bài viết, kèm ảnh.
+
+**Khi thêm bài viết mới:** thêm vào `posts.js` → `node scripts/make-blog-images.js` (ảnh bìa) → `npm install --no-save @resvg/resvg-js && node scripts/make-og-images.js` (ảnh chia sẻ PNG) → commit, push, Redeploy.
+
+**Việc cần làm trên công cụ bên ngoài:** khai báo website và gửi `https://danhmay247.com/sitemap.xml` trong Google Search Console, Cốc Cốc Webmaster, Bing Webmaster Tools; kiểm tra ảnh xem trước khi chia sẻ bằng Facebook Sharing Debugger (developers.facebook.com/tools/debug).
+
 ## Chạy trên máy
 
 Cần Node.js 20 trở lên.
@@ -70,7 +82,7 @@ Cần Node.js 20 trở lên.
 ```bash
 npm install
 npm start      # http://localhost:3000
-npm test       # 87 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
+npm test       # 108 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
 ```
 
 Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_PASSWORD` để vào được trang quản trị.
@@ -88,6 +100,8 @@ Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_
 
 ```
 server.js                  Khởi động website + API + sitemap.xml
+server/seo.js              SEO: dựng sẵn bài viết/dịch vụ, canonical, Open Graph, JSON-LD
+scripts/make-og-images.js  Tạo ảnh chia sẻ PNG cho Facebook/Zalo
 scripts/make-blog-images.js  Tạo ảnh bìa / hình minh họa SVG cho blog
 server/api.js              API: đơn hàng, tệp, tài khoản, tin nhắn, liên hệ, đánh giá, webhook, quản trị, nhân viên, xuất Excel
 server/db.js               Chọn nơi lưu: tệp (mặc định) hoặc MySQL

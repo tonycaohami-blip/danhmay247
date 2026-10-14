@@ -123,7 +123,7 @@ DM.calcPrice = function (o) {
   };
 };
 
-/* ---------- Dịch vụ chi tiết (trang /dich-vu?slug=...) ---------- */
+/* ---------- Dịch vụ chi tiết (trang /dich-vu/...) ---------- */
 DM.services = {
   "pdf-sang-word": { title: "Chuyển PDF sang Word", service: "retyping", type: "pdf-word", icon: ["PDF", "#ff6b5b"],
     intro: "Đánh máy lại thủ công mọi tệp PDF — kể cả bản scan mờ, có dấu mộc, chữ ký hay hình mờ — thành tệp Word chỉnh sửa được, giữ nguyên bố cục gốc.",

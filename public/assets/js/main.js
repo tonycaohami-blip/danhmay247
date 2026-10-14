@@ -188,7 +188,7 @@
     if (!mount) return;
     var page = currentPage();
     var navHtml = NAV.map(function (n) {
-      var active = n.href === page || (n.sub && n.sub.some(function (s) { return s.href.split("#")[0] === page && page !== "/"; })) || (page === "/bai-viet" && n.href === "/blog");
+      var active = n.href === page || (n.sub && n.sub.some(function (s) { return s.href.split("#")[0] === page && page !== "/"; })) || (n.href !== "/" && page.indexOf(n.href + "/") === 0); // /blog/…, /dich-vu/… vẫn sáng mục cha
       if (n.sub) {
         return '<li class="nav__item"><button class="nav__link' + (active ? " is-active" : "") + '" aria-expanded="false" aria-haspopup="true" data-sub-toggle>' + n.label + '<span class="nav__arrow" aria-hidden="true"></span></button>' +
           '<ul class="nav__sub">' + n.sub.map(function (s) { return '<li><a href="' + s.href + '">' + s.label + "</a></li>"; }).join("") + "</ul></li>";
@@ -377,8 +377,8 @@
       '<li><a href="#" data-legal="cookie">Chính sách cookie</a></li><li><a href="/nhan-vien" rel="nofollow">Đăng nhập nhân viên</a></li></ul></div>' +
       '<div class="footer__menu"><div class="footer__title">Dịch vụ</div><ul>' +
       '<li><a href="/#services-section">Đánh máy lại</a></li><li><a href="/dich-vu-chuyen-am">Chuyển âm</a></li>' +
-      '<li><a href="/dich-vu?slug=pdf-sang-word">PDF sang Word</a></li><li><a href="/dich-vu?slug=viet-tay-sang-word">Viết tay sang Word</a></li>' +
-      '<li><a href="/dich-vu?slug=dinh-dang-tai-lieu">Định dạng tài liệu</a></li><li><a href="/dich-vu">Tất cả dịch vụ</a></li></ul></div>' +
+      '<li><a href="/dich-vu/pdf-sang-word">PDF sang Word</a></li><li><a href="/dich-vu/viet-tay-sang-word">Viết tay sang Word</a></li>' +
+      '<li><a href="/dich-vu/dinh-dang-tai-lieu">Định dạng tài liệu</a></li><li><a href="/dich-vu">Tất cả dịch vụ</a></li></ul></div>' +
       '<div class="footer__contact"><div class="footer__title">Liên hệ</div>' +
       '<a href="mailto:' + s.email + '">' + DM.icon.mail + s.email + "</a>" +
       '<a href="tel:' + s.phoneHref + '">' + DM.icon.phone + s.phone + "</a>" +

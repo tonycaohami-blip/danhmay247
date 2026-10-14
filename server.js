@@ -13,12 +13,15 @@
 const fs = require("fs");
 const path = require("path");
 const zlib = require("zlib");
+const crypto = require("crypto");
 const express = require("express");
 
 const config = require("./server/config");
 const db = require("./server/db");
 const { router: api, startJobs } = require("./server/api");
 const { sameOrigin } = require("./server/security");
+const seo = require("./server/seo");
+const { DM } = require("./server/shared");
 
 const PUBLIC = config.PUBLIC_DIR;
 const app = express();
@@ -43,29 +46,23 @@ app.use("/api", (req, res, next) => { res.set("Cache-Control", "no-store"); next
 app.use("/api", (req, res, next) => (db.isReady() ? next() : res.status(503).json({ error: "Hệ thống đặt hàng đang bảo trì, vui lòng thử lại sau ít phút hoặc gọi 0988 058 030." })));
 app.use("/api", api);
 
-/* ---------- Sitemap cho Google: trang công khai + bài viết blog ---------- */
+/* ---------- SEO: bài viết, dịch vụ dựng sẵn phía máy chủ + chuyển hướng đường dẫn cũ ---------- */
+seo.register(app, (req, res) => sendFile(req, res, 404, path.join(PUBLIC, "404.html")));
+
+/* ---------- Sitemap cho Google: trang công khai + dịch vụ + bài viết (kèm ảnh) ---------- */
 app.get("/sitemap.xml", (req, res) => {
   const base = config.SITE_URL;
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
-  const pages = ["", "bang-gia", "dat-hang", "dich-vu", "dich-vu-chuyen-am", "gioi-thieu", "danh-gia", "mau", "blog", "hoi-dap", "lien-he"];
-  let posts = [];
-  try {
-    const ctx = {}; ctx.window = ctx; require("vm").createContext(ctx);
-    require("vm").runInContext(fs.readFileSync(path.join(PUBLIC, "assets/js/posts.js"), "utf8"), ctx);
-    posts = ctx.DM.posts || [];
-  } catch (e) { console.error("[sitemap]", e.message); }
-  const services = (() => {
-    try {
-      const ctx = {}; ctx.window = ctx; require("vm").createContext(ctx);
-      require("vm").runInContext(fs.readFileSync(path.join(PUBLIC, "assets/js/data.js"), "utf8"), ctx);
-      return Object.keys(ctx.DM.services || {});
-    } catch (e) { return []; }
-  })();
+  const pages = ["", "bang-gia", "dich-vu", "dich-vu-chuyen-am", "gioi-thieu", "danh-gia", "mau", "blog", "hoi-dap", "lien-he"];
+  const posts = seo.posts();
+  const services = Object.keys(DM.services || {});
+  const today = new Date().toISOString().slice(0, 10);
   const url = (loc, extra) => "<url><loc>" + esc(base + loc) + "</loc>" + (extra || "") + "</url>";
+  const img = (src) => "<image:image><image:loc>" + esc(base + src) + "</image:loc></image:image>";
   const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' +
-    pages.map((p) => url("/" + p)).join("") +
-    services.map((s) => url("/dich-vu?slug=" + s)).join("") +
-    posts.map((p) => url("/bai-viet?slug=" + p.slug, "<lastmod>" + p.date + "</lastmod>" + (p.cover ? "<image:image><image:loc>" + esc(base + p.cover) + "</image:loc></image:image>" : ""))).join("") +
+    pages.map((p) => url("/" + p, p === "blog" && posts[0] ? "<lastmod>" + posts[0].date + "</lastmod>" : p === "" ? "<lastmod>" + today + "</lastmod>" : "")).join("") +
+    services.map((s) => url("/dich-vu/" + s)).join("") +
+    posts.map((p) => url("/blog/" + p.slug, "<lastmod>" + p.date + "</lastmod>" + img("/assets/img/og/" + p.slug + ".png"))).join("") +
     "</urlset>";
   res.set({ "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }).send(xml);
 });
@@ -89,12 +86,17 @@ function sendFile(req, res, status, file) {
   const type = TYPES[path.extname(file).toLowerCase()] || "application/octet-stream";
   // HTML/CSS/JS luôn kiểm tra bản mới (ETag → 304) để cập nhật hiển thị ngay; ảnh cache 7 ngày
   const revalidate = /^(text\/|application\/)/.test(type);
-  const stat = fs.statSync(file);
-  const etag = '"' + stat.size.toString(36) + "-" + Math.floor(stat.mtimeMs).toString(36) + '"';
+  let data = fs.readFileSync(file);
+  // Trang HTML: chèn canonical, Open Graph, JSON-LD… (xem server/seo.js)
+  if (status === 200 && type.startsWith("text/html")) {
+    const urlPath = req.path.replace(/\/+$/, "") || "/";
+    data = Buffer.from(seo.transformHtml(urlPath, data.toString("utf8")), "utf8");
+  }
+  // ETag theo nội dung để trình duyệt luôn nhận bản mới khi bài viết/giá thay đổi
+  const etag = '"' + crypto.createHash("sha1").update(data).digest("base64url").slice(0, 20) + '"';
   res.set({ "Content-Type": type, "Cache-Control": revalidate ? "no-cache" : "public, max-age=604800", ETag: etag });
   if (status === 200 && req.headers["if-none-match"] === etag) return res.status(304).end();
 
-  let data = fs.readFileSync(file);
   if (COMPRESSIBLE.test(type) && /\bgzip\b/.test(req.headers["accept-encoding"] || "") && data.length > 1024) {
     data = zlib.gzipSync(data);
     res.set({ "Content-Encoding": "gzip", Vary: "Accept-Encoding" });
