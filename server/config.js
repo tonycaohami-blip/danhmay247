@@ -6,7 +6,6 @@
 
 const fs = require("fs");
 const path = require("path");
-const crypto = require("crypto");
 
 const ROOT = path.join(__dirname, "..");
 
@@ -25,17 +24,13 @@ const env = process.env;
 const DATA_DIR = path.resolve(ROOT, env.DATA_DIR || "data");
 fs.mkdirSync(path.join(DATA_DIR, "uploads"), { recursive: true });
 
-// Khóa ký phiên đăng nhập: lấy từ SESSION_SECRET, nếu chưa có thì tạo và lưu lại trong DATA_DIR
-function sessionSecret() {
-  if (env.SESSION_SECRET && env.SESSION_SECRET.length >= 32) return env.SESSION_SECRET;
-  const file = path.join(DATA_DIR, ".session-secret");
-  if (fs.existsSync(file)) return fs.readFileSync(file, "utf8").trim();
-  const s = crypto.randomBytes(48).toString("hex");
-  fs.writeFileSync(file, s, { mode: 0o600 });
-  return s;
+// Đang chạy thật (production) mà SITE_URL vẫn trỏ về máy cục bộ → email sẽ có liên kết hỏng, nên tự sửa
+if (env.NODE_ENV === "production" && /localhost|127\.0\.0\.1/i.test(env.SITE_URL || "")) {
+  console.warn("[config] SITE_URL đang là " + env.SITE_URL + " — dùng https://danhmay247.com cho liên kết trong email.");
+  env.SITE_URL = "https://danhmay247.com";
 }
 
-const smtpReady = !!(env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS);
+const smtpReady =!!(env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS);
 
 module.exports = {
   ROOT,
@@ -45,11 +40,13 @@ module.exports = {
   PORT: Number(env.PORT) || 3000,
   HOST: env.HOST || "0.0.0.0",
   IS_PROD: env.NODE_ENV === "production",
-  // Địa chỉ công khai của website, dùng cho liên kết trong email (vd: https://danhmay247.com)
-  SITE_URL: (env.SITE_URL || "http://localhost:" + (Number(env.PORT) || 3000)).replace(/\/+$/, ""),
-  SESSION_SECRET: sessionSecret(),
+  // Địa chỉ công khai của website, dùng cho mọi liên kết trong email.
+  // Mặc định là tên miền thật; chỉ đặt SITE_URL khi chạy thử trên máy (vd: http://localhost:3000).
+  SITE_URL: (env.SITE_URL || "https://danhmay247.com").trim().replace(/\/+$/, ""),
+  // Khóa ký phiên đăng nhập. Để trống: tự tạo một lần và lưu trong bảng settings của MySQL
+  SESSION_SECRET: env.SESSION_SECRET && env.SESSION_SECRET.length >= 32 ? env.SESSION_SECRET : null,
   ADMIN_PASSWORD: env.ADMIN_PASSWORD || "",
-  ADMIN_EMAIL: env.ADMIN_EMAIL || "trungtamdanhmay247@gmail.com",
+  ADMIN_EMAIL: env.ADMIN_EMAIL || "vietsciediting@gmail.com",
   SMTP: smtpReady ? {
     host: env.SMTP_HOST,
     port: Number(env.SMTP_PORT) || 465,
@@ -60,5 +57,14 @@ module.exports = {
   // Khóa API của SePay (đối soát chuyển khoản tự động). Để trống = tắt webhook.
   SEPAY_API_KEY: env.SEPAY_API_KEY || "",
   MAX_FILES: 6,
-  MAX_FILE_MB: Number(env.MAX_FILE_MB) || 50
+  MAX_FILE_MB: Number(env.MAX_FILE_MB) || 50,
+  // MySQL — lấy trong hPanel → Databases → MySQL Databases
+  DB: {
+    host: env.DB_HOST || "localhost",
+    port: Number(env.DB_PORT) || 3306,
+    user: env.DB_USER || "",
+    password: env.DB_PASSWORD || "",
+    database: env.DB_NAME || "",
+    prefix: (env.DB_PREFIX || "").replace(/[^a-z0-9_]/gi, "")
+  }
 };

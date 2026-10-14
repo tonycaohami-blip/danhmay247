@@ -1,17 +1,24 @@
-// Kiểm thử tích hợp: chạy server với dữ liệu tạm, chặn email để lấy liên kết đăng nhập
+/**
+ * Kiểm thử tích hợp trên MySQL thật: npm test
+ * - Dùng thông tin DB_* trong .env, nhưng tạo bảng với tiền tố riêng (t<ngẫu nhiên>_) và XÓA sạch khi xong,
+ *   nên không ảnh hưởng dữ liệu đơn hàng thật.
+ * - Chặn email để lấy liên kết đăng nhập.
+ */
 const path = require("path"), fs = require("fs"), os = require("os");
 const ROOT = path.join(__dirname, "..");
 const DATA = fs.mkdtempSync(path.join(os.tmpdir(), "dm247-"));
-Object.assign(process.env, { PORT: "3999", DATA_DIR: DATA, ADMIN_PASSWORD: "mat-khau-thu", SEPAY_API_KEY: "k", SITE_URL: "http://localhost:3999", SMTP_HOST: "", SMTP_USER: "", SMTP_PASS: "" });
+const PREFIX = "t" + Math.random().toString(36).slice(2, 7) + "_";
+Object.assign(process.env, { PORT: "3999", DATA_DIR: DATA, DB_PREFIX: PREFIX, ADMIN_PASSWORD: "mat-khau-thu", SEPAY_API_KEY: "k", SITE_URL: "http://localhost:3999", SMTP_HOST: "", SMTP_USER: "", SMTP_PASS: "", NODE_ENV: "test" });
 
+const config = require(path.join(ROOT, "server/config.js"));
 const mailer = require(path.join(ROOT, "server/mailer.js"));
 const sent = [];
 mailer.ready = true;
 mailer.loginLink = async (email, url) => { sent.push({ email, url }); return true; };
 
-require(path.join(ROOT, "server.js"));
-const { db, flush } = require(path.join(ROOT, "server/store.js"));
+const db = require(path.join(ROOT, "server/db.js"));
 const { purgeOldFiles } = require(path.join(ROOT, "server/api.js"));
+const { start } = require(path.join(ROOT, "server.js"));
 
 const B = "http://localhost:3999";
 const H = { Origin: B };
@@ -19,16 +26,35 @@ let pass = 0, fail = 0;
 const ok = (name, cond, extra) => { cond ? pass++ : fail++; console.log((cond ? "  ✓ " : "  ✗ ") + name + (extra ? " — " + extra : "")); };
 const j = (method, url, body, headers) => fetch(B + url, { method, headers: Object.assign({ "Content-Type": "application/json" }, H, headers), body: body ? JSON.stringify(body) : undefined, redirect: "manual" });
 
+let server;
+async function cleanup() {
+  try { for (const t of Object.values(db.TABLES)) await db.query("DROP TABLE IF EXISTS `" + t + "`"); } catch (e) { console.error("Không xóa được bảng thử:", e.message); }
+  await db.close().catch(() => {});
+  if (server) server.close();
+  fs.rmSync(DATA, { recursive: true, force: true });
+}
+
 (async () => {
+  server = await start();
   await new Promise((r) => setTimeout(r, 300));
+  console.log("  (bảng thử nghiệm: " + PREFIX + "*)");
 
   // --- Đặt hàng hợp lệ & không hợp lệ
-  const mk = (over) => { const f = new FormData(); const v = Object.assign({ service: "transcription", type: "interview", urgency: "48h", qty: "30", speakers: "2", extras: "timestamps", name: "Lê Văn Đạt", email: "Dat.Le@Example.com", phone: "+84 988058030", agree: "on" }, over); for (const k in v) f.append(k, v[k]); return f; };
-  let r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: mk() });
+  const mk = (over) => { const f = new FormData(); const v = Object.assign({ service: "transcription", type: "interview", urgency: "48h", qty: "30", speakers: "2", extras: "timestamps", name: "Lê Văn Đạt", email: "Dat.Le@Example.com", phone: "+84 988058030", agree: "on", instructions: "Ghi chú có dấu: Việt Nam 🇻🇳" }, over); for (const k in v) f.append(k, v[k]); return f; };
+  const withFile = mk(); withFile.append("files", new Blob(["noi dung"]), "Biên bản họp.pdf");
+  let r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: withFile });
   let d = await r.json();
-  ok("tạo đơn chuyển âm", r.status === 201, d.order && d.order.id + " " + d.order.price.total + "đ");
+  ok("tạo đơn chuyển âm kèm tệp", r.status === 201, d.order && d.order.id + " " + d.order.price.total + "đ");
   const id = d.order.id, token = d.token;
   ok("email được chuẩn hóa chữ thường", d.order.email === "dat.le@example.com");
+
+  const row = (await db.query("SELECT * FROM `" + db.TABLES.orders + "` WHERE id = ?", [id]))[0];
+  ok("đơn được lưu vào bảng MySQL orders", !!row && row.total === d.order.price.total && row.name === "Lê Văn Đạt");
+  ok("tiếng Việt + emoji lưu đúng (utf8mb4)", row.instructions === "Ghi chú có dấu: Việt Nam 🇻🇳");
+  ok("không lưu mã truy cập dạng rõ", row.token_hash.length === 64 && row.token_hash !== token);
+  const frows = await db.query("SELECT * FROM `" + db.TABLES.files + "` WHERE order_id = ?", [id]);
+  ok("thông tin tệp lưu bảng order_files", frows.length === 1 && frows[0].name === "Biên bản họp.pdf" && fs.existsSync(path.join(config.UPLOAD_DIR, frows[0].stored)));
+
   for (const [k, v, msg] of [["urgency", "14d", "thời hạn không có cho chuyển âm"], ["qty", "0", "số lượng 0"], ["email", "sai", "email sai"], ["agree", "", "chưa đồng ý"], ["type", "abc", "loại sai"]]) {
     r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: mk({ [k]: v }) });
     ok("từ chối: " + msg, r.status === 400, (await r.json()).error);
@@ -40,6 +66,16 @@ const j = (method, url, body, headers) => fetch(B + url, { method, headers: Obje
   r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: bad });
   ok("từ chối tệp .html", r.status === 400, (await r.json()).error);
   ok("không để lại tệp tạm khi lỗi", fs.readdirSync(path.join(DATA, "uploads/_tmp")).length === 0);
+  ok("đơn lỗi không được lưu", (await db.query("SELECT COUNT(*) n FROM `" + db.TABLES.orders + "`"))[0].n === 1);
+
+  // --- Xem đơn
+  r = await fetch(B + "/api/orders/" + id); ok("không có mã truy cập → 404", r.status === 404);
+  r = await fetch(B + "/api/orders/" + id, { headers: { "X-Order-Token": token } });
+  d = await r.json(); ok("có mã truy cập → xem được đơn", r.ok && d.order.id === id && d.order.messages.length === 1);
+  r = await j("POST", "/api/orders/" + id + "/messages", { text: "Khi nào xong ạ?" }, { "X-Order-Token": token });
+  ok("khách gửi tin nhắn", (await r.json()).order.messages.length === 2);
+  r = await j("POST", "/api/orders/" + id + "/messages", { text: "x" }, { "X-Order-Token": token, Origin: "https://evil.com" });
+  ok("chặn CSRF (Origin lạ)", r.status === 403);
 
   // --- Đăng nhập bằng liên kết email
   r = await j("POST", "/api/auth/request-link", { email: "dat.le@example.com" });
@@ -58,44 +94,70 @@ const j = (method, url, body, headers) => fetch(B + url, { method, headers: Obje
   r = await fetch(B + "/api/orders/" + id, { headers: { Cookie: "dm_session=gia.mao" } });
   ok("cookie giả mạo bị từ chối", r.status === 404);
 
+  // --- Thanh toán: khách báo đã chuyển, webhook SePay (thiếu → đủ → trùng)
+  r = await j("POST", "/api/orders/" + id + "/claim-paid", null, { "X-Order-Token": token });
+  ok("khách báo đã chuyển khoản → verifying", (await r.json()).order.status === "verifying");
+  const total = (await db.orders.get(id)).price.total;
+  const hook = (body, key) => fetch(B + "/api/webhooks/sepay", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Apikey " + (key || "k") }, body: JSON.stringify(body) });
+  r = await hook({ id: 1, transferType: "in", transferAmount: 1000, content: id }, "sai"); ok("webhook sai khóa → 401", r.status === 401);
+  await hook({ id: 101, transferType: "in", transferAmount: 100000, content: "CK " + id + " FT1" });
+  ok("chuyển thiếu → chưa xác nhận", (await db.orders.get(id)).status === "verifying");
+  await hook({ id: 102, transferType: "in", transferAmount: total - 100000, content: "thanh toan " + id.toLowerCase() });
+  let o = await db.orders.get(id);
+  ok("đủ tiền → tự xác nhận", o.status === "paid" && o.paySource === "sepay" && o.receivedAmount === total && !!o.deadline);
+  await hook({ id: 102, transferType: "in", transferAmount: 999999, content: id });
+  ok("giao dịch gửi lại không bị cộng trùng", (await db.orders.get(id)).receivedAmount === total);
+  const pays = await db.payments.recent();
+  ok("lịch sử giao dịch lưu bảng payments", pays.length === 2 && pays.some((p) => p.result === "Đã xác nhận tự động"));
+
   // --- Liên hệ & đánh giá
-  r = await j("POST", "/api/contact", { name: "A", email: "a@b.vn", message: "Cần báo giá 100 trang" });
+  r = await j("POST", "/api/contact", { name: "Á", email: "a@b.vn", message: "Cần báo giá 100 trang" });
   ok("gửi liên hệ", r.status === 201);
   r = await j("POST", "/api/reviews", { name: "Hà", text: "Dịch vụ rất tốt, giao đúng hẹn và chính xác.", rating: 5 });
   ok("gửi đánh giá (chờ duyệt)", r.status === 201);
   r = await fetch(B + "/api/reviews"); ok("đánh giá chưa duyệt không hiển thị", (await r.json()).reviews.length === 0);
 
   // --- Quản trị
+  r = await j("POST", "/api/admin/login", { password: "sai" }); ok("sai mật khẩu quản trị → 401", r.status === 401);
   r = await j("POST", "/api/admin/login", { password: "mat-khau-thu" });
   const admin = (r.headers.get("set-cookie") || "").split(";")[0];
   ok("đăng nhập quản trị", r.ok && admin.startsWith("dm_admin="));
-  const rid = db.reviews[0].id;
-  r = await j("PATCH", "/api/admin/reviews/" + rid, { approved: true }, { Cookie: admin });
-  r = await fetch(B + "/api/reviews"); ok("duyệt → đánh giá hiển thị", (await r.json()).reviews.length === 1);
-  r = await j("PATCH", "/api/admin/orders/" + id, { status: "paid" }, { Cookie: admin });
+  r = await fetch(B + "/api/admin/summary", { headers: { Cookie: admin } });
   d = await r.json();
-  ok("quản trị xác nhận thanh toán thủ công", d.order.status === "paid" && d.order.paySource === "admin" && !!d.order.deadline);
-  r = await j("PATCH", "/api/admin/orders/" + id, { status: "done" }, { Cookie: admin });
-  ok("hoàn thành đơn", (await r.json()).order.status === "done");
+  ok("bảng điều khiển đọc từ MySQL", d.stats.orders === 1 && d.stats.paid === 1 && d.stats.revenue === total && d.stats.newContacts === 1 && d.stats.pendingReviews === 1);
+  r = await j("PATCH", "/api/admin/reviews/" + d.reviews[0].id, { approved: true }, { Cookie: admin });
+  r = await fetch(B + "/api/reviews"); ok("duyệt → đánh giá hiển thị", (await r.json()).reviews.length === 1);
+  r = await j("PATCH", "/api/admin/contacts/" + d.contacts[0].id, { read: true }, { Cookie: admin });
+  ok("đánh dấu liên hệ đã xử lý", (await db.contacts.unread()) === 0);
+  r = await j("POST", "/api/admin/orders/" + id + "/messages", { text: "Chào anh, em đang làm ạ." }, { Cookie: admin });
+  ok("quản trị nhắn tin", (await r.json()).order.messages.some((m) => m.text === "Chào anh, em đang làm ạ."));
+  const up = new FormData(); up.append("files", new Blob(["ket qua"]), "Kết quả.docx"); up.append("complete", "1");
+  r = await fetch(B + "/api/admin/orders/" + id + "/result", { method: "POST", headers: Object.assign({ Cookie: admin }, H), body: up });
+  d = await r.json();
+  ok("gửi tệp hoàn thành → đơn done", d.order.status === "done" && d.order.files.some((f) => f.by === "admin" && f.name === "Kết quả.docx"));
+  const result = d.order.files.find((f) => f.by === "admin");
+  r = await fetch(B + "/api/orders/" + id + "/files/" + result.id + "?t=" + token);
+  ok("khách tải được tệp hoàn thành", r.ok && (await r.text()) === "ket qua");
+  r = await j("PATCH", "/api/admin/orders/" + id, { status: "progress", notes: "Ưu tiên" }, { Cookie: admin });
+  d = await r.json();
+  ok("đổi trạng thái + ghi chú nội bộ", d.order.status === "progress" && d.order.notes === "Ưu tiên");
+  r = await fetch(B + "/api/orders/" + id, { headers: { "X-Order-Token": token } });
+  ok("khách không thấy ghi chú nội bộ", !("notes" in (await r.json()).order));
+  ok("lịch sử trạng thái đầy đủ", (await db.orders.get(id)).history.map((h) => h.status).join(">") === "unpaid>verifying>paid>done>progress");
 
   // --- Tự xóa tệp sau 30 ngày
-  const o = db.orders.find((x) => x.id === id);
-  fs.mkdirSync(path.join(DATA, "uploads", id), { recursive: true });
-  fs.writeFileSync(path.join(DATA, "uploads", id, "x.pdf"), "x");
-  o.files.push({ id: "f1", name: "cu.pdf", size: 1, by: "customer", stored: id + "/x.pdf" });
-  o.history[o.history.length - 1].at = Date.now() - 31 * 86400e3;
-  purgeOldFiles();
-  await new Promise((res) => setTimeout(res, 200));
-  ok("tệp quá 30 ngày đã bị xóa", !fs.existsSync(path.join(DATA, "uploads", id, "x.pdf")) && o.files[0].purged);
-  r = await fetch(B + "/api/orders/" + id + "/files/f1?t=" + token);
+  await j("PATCH", "/api/admin/orders/" + id, { status: "done" }, { Cookie: admin });
+  await db.query("UPDATE `" + db.TABLES.history + "` SET created_at = DATE_SUB(NOW(), INTERVAL 31 DAY) WHERE order_id = ?", [id]);
+  const n = await purgeOldFiles();
+  o = await db.orders.get(id);
+  ok("tệp quá 30 ngày đã bị xóa", n === 2 && o.files.every((f) => f.purged && !f.stored) && !fs.existsSync(path.join(config.UPLOAD_DIR, frows[0].stored)));
+  r = await fetch(B + "/api/orders/" + id + "/files/" + result.id + "?t=" + token);
   ok("tải tệp đã xóa → 410", r.status === 410);
 
-  // --- Dữ liệu ghi xuống đĩa
-  flush();
-  const saved = JSON.parse(fs.readFileSync(path.join(DATA, "db.json"), "utf8"));
-  ok("db.json lưu đơn, không lưu mã truy cập dạng rõ", saved.orders.length === 1 && !JSON.stringify(saved).includes(token));
+  // --- Khóa phiên lưu trong MySQL (không đổi sau khi khởi động lại)
+  ok("khóa phiên lưu bảng settings", (await db.settings.get("session_secret")) === config.SESSION_SECRET);
 
   console.log(`\n${pass} đạt, ${fail} lỗi`);
-  fs.rmSync(DATA, { recursive: true, force: true });
+  await cleanup();
   process.exit(fail ? 1 : 0);
-})().catch((e) => { console.error(e); process.exit(1); });
+})().catch(async (e) => { console.error(e); await cleanup(); process.exit(1); });

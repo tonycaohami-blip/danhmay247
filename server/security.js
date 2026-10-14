@@ -4,7 +4,8 @@
 "use strict";
 
 const crypto = require("crypto");
-const { SESSION_SECRET, IS_PROD, ADMIN_PASSWORD } = require("./config");
+const config = require("./config");
+const { IS_PROD, ADMIN_PASSWORD } = config;
 
 const b64 = (buf) => Buffer.from(buf).toString("base64url");
 const sha256 = (s) => crypto.createHash("sha256").update(String(s)).digest("hex");
@@ -18,14 +19,14 @@ function safeEqual(a, b) {
 /* ---------- Cookie ký số (không cần lưu phiên trên máy chủ) ---------- */
 function sign(payload) {
   const body = b64(JSON.stringify(payload));
-  const mac = crypto.createHmac("sha256", SESSION_SECRET).update(body).digest("base64url");
+  const mac = crypto.createHmac("sha256", config.SESSION_SECRET).update(body).digest("base64url");
   return body + "." + mac;
 }
 function verify(token) {
   if (!token || typeof token !== "string") return null;
   const [body, mac] = token.split(".");
   if (!body || !mac) return null;
-  const expect = crypto.createHmac("sha256", SESSION_SECRET).update(body).digest("base64url");
+  const expect = crypto.createHmac("sha256", config.SESSION_SECRET).update(body).digest("base64url");
   if (!safeEqual(mac, expect)) return null;
   try {
     const p = JSON.parse(Buffer.from(body, "base64url").toString("utf8"));

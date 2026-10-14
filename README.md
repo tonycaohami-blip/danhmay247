@@ -1,6 +1,6 @@
 # Đánh máy 247 - Sản phẩm của VietSCI Editing Services
 
-Website dịch vụ đánh máy, chuyển âm và định dạng tài liệu, chạy bằng **Node.js** (Express). Máy chủ nhận đơn thật: lưu đơn hàng và tệp khách gửi, gửi email, đối soát chuyển khoản HDBank tự động, có trang quản trị.
+Website dịch vụ đánh máy, chuyển âm và định dạng tài liệu, chạy bằng **Node.js** (Express) + **MySQL**. Máy chủ nhận đơn thật: lưu đơn hàng vào MySQL, lưu tệp khách gửi, gửi email, đối soát chuyển khoản HDBank tự động, có trang quản trị.
 
 ## Cấu trúc
 
@@ -10,7 +10,7 @@ DanhMay247/
 ├── server/
 │   ├── config.js        # Đọc biến môi trường / .env
 │   ├── api.js           # API: đơn hàng, tệp, đăng nhập, tin nhắn, liên hệ, đánh giá, webhook, quản trị
-│   ├── store.js         # Lưu dữ liệu JSON (ghi nguyên tử) trong DATA_DIR
+│   ├── db.js            # MySQL: tự tạo bảng, truy vấn đơn hàng/khách/liên hệ/đánh giá/giao dịch
 │   ├── mailer.js        # Mẫu email tiếng Việt + gửi qua SMTP
 │   ├── security.js      # Phiên đăng nhập ký HMAC, chống spam, chống CSRF
 │   └── shared.js        # Dùng chung bảng giá với public/assets/js/data.js
@@ -37,7 +37,7 @@ Cần **Node.js 20 trở lên**.
 npm install
 cp .env.example .env     # rồi điền ADMIN_PASSWORD, SMTP_PASS…
 npm start                # http://localhost:3000
-npm test                 # chạy 26 kiểm thử tự động
+npm test                 # 45 kiểm thử trên MySQL (bảng tạm có tiền tố riêng, tự xóa khi xong)
 ```
 
 ## Cấu hình (biến môi trường)
@@ -46,18 +46,19 @@ Xem `.env.example`. Trên Hostinger, khai báo trong hPanel → Node.js app → 
 
 | Biến | Bắt buộc | Ý nghĩa |
 |---|---|---|
+| `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | ✅ | Kết nối MySQL (hPanel → Databases → MySQL Databases). Trên Hostinger, `DB_HOST` thường là `localhost` |
 | `ADMIN_PASSWORD` | ✅ | Mật khẩu vào `/quan-tri`. Để trống thì trang quản trị bị khóa. |
-| `SITE_URL` | ✅ | Ví dụ `https://danhmay247.com`, dùng cho liên kết trong email |
+| `SITE_URL` | | Liên kết trong email. Mặc định `https://danhmay247.com` |
 | `NODE_ENV` | ✅ | `production` (bật cookie Secure khi chạy HTTPS) |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | ✅ | Để gửi email. Gmail: `smtp.gmail.com`, `465`, `trungtamdanhmay247@gmail.com` và **mật khẩu ứng dụng** |
-| `ADMIN_EMAIL` | | Email nhận thông báo (mặc định trungtamdanhmay247@gmail.com) |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | ✅ | Để gửi email. Gmail: `smtp.gmail.com`, `465`, `vietsciediting@gmail.com` và **mật khẩu ứng dụng** |
+| `ADMIN_EMAIL` | | Email nhận thông báo (mặc định vietsciediting@gmail.com) |
 | `SEPAY_API_KEY` | | Bật đối soát chuyển khoản tự động |
-| `DATA_DIR` | ⚠️ | Thư mục lưu đơn hàng và tệp. **Nên đặt ngoài thư mục code** |
-| `SESSION_SECRET` | | Để trống thì tự tạo và lưu trong DATA_DIR |
+| `DATA_DIR` | ⚠️ | Thư mục lưu **tệp** khách gửi (đơn hàng nằm trong MySQL). **Nên đặt ngoài thư mục code** |
+| `SESSION_SECRET` | | Để trống thì tự tạo và lưu trong bảng `settings` của MySQL |
 
 ### Gửi email bằng Gmail
 
-1. Đăng nhập trungtamdanhmay247@gmail.com, bật **Xác minh 2 bước**.
+1. Đăng nhập vietsciediting@gmail.com, bật **Xác minh 2 bước**.
 2. Vào https://myaccount.google.com/apppasswords, tạo mật khẩu ứng dụng tên "Danh may 247".
 3. Dán 16 ký tự (bỏ dấu cách) vào `SMTP_PASS`.
 
@@ -92,7 +93,7 @@ git push -u origin main
 1. hPanel → Websites → **Node.js Apps** → **Import Git repository**, chọn repo, nhánh `main`.
 2. Node version **20** hoặc **22**. Build command để trống. Start: `npm start` (entry `server.js`).
 3. Thêm các biến môi trường ở bảng trên.
-4. **Quan trọng: `DATA_DIR`.** Đặt một thư mục **ngoài thư mục ứng dụng**, ví dụ `/home/<user>/danhmay247-data`. Hãy tạo trước bằng File Manager. Nếu để mặc định, dữ liệu nằm trong thư mục code và **có thể bị mất khi deploy lại**.
+4. **Quan trọng: `DATA_DIR`.** Đặt một thư mục **ngoài thư mục ứng dụng**, ví dụ `/home/<user>/danhmay247-data`. Hãy tạo trước bằng File Manager. Nếu để mặc định, tệp khách gửi nằm trong thư mục code và **có thể bị mất khi deploy lại**.
 5. Deploy, gắn tên miền, bật SSL. Sau đó vào `/quan-tri` để đăng nhập.
 
 **VPS:**
@@ -108,7 +109,12 @@ Rồi cấu hình Nginx reverse proxy tới `127.0.0.1:3000` (thêm `client_max_
 
 ## Sao lưu
 
-Toàn bộ dữ liệu nằm trong `DATA_DIR` (`db.json` + thư mục `uploads/`). Hãy sao lưu thư mục này định kỳ, ví dụ tải về hằng tuần qua File Manager hoặc dùng cron trên VPS.
+- **Đơn hàng:** MySQL. hPanel có sao lưu database tự động; có thể xuất thủ công bằng phpMyAdmin → Export.
+- **Tệp khách gửi:** thư mục `DATA_DIR/uploads/`. Hãy tải về định kỳ qua File Manager.
+
+Các bảng: `orders`, `order_files`, `order_messages`, `order_history`, `users`, `contacts`, `reviews`, `payments`, `login_tokens`, `settings` — tự tạo khi khởi động. Nếu thư mục `DATA_DIR` còn tệp `db.json` của phiên bản cũ, dữ liệu sẽ tự được nhập vào MySQL ở lần chạy đầu.
+
+Khi chưa kết nối được MySQL, website vẫn hiển thị bình thường; riêng đặt hàng/tài khoản/quản trị báo bảo trì và máy chủ tự thử kết nối lại mỗi 30 giây.
 
 ## Chỉnh sửa nội dung
 
@@ -117,5 +123,4 @@ Toàn bộ dữ liệu nằm trong `DATA_DIR` (`db.json` + thư mục `uploads/`
 
 ## Giới hạn còn lại
 
-- Lưu trữ JSON phù hợp quy mô nhỏ–vừa (vài chục nghìn đơn). Khi lớn hơn nên chuyển sang MySQL (Hostinger có sẵn).
 - Đánh giá và số liệu mẫu trên trang (trang Giới thiệu, "9.8/10", điểm Google/Facebook) cần thay bằng thông tin thật.

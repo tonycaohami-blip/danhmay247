@@ -7,7 +7,7 @@ window.DM = window.DM || {};
 DM.site = {
   name: "DanhMay247",
   domain: "danhmay247.vn",
-  email: "trungtamdanhmay247@gmail.com",
+  email: "vietsciediting@gmail.com",
   phone: "0988 058 030",
   phoneHref: "0988058030",
   zalo: "0988058030",
@@ -201,7 +201,7 @@ DM.reviews = [
 DM.faq = [
   { cat: "Dịch vụ", q: "Các bạn cung cấp những dịch vụ đánh máy nào?", a: "<p>Chúng tôi chuyển ghi chép viết tay, PDF, bản scan, hình ảnh, giấy tờ đánh máy cũ, công văn… thành tài liệu Word chỉnh sửa được, trình bày gọn đẹp. Ngoài ra, chúng tôi còn chuyển âm mọi bản ghi âm, video sang văn bản với độ chính xác cao.</p>" },
   { cat: "Giá & thanh toán", q: "Báo giá đã bao gồm những gì?", a: "<p>Báo giá bao gồm loại dịch vụ tương ứng, khối lượng công việc (số trang/số phút), giao đúng hạn, cam kết chất lượng và sự khớp đúng của sản phẩm cuối cùng so với bản gốc. Không có phí ẩn.</p>" },
-  { cat: "Đặt hàng", q: "Tôi gửi tệp đính kèm cho các bạn bằng cách nào?", a: "<p>Bạn có thể tải lên tối đa 6 tệp — từ PDF, JPEG đến MP3, WAV — ngay trên trang đặt hàng.</p><p>Nếu gặp sự cố, hãy tải tệp lên Google Drive, Dropbox hoặc dịch vụ lưu trữ đám mây bất kỳ rồi dán đường dẫn vào phần hướng dẫn. Bạn cũng có thể gửi tệp tới <a href=\"mailto:trungtamdanhmay247@gmail.com\">trungtamdanhmay247@gmail.com</a> và ghi chú trong phần hướng dẫn rằng tệp đã được gửi qua email.</p>" },
+  { cat: "Đặt hàng", q: "Tôi gửi tệp đính kèm cho các bạn bằng cách nào?", a: "<p>Bạn có thể tải lên tối đa 6 tệp — từ PDF, JPEG đến MP3, WAV — ngay trên trang đặt hàng.</p><p>Nếu gặp sự cố, hãy tải tệp lên Google Drive, Dropbox hoặc dịch vụ lưu trữ đám mây bất kỳ rồi dán đường dẫn vào phần hướng dẫn. Bạn cũng có thể gửi tệp tới <a href=\"mailto:vietsciediting@gmail.com\">vietsciediting@gmail.com</a> và ghi chú trong phần hướng dẫn rằng tệp đã được gửi qua email.</p>" },
   { cat: "Đặt hàng", q: "Làm sao để tôi theo dõi đơn hàng?", a: "<p>Ngay sau khi thanh toán, bạn sẽ có quyền truy cập vào tài khoản cá nhân. Tại đó, bạn có thể trao đổi với người thực hiện đơn, liên hệ đội hỗ trợ và theo dõi tiến độ công việc một cách thuận tiện.</p><p>Khi có tin nhắn từ chuyên viên hoặc trạng thái đơn thay đổi (ví dụ từ “Đang thực hiện” sang “Hoàn thành”), chúng tôi sẽ tự động gửi thông báo qua email.</p>" },
   { cat: "Bảo mật", q: "Quyền riêng tư và bảo mật thông tin được đảm bảo thế nào?", a: "<p>Mục tiêu của DanhMay247 là xây dựng niềm tin với từng khách hàng. Chúng tôi tôn trọng quyền riêng tư và đảm bảo bảo mật trong suốt quá trình hợp tác.</p><p>Nhân viên đánh máy, thiết kế, biên tập của chúng tôi đều được đào tạo bài bản, tuân thủ quy tắc đạo đức nghề nghiệp và làm việc theo thỏa thuận bảo mật (NDA). Mọi thông tin bạn chia sẻ đều được giữ kín tuyệt đối.</p>" },
   { cat: "Dịch vụ", q: "Các bạn đảm bảo chất lượng dịch vụ ra sao?", a: "<p>Chúng tôi có đội ngũ chuyên viên với hơn 5 năm kinh nghiệm đánh máy thủ công và chuyển âm, cùng quy trình kiểm soát chất lượng nhiều bước.</p><p>Khi đã nhận hạn chót, chúng tôi sẽ giao đúng hạn. Nếu không đáp ứng được yêu cầu của bạn trong thời gian đã thỏa thuận, bạn sẽ được hoàn tiền.</p>" },

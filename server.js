@@ -16,9 +16,9 @@ const zlib = require("zlib");
 const express = require("express");
 
 const config = require("./server/config");
-const { router: api } = require("./server/api");
+const db = require("./server/db");
+const { router: api, startJobs } = require("./server/api");
 const { sameOrigin } = require("./server/security");
-const { flush } = require("./server/store");
 
 const PUBLIC = config.PUBLIC_DIR;
 const app = express();
@@ -37,6 +37,8 @@ app.use((req, res, next) => { res.set(SECURITY_HEADERS); next(); });
 app.use("/api", express.json({ limit: "100kb" }));
 app.use("/api", (req, res, next) => (req.path.startsWith("/webhooks/") ? next() : sameOrigin(req, res, next)));
 app.use("/api", (req, res, next) => { res.set("Cache-Control", "no-store"); next(); });
+// Chưa kết nối được MySQL: website vẫn hiển thị, chỉ API tạm báo bảo trì (webhook SePay nhận 503 sẽ tự gửi lại sau)
+app.use("/api", (req, res, next) => (db.isReady() ? next() : res.status(503).json({ error: "Hệ thống đặt hàng đang bảo trì, vui lòng thử lại sau ít phút hoặc gọi 0988 058 030." })));
 app.use("/api", api);
 
 /* ---------- Website tĩnh ---------- */
@@ -90,12 +92,37 @@ app.use((req, res, next) => {
   sendFile(req, res, 404, path.join(PUBLIC, "404.html"));
 });
 
-app.listen(config.PORT, config.HOST, () => {
-  console.log("Đánh máy 247 đang chạy tại http://localhost:" + config.PORT);
-  console.log("  Dữ liệu:   " + config.DATA_DIR);
-  console.log("  Email:     " + (config.SMTP ? "đã cấu hình (" + config.SMTP.host + ")" : "CHƯA cấu hình SMTP — email chỉ ghi ra log"));
-  console.log("  Quản trị:  " + (config.ADMIN_PASSWORD ? "đã đặt mật khẩu" : "CHƯA đặt ADMIN_PASSWORD — trang /quan-tri bị khóa"));
-  console.log("  SePay:     " + (config.SEPAY_API_KEY ? "webhook đang bật" : "tắt (xác nhận thanh toán thủ công)"));
-});
+/** Kết nối MySQL; nếu lỗi thì thử lại sau 30 giây (website vẫn chạy trong lúc chờ). */
+async function connectDb() {
+  try {
+    await db.init();
+    startJobs();
+    console.log("[MySQL] Đã kết nối " + config.DB.user + "@" + config.DB.host + "/" + config.DB.database);
+    return true;
+  } catch (e) {
+    console.error("[KHÔNG KẾT NỐI ĐƯỢC MYSQL] " + e.message);
+    console.error("  Kiểm tra DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME trong biến môi trường. Thử lại sau 30 giây…");
+    setTimeout(connectDb, 30e3).unref();
+    return false;
+  }
+}
 
-process.on("uncaughtException", (e) => { console.error(e); try { flush(); } catch { /* bỏ qua */ } });
+async function start() {
+  await connectDb();
+  const server = app.listen(config.PORT, config.HOST, () => {
+    console.log("Đánh máy 247 đang chạy tại http://localhost:" + config.PORT);
+    console.log("  MySQL:     " + config.DB.user + "@" + config.DB.host + ":" + config.DB.port + "/" + config.DB.database + (config.DB.prefix ? " (tiền tố bảng " + config.DB.prefix + ")" : ""));
+    console.log("  Liên kết:  " + config.SITE_URL);
+    console.log("  Tệp tải lên: " + config.UPLOAD_DIR);
+    console.log("  Email:     " + (config.SMTP ? "đã cấu hình (" + config.SMTP.host + ")" : "CHƯA cấu hình SMTP — email chỉ ghi ra log"));
+    console.log("  Quản trị:  " + (config.ADMIN_PASSWORD ? "đã đặt mật khẩu" : "CHƯA đặt ADMIN_PASSWORD — trang /quan-tri bị khóa"));
+    console.log("  SePay:     " + (config.SEPAY_API_KEY ? "webhook đang bật" : "tắt (xác nhận thanh toán thủ công)"));
+  });
+  const stop = () => server.close(() => db.close().finally(() => process.exit(0)));
+  process.on("SIGINT", stop);
+  process.on("SIGTERM", stop);
+  return server;
+}
+
+if (require.main === module) start();
+module.exports = { app, start };
