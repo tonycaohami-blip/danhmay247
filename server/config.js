@@ -69,7 +69,7 @@ module.exports = {
   // Khóa ký phiên đăng nhập. Để trống: tự tạo một lần và lưu trong bảng settings của MySQL
   SESSION_SECRET: env.SESSION_SECRET && env.SESSION_SECRET.length >= 32 ? env.SESSION_SECRET : null,
   ADMIN_PASSWORD: env.ADMIN_PASSWORD || "",
-  ADMIN_EMAIL: env.ADMIN_EMAIL || "vietsciediting@gmail.com",
+  ADMIN_EMAIL: env.ADMIN_EMAIL || "trungtamdanhmay247@gmail.com",
   SMTP: smtpReady ? {
     host: env.SMTP_HOST,
     port: Number(env.SMTP_PORT) || 465,

@@ -25,8 +25,8 @@ danhmay247-data/
 1. hPanel → **Websites** → **Node.js Apps** → **Import Git repository** → chọn repo `danhmay247`, nhánh `main`. Chọn Node **20** hoặc **22**, để trống Build command, Start command `npm start`.
 2. Mục **Environment variables**, thêm:
    - `ADMIN_PASSWORD`: mật khẩu vào trang quản trị (bắt buộc)
-   - `SMTP_PASS`: mật khẩu ứng dụng Gmail của vietsciediting@gmail.com (để gửi email, xem bên dưới)
-   - `SMTP_HOST` = `smtp.gmail.com`, `SMTP_PORT` = `465`, `SMTP_USER` = `vietsciediting@gmail.com`
+   - `SMTP_PASS`: mật khẩu ứng dụng Gmail của trungtamdanhmay247@gmail.com (để gửi email, xem bên dưới)
+   - `SMTP_HOST` = `smtp.gmail.com`, `SMTP_PORT` = `465`, `SMTP_USER` = `trungtamdanhmay247@gmail.com`
 3. Bấm **Deploy**, gắn tên miền `danhmay247.com` và bật SSL.
 
 Xong. Kiểm tra bằng cách đặt thử một đơn rồi vào `https://danhmay247.com/quan-tri`.
@@ -35,7 +35,7 @@ Mỗi lần sửa code: `git add . && git commit -m "..." && git push`, rồi b�
 
 ### Tạo mật khẩu ứng dụng Gmail
 
-1. Đăng nhập **vietsciediting@gmail.com** → https://myaccount.google.com/signinoptions/two-step-verification → bật **Xác minh 2 bước**.
+1. Đăng nhập **trungtamdanhmay247@gmail.com** → https://myaccount.google.com/signinoptions/two-step-verification → bật **Xác minh 2 bước**.
 2. Mở https://myaccount.google.com/apppasswords → tên ứng dụng `Danh may 247` → **Tạo**.
 3. Sao chép 16 ký tự, **bỏ dấu cách**, dán vào biến `SMTP_PASS` trên Hostinger.
 

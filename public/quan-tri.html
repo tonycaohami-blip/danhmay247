@@ -21,6 +21,9 @@
     .msg--staff { background: #eef7ef; align-self: flex-start; }
     .msg--sys { background: transparent; box-shadow: none; color: var(--muted); font-size: 13px; align-self: center; text-align: center; }
     .staff-off { opacity: .55; }
+    .files li.has-actions { flex-wrap: wrap; }
+    .file-actions { flex: 1 0 100%; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; padding-top: 6px; border-top: 1px dashed #dcdde6; margin-top: 4px; }
+    .file-actions .button { white-space: nowrap; width: auto; }
     .sys { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
     @media (max-width: 900px) { .kpis { grid-template-columns: 1fr 1fr; } }
   </style>
@@ -139,9 +142,9 @@
       var staffFiles = function () {
         var l = o.files.filter(function (f) { return f.by === "staff"; });
         return l.length ? '<ul class="files" style="margin:0 0 14px">' + l.map(function (f) {
-          return '<li><span class="ext">' + DM.esc(f.name.split(".").pop().slice(0, 4)) + '</span><a class="meta" href="' + fileUrl(f) + '" download><b>' + DM.esc(f.name) + "</b><small>" + size(f.size) + " · " + (f.shared ? "đã chuyển cho khách" : "chờ duyệt") + "</small></a>" +
-            (f.purged ? "" : f.shared ? '<button type="button" class="link" data-unshare="' + f.id + '" style="white-space:nowrap">Thu hồi</button>'
-              : '<span style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="button button--sm" data-share="' + f.id + '" data-complete="1">Duyệt &amp; hoàn thành đơn</button><button type="button" class="button button--sm button--black" data-share="' + f.id + '">Chỉ gửi tệp</button></span>') + "</li>";
+          return '<li class="' + (f.purged ? "" : "has-actions") + '"><span class="ext">' + DM.esc(f.name.split(".").pop().slice(0, 4)) + '</span><a class="meta" href="' + fileUrl(f) + '" download><b>' + DM.esc(f.name) + "</b><small>" + size(f.size) + " · " + (f.shared ? "đã chuyển cho khách" : "chờ duyệt") + "</small></a>" +
+            (f.purged ? "" : f.shared ? '<span class="file-actions"><button type="button" class="button button--sm button--black" data-unshare="' + f.id + '">Thu hồi tệp</button></span>'
+              : '<span class="file-actions"><button type="button" class="button button--sm" data-share="' + f.id + '" data-complete="1">Duyệt &amp; hoàn thành đơn</button><button type="button" class="button button--sm button--black" data-share="' + f.id + '">Chỉ gửi tệp cho khách</button></span>') + "</li>";
         }).join("") + "</ul>" : '<p class="field__hint" style="margin-bottom:14px">Nhân viên chưa tải tệp nào.</p>';
       };
       var unpaid = o.status === "unpaid" || o.status === "verifying";
@@ -256,8 +259,10 @@
             return '<tr class="' + (x.active ? "" : "staff-off") + '"><td><b>' + DM.esc(x.name) + "</b>" + (x.active ? "" : ' <span class="chip chip--red">Đã khóa</span>') + "<br><small>" + DM.esc(x.email || "—") + "</small></td>" +
               "<td>" + DM.esc(x.username) + "</td><td>" + count(x.id, ["paid", "progress", "review"]) + "</td><td>" + count(x.id, ["done"]) + "</td>" +
               "<td>" + (x.lastLogin ? DM.dateTime(x.lastLogin) : "Chưa đăng nhập") + "</td>" +
-              '<td style="white-space:nowrap"><button type="button" class="link" data-orders="' + x.id + '">Xem đơn</button> · <button type="button" class="link" data-edit="' + x.id + '">Sửa / đặt lại mật khẩu</button> · ' +
-              '<button type="button" class="link" data-active="' + x.id + '" data-v="' + (x.active ? "0" : "1") + '">' + (x.active ? "Khóa" : "Mở khóa") + "</button></td></tr>";
+              '<td><div style="display:flex;gap:6px;flex-wrap:wrap;min-width:150px">' +
+              '<button type="button" class="button button--sm button--black" data-orders="' + x.id + '">Xem đơn</button>' +
+              '<button type="button" class="button button--sm button--black" data-edit="' + x.id + '">Sửa / đặt lại mật khẩu</button>' +
+              '<button type="button" class="button button--sm' + (x.active ? " button--black" : "") + '" data-active="' + x.id + '" data-v="' + (x.active ? "0" : "1") + '">' + (x.active ? "Khóa" : "Mở khóa") + "</button></div></td></tr>";
           }).join("") + "</tbody></table></div>" : '<div class="empty">' + DM.icon.users + "<p>Chưa có nhân viên nào.</p></div>") + "</div>";
 
       $("#st-new").addEventListener("submit", function (e) {
@@ -268,15 +273,15 @@
           .then(function (d) { DM.toast("Đã tạo tài khoản cho " + d.staff.name + "."); load(); },
             function (er) { $("#st-msg").innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
       });
-      $("[data-orders]").forEach(function (b) { b.addEventListener("click", function () { staffFilter = b.dataset.orders; tab = "orders"; render(); }); });
-      $("[data-active]").forEach(function (b) {
+      $$("[data-orders]").forEach(function (b) { b.addEventListener("click", function () { staffFilter = b.dataset.orders; tab = "orders"; render(); }); });
+      $$("[data-active]").forEach(function (b) {
         b.addEventListener("click", function () {
           var off = b.dataset.v === "0";
           if (off && !confirm("Khóa tài khoản này? Nhân viên sẽ bị đăng xuất ngay và không xem được đơn nào nữa.")) return;
           DM.api("/admin/staff/" + b.dataset.active, { method: "PATCH", body: { active: !off } }).then(function () { DM.toast(off ? "Đã khóa tài khoản." : "Đã mở khóa."); load(); }, function (er) { DM.toast(er.message, "error"); });
         });
       });
-      $("[data-edit]").forEach(function (b) {
+      $$("[data-edit]").forEach(function (b) {
         b.addEventListener("click", function () {
           var x = data.staff.find(function (y) { return y.id === b.dataset.edit; });
           var m = DM.modal.open('<h2 class="modal__title">' + DM.esc(x.name) + '</h2><form id="st-edit" novalidate><div id="se-msg"></div>' +

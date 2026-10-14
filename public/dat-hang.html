@@ -160,7 +160,7 @@
       var urgs = DM.urgencies.filter(function (u) { return s.base[u.key]; });
       if (!urgs.some(function (u) { return u.key === state.urgency; })) state.urgency = "12h";
       $("#o-urgency").innerHTML = urgs.map(function (u) {
-        return '<option value="' + u.key + '"' + (u.key === state.urgency ? " selected" : "") + ">" + u.label + " / " + DM.dateLabel(DM.deadline(u.hours)) + "</option>";
+        return '<option value="' + u.key + '"' + (u.key === state.urgency ? " selected" : "") + ">" + u.label + "; " + DM.dateLabel(DM.deadline(u.hours)) + "</option>";
       }).join("");
       var isT = state.service === "transcription";
       $("#qty-label").textContent = isT ? "Số phút" : "Số trang";
@@ -193,7 +193,7 @@
       $("#s-type").textContent = t.label + (state.service === "transcription" ? " · " + s.speakers.find(function (x) { return x.key === state.speakers; }).label : "");
       $("#s-qty-label").textContent = state.service === "retyping" ? "Số trang:" : "Số phút:";
       $("#s-qty").textContent = state.qty;
-      $("#s-urgency").textContent = u.label + " / " + DM.dateLabel(DM.deadline(u.hours));
+      $("#s-urgency").textContent = u.label + "; " + DM.dateLabel(DM.deadline(u.hours));
       $("#s-unit").textContent = DM.fmt(r.unitPrice) + " / " + r.unit;
       $("#s-extras-row").classList.toggle("hidden", !state.extras.length);
       $("#s-extras").textContent = state.extras.map(function (k) { var e = s.extras.find(function (x) { return x.key === k; }); return "+" + e.pct + "%"; }).join(", ");

@@ -722,8 +722,8 @@ ul { margin: 0; padding: 0; }
 .files .meta { flex: 1; min-width: 0; }
 .files .meta b { display: block; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #000; }
 .files .meta small { color: var(--muted); }
-.files button { width: 34px; height: 34px; border: 0; border-radius: 50%; background: transparent; cursor: pointer; color: var(--muted); font-size: 18px; }
-.files button:hover { background: #fff; color: var(--red); }
+.files button:not(.button) { width: 34px; height: 34px; border: 0; border-radius: 50%; background: transparent; cursor: pointer; color: var(--muted); font-size: 18px; }
+.files button:not(.button):hover { background: #fff; color: var(--red); }
 .phone-group { display: grid; grid-template-columns: 150px 1fr; gap: 10px; }
 .summary { position: sticky; top: calc(var(--header-h) + 20px); }
 .summary .order-card { padding: 30px; }
