@@ -46,6 +46,12 @@ for (const p of ctx.DM.posts) {
   n++;
 }
 
+// 1b) Trang có ảnh chia sẻ riêng (ảnh bìa nằm cùng thư mục ảnh blog)
+for (const name of ["doi-tac"]) {
+  const src = path.join(ROOT, "public/assets/img/blog", name + ".svg");
+  if (fs.existsSync(src)) { fs.writeFileSync(path.join(OUT, name + ".png"), render(fs.readFileSync(src, "utf8").replace(/<\/svg>\s*$/, brand + "</svg>"))); n++; }
+}
+
 // 2) Ảnh chia sẻ mặc định cho các trang
 const defaultSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d3078"/><stop offset="1" stop-color="#4a4fb0"/></linearGradient>

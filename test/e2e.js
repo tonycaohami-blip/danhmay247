@@ -335,6 +335,87 @@ async function cleanup() {
   ok("sitemap: đường dẫn sạch + ảnh PNG, không có trang riêng tư", pg.h.includes("/blog/telex-hay-vni") && pg.h.includes("/dich-vu/pdf-sang-word") && /og\/[a-z0-9-]+\.png/.test(pg.h) && !/bai-viet|\?slug=|dat-hang|tai-khoan/.test(pg.h));
 
   // --- Khóa phiên lưu trong MySQL (không đổi sau khi khởi động lại)
+  // ================= ĐỐI TÁC (AFFILIATE) =================
+  const affReg = { shop: "Photocopy Minh Anh", name: "Trần Minh Anh", phone: "0977 111 222", email: "minhanh@photo.vn", address: "12 Lê Lợi", city: "Huế", bankName: "Vietcombank", bankAccount: "0123 456 789", bankHolder: "tran minh anh", password: "doitac1234", agree: true };
+  r = await j("POST", "/api/aff/register", affReg);
+  d = await r.json();
+  const affCk = (r.headers.get("set-cookie") || "").split(";")[0];
+  const aff = d.affiliate || {};
+  ok("đối tác đăng ký → chờ duyệt, có mã giới thiệu, đăng nhập luôn", r.status === 201 && aff.status === "pending" && /^[A-Z0-9]{4,12}$/.test(aff.code) && affCk.startsWith("dm_aff=") && !("passHash" in aff) && aff.bank.account === "0123456789" && aff.bank.holder === "TRAN MINH ANH");
+  ok("đối tác: không cho trùng email", (await j("POST", "/api/aff/register", affReg)).status === 409);
+  ok("đối tác: bắt buộc đồng ý điều khoản, mật khẩu đủ dài", (await j("POST", "/api/aff/register", Object.assign({}, affReg, { email: "x@y.vn", agree: false }))).status === 400 && (await j("POST", "/api/aff/register", Object.assign({}, affReg, { email: "x@y.vn", password: "123" }))).status === 400);
+  d = await (await fetch(B + "/api/admin/notifications", { headers: { Cookie: admin } })).json();
+  ok("thông báo quản trị: có đối tác mới chờ duyệt", d.events.some((e) => e.kind === "aff:" + aff.id && /Photocopy Minh Anh/.test(e.title)));
+  ok("đối tác: mã chưa duyệt thì chưa dùng được", (await (await fetch(B + "/api/aff/check?code=" + aff.code)).json()).valid === false);
+  ok("đối tác: chỉ quản trị mới duyệt được", (await j("PATCH", "/api/admin/affiliates/" + aff.id, { status: "active" }, { Cookie: affCk })).status === 401);
+  r = await j("PATCH", "/api/admin/affiliates/" + aff.id, { status: "active" }, { Cookie: admin });
+  ok("quản trị duyệt đối tác", r.ok && (await r.json()).affiliate.status === "active");
+  d = await (await fetch(B + "/api/aff/check?code=" + aff.code.toLowerCase())).json();
+  ok("kiểm tra mã: hợp lệ, chỉ lộ tên cửa hàng", d.valid === true && d.shop === "Photocopy Minh Anh" && !("email" in d) && !("phone" in d));
+  await j("POST", "/api/aff/click", { code: aff.code });
+  await j("POST", "/api/aff/click", { code: "KHONGCO99" });
+
+  // Đơn qua mã giới thiệu
+  r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: mk({ name: "Khách Của Tiệm", email: "khach@tiem.vn", phone: "0909000111", ref: aff.code, qty: "10" }) });
+  d = await r.json();
+  const refId = d.order.id, refTok = d.token, refTotal = d.order.price.total;
+  ok("đơn đặt bằng mã giới thiệu được gắn đối tác; khách không thấy dữ liệu hoa hồng", d.order.affCode === aff.code && !("affId" in d.order) && !("affRate" in d.order));
+  r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: mk({ name: "Chính Chủ Tiệm", email: "minhanh@photo.vn", ref: aff.code }) });
+  d = await r.json();
+  ok("không tính hoa hồng khi đối tác tự đặt đơn (cùng email)", !d.order.affCode);
+  r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: mk({ email: "khac@vd.vn", phone: "0977111222", ref: aff.code }) });
+  ok("không tính hoa hồng khi trùng số điện thoại đối tác", !(await r.json()).order.affCode);
+
+  r = await fetch(B + "/api/aff/me", { headers: { Cookie: affCk } });
+  d = await r.json();
+  const affJson = JSON.stringify(d.orders);
+  ok("trang đối tác: thấy đơn, lượt bấm, hoa hồng dự kiến 30%", r.ok && d.stats.clicks === 1 && d.orders.length === 1 && d.orders[0].id === refId && d.orders[0].commission === Math.round(refTotal * 0.3) && d.orders[0].cstatus === "waiting");
+  ok("trang đối tác: KHÔNG lộ tên, email, SĐT khách", !/Khách Của Tiệm|khach@tiem\.vn|0909000111/.test(affJson) && !("name" in d.orders[0]) && !("email" in d.orders[0]));
+  ok("trang đối tác: chỉ đối tác đăng nhập mới xem được", (await fetch(B + "/api/aff/me")).status === 401 && (await fetch(B + "/api/aff/me", { headers: { Cookie: staffCk } })).status === 401);
+  r = await fetch(B + "/api/aff/qr.svg", { headers: { Cookie: affCk } });
+  ok("đối tác tải được mã QR (SVG)", r.ok && /image\/svg/.test(r.headers.get("content-type")) && (await r.text()).includes("<svg"));
+
+  // Hoàn thành đơn → duyệt hoa hồng → chi trả
+  ok("chưa có hoa hồng đã duyệt thì không chi trả được", (await j("POST", "/api/admin/affiliates/" + aff.id + "/payout", {}, { Cookie: admin })).status === 400);
+  await j("PATCH", "/api/admin/orders/" + refId, { status: "paid" }, { Cookie: admin });
+  d = await (await fetch(B + "/api/aff/me", { headers: { Cookie: affCk } })).json();
+  ok("đơn đã thanh toán → hoa hồng 'đang thực hiện'", d.orders[0].cstatus === "processing" && d.stats.processing === Math.round(refTotal * 0.3));
+  await j("PATCH", "/api/admin/orders/" + refId, { status: "done" }, { Cookie: admin });
+  d = await (await fetch(B + "/api/aff/me", { headers: { Cookie: affCk } })).json();
+  ok("đơn hoàn thành → hoa hồng được duyệt", d.orders[0].cstatus === "approved" && d.stats.approved === Math.round(refTotal * 0.3) && d.stats.done === 1);
+  r = await fetch(B + "/api/admin/affiliates", { headers: { Cookie: admin } });
+  d = await r.json();
+  ok("quản trị xem danh sách đối tác + số liệu", r.ok && d.affiliates.some((a) => a.id === aff.id && a.stats.approved === Math.round(refTotal * 0.3) && a.stats.clicks === 1) && d.orders.some((o) => o.id === refId && o.customer === "Khách Của Tiệm"));
+  r = await j("POST", "/api/admin/affiliates/" + aff.id + "/payout", { note: "CK 01" }, { Cookie: admin });
+  d = await r.json();
+  ok("quản trị chi trả hoa hồng", r.ok && d.payout.amount === Math.round(refTotal * 0.3) && d.payout.orderIds[0] === refId);
+  d = await (await fetch(B + "/api/aff/me", { headers: { Cookie: affCk } })).json();
+  ok("đối tác thấy đã chi trả + lịch sử", d.orders[0].cstatus === "paid" && d.stats.paid === Math.round(refTotal * 0.3) && d.stats.approved === 0 && d.payouts.length === 1);
+  ok("không chi trả trùng lần hai", (await j("POST", "/api/admin/affiliates/" + aff.id + "/payout", {}, { Cookie: admin })).status === 400);
+  ok("không đổi được đối tác của đơn đã chi hoa hồng", (await j("POST", "/api/admin/orders/" + refId + "/affiliate", { code: "" }, { Cookie: admin })).status === 400);
+  d = await (await fetch(B + "/api/aff/notifications", { headers: { Cookie: affCk } })).json();
+  ok("thông báo đối tác: duyệt tài khoản, đơn mới, hoa hồng duyệt, chi trả", ["done", "new", "paid", "pay"].every((k) => d.events.some((e) => e.kind === k)) && !/Khách Của Tiệm|khach@tiem/.test(JSON.stringify(d.events)));
+  r = await fetch(B + "/api/admin/export.csv", { headers: { Cookie: admin } });
+  ok("tệp Excel có cột mã giới thiệu và hoa hồng", (await r.text()).includes(aff.code));
+
+  // Quản trị gắn mã cho đơn khách quên nhập
+  r = await j("POST", "/api/admin/orders/" + id2 + "/affiliate", { code: aff.code }, { Cookie: admin });
+  ok("quản trị gắn mã giới thiệu cho đơn", r.ok && (await r.json()).affCode === aff.code);
+  ok("quản trị: mã sai bị từ chối", (await j("POST", "/api/admin/orders/" + id2 + "/affiliate", { code: "SAIMA123" }, { Cookie: admin })).status === 400);
+
+  // Đổi mật khẩu, khóa
+  r = await j("POST", "/api/aff/login", { email: "MINHANH@photo.vn", password: "sai-mat-khau" });
+  ok("đối tác sai mật khẩu → 401", r.status === 401);
+  r = await j("POST", "/api/aff/login", { email: "MINHANH@photo.vn", password: "doitac1234" });
+  ok("đối tác đăng nhập", r.ok);
+  r = await j("PATCH", "/api/aff/me", { bankName: "MB Bank", bankAccount: "999 888", bankHolder: "Tran Minh Anh", phone: "abc" }, { Cookie: affCk });
+  ok("đối tác: kiểm tra dữ liệu khi sửa thông tin", r.status === 400);
+  await j("PATCH", "/api/admin/affiliates/" + aff.id, { status: "locked" }, { Cookie: admin });
+  ok("khóa đối tác → đăng xuất ngay, không đăng nhập lại được", (await fetch(B + "/api/aff/me", { headers: { Cookie: affCk } })).status === 401 && (await j("POST", "/api/aff/login", { email: "minhanh@photo.vn", password: "doitac1234" })).status === 403);
+  r = await fetch(B + "/api/orders", { method: "POST", headers: H, body: mk({ email: "moi@vd.vn", phone: "0911999888", ref: aff.code }) });
+  ok("mã của đối tác bị khóa không còn được tính", !(await r.json()).order.affCode);
+  ok("quản trị: tỷ lệ hoa hồng tối đa 50%", (await j("PATCH", "/api/admin/affiliates/" + aff.id, { rate: 0.9 }, { Cookie: admin })).status === 400);
+
   // --- Header bảo mật
   r = await fetch(B + "/");
   const csp = r.headers.get("content-security-policy") || "";

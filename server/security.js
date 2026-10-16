@@ -50,7 +50,7 @@ function setCookie(res, name, value, maxAgeSec) {
   res.setHeader("Set-Cookie", (Array.isArray(prev) ? prev : prev ? [prev] : []).concat(parts.join("; ")));
 }
 
-const USER_COOKIE = "dm_session", ADMIN_COOKIE = "dm_admin", STAFF_COOKIE = "dm_staff";
+const USER_COOKIE = "dm_session", ADMIN_COOKIE = "dm_admin", STAFF_COOKIE = "dm_staff", AFF_COOKIE = "dm_aff";
 const DAY = 86400e3;
 
 function startUserSession(res, email) {
@@ -64,6 +64,10 @@ function startAdminSession(res) {
 /** Phiên nhân viên: ghi kèm "phiên bản" để đổi mật khẩu / khóa tài khoản là đăng xuất ngay. */
 function startStaffSession(res, staff) {
   setCookie(res, STAFF_COOKIE, sign({ s: staff.id, v: staff.sessionVersion || 1, exp: Date.now() + 7 * DAY }), 7 * 86400);
+}
+/** Phiên đối tác (affiliate): cũng gắn "phiên bản" để đổi mật khẩu / khóa là đăng xuất ngay. */
+function startAffSession(res, a) {
+  setCookie(res, AFF_COOKIE, sign({ f: a.id, v: a.sessionVersion || 1, exp: Date.now() + 30 * DAY }), 30 * 86400);
 }
 function clearSession(res, name) { setCookie(res, name, "", 0); }
 
@@ -87,6 +91,8 @@ function sessionMiddleware(req, res, next) {
   req.isAdmin = !!(a && a.k === adminKey());
   const st = verify(c[STAFF_COOKIE]);
   req.staffSession = st && st.s ? { id: st.s, v: st.v } : null;
+  const af = verify(c[AFF_COOKIE]);
+  req.affSession = af && af.f ? { id: af.f, v: af.v } : null;
   next();
 }
 
@@ -123,7 +129,7 @@ function sameOrigin(req, res, next) {
 
 module.exports = {
   sha256, randomToken, safeEqual,
-  startUserSession, startAdminSession, startStaffSession, clearSession, USER_COOKIE, ADMIN_COOKIE, STAFF_COOKIE,
+  startUserSession, startAdminSession, startStaffSession, startAffSession, clearSession, USER_COOKIE, ADMIN_COOKIE, STAFF_COOKIE, AFF_COOKIE,
   hashPassword, checkPassword,
   sessionMiddleware, rateLimit, sameOrigin
 };

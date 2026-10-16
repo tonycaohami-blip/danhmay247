@@ -1135,5 +1135,7 @@ kbd { display: inline-block; min-width: 26px; padding: 2px 8px; border: 1px soli
 }
 @media print { .notif { display: none; } }
 .login__toggle { white-space: nowrap; }
-.login__name { max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+.login__name { max-width: 130px; overflow: hidden; text-overflow: ellipsis; }
 .header__buttons > .button { white-space: nowrap; }
+@media (min-width: 1100px) and (max-width: 1320px) { .login__name { display: none; } .header .nav { gap: 14px; } .header__buttons { gap: 10px; } .header .container { gap: 16px; } }
+@media (min-width: 1100px) and (max-width: 1200px) { .nav__link { padding-left: 8px; padding-right: 8px; font-size: 14.5px; } .header__buttons > .button { padding: 8px 12px; } }

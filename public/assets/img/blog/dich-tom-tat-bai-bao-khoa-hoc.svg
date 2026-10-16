@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img"><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a237e"/><stop offset="1" stop-color="#3949ab"/></linearGradient>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0b0d2a" flood-opacity=".28"/></filter>
+<filter id="sh2" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0b0d2a" flood-opacity=".22"/></filter>
+<pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="2" fill="#fff" opacity=".13"/></pattern>
+</defs><rect width="1200" height="630" fill="url(#bg)"/>
+<rect width="1200" height="630" fill="url(#dots)"/>
+<circle cx="1080" cy="-40" r="260" fill="#fff" opacity=".07"/>
+<circle cx="80" cy="640" r="220" fill="#fff" opacity=".06"/>
+<circle cx="1110" cy="560" r="90" fill="#f24d50" opacity=".25"/>
+<g filter="url(#sh)"><rect x="170" y="90" width="420" height="470" rx="20" fill="#fff"/></g>
+<text x="380" y="150" text-anchor="middle" font-family="'Open Sans','Segoe UI',Arial,sans-serif" font-weight="800" font-size="20" fill="#7f8491">TẠP CHÍ KHOA HỌC</text>
+<rect x="210" y="175" width="340" height="18" rx="9" fill="#1d2040"/><rect x="250" y="205" width="260" height="14" rx="7" fill="#1d2040" opacity=".6"/>
+<text x="210" y="262" text-anchor="start" font-family="'Open Sans','Segoe UI',Arial,sans-serif" font-weight="800" font-size="18" fill="#f24d50">TÓM TẮT</text>
+<rect x="210" y="280" width="340" height="10" rx="5" fill="#d9dbe6"/><rect x="210" y="306" width="340" height="10" rx="5" fill="#d9dbe6"/><rect x="210" y="332" width="340" height="10" rx="5" fill="#d9dbe6"/><rect x="210" y="358" width="340" height="10" rx="5" fill="#d9dbe6"/><rect x="210" y="384" width="200" height="10" rx="5" fill="#d9dbe6"/>
+<text x="210" y="430" text-anchor="start" font-family="'Open Sans','Segoe UI',Arial,sans-serif" font-weight="700" font-size="16" fill="#1d2040">Từ khóa:</text><rect x="290" y="418" width="78" height="18" rx="9" fill="#e3e6f6"/><rect x="380" y="418" width="78" height="18" rx="9" fill="#e3e6f6"/><rect x="470" y="418" width="78" height="18" rx="9" fill="#e3e6f6"/>
+<path d="M610 320 H684" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".9"/><path d="M674 304 L700 320 L674 336" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+<g filter="url(#sh)"><rect x="720" y="90" width="420" height="470" rx="20" fill="#fff"/></g>
+<text x="930" y="150" text-anchor="middle" font-family="'Open Sans','Segoe UI',Arial,sans-serif" font-weight="800" font-size="20" fill="#7f8491">SCIENTIFIC JOURNAL</text>
+<rect x="760" y="175" width="340" height="18" rx="9" fill="#1d2040"/><rect x="800" y="205" width="260" height="14" rx="7" fill="#1d2040" opacity=".6"/>
+<text x="760" y="262" text-anchor="start" font-family="'Open Sans','Segoe UI',Arial,sans-serif" font-weight="800" font-size="18" fill="#2b579a">ABSTRACT</text>
+<rect x="760" y="280" width="340" height="10" rx="5" fill="#d9dbe6"/><rect x="760" y="306" width="340" height="10" rx="5" fill="#d9dbe6"/><rect x="760" y="332" width="340" height="10" rx="5" fill="#d9dbe6"/><rect x="760" y="358" width="340" height="10" rx="5" fill="#d9dbe6"/><rect x="760" y="384" width="220" height="10" rx="5" fill="#d9dbe6"/>
+<text x="760" y="430" text-anchor="start" font-family="'Open Sans','Segoe UI',Arial,sans-serif" font-weight="700" font-size="16" fill="#1d2040">Keywords:</text><rect x="850" y="418" width="74" height="18" rx="9" fill="#e3e6f6"/><rect x="934" y="418" width="74" height="18" rx="9" fill="#e3e6f6"/><rect x="1018" y="418" width="74" height="18" rx="9" fill="#e3e6f6"/>
+<g filter="url(#sh2)"><rect x="330" y="490" width="100" height="46" rx="23" fill="#f24d50"/><text x="380" y="520" text-anchor="middle" font-family="'Open Sans','Segoe UI',Arial,sans-serif" font-weight="700" font-size="20" fill="#fff">VI</text></g><g filter="url(#sh2)"><rect x="880" y="490" width="100" height="46" rx="23" fill="#2b579a"/><text x="930" y="520" text-anchor="middle" font-family="'Open Sans','Segoe UI',Arial,sans-serif" font-weight="700" font-size="20" fill="#fff">EN</text></g></svg>

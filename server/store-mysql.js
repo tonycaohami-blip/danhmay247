@@ -18,7 +18,8 @@ const P = config.DB.prefix;
 const T = {
   orders: P + "orders", files: P + "order_files", messages: P + "order_messages", history: P + "order_history",
   users: P + "users", tokens: P + "login_tokens", contacts: P + "contacts", reviews: P + "reviews",
-  payments: P + "payments", settings: P + "settings", staff: P + "staff", internal: P + "order_internal"
+  payments: P + "payments", settings: P + "settings", staff: P + "staff", internal: P + "order_internal",
+  affiliates: P + "affiliates", affPayouts: P + "aff_payouts"
 };
 
 let pool = null;
@@ -163,6 +164,35 @@ const SCHEMA = [
     UNIQUE KEY uq_tx (tx_id),
     KEY idx_order (order_id)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+  `CREATE TABLE IF NOT EXISTS \`${T.affiliates}\` (
+    id VARCHAR(20) NOT NULL PRIMARY KEY,
+    code VARCHAR(20) NOT NULL UNIQUE COMMENT 'Mã giới thiệu',
+    email VARCHAR(160) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    shop VARCHAR(150) NOT NULL,
+    phone VARCHAR(30) NOT NULL,
+    address VARCHAR(255) NULL,
+    city VARCHAR(80) NULL,
+    bank JSON NULL,
+    pass_hash VARCHAR(200) NOT NULL,
+    session_version INT NOT NULL DEFAULT 1,
+    status VARCHAR(10) NOT NULL DEFAULT 'pending' COMMENT 'pending|active|locked',
+    rate DECIMAL(4,3) NOT NULL DEFAULT 0.300,
+    clicks INT NOT NULL DEFAULT 0,
+    note TEXT NULL,
+    created_at DATETIME(3) NOT NULL,
+    approved_at DATETIME(3) NULL,
+    last_login DATETIME(3) NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+  `CREATE TABLE IF NOT EXISTS \`${T.affPayouts}\` (
+    id VARCHAR(20) NOT NULL PRIMARY KEY,
+    aff_id VARCHAR(20) NOT NULL,
+    amount INT NOT NULL,
+    order_ids JSON NOT NULL,
+    note VARCHAR(255) NULL,
+    created_at DATETIME(3) NOT NULL,
+    KEY idx_aff (aff_id)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS \`${T.settings}\` (
     name VARCHAR(60) NOT NULL PRIMARY KEY,
     value TEXT NOT NULL
@@ -186,6 +216,11 @@ async function init() {
   await addColumnIfMissing(T.orders, "assigned_to", "VARCHAR(20) NULL");
   await addColumnIfMissing(T.orders, "assigned_at", "DATETIME(3) NULL");
   await addColumnIfMissing(T.files, "shared", "TINYINT(1) NOT NULL DEFAULT 0");
+  await addColumnIfMissing(T.orders, "aff_id", "VARCHAR(20) NULL");
+  await addColumnIfMissing(T.orders, "aff_code", "VARCHAR(20) NULL");
+  await addColumnIfMissing(T.orders, "aff_rate", "DECIMAL(4,3) NULL");
+  await addColumnIfMissing(T.orders, "aff_paid_at", "DATETIME(3) NULL");
+  await addColumnIfMissing(T.orders, "aff_payout_id", "VARCHAR(20) NULL");
 
   // Khóa ký phiên: lưu trong MySQL để không đổi sau mỗi lần deploy (khách không bị đăng xuất)
   if (!config.SESSION_SECRET) {
@@ -209,9 +244,9 @@ const isReady = () => ready;
 const ORDER_COLS = {
   status: "status", name: "name", email: "email", phone: "phone", notes: "notes",
   paidAt: "paid_at", paidAmount: "paid_amount", paySource: "pay_source", receivedAmount: "received_amount", deadline: "deadline",
-  assignedTo: "assigned_to", assignedAt: "assigned_at"
+  assignedTo: "assigned_to", assignedAt: "assigned_at", affId: "aff_id", affCode: "aff_code", affRate: "aff_rate", affPaidAt: "aff_paid_at", affPayoutId: "aff_payout_id"
 };
-const DATE_FIELDS = new Set(["paidAt", "deadline", "assignedAt"]);
+const DATE_FIELDS = new Set(["paidAt", "deadline", "assignedAt", "affPaidAt"]);
 
 function rowToOrder(r) {
   return {
@@ -225,6 +260,8 @@ function rowToOrder(r) {
     status: r.status, paidAt: toMs(r.paid_at), paidAmount: r.paid_amount, paySource: r.pay_source,
     receivedAmount: r.received_amount || 0, deadline: toMs(r.deadline), notes: r.notes || "",
     assignedTo: r.assigned_to || null, assignedAt: toMs(r.assigned_at),
+    affId: r.aff_id || null, affCode: r.aff_code || null, affRate: r.aff_rate == null ? null : Number(r.aff_rate),
+    affPaidAt: toMs(r.aff_paid_at), affPayoutId: r.aff_payout_id || null,
     files: [], messages: [], history: [], internal: []
   };
 }
@@ -262,7 +299,9 @@ const orders = {
         speakers: o.speakers, extras: toJSON(o.extras), doc_type: o.docType, instructions: o.instructions,
         total: o.price.total, price: toJSON(o.price), promo: o.promo, token_hash: o.tokenHash,
         paid_at: toDate(o.paidAt), paid_amount: o.paidAmount || null, pay_source: o.paySource || null,
-        received_amount: o.receivedAmount || 0, deadline: toDate(o.deadline), notes: o.notes || null
+        received_amount: o.receivedAmount || 0, deadline: toDate(o.deadline), notes: o.notes || null,
+        aff_id: o.affId || null, aff_code: o.affCode || null, aff_rate: o.affRate == null ? null : o.affRate,
+        aff_paid_at: toDate(o.affPaidAt), aff_payout_id: o.affPayoutId || null
       }]);
       for (const f of o.files) await conn.query(`INSERT INTO \`${T.files}\` SET ?`, [fileRow(o.id, f)]);
       for (const m of o.messages) await conn.query(`INSERT INTO \`${T.messages}\` SET ?`, [{ order_id: o.id, from_customer: m.me ? 1 : 0, sender: m.from, text: m.text, created_at: toDate(m.at) }]);
@@ -281,6 +320,7 @@ const orders = {
     return rows.length ? (await hydrate(rows))[0] : null;
   },
   async byStaff(staffId) { return hydrate(await q(`SELECT * FROM \`${T.orders}\` WHERE assigned_to = ? ORDER BY created_at DESC`, [staffId])); },
+  async byAffiliate(affId) { return hydrate(await q(`SELECT * FROM \`${T.orders}\` WHERE aff_id = ? ORDER BY created_at DESC`, [affId])); },
   async byEmail(email) { return hydrate(await q(`SELECT * FROM \`${T.orders}\` WHERE email = ? ORDER BY created_at DESC`, [email])); },
   async all(limit) { return hydrate(await q(`SELECT * FROM \`${T.orders}\` ORDER BY created_at DESC LIMIT ?`, [limit || 1000])); },
 
@@ -342,6 +382,42 @@ const staff = {
     if (!Object.keys(set).length) return false;
     return (await q(`UPDATE \`${T.staff}\` SET ? WHERE id = ?`, [set, id])).affectedRows > 0;
   }
+};
+
+/* ---------- Đối tác (affiliate) ---------- */
+const mapAff = (r) => ({
+  id: r.id, code: r.code, email: r.email, name: r.name, shop: r.shop, phone: r.phone, address: r.address || "", city: r.city || "",
+  bank: fromJSON(r.bank, {}), passHash: r.pass_hash, sessionVersion: r.session_version, status: r.status, rate: Number(r.rate),
+  clicks: r.clicks || 0, note: r.note || "", created: toMs(r.created_at), approvedAt: toMs(r.approved_at), lastLogin: toMs(r.last_login)
+});
+const AFF_COLS = { name: "name", shop: "shop", phone: "phone", address: "address", city: "city", bank: "bank", passHash: "pass_hash", sessionVersion: "session_version", status: "status", rate: "rate", note: "note", lastLogin: "last_login", approvedAt: "approved_at" };
+const affiliates = {
+  async list() { return (await q(`SELECT * FROM \`${T.affiliates}\` ORDER BY created_at DESC`)).map(mapAff); },
+  async get(id) { const r = await q(`SELECT * FROM \`${T.affiliates}\` WHERE id = ?`, [id]); return r.length ? mapAff(r[0]) : null; },
+  async byEmail(e) { const r = await q(`SELECT * FROM \`${T.affiliates}\` WHERE email = ?`, [e]); return r.length ? mapAff(r[0]) : null; },
+  async byCode(c) { const r = await q(`SELECT * FROM \`${T.affiliates}\` WHERE code = ?`, [c]); return r.length ? mapAff(r[0]) : null; },
+  create(a) {
+    return q(`INSERT INTO \`${T.affiliates}\` SET ?`, [{
+      id: a.id, code: a.code, email: a.email, name: a.name, shop: a.shop, phone: a.phone, address: a.address || null, city: a.city || null,
+      bank: toJSON(a.bank || {}), pass_hash: a.passHash, session_version: a.sessionVersion || 1, status: a.status, rate: a.rate, clicks: 0, created_at: toDate(a.created)
+    }]);
+  },
+  async update(id, patch) {
+    const set = {};
+    for (const k of Object.keys(patch)) {
+      if (!AFF_COLS[k]) continue;
+      set[AFF_COLS[k]] = k === "bank" ? toJSON(patch[k]) : (k === "lastLogin" || k === "approvedAt") ? toDate(patch[k]) : patch[k];
+    }
+    if (!Object.keys(set).length) return false;
+    return (await q(`UPDATE \`${T.affiliates}\` SET ? WHERE id = ?`, [set, id])).affectedRows > 0;
+  },
+  addClick(id) { return q(`UPDATE \`${T.affiliates}\` SET clicks = clicks + 1 WHERE id = ?`, [id]); }
+};
+const mapPayout = (r) => ({ id: r.id, affId: r.aff_id, amount: r.amount, orderIds: fromJSON(r.order_ids, []), note: r.note || "", at: toMs(r.created_at) });
+const affPayouts = {
+  create(p) { return q(`INSERT INTO \`${T.affPayouts}\` SET ?`, [{ id: p.id, aff_id: p.affId, amount: p.amount, order_ids: toJSON(p.orderIds), note: p.note || null, created_at: toDate(p.at) }]); },
+  async byAffiliate(affId) { return (await q(`SELECT * FROM \`${T.affPayouts}\` WHERE aff_id = ? ORDER BY created_at DESC`, [affId])).map(mapPayout); },
+  async all() { return (await q(`SELECT * FROM \`${T.affPayouts}\` ORDER BY created_at DESC LIMIT 500`)).map(mapPayout); }
 };
 
 const users = {
@@ -432,4 +508,4 @@ async function importLegacyJson() {
   console.log("[db] Đã nhập " + n + " đơn hàng từ db.json sang MySQL (tệp cũ đổi tên thành db.json.imported).");
 }
 
-module.exports = { init, close, isReady, orders, staff, users, loginTokens, contacts, reviews, payments, settings, TABLES: T, query: (s, p) => q(s, p) };
+module.exports = { init, close, isReady, orders, staff, affiliates, affPayouts, users, loginTokens, contacts, reviews, payments, settings, TABLES: T, query: (s, p) => q(s, p) };

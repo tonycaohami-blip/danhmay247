@@ -13,6 +13,7 @@ const db = require("./db");
 const { DM, STATUS, fmt } = require("./shared");
 const mail = require("./mailer");
 const sec = require("./security");
+const affiliate = require("./affiliate");
 
 const router = express.Router();
 router.use(sec.sessionMiddleware);
@@ -87,6 +88,7 @@ function publicOrder(o, admin) {
     return out;
   }
   delete out.notes; delete out.internal; delete out.assignedTo; delete out.assignedAt;
+  delete out.affId; delete out.affRate; delete out.affPaidAt; delete out.affPayoutId; // khách chỉ thấy mã giới thiệu đã dùng
   out.files = o.files.filter(customerCanSeeFile).map((f) => { const x = fileOut(f); delete x.shared; if (x.by === "staff") x.by = "admin"; return x; });
   return out;
 }
@@ -214,6 +216,7 @@ router.post("/orders", sec.rateLimit("order", 15, 3600e3), upload.array("files",
       status: "unpaid", history: [{ status: "unpaid", at: t }],
       messages: [{ me: false, from: "Hỗ trợ Đánh máy 247", text: "Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ phân công chuyên viên ngay sau khi nhận được thanh toán.", at: t }]
     };
+    await affiliate.attachRef(o, b.ref);
     await db.orders.create(o);
     await db.users.ensure(email, name, phone);
     mail.orderCreated(o, token);
@@ -394,11 +397,11 @@ router.post("/admin/logout", (req, res) => { sec.clearSession(res, sec.ADMIN_COO
 const adminOnly = (req, res, next) => (req.isAdmin ? next() : res.status(401).json({ error: "Vui lòng đăng nhập quản trị." }));
 
 router.get("/admin/summary", adminOnly, wrap(async (req, res) => {
-  const [orders, stats, contacts, newContacts, reviews, pendingReviews, payments, staffList] = await Promise.all([
-    db.orders.all(1000), db.orders.stats(), db.contacts.list(), db.contacts.unread(), db.reviews.all(), db.reviews.pending(), db.payments.recent(), db.staff.list()
+  const [orders, stats, contacts, newContacts, reviews, pendingReviews, payments, staffList, affs] = await Promise.all([
+    db.orders.all(1000), db.orders.stats(), db.contacts.list(), db.contacts.unread(), db.reviews.all(), db.reviews.pending(), db.payments.recent(), db.staff.list(), db.affiliates.list()
   ]);
   res.json({
-    stats: Object.assign(stats, { newContacts, pendingReviews, toReview: orders.filter((o) => o.status === "review").length }),
+    stats: Object.assign(stats, { newContacts, pendingReviews, toReview: orders.filter((o) => o.status === "review").length, affiliates: affs.length, pendingAffiliates: affs.filter((a) => a.status === "pending").length }),
     orders: orders.map((o) => publicOrder(o, true)),
     staff: staffList.map(publicStaff),
     contacts, reviews, payments,
@@ -468,10 +471,11 @@ router.get("/admin/export.csv", adminOnly, wrap(async (req, res) => {
     return '"' + s.replace(/"/g, '""') + '"';
   };
   const head = ["Mã đơn", "Ngày đặt", "Trạng thái", "Họ tên", "Email", "Điện thoại", "Dịch vụ", "Loại", "Số lượng", "Đơn vị", "Thời hạn", "Bổ sung",
-    "Loại tài liệu", "Mã giảm giá", "Tổng tiền (đ)", "Đã nhận (đ)", "Ngày thanh toán", "Hạn hoàn thành", "Số tệp khách gửi", "Hướng dẫn", "Ghi chú nội bộ"];
+    "Loại tài liệu", "Mã giảm giá", "Tổng tiền (đ)", "Đã nhận (đ)", "Ngày thanh toán", "Hạn hoàn thành", "Số tệp khách gửi", "Hướng dẫn", "Ghi chú nội bộ", "Mã giới thiệu", "Hoa hồng (đ)", "Ngày chi hoa hồng"];
   const rows = list.map((o) => [o.id, vn(o.created), STATUS[o.status] || o.status, o.name, o.email, o.phone, o.serviceLabel, o.typeLabel, o.qty, o.unit,
     o.urgencyLabel, (o.extras || []).join("; "), o.docType, o.promo || "", o.price.total, o.paidAmount || o.receivedAmount || 0, vn(o.paidAt), vn(o.deadline),
-    o.files.filter((f) => f.by === "customer").length, o.instructions, o.notes || ""].map(cell).join(","));
+    o.files.filter((f) => f.by === "customer").length, o.instructions, o.notes || "",
+    o.affCode || "", affiliate.commission(o) || "", vn(o.affPaidAt)].map(cell).join(","));
   const day = new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
   res.setHeader("Content-Type", "text/csv; charset=utf-8");
   res.setHeader("Content-Disposition", 'attachment; filename="don-hang-danhmay247-' + day + '.csv"');
@@ -655,7 +659,7 @@ const evt = (o, kind, at, title, text) => ({ id: (o ? o.id : "x") + ":" + kind +
 const newest = (list) => list.filter((e) => e.at).sort((a, b) => b.at - a.at).slice(0, NOTIF_LIMIT);
 
 /** Quản trị: đơn mới, khách báo chuyển khoản / nhắn tin / hủy đơn, tiền về tự động, nhân viên cập nhật, liên hệ & đánh giá mới. */
-function adminEvents(orders, contacts, reviews) {
+function adminEvents(orders, contacts, reviews, affs) {
   const out = [];
   for (const o of orders) {
     out.push(evt(o, "new", o.created, "Đơn hàng mới #" + o.id, o.name + " · " + o.typeLabel + " · " + o.qty + " " + o.unit + " · " + fmt(o.price.total)));
@@ -671,6 +675,7 @@ function adminEvents(orders, contacts, reviews) {
     for (const n of o.internal || []) if (n.role === "staff") out.push(evt(o, "staff", n.at, n.from + " - đơn #" + o.id, n.text));
   }
   for (const c of contacts || []) if (!c.read) out.push(evt(null, "contact:" + c.id, c.at, "Liên hệ mới: " + cut(c.subject, 60), c.name + " - " + c.message));
+  for (const a of affs || []) if (a.status === "pending") out.push(evt(null, "aff:" + a.id, a.created, "Đối tác mới đăng ký: " + cut(a.shop, 60), a.name + " · " + a.phone + (a.city ? " · " + a.city : "") + " - chờ duyệt"));
   for (const r of reviews || []) if (!r.approved) out.push(evt(null, "review:" + r.id, r.at, "Đánh giá mới chờ duyệt", (r.name || "Khách hàng") + ": " + (r.text || r.content || "")));
   return newest(out);
 }
@@ -711,9 +716,9 @@ function customerEvents(orders) {
 const vnTime = (ms) => { const d = new Date(ms + 7 * 3600e3), p = (n) => String(n).padStart(2, "0"); return p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()) + " ngày " + p(d.getUTCDate()) + "/" + p(d.getUTCMonth() + 1); };
 
 router.get("/admin/notifications", adminOnly, wrap(async (req, res) => {
-  const [orders, contacts, reviews] = await Promise.all([db.orders.all(500), db.contacts.list(), db.reviews.all()]);
+  const [orders, contacts, reviews, affs] = await Promise.all([db.orders.all(500), db.contacts.list(), db.reviews.all(), db.affiliates.list()]);
   res.setHeader("Cache-Control", "no-store");
-  res.json({ now: now(), events: adminEvents(orders, contacts, reviews) });
+  res.json({ now: now(), events: adminEvents(orders, contacts, reviews, affs) });
 }));
 
 router.get("/staff/notifications", staffOnly, wrap(async (req, res) => {
@@ -734,6 +739,9 @@ router.post("/notifications", sec.rateLimit("notif", 120, 600e3), wrap(async (re
   res.setHeader("Cache-Control", "no-store");
   res.json({ now: now(), events: customerEvents(list) });
 }));
+
+/* ---------- Chương trình đối tác (affiliate) - xem server/affiliate.js ---------- */
+affiliate.register(router, { wrap, HttpError, adminOnly, str, EMAIL_RE });
 
 /* =========================================================
    Tự xóa tệp 30 ngày sau khi đơn hoàn thành / hủy (theo Chính sách bảo mật)

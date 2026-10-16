@@ -6,6 +6,38 @@
 window.DM = window.DM || {};
 DM.posts = [
   {
+    "slug": "cua-hang-photocopy-tang-thu-nhap",
+    "cat": "Đối tác",
+    "date": "2026-10-16",
+    "tags": [
+      "Cửa hàng photocopy",
+      "Affiliate",
+      "Kiếm thêm thu nhập",
+      "Đánh máy thuê"
+    ],
+    "title": "Cửa hàng photocopy tăng thu nhập với dịch vụ đánh máy thuê: hoa hồng 30%, không cần vốn",
+    "seoTitle": "Tiệm photocopy kiếm thêm thu nhập: hoa hồng 30%",
+    "excerpt": "Khách hỏi gõ lại tài liệu nhưng tiệm không có người gõ? Cách tiệm photocopy biến nhu cầu đó thành thu nhập: giới thiệu khách, nhận 30% mỗi đơn.",
+    "body": "<p class=\"lead\">Gần như tiệm photocopy nào cũng quen cảnh: một sinh viên cầm xấp vở viết tay hỏi “anh gõ lại giúp em thành file Word được không?”, một cô giáo mang đề thi photo mờ cần “đánh lại cho đẹp”, một người lớn tuổi muốn chuyển giấy tờ cũ sang bản mềm. Phần lớn tiệm đành từ chối vì không có người gõ, không đủ thời gian. Bài viết này chỉ ra cách biến những lời từ chối đó thành nguồn thu nhập đều đặn.</p>\n<figure><img src=\"/assets/img/blog/fig-hoa-hong-doi-tac.svg\" alt=\"Quy trình đối tác: khách quét QR, đặt hàng, hoàn thành, tiệm nhận hoa hồng\" loading=\"lazy\" width=\"960\"><figcaption>Tiệm chỉ giới thiệu - Đánh máy 247 lo phần đánh máy, thanh toán và giao tài liệu; hoa hồng về tài khoản của tiệm.</figcaption></figure>\n\n<h2>Nhu cầu đánh máy ở tiệm photocopy lớn đến đâu?</h2>\n<p>Tiệm photocopy là điểm chạm đầu tiên của rất nhiều loại tài liệu giấy. Những yêu cầu thường gặp:</p>\n<ul>\n  <li><b>Sinh viên</b>: gõ lại vở ghi, định dạng luận văn, báo cáo thực tập, gõ công thức Toán, Lý, Hóa.</li>\n  <li><b>Giáo viên</b>: số hóa đề thi cũ, giáo án viết tay, ngân hàng câu hỏi trắc nghiệm.</li>\n  <li><b>Doanh nghiệp nhỏ, hộ kinh doanh</b>: gõ lại hợp đồng scan, nhập liệu sổ sách sang Excel.</li>\n  <li><b>Người dân</b>: giấy tờ cũ cần đánh máy để làm hồ sơ, chuẩn bị dịch thuật, gia phả, hồi ký.</li>\n</ul>\n<p>Những việc này cần người gõ thành thạo, biết trình bày và kiểm tra lỗi - thứ mà một tiệm photocopy bận rộn khó đáp ứng, nhất là vào mùa thi và mùa nộp luận văn.</p>\n\n<h2>Mô hình giới thiệu (affiliate) hoạt động thế nào?</h2>\n<ol class=\"steps\">\n  <li><b>Đăng ký đối tác miễn phí</b> tại trang <a href=\"/doi-tac\">chương trình đối tác</a>, khai báo tài khoản ngân hàng nhận tiền.</li>\n  <li><b>Nhận mã giới thiệu và mã QR riêng</b> của tiệm, in poster A4 ngay trong trang đối tác.</li>\n  <li><b>Dán poster tại quầy</b>; khi khách hỏi, hướng dẫn khách quét QR để gửi tài liệu và nhận báo giá.</li>\n  <li><b>Theo dõi từng đơn</b>: lượt quét, đơn đã đặt, hoa hồng chờ duyệt, đã duyệt, đã chi trả.</li>\n  <li><b>Nhận hoa hồng 30%</b> giá trị mỗi đơn hoàn thành, chuyển khoản hằng tháng.</li>\n</ol>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Khách được ghi nhận cho tiệm trong 30 ngày kể từ lần quét mã. Khách cũng có thể tự nhập mã giới thiệu của tiệm ở trang đặt hàng.</div></div>\n\n<h2>Ví dụ minh họa thu nhập thêm</h2>\n<p>Giả sử mỗi tháng tiệm giới thiệu được 20 khách, giá trị trung bình mỗi đơn 300.000 đồng (khoảng 10-15 trang gõ lại thời hạn vài ngày):</p>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Số đơn hoàn thành / tháng</th><th>Giá trị TB / đơn</th><th>Hoa hồng 30% / tháng</th></tr>\n  <tr><td>10</td><td>300.000 đ</td><td>900.000 đ</td></tr>\n  <tr><td>20</td><td>300.000 đ</td><td>1.800.000 đ</td></tr>\n  <tr><td>40</td><td>400.000 đ</td><td>4.800.000 đ</td></tr>\n</table></div>\n<p>Đây là con số minh họa để hình dung - thu nhập thực tế phụ thuộc vị trí tiệm, lượng khách và cách tiệm giới thiệu. Bạn có thể tự ước tính bằng công cụ tính ở trang <a href=\"/doi-tac\">đối tác</a>.</p>\n\n<h2>Vì sao không tự làm mà nên giới thiệu?</h2>\n<div class=\"compare-grid\">\n  <div class=\"bad\"><b>Tự nhận gõ thuê</b>Cần người gõ giỏi, tốn thời gian đứng máy; dễ trễ hẹn mùa cao điểm; tự chịu trách nhiệm lỗi chính tả, công thức, bảo mật tài liệu.</div>\n  <div class=\"good\"><b>Giới thiệu đối tác</b>Không vốn, không nhân sự; khách vẫn được phục vụ chuyên nghiệp; tiệm giữ chân khách và có thêm khoản thu đều đặn mỗi tháng.</div>\n</div>\n\n<h2>Mẹo để khách quét mã nhiều hơn</h2>\n<ul>\n  <li><b>Đặt poster ở nơi khách đứng chờ</b>: cạnh máy photo, quầy thu tiền, khu đóng gáy luận văn.</li>\n  <li><b>Chủ động gợi ý</b> khi khách photo tài liệu viết tay, đề thi, bản scan mờ: “Cần bản Word thì quét mã này nhé”.</li>\n  <li><b>Tận dụng mùa cao điểm</b>: tháng 4-6 và 11-12 là mùa luận văn, đồ án, ôn thi.</li>\n  <li><b>Chia sẻ liên kết</b> vào nhóm Zalo khách quen, nhóm sinh viên trường gần tiệm.</li>\n</ul>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Kết hợp với dịch vụ sẵn có: khách nhận bản Word từ Đánh máy 247 rồi quay lại tiệm in, đóng gáy, đóng bìa - tiệm có thêm doanh thu in ấn.</div></div>\n\n<h2>Minh bạch và bảo vệ khách hàng</h2>\n<p>Trang đối tác hiển thị mã đơn, dịch vụ, giá trị và hoa hồng của từng đơn, nhưng không hiển thị tên, email hay số điện thoại khách - thông tin cá nhân của khách được bảo vệ. Đơn do chính tiệm tự đặt không tính hoa hồng, nhằm giữ chương trình công bằng.</p>\n<div class=\"aside-cta\" style=\"margin:1.8em 0\"><b>Tiệm của bạn muốn có thêm thu nhập từ khách cần đánh máy?</b>Đăng ký miễn phí, nhận mã QR in poster ngay. <a href=\"/doi-tac\" class=\"button\">Tìm hiểu chương trình đối tác</a></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Tiệm photocopy gặp nhu cầu đánh máy hằng ngày nhưng khó tự đáp ứng.</li><li>Giới thiệu bằng mã QR, nhận 30% giá trị mỗi đơn hoàn thành.</li><li>Không vốn, không thu hộ, không cần người gõ.</li><li>Kết hợp in ấn, đóng gáy sau khi khách nhận bản Word để tăng doanh thu.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Tiệm photocopy có cần thuê người đánh máy không?",
+        "a": "Không. Tiệm chỉ giới thiệu khách bằng mã QR hoặc mã giới thiệu riêng. Việc đánh máy, kiểm tra, giao tài liệu và chăm sóc khách do Đánh máy 247 đảm nhận."
+      },
+      {
+        "q": "Khách trả tiền cho ai?",
+        "a": "Khách thanh toán trực tiếp cho Đánh máy 247 qua chuyển khoản VietQR. Tiệm không phải thu hộ hay chịu rủi ro tiền bạc; hoa hồng được chuyển cho tiệm hằng tháng."
+      },
+      {
+        "q": "Hoa hồng 30% tính trên số tiền nào?",
+        "a": "Trên giá trị đơn khách thanh toán, khi đơn đã hoàn thành. Đơn bị hủy hoặc hoàn tiền không tính hoa hồng."
+      }
+    ],
+    "cover": "/assets/img/blog/cua-hang-photocopy-tang-thu-nhap.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 5
+  },
+  {
     "slug": "lam-danh-may-tai-nha-tranh-lua-dao",
     "cat": "Kỹ năng gõ phím",
     "date": "2026-10-16",
@@ -68,6 +100,38 @@ DM.posts = [
     "cover": "/assets/img/blog/ai-ocr-co-thay-the-nguoi-danh-may.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 5
+  },
+  {
+    "slug": "dich-vu-an-theo-tiem-photocopy",
+    "cat": "Đối tác",
+    "date": "2026-10-14",
+    "tags": [
+      "Cửa hàng photocopy",
+      "Kinh doanh nhỏ",
+      "Mùa luận văn",
+      "Văn phòng phẩm"
+    ],
+    "title": "7 dịch vụ “ăn theo” giúp tiệm photocopy tăng doanh thu mùa thi và mùa luận văn",
+    "seoTitle": "7 dịch vụ giúp tiệm photocopy tăng doanh thu mùa thi",
+    "excerpt": "7 dịch vụ giúp tiệm photocopy tăng doanh thu mùa thi, mùa luận văn: đóng gáy, scan PDF, đánh máy thuê, định dạng luận văn, ép plastic…",
+    "body": "<p class=\"lead\">Giá photo mỗi trang chỉ vài trăm đồng, cạnh tranh ngày càng gay gắt. Những tiệm photocopy sống khỏe thường không chỉ bán “bản sao”, mà bán <b>giải pháp tài liệu trọn gói</b> cho sinh viên, giáo viên và văn phòng. Dưới đây là 7 dịch vụ ăn theo dễ triển khai, đặc biệt hiệu quả trong mùa thi và mùa luận văn.</p>\n\n<h2>1. Đóng gáy, đóng bìa luận văn</h2>\n<p>Đóng gáy lò xo, đóng gáy keo nhiệt, bìa cứng mạ chữ là dịch vụ có biên lợi nhuận tốt hơn photo thường. Hãy có sẵn bảng mẫu bìa và màu sắc để khách chọn nhanh, và nhắc khách kiểm tra kỹ <a href=\"/blog/dinh-dang-luan-van-chuan\">định dạng luận văn</a> trước khi in số lượng lớn.</p>\n\n<h2>2. Scan tài liệu sang PDF có thể tìm kiếm</h2>\n<p>Doanh nghiệp, hộ gia đình cần số hóa hồ sơ để lưu trữ. Một máy scan nạp giấy tự động (ADF) giúp xử lý hàng trăm trang mỗi giờ. Gợi ý gói dịch vụ: scan 300 dpi, đặt tên tệp theo quy tắc, gộp theo hồ sơ.</p>\n\n<h2>3. Đánh máy thuê, chuyển PDF/ảnh sang Word</h2>\n<p>Đây là nhu cầu rất phổ biến nhưng cần người gõ thành thạo và kiểm tra lỗi kỹ. Nếu tiệm không có nhân sự, có thể tham gia <a href=\"/doi-tac\">chương trình đối tác</a>: giới thiệu khách bằng mã QR và nhận hoa hồng 30% mỗi đơn hoàn thành mà không phải tự làm.</p>\n<figure><img src=\"/assets/img/blog/fig-hoa-hong-doi-tac.svg\" alt=\"Luồng giới thiệu khách cần đánh máy cho đối tác\" loading=\"lazy\" width=\"960\"><figcaption>Khách quét mã QR tại quầy → đặt hàng và thanh toán trực tuyến → nhận bản Word → tiệm nhận hoa hồng.</figcaption></figure>\n\n<h2>4. Định dạng luận văn, báo cáo</h2>\n<p>Sinh viên thường gặp khó với mục lục tự động, đánh số trang La Mã - Ả Rập, danh mục bảng biểu, trích dẫn tài liệu tham khảo. Đây là dịch vụ đòi hỏi kiến thức Word chắc chắn - xem thêm hướng dẫn <a href=\"/blog/tao-muc-luc-tu-dong-word\">tạo mục lục tự động</a>.</p>\n\n<h2>5. Ép plastic, in thẻ, in ảnh thẻ</h2>\n<p>Giá trị đơn nhỏ nhưng tần suất cao, giữ chân khách quay lại. Kết hợp chụp ảnh thẻ nền xanh, nền trắng cho hồ sơ.</p>\n\n<h2>6. In màu tài liệu học tập, poster, slide</h2>\n<p>Sinh viên cần in slide thuyết trình, poster báo cáo khoa học, đề cương ôn tập màu. Có thể đề xuất in 2-4 slide/trang để tiết kiệm.</p>\n\n<h2>7. Văn phòng phẩm theo mùa</h2>\n<p>Bìa hồ sơ, kẹp tài liệu, bút, giấy thi, túi đựng hồ sơ dự tuyển - bày ngay quầy thu tiền để khách mua kèm.</p>\n\n<h2>So sánh mức đầu tư và hiệu quả</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Dịch vụ</th><th>Đầu tư</th><th>Cần nhân sự chuyên môn</th><th>Phù hợp mùa</th></tr>\n  <tr><td>Đóng gáy, bìa</td><td>Trung bình</td><td class=\"no\">Không</td><td>Luận văn, đồ án</td></tr>\n  <tr><td>Scan PDF</td><td>Trung bình</td><td class=\"no\">Không</td><td>Quanh năm</td></tr>\n  <tr><td>Đánh máy thuê (qua đối tác)</td><td>Không</td><td class=\"no\">Không</td><td>Quanh năm, cao điểm mùa thi</td></tr>\n  <tr><td>Định dạng luận văn</td><td>Thấp</td><td class=\"ok\">Có</td><td>Luận văn</td></tr>\n  <tr><td>Ép plastic, ảnh thẻ</td><td>Thấp</td><td class=\"no\">Không</td><td>Mùa hồ sơ</td></tr>\n  <tr><td>In màu, poster</td><td>Cao</td><td class=\"no\">Không</td><td>Hội thảo, báo cáo</td></tr>\n</table></div>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Khi nhận tài liệu của khách (hợp đồng, hồ sơ cá nhân), hãy có quy tắc bảo mật rõ ràng: không lưu bản scan lâu hơn cần thiết, không để tài liệu khách ở nơi người khác xem được.</div></div>\n\n<h2>Lên kế hoạch cho mùa cao điểm</h2>\n<ol class=\"steps\">\n  <li>Theo dõi lịch thi, lịch nộp khóa luận của trường gần tiệm.</li>\n  <li>Chuẩn bị bảng giá gói: “đánh máy + định dạng + in + đóng gáy”.</li>\n  <li>Dán poster dịch vụ và mã QR đặt hàng tại quầy, cửa ra vào.</li>\n  <li>Đăng thông báo vào nhóm Zalo, Facebook của sinh viên khu vực.</li>\n</ol>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Gói dịch vụ trọn bộ giúp khách đỡ phải đi nhiều nơi - và tiệm có nhiều điểm chạm doanh thu trên cùng một khách hàng.</div></div>\n<div class=\"aside-cta\" style=\"margin:1.8em 0\"><b>Thêm dịch vụ đánh máy cho tiệm mà không cần người gõ?</b>Đăng ký miễn phí, nhận mã QR in poster ngay. <a href=\"/doi-tac\" class=\"button\">Tìm hiểu chương trình đối tác</a></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Bán giải pháp tài liệu trọn gói thay vì chỉ bán bản photo.</li><li>Đóng gáy, scan, ép plastic đầu tư thấp, dễ triển khai.</li><li>Đánh máy, định dạng có thể triển khai qua chương trình đối tác 30%.</li><li>Chuẩn bị trước cho mùa thi, mùa luận văn.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Dịch vụ nào dễ triển khai nhất cho tiệm photocopy nhỏ?",
+        "a": "Scan tài liệu sang PDF, ép plastic và đóng gáy lò xo cần ít đầu tư thiết bị. Những dịch vụ cần nhân sự chuyên môn như đánh máy, định dạng luận văn có thể triển khai bằng cách hợp tác với đơn vị chuyên nghiệp."
+      },
+      {
+        "q": "Mùa cao điểm của tiệm photocopy gần trường là khi nào?",
+        "a": "Thường là các tháng cuối học kỳ, mùa thi, mùa nộp khóa luận, đồ án và luận văn. Mỗi trường có lịch riêng nên tiệm nên theo dõi lịch học vụ của trường gần nhất."
+      },
+      {
+        "q": "Có nên tự nhận đánh máy thuê tại tiệm?",
+        "a": "Nếu có người gõ thành thạo và thời gian, có thể nhận đơn nhỏ. Với đơn lớn, tài liệu có công thức hoặc cần gấp, giới thiệu sang đơn vị chuyên nghiệp giúp tránh trễ hẹn mà vẫn có hoa hồng."
+      }
+    ],
+    "cover": "/assets/img/blog/dich-vu-an-theo-tiem-photocopy.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
   },
   {
     "slug": "go-10-ngon-30-ngay",
@@ -134,6 +198,38 @@ DM.posts = [
     "read": 4
   },
   {
+    "slug": "tao-muc-luc-tu-dong-word",
+    "cat": "Mẹo hay",
+    "date": "2026-10-12",
+    "tags": [
+      "Mục lục tự động",
+      "Word",
+      "Luận văn",
+      "Heading"
+    ],
+    "title": "Tạo mục lục tự động trong Word cho luận văn, báo cáo: từ Heading đến danh mục bảng biểu",
+    "seoTitle": "Tạo mục lục tự động trong Word cho luận văn",
+    "excerpt": "Hướng dẫn tạo mục lục tự động trong Word bằng Heading, cập nhật số trang, danh mục bảng biểu và đánh số trang La Mã cho luận văn.",
+    "body": "<p class=\"lead\">Mục lục là trang đầu tiên hội đồng nhìn vào, và cũng là nơi lỗi trình bày lộ rõ nhất: số trang lệch, tiêu đề trong mục lục khác tiêu đề trong bài, dấu chấm dẫn không thẳng. Tất cả các lỗi này biến mất khi bạn để Word tạo mục lục tự động. Bí quyết nằm ở một khái niệm: <b>Heading</b>.</p>\n<figure><img src=\"/assets/img/blog/fig-muc-luc-word.svg\" alt=\"Tiêu đề gán Heading được Word tổng hợp thành mục lục tự động\" loading=\"lazy\" width=\"960\"><figcaption>Gán Heading 1, 2, 3 cho tiêu đề chương, mục, tiểu mục - Word tự tạo mục lục với số trang chính xác.</figcaption></figure>\n\n<h2>Bước 1: Gán Heading cho tiêu đề</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Cấp</th><th>Dùng cho</th><th>Phím tắt</th></tr>\n  <tr><td>Heading 1</td><td>Tên chương: CHƯƠNG 1. TỔNG QUAN</td><td><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>1</kbd></td></tr>\n  <tr><td>Heading 2</td><td>Mục: 1.1. Cơ sở lý thuyết</td><td><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>2</kbd></td></tr>\n  <tr><td>Heading 3</td><td>Tiểu mục: 1.1.1. Khái niệm</td><td><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>3</kbd></td></tr>\n</table></div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Chỉnh kiểu chữ của Heading một lần (nhấp phải vào Heading trong Styles → Modify): phông, cỡ, đậm, khoảng cách trước/sau. Mọi tiêu đề cùng cấp sẽ đồng bộ ngay.</div></div>\n\n<h2>Bước 2: Chèn mục lục</h2>\n<ol class=\"steps\">\n  <li>Đặt con trỏ ở trang mục lục (thường sau lời cam đoan, lời cảm ơn).</li>\n  <li>Vào <b>References → Table of Contents → Custom Table of Contents</b>.</li>\n  <li>Chọn số cấp hiển thị (<b>Show levels</b>: 3), kiểu dấu dẫn (<b>Tab leader</b>: dấu chấm).</li>\n  <li>Bấm OK - mục lục xuất hiện cùng số trang, có thể nhấp để nhảy tới nội dung.</li>\n</ol>\n\n<h2>Bước 3: Cập nhật khi sửa bài</h2>\n<p>Mỗi khi thêm, bớt nội dung, nhấp vào mục lục và nhấn <kbd>F9</kbd>. Chọn <b>Update entire table</b> nếu có đổi tên tiêu đề. Trước khi in, nên chọn toàn bộ văn bản (<kbd>Ctrl</kbd> + <kbd>A</kbd>) rồi nhấn <kbd>F9</kbd> để cập nhật mọi trường (mục lục, danh mục, tham chiếu chéo).</p>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Đừng sửa trực tiếp chữ trong mục lục - lần cập nhật sau sẽ ghi đè. Hãy sửa tiêu đề trong bài rồi cập nhật mục lục.</div></div>\n\n<h2>Danh mục hình và bảng biểu</h2>\n<p>Luận văn thường yêu cầu “Danh mục bảng” và “Danh mục hình”. Cách làm tự động:</p>\n<ul>\n  <li>Chú thích bảng, hình bằng <b>References → Insert Caption</b> (tạo nhãn “Bảng”, “Hình” bằng nút New Label).</li>\n  <li>Bật <b>Include chapter number</b> để có dạng “Bảng 2.3”.</li>\n  <li>Chèn danh mục bằng <b>References → Insert Table of Figures</b>, chọn nhãn tương ứng.</li>\n</ul>\n\n<h2>Đánh số trang La Mã cho phần mở đầu</h2>\n<ol class=\"steps\">\n  <li>Đặt con trỏ trước “CHƯƠNG 1”, vào <b>Layout → Breaks → Next Page</b>.</li>\n  <li>Mở chân trang của chương 1, tắt <b>Link to Previous</b>.</li>\n  <li>Phần mở đầu: <b>Page Number → Format</b> chọn i, ii, iii. Phần nội dung: chọn 1, 2, 3 và <b>Start at: 1</b>.</li>\n</ol>\n\n<h2>Lỗi thường gặp và cách sửa</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Hiện tượng</th><th>Nguyên nhân</th><th>Cách sửa</th></tr>\n  <tr><td>Đoạn văn thường lọt vào mục lục</td><td>Đoạn đó bị gán Heading hoặc Outline Level</td><td>Đổi về Normal, cập nhật mục lục</td></tr>\n  <tr><td>Thiếu tiêu đề</td><td>Tiêu đề gõ tay, chỉ in đậm</td><td>Gán Heading tương ứng</td></tr>\n  <tr><td>Mục lục hiện “Error! Bookmark not defined”</td><td>Xóa tiêu đề khi chưa cập nhật</td><td>Cập nhật toàn bộ mục lục</td></tr>\n  <tr><td>Số trang mục lục khác số trang in</td><td>Chưa cập nhật trước khi in/xuất PDF</td><td><kbd>Ctrl</kbd> + <kbd>A</kbd> rồi <kbd>F9</kbd></td></tr>\n</table></div>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Mở <b>View → Navigation Pane</b> để thấy cây tiêu đề bên trái: vừa kiểm tra cấu trúc, vừa kéo thả để sắp xếp lại chương mục.</div></div>\n\n<h2>Giữ mục lục khi xuất PDF</h2>\n<p>Khi nộp bản điện tử, hãy xuất PDF bằng <b>File → Save As → PDF → Options</b> và chọn <b>Create bookmarks using: Headings</b>. Người đọc sẽ thấy cây mục lục ở thanh bên của trình đọc PDF, nhấp vào là nhảy đến chương mục tương ứng. Mục lục trong bài cũng giữ nguyên liên kết, giúp hội đồng tra cứu nhanh khi chấm.</p>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Gán Heading 1-2-3 cho chương, mục, tiểu mục.</li><li>Chèn mục lục ở References, cập nhật bằng F9.</li><li>Dùng Insert Caption để có danh mục bảng, hình tự động.</li><li>Section Break giúp đánh số trang La Mã và Ả Rập riêng.</li></ul></div>\n<p>Không có thời gian chỉnh định dạng? Dịch vụ <a href=\"/dich-vu/dinh-dang-tai-lieu\">định dạng tài liệu</a> trình bày luận văn theo đúng mẫu của trường bạn.</p>",
+    "faq": [
+      {
+        "q": "Vì sao mục lục tự động không hiện tiêu đề của tôi?",
+        "a": "Vì tiêu đề chưa được gán kiểu Heading (Heading 1, 2, 3). Word chỉ đưa vào mục lục những đoạn có kiểu tiêu đề hoặc có cấp độ dàn ý (Outline Level)."
+      },
+      {
+        "q": "Làm sao cập nhật số trang trong mục lục?",
+        "a": "Nhấp vào mục lục, nhấn F9 hoặc chọn Update Table, rồi chọn Update page numbers only (chỉ số trang) hoặc Update entire table (cả tiêu đề)."
+      },
+      {
+        "q": "Đánh số trang La Mã cho phần mở đầu thế nào?",
+        "a": "Chèn Section Break (Next Page) giữa phần mở đầu và chương 1, bỏ Link to Previous ở chân trang của phần sau, rồi định dạng số trang riêng cho từng phần."
+      }
+    ],
+    "cover": "/assets/img/blog/tao-muc-luc-tu-dong-word.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
     "slug": "nhap-lieu-excel-chinh-xac",
     "cat": "Mẹo hay",
     "date": "2026-10-11",
@@ -162,6 +258,38 @@ DM.posts = [
       }
     ],
     "cover": "/assets/img/blog/nhap-lieu-excel-chinh-xac.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
+    "slug": "go-ma-tran-he-phuong-trinh-word",
+    "cat": "Học thuật",
+    "date": "2026-10-10",
+    "tags": [
+      "Công thức toán",
+      "Ma trận",
+      "Hệ phương trình",
+      "Word Equation"
+    ],
+    "title": "Gõ ma trận, hệ phương trình, tích phân trong Word nhanh như dân chuyên",
+    "seoTitle": "Gõ ma trận, hệ phương trình, tích phân trong Word",
+    "excerpt": "Cách gõ nhanh ma trận, định thức, hệ phương trình, tích phân, giới hạn trong Word Equation bằng cú pháp tuyến tính, kèm mẹo căn dấu bằng.",
+    "body": "<p class=\"lead\">Ma trận, hệ phương trình, tích phân là ba loại công thức khiến người mới dùng Word mất nhiều thời gian nhất. Tin vui là Word Equation hiểu một cú pháp gõ tắt gần giống LaTeX, giúp bạn nhập công thức chỉ bằng bàn phím. Bài viết tổng hợp các thao tác hay dùng nhất cho giáo viên, sinh viên khối Toán - Kỹ thuật.</p>\n<figure><img src=\"/assets/img/blog/fig-ma-tran-word.svg\" alt=\"Ma trận, hệ phương trình và tích phân hiển thị trong Word Equation\" loading=\"lazy\" width=\"960\"><figcaption>Ba cấu trúc thường gặp: ma trận 2×2, hệ phương trình có ngoặc nhọn, tích phân xác định.</figcaption></figure>\n\n<h2>Mở khung công thức và chế độ gõ</h2>\n<p>Nhấn <kbd>Alt</kbd> + <kbd>=</kbd> để chèn khung Equation. Word mặc định dùng cú pháp tuyến tính <b>UnicodeMath</b>: bạn gõ ký hiệu, nhấn phím cách, Word tự dựng công thức. Các phiên bản mới còn cho phép chuyển sang cú pháp LaTeX trong thẻ Equation.</p>\n\n<h2>Ma trận và định thức</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Muốn gõ</th><th>Cú pháp trong Equation</th></tr>\n  <tr><td>Ma trận 2×2 trong ngoặc tròn</td><td><span class=\"mono\">(\\matrix(a&amp;b@c&amp;d))</span></td></tr>\n  <tr><td>Ma trận trong ngoặc vuông</td><td><span class=\"mono\">[\\matrix(1&amp;0@0&amp;1)]</span></td></tr>\n  <tr><td>Định thức</td><td><span class=\"mono\">|\\matrix(a&amp;b@c&amp;d)|</span></td></tr>\n  <tr><td>Ma trận 3×3</td><td><span class=\"mono\">(\\matrix(1&amp;2&amp;3@4&amp;5&amp;6@7&amp;8&amp;9))</span></td></tr>\n</table></div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Ký hiệu <b>&amp;</b> ngăn cột, <b>@</b> xuống hàng. Gõ xong nhấn phím cách để Word dựng ma trận.</div></div>\n\n<h2>Hệ phương trình</h2>\n<ol class=\"steps\">\n  <li>Mở khung Equation (<kbd>Alt</kbd> + <kbd>=</kbd>).</li>\n  <li>Chọn <b>Bracket → Cases and Stacks</b>, chọn mẫu hai hoặc ba dòng có ngoặc nhọn.</li>\n  <li>Gõ từng phương trình vào ô; dùng <kbd>Tab</kbd> hoặc phím mũi tên để chuyển ô.</li>\n</ol>\n<p>Với hệ “hoặc” (dấu ngoặc vuông dùng trong giải phương trình chứa dấu giá trị tuyệt đối), chọn mẫu ngoặc vuông một bên trong Bracket và dùng ma trận một cột bên trong.</p>\n\n<h2>Tích phân, giới hạn, tổng</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Muốn gõ</th><th>Cú pháp</th></tr>\n  <tr><td>Tích phân xác định</td><td><span class=\"mono\">\\int_0^1 x^2 dx</span></td></tr>\n  <tr><td>Tích phân kép</td><td><span class=\"mono\">\\iint_D f(x,y) dA</span></td></tr>\n  <tr><td>Giới hạn</td><td><span class=\"mono\">\\lim_(x\\to 0) sin x/x</span></td></tr>\n  <tr><td>Tổng sigma</td><td><span class=\"mono\">\\sum_(k=1)^n k^2</span></td></tr>\n  <tr><td>Căn bậc n</td><td><span class=\"mono\">\\sqrt(3&amp;x+1)</span></td></tr>\n</table></div>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Viết đúng chuẩn: biến viết nghiêng, nhưng “d” trong dx, các hàm sin, cos, log, lim viết đứng. Word tự nhận diện tên hàm quen thuộc khi bạn gõ đúng chính tả.</div></div>\n\n<h2>Căn thẳng nhiều dòng biến đổi</h2>\n<p>Khi trình bày lời giải nhiều bước, hãy đặt các dòng trong cùng một khối Equation, xuống dòng bằng <kbd>Shift</kbd> + <kbd>Enter</kbd>, rồi nhấp phải chọn <b>Align at =</b>. Các dấu bằng thẳng hàng giúp lời giải dễ theo dõi hơn hẳn.</p>\n\n<h2>Lỗi thường gặp</h2>\n<div class=\"compare-grid\">\n  <div class=\"bad\"><b>Nên tránh</b>Gõ ma trận bằng bảng Word có viền ẩn; vẽ ngoặc nhọn bằng Shapes; chèn công thức dạng ảnh chụp màn hình - không sửa được, in ra bị mờ.</div>\n  <div class=\"good\"><b>Nên làm</b>Dùng Equation hoặc MathType thống nhất; lưu công thức hay dùng vào <b>Save as New Equation</b>; kiểm tra lại khi chuyển tệp sang máy khác.</div>\n</div>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Tệp có công thức Equation mở bằng phiên bản Word rất cũ có thể hiển thị thành ảnh không sửa được. Hãy hỏi trước phiên bản người nhận sử dụng.</div></div>\n\n<h2>Gõ bằng cú pháp LaTeX ngay trong Word</h2>\n<p>Các phiên bản Word mới cho phép chuyển khung Equation sang chế độ <b>LaTeX</b> (trong thẻ Equation, mục chuyển đổi định dạng). Khi đó bạn có thể gõ <span class=\"mono\">\\frac{a}{b}</span>, <span class=\"mono\">\\begin{pmatrix} a &amp; b \\\\ c &amp; d \\end{pmatrix}</span> quen thuộc rồi chuyển sang dạng hiển thị chuyên nghiệp. Cách này đặc biệt tiện cho người đã quen LaTeX hoặc khi sao chép công thức từ tài liệu LaTeX sang Word.</p>\n<h2>Lưu công thức hay dùng để chèn lại</h2>\n<ol class=\"steps\">\n  <li>Chọn công thức đã gõ hoàn chỉnh (ví dụ công thức nghiệm, khai triển nhị thức).</li>\n  <li>Nhấp mũi tên ở góc khung Equation, chọn <b>Save as New Equation</b>, đặt tên dễ nhớ.</li>\n  <li>Lần sau vào <b>Insert → Equation</b>, công thức nằm sẵn trong danh sách để chèn.</li>\n</ol>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Một “thư viện” khoảng 20-30 công thức hay dùng của bộ môn có thể giúp giáo viên tiết kiệm đáng kể thời gian soạn đề mỗi tuần.</div></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Alt + = mở Equation; gõ cú pháp rồi nhấn phím cách.</li><li>& ngăn cột, @ xuống hàng khi gõ ma trận.</li><li>Hệ phương trình dùng mẫu Cases trong Bracket.</li><li>Align at = để căn thẳng nhiều dòng biến đổi.</li></ul></div>\n<p>Đọc thêm <a href=\"/blog/latex-cho-nguoi-moi\">LaTeX cho người mới</a> và <a href=\"/blog/so-hoa-de-thi-toan\">quy trình số hóa đề thi Toán</a>. Cần gõ cả bộ đề? Xem dịch vụ <a href=\"/dich-vu/danh-may-cong-thuc\">đánh máy công thức</a>.</p>",
+    "faq": [
+      {
+        "q": "Gõ hệ phương trình có dấu ngoặc nhọn trong Word thế nào?",
+        "a": "Nhấn Alt + = để mở Equation, vào Bracket chọn mẫu Cases (hai hoặc ba dòng), rồi gõ từng phương trình vào các ô."
+      },
+      {
+        "q": "Có cách gõ ma trận nhanh không cần chuột?",
+        "a": "Trong khung Equation, gõ \\matrix(a&b@c&d) rồi nhấn phím cách: dấu & ngăn cột, @ xuống hàng. Sau đó bọc trong ngoặc tròn hoặc vuông tùy loại ma trận."
+      },
+      {
+        "q": "Làm sao căn thẳng dấu bằng giữa nhiều dòng công thức?",
+        "a": "Đặt các dòng trong cùng một khối Equation, ngăn dòng bằng Shift + Enter, rồi nhấp phải chọn Align at = để Word căn theo dấu bằng."
+      }
+    ],
+    "cover": "/assets/img/blog/go-ma-tran-he-phuong-trinh-word.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 4
   },
@@ -215,6 +343,38 @@ DM.posts = [
     "read": 4
   },
   {
+    "slug": "ve-cong-thuc-cau-tao-huu-co",
+    "cat": "Học thuật",
+    "date": "2026-10-07",
+    "tags": [
+      "Hóa hữu cơ",
+      "Công thức cấu tạo",
+      "ChemSketch",
+      "chemfig"
+    ],
+    "title": "Vẽ công thức cấu tạo hóa hữu cơ đẹp cho giáo án, đề thi: công cụ và quy tắc trình bày",
+    "seoTitle": "Vẽ công thức cấu tạo hóa hữu cơ cho giáo án, đề thi",
+    "excerpt": "So sánh công cụ vẽ công thức cấu tạo hóa hữu cơ (ChemSketch, ChemDraw, chemfig, MolView) và quy tắc trình bày chuẩn cho giáo án, đề thi.",
+    "body": "<p class=\"lead\">Giáo viên Hóa nào cũng từng mất cả buổi tối để vẽ một vòng benzen bằng Shapes trong Word, rồi đau đầu khi chỉnh một liên kết là cả hình xô lệch. Công thức cấu tạo đẹp, chuẩn không chỉ giúp đề thi chuyên nghiệp mà còn tránh để học sinh hiểu sai cấu trúc phân tử. Bài viết giới thiệu công cụ phù hợp và các quy tắc trình bày cơ bản.</p>\n\n<h2>Ba cách biểu diễn cấu tạo thường dùng</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Cách biểu diễn</th><th>Ví dụ</th><th>Phù hợp</th></tr>\n  <tr><td>Công thức cấu tạo đầy đủ</td><td>Vẽ đủ mọi liên kết C-H</td><td>Lớp 11 mới học, phân tử nhỏ</td></tr>\n  <tr><td>Công thức cấu tạo thu gọn</td><td>CH<sub>3</sub>-CH<sub>2</sub>-OH</td><td>Phần lớn đề thi phổ thông</td></tr>\n  <tr><td>Công thức khung (skeletal)</td><td>Đường gấp khúc, đỉnh là C</td><td>Đại học, phân tử lớn, vòng</td></tr>\n</table></div>\n\n<h2>So sánh công cụ vẽ</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Công cụ</th><th>Ưu điểm</th><th>Lưu ý</th></tr>\n  <tr><td><b>ACD/ChemSketch</b></td><td>Có bản miễn phí cho cá nhân, học tập; thư viện vòng, nhóm chức</td><td>Giao diện cũ, cần cài đặt</td></tr>\n  <tr><td><b>ChemDraw</b></td><td>Chuẩn của nhiều tạp chí, tính năng mạnh</td><td>Phần mềm thương mại có phí</td></tr>\n  <tr><td><b>MolView</b></td><td>Chạy trên trình duyệt, xem được 3D</td><td>Xuất hình độ phân giải hạn chế</td></tr>\n  <tr><td><b>chemfig (LaTeX)</b></td><td>Mã nguồn, chỉnh sửa chính xác, đẹp khi in</td><td>Cần biết LaTeX</td></tr>\n  <tr><td>Shapes trong Word</td><td>Có sẵn</td><td>Khó căn góc 120°, dễ vỡ hình</td></tr>\n</table></div>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Với LaTeX, ví dụ <span class=\"mono\">\\chemfig{*6(=-=-=-)}</span> vẽ vòng benzen, kết hợp gói mhchem cho phương trình phản ứng. Xem thêm <a href=\"/blog/latex-cho-nguoi-moi\">LaTeX cho người mới</a>.</div></div>\n\n<h2>Quy tắc trình bày chuẩn</h2>\n<ol class=\"steps\">\n  <li><b>Góc liên kết đều</b>: mạch zigzag và vòng sáu cạnh dùng góc 120°; độ dài liên kết bằng nhau.</li>\n  <li><b>Liên kết đôi, ba</b> vẽ song song, khoảng cách đều, không chạm chữ.</li>\n  <li><b>Nhãn nguyên tử</b> (O, N, Cl) cùng phông, cùng cỡ với nội dung đề; chỉ số dưới đúng vị trí (OH, NH<sub>2</sub>).</li>\n  <li><b>Điện tích</b> đặt ở góc trên bên phải nguyên tử, có khoanh tròn hoặc không - thống nhất cả đề.</li>\n  <li><b>Cùng tỷ lệ</b>: các công thức trong một đề có độ dài liên kết như nhau.</li>\n</ol>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Tạo một tệp “mẫu” với các nhóm hay dùng (benzen, -COOH, -NH<sub>2</sub>, -CHO) đã đúng tỷ lệ. Khi soạn đề mới, sao chép và ghép lại sẽ nhanh và đồng bộ hơn vẽ từ đầu.</div></div>\n\n<h2>Đưa hình vào Word đúng cách</h2>\n<ul>\n  <li>Ưu tiên định dạng vector (EMF, SVG) để in sắc nét ở mọi cỡ.</li>\n  <li>Nếu dùng PNG, xuất từ 300 dpi trở lên, nền trắng hoặc trong suốt.</li>\n  <li>Chọn <b>Wrap Text → In Line with Text</b> để hình không “trôi” khi sửa đề hoặc trộn đề.</li>\n  <li>Lưu tệp vẽ gốc cạnh tệp Word để chỉnh sửa sau này.</li>\n</ul>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Không chụp màn hình công thức từ sách, tài liệu có bản quyền để đưa vào đề phát hành. Hãy vẽ lại - vừa đúng bản quyền, vừa sắc nét hơn.</div></div>\n\n<h2>Phương trình phản ứng hữu cơ</h2>\n<p>Phản ứng hữu cơ thường cần công thức cấu tạo hai vế cùng điều kiện phản ứng trên mũi tên. Hãy vẽ cả phương trình trong một công cụ để căn hàng chính xác, thay vì ghép nhiều hình nhỏ trong Word. Các quy tắc về chỉ số, điện tích, mũi tên xem tại bài <a href=\"/blog/go-cong-thuc-hoa-hoc-trong-word\">gõ công thức hóa học trong Word</a>.</p>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Chọn cách biểu diễn phù hợp trình độ: đầy đủ, thu gọn hay khung.</li><li>Dùng công cụ chuyên dụng thay cho Shapes trong Word.</li><li>Giữ góc 120°, độ dài liên kết và tỷ lệ thống nhất.</li><li>Chèn hình vector, In Line with Text, lưu tệp vẽ gốc.</li></ul></div>\n<p>Có giáo án, đề thi Hóa nhiều công thức cấu tạo cần số hóa? Xem dịch vụ <a href=\"/dich-vu/danh-may-cong-thuc\">đánh máy công thức</a>.</p>",
+    "faq": [
+      {
+        "q": "Có phần mềm miễn phí để vẽ công thức cấu tạo không?",
+        "a": "Có. ACD/ChemSketch có bản miễn phí cho mục đích cá nhân và học tập; MolView chạy trên trình duyệt; người dùng LaTeX có thể dùng gói chemfig. Hãy đọc điều khoản giấy phép của từng công cụ trước khi dùng."
+      },
+      {
+        "q": "Chèn công thức cấu tạo vào Word thế nào để in rõ nét?",
+        "a": "Xuất hình ở định dạng vector (EMF, SVG) hoặc PNG độ phân giải cao (từ 300 dpi), chèn với kiểu In Line with Text và không phóng to quá kích thước gốc."
+      },
+      {
+        "q": "Công thức thu gọn và công thức khung khác nhau thế nào?",
+        "a": "Công thức thu gọn viết các nhóm nguyên tử theo dòng (như CH3-CH2-OH); công thức khung chỉ vẽ mạch carbon bằng các đoạn thẳng gấp khúc, không ghi C và H gắn với C."
+      }
+    ],
+    "cover": "/assets/img/blog/ve-cong-thuc-cau-tao-huu-co.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
     "slug": "loi-chinh-ta-tieng-viet",
     "cat": "Chính tả & văn bản",
     "date": "2026-10-06",
@@ -263,6 +423,38 @@ DM.posts = [
     "read": 4
   },
   {
+    "slug": "ky-hieu-dien-hoc-so-do-mach",
+    "cat": "Học thuật",
+    "date": "2026-10-04",
+    "tags": [
+      "Vật lý",
+      "Sơ đồ mạch điện",
+      "Ký hiệu đặc biệt",
+      "Đề thi"
+    ],
+    "title": "Gõ ký hiệu điện học (Ω, µF, ε) và vẽ sơ đồ mạch điện cho đề thi Vật lý",
+    "seoTitle": "Gõ ký hiệu điện học, vẽ sơ đồ mạch điện cho tài liệu Vật lý",
+    "excerpt": "Cách gõ Ω, µ, Δ, ε bằng Alt + X trong Word và vẽ sơ đồ mạch điện chuẩn bằng draw.io, CircuiTikZ cho đề thi, giáo án Vật lý.",
+    "body": "<p class=\"lead\">Đề thi Vật lý phần Điện thường dày đặc ký hiệu: Ω, µF, ε, ξ, ∆U, cùng các sơ đồ mạch điện có điện trở, tụ điện, nguồn, ampe kế. Gõ sai một ký hiệu (µ thành u, Ω thành W) hay vẽ mạch lệch dây đều khiến học sinh hiểu nhầm đề. Bài viết hướng dẫn cách gõ ký hiệu nhanh và vẽ sơ đồ mạch chuẩn.</p>\n\n<h2>Bảng ký hiệu và cách gõ nhanh trong Word</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Ký hiệu</th><th>Ý nghĩa</th><th>Gõ mã rồi <kbd>Alt</kbd> + <kbd>X</kbd></th></tr>\n  <tr><td>Ω</td><td>Ôm (điện trở)</td><td><span class=\"mono\">03A9</span></td></tr>\n  <tr><td>µ</td><td>Tiền tố micro (µF, µA)</td><td><span class=\"mono\">00B5</span></td></tr>\n  <tr><td>Δ</td><td>Độ biến thiên (ΔU, Δt)</td><td><span class=\"mono\">0394</span></td></tr>\n  <tr><td>ε</td><td>Hằng số điện môi</td><td><span class=\"mono\">03B5</span></td></tr>\n  <tr><td>ξ</td><td>Suất điện động (một số sách)</td><td><span class=\"mono\">03BE</span></td></tr>\n  <tr><td>φ</td><td>Pha, từ thông</td><td><span class=\"mono\">03C6</span></td></tr>\n  <tr><td>°</td><td>Độ</td><td><span class=\"mono\">00B0</span></td></tr>\n</table></div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Ký hiệu dùng nhiều thì tạo AutoCorrect: ví dụ gõ “\\ohm” tự đổi thành Ω. Trong khung Equation (<kbd>Alt</kbd> + <kbd>=</kbd>), gõ \\Omega, \\mu, \\Delta rồi nhấn phím cách cũng được.</div></div>\n\n<h2>Đơn vị và tiền tố: tránh nhầm lẫn</h2>\n<ul>\n  <li><b>µ (micro, 10<sup>-6</sup>)</b> khác <b>m (mili, 10<sup>-3</sup>)</b>: 10 µF khác 10 mF tới 1000 lần.</li>\n  <li><b>Không thay µ bằng chữ u</b> trong tài liệu chính thức.</li>\n  <li><b>Ký hiệu đơn vị viết đứng</b>, đại lượng viết nghiêng: <i>R</i> = 10 Ω, <i>C</i> = 4,7 µF. Xem thêm <a href=\"/blog/go-cong-thuc-vat-ly-don-vi-si\">đơn vị SI đúng chuẩn</a>.</li>\n</ul>\n\n<h2>Vẽ sơ đồ mạch điện</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Công cụ</th><th>Ưu điểm</th><th>Lưu ý</th></tr>\n  <tr><td><b>draw.io (diagrams.net)</b></td><td>Miễn phí, chạy trên trình duyệt, có thư viện Electrical</td><td>Xuất SVG/PNG để chèn Word</td></tr>\n  <tr><td><b>CircuiTikZ (LaTeX)</b></td><td>Đẹp, chính xác, sửa bằng mã</td><td>Cần biết LaTeX</td></tr>\n  <tr><td>Phần mềm mô phỏng mạch</td><td>Vừa vẽ vừa kiểm tra mạch</td><td>Ký hiệu có thể khác chuẩn sách</td></tr>\n  <tr><td>Shapes trong Word</td><td>Có sẵn</td><td>Dây dễ lệch, khó sửa</td></tr>\n</table></div>\n<pre class=\"code\"><code>\\begin{circuitikz}\n  \\draw (0,0) to[battery1, l=$\\xi$] (0,2)\n        to[R, l=$R_1$] (3,2)\n        to[C, l=$C$] (3,0) -- (0,0);\n\\end{circuitikz}</code></pre>\n\n<h2>Quy tắc trình bày sơ đồ</h2>\n<ol class=\"steps\">\n  <li><b>Dây dẫn thẳng, gấp góc vuông</b>, không chéo trừ khi bắt buộc.</li>\n  <li><b>Điểm nối</b> đánh dấu chấm đậm; hai dây cắt nhau không có chấm nghĩa là không nối.</li>\n  <li><b>Nhãn linh kiện</b> (R<sub>1</sub>, R<sub>2</sub>, C, K) đặt gần ký hiệu, không đè lên dây.</li>\n  <li><b>Thống nhất chuẩn ký hiệu</b>: điện trở hình chữ nhật (IEC) hay răng cưa (ANSI) - chọn một.</li>\n  <li><b>Chiều dòng điện</b>, cực nguồn (+/-) ghi rõ nếu đề yêu cầu.</li>\n</ol>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Sơ đồ chụp từ sách rồi chèn vào đề thường mờ khi photo nhiều lần. Vẽ lại bằng công cụ vector giúp đề in rõ ở mọi máy photo.</div></div>\n\n<h2>Đưa sơ đồ vào đề thi</h2>\n<p>Xuất hình dạng SVG hoặc EMF nếu có thể, đặt <b>In Line with Text</b>, căn giữa và thêm nhãn “Hình 1”. Với đề trắc nghiệm cần trộn đề, giữ hình nằm trong câu hỏi tương ứng để phần mềm trộn không làm lạc hình - xem <a href=\"/blog/so-hoa-de-thi-toan\">quy trình số hóa đề thi</a>.</p>\n\n<h2>Tiền tố đơn vị hay gặp trong phần Điện</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Tiền tố</th><th>Ký hiệu</th><th>Giá trị</th><th>Ví dụ</th></tr>\n  <tr><td>pico</td><td>p</td><td>10<sup>-12</sup></td><td>22 pF</td></tr>\n  <tr><td>nano</td><td>n</td><td>10<sup>-9</sup></td><td>100 nF</td></tr>\n  <tr><td>micro</td><td>µ</td><td>10<sup>-6</sup></td><td>4,7 µF</td></tr>\n  <tr><td>mili</td><td>m</td><td>10<sup>-3</sup></td><td>20 mA</td></tr>\n  <tr><td>kilo</td><td>k</td><td>10<sup>3</sup></td><td>2,2 kΩ</td></tr>\n  <tr><td>mega</td><td>M</td><td>10<sup>6</sup></td><td>1 MΩ</td></tr>\n</table></div>\n<p>Lưu ý chữ hoa, chữ thường: <b>m</b> (mili) và <b>M</b> (mega) chênh nhau 10<sup>9</sup> lần; <b>k</b> (kilo) luôn viết thường.</p>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Gõ mã Unicode rồi Alt + X để có Ω, µ, Δ, ε nhanh.</li><li>Phân biệt µ và m; đơn vị viết đứng, đại lượng viết nghiêng.</li><li>Vẽ mạch bằng draw.io hoặc CircuiTikZ thay cho Shapes.</li><li>Thống nhất chuẩn ký hiệu và cách đánh dấu điểm nối.</li></ul></div>\n<p>Cần số hóa bộ đề Vật lý có nhiều sơ đồ mạch? Xem dịch vụ <a href=\"/dich-vu/danh-may-cong-thuc\">đánh máy công thức</a> và <a href=\"/dich-vu/danh-may-latex\">đánh máy LaTeX</a>.</p>",
+    "faq": [
+      {
+        "q": "Phím tắt gõ ký hiệu Ω trong Word là gì?",
+        "a": "Gõ 03A9 rồi nhấn Alt + X, Word đổi thành Ω. Tương tự 00B5 + Alt + X cho µ, 0394 + Alt + X cho Δ. Trên bàn phím số có thể dùng Alt + 234 cho Ω."
+      },
+      {
+        "q": "Nên vẽ sơ đồ mạch điện bằng công cụ gì?",
+        "a": "draw.io (diagrams.net) miễn phí, có thư viện ký hiệu điện; người dùng LaTeX có gói CircuiTikZ. Tránh vẽ bằng Shapes rời rạc trong Word vì khó căn chỉnh."
+      },
+      {
+        "q": "Ký hiệu điện trở hình chữ nhật hay răng cưa?",
+        "a": "Hình chữ nhật theo chuẩn IEC, răng cưa theo chuẩn ANSI của Mỹ. Tài liệu tiếng Việt thường dùng ký hiệu hình chữ nhật; điều quan trọng là thống nhất trong toàn bộ tài liệu."
+      }
+    ],
+    "cover": "/assets/img/blog/ky-hieu-dien-hoc-so-do-mach.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
     "slug": "latex-cho-nguoi-moi",
     "cat": "Học thuật",
     "date": "2026-10-03",
@@ -291,6 +483,38 @@ DM.posts = [
       }
     ],
     "cover": "/assets/img/blog/latex-cho-nguoi-moi.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
+    "slug": "bang-thuat-ngu-dich-ky-thuat",
+    "cat": "Dịch thuật",
+    "date": "2026-10-02",
+    "tags": [
+      "Thuật ngữ",
+      "Dịch kỹ thuật",
+      "Glossary",
+      "Dịch thuật"
+    ],
+    "title": "Xây dựng bảng thuật ngữ (glossary) Anh - Việt cho dịch tài liệu kỹ thuật: mẫu và quy trình",
+    "seoTitle": "Xây dựng bảng thuật ngữ Anh - Việt khi dịch tài liệu kỹ thuật",
+    "excerpt": "Hướng dẫn xây dựng bảng thuật ngữ Anh - Việt khi dịch tài liệu kỹ thuật: các cột cần có, nguồn tra cứu, quy trình duyệt và cập nhật.",
+    "body": "<p class=\"lead\">Trong một bộ tài liệu hướng dẫn máy móc, “bearing” lúc thì là “ổ bi”, lúc “vòng bi”, lúc “ổ đỡ”. Người đọc sẽ nghĩ đó là ba bộ phận khác nhau. Bảng thuật ngữ (glossary) là công cụ đơn giản nhưng hiệu quả nhất để tránh lỗi này, nhất là khi nhiều người cùng dịch một dự án.</p>\n\n<h2>Bảng thuật ngữ cần những cột nào?</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Cột</th><th>Nội dung</th><th>Ví dụ</th></tr>\n  <tr><td>Thuật ngữ gốc</td><td>Đúng chính tả, số ít</td><td>bearing</td></tr>\n  <tr><td>Thuật ngữ dịch</td><td>Một cách dịch đã chốt</td><td>ổ bi</td></tr>\n  <tr><td>Từ loại / lĩnh vực</td><td>Danh từ, động từ; cơ khí, điện…</td><td>Danh từ - cơ khí</td></tr>\n  <tr><td>Ngữ cảnh</td><td>Câu ví dụ trong tài liệu gốc</td><td>Replace the front wheel bearing…</td></tr>\n  <tr><td>Không dùng</td><td>Cách dịch bị loại</td><td>vòng bi, ổ đỡ</td></tr>\n  <tr><td>Ghi chú, nguồn</td><td>Tiêu chuẩn, tài liệu tham chiếu</td><td>Theo tài liệu của hãng</td></tr>\n  <tr><td>Trạng thái</td><td>Đề xuất / đã duyệt</td><td>Đã duyệt</td></tr>\n</table></div>\n\n<h2>Quy trình 5 bước</h2>\n<ol class=\"steps\">\n  <li><b>Trích thuật ngữ</b> từ bản gốc: danh từ chuyên ngành, tên bộ phận, tên chức năng trên giao diện, đơn vị đo.</li>\n  <li><b>Tra cứu</b> tiêu chuẩn quốc gia, tài liệu tiếng Việt chính thức của ngành, bản dịch trước đây của khách hàng.</li>\n  <li><b>Đề xuất</b> một cách dịch, ghi cách dịch bị loại và lý do.</li>\n  <li><b>Duyệt</b> với chuyên gia lĩnh vực hoặc khách hàng trước khi dịch hàng loạt.</li>\n  <li><b>Cập nhật</b> trong suốt dự án; mọi thay đổi thông báo cho cả nhóm dịch.</li>\n</ol>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Bước trích thuật ngữ nhanh hơn nhiều khi bản gốc là văn bản chỉnh sửa được. Nếu chỉ có bản scan, hãy <a href=\"/blog/danh-may-ban-goc-truoc-khi-dich\">đánh máy bản gốc trước khi dịch</a>.</div></div>\n\n<h2>Những loại thuật ngữ cần đặc biệt chú ý</h2>\n<ul>\n  <li><b>Chữ trên giao diện phần mềm, nút bấm, nhãn máy</b>: phải khớp đúng với bản tiếng Việt của sản phẩm nếu có.</li>\n  <li><b>Từ viết tắt</b> (PLC, HVAC, PPE): quyết định giữ nguyên, dịch, hay ghi cả hai lần đầu xuất hiện.</li>\n  <li><b>Đơn vị và ký hiệu</b>: giữ ký hiệu SI, chỉ đổi dấu thập phân theo quy ước tiếng Việt khi khách hàng đồng ý.</li>\n  <li><b>Tên riêng, thương hiệu</b>: thường giữ nguyên.</li>\n  <li><b>Từ “bẫy”</b> có nghĩa thông dụng khác nghĩa chuyên ngành, ví dụ “mouse”, “cell”, “drive”.</li>\n</ul>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Đừng dựa hoàn toàn vào dịch máy để quyết định thuật ngữ. Máy có thể chọn nghĩa thông dụng thay vì nghĩa chuyên ngành, và không giữ nhất quán giữa các câu.</div></div>\n\n<h2>Bảng thuật ngữ và công cụ dịch</h2>\n<p>Các công cụ dịch có hỗ trợ máy tính (CAT) cho phép nhập bảng thuật ngữ: khi gặp từ gốc, công cụ hiện ngay cách dịch đã chốt, và có thể cảnh báo khi bản dịch không dùng đúng thuật ngữ. Ngay cả khi không dùng CAT, một tệp Excel có bộ lọc cũng giúp người dịch và người hiệu đính tra cứu nhanh.</p>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Lưu bảng thuật ngữ theo từng khách hàng. Dự án sau của cùng khách hàng sẽ nhanh hơn và nhất quán với các tài liệu trước.</div></div>\n\n<h2>Kiểm tra sau khi dịch</h2>\n<p>Người hiệu đính dùng bảng thuật ngữ như một danh sách kiểm tra: tìm từng thuật ngữ trong bản dịch, xác nhận dùng đúng cách đã duyệt, không lẫn cách dịch bị loại. Bước này đặc biệt quan trọng với tài liệu an toàn, hướng dẫn vận hành, hồ sơ thầu.</p>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Mỗi thuật ngữ chỉ một cách dịch đã duyệt trong một dự án.</li><li>Ghi cả cách dịch bị loại để tránh dùng nhầm.</li><li>Duyệt với chuyên gia lĩnh vực trước khi dịch hàng loạt.</li><li>Dùng bảng thuật ngữ làm danh sách kiểm tra khi hiệu đính.</li></ul></div>\n<p>Cần bản gốc có thể chỉnh sửa để trích thuật ngữ? Dịch vụ <a href=\"/dich-vu/pdf-sang-word\">chuyển PDF sang Word</a> giữ nguyên văn và bố cục.</p>",
+    "faq": [
+      {
+        "q": "Bảng thuật ngữ khác từ điển ở điểm nào?",
+        "a": "Từ điển cho nhiều nghĩa chung; bảng thuật ngữ chốt một cách dịch duy nhất cho từng thuật ngữ trong phạm vi một dự án hoặc một khách hàng, kèm ngữ cảnh và ghi chú."
+      },
+      {
+        "q": "Nên lập bảng thuật ngữ bằng công cụ gì?",
+        "a": "Excel hoặc Google Sheets là đủ cho dự án vừa và nhỏ. Các công cụ dịch có hỗ trợ máy tính (CAT) cho phép nhập bảng thuật ngữ để tự gợi ý khi dịch."
+      },
+      {
+        "q": "Ai là người duyệt bảng thuật ngữ?",
+        "a": "Lý tưởng là chuyên gia lĩnh vực phía khách hàng hoặc kỹ sư am hiểu sản phẩm, phối hợp với người dịch và người hiệu đính."
+      }
+    ],
+    "cover": "/assets/img/blog/bang-thuat-ngu-dich-ky-thuat.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 4
   },
@@ -338,6 +562,38 @@ DM.posts = [
       }
     ],
     "cover": "/assets/img/blog/so-hoa-de-thi-toan.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
+    "slug": "dich-may-va-hau-bien-tap",
+    "cat": "Dịch thuật",
+    "date": "2026-09-30",
+    "tags": [
+      "Dịch máy",
+      "AI",
+      "Hậu biên tập",
+      "Dịch thuật"
+    ],
+    "title": "Dịch máy, AI và hậu biên tập (post-editing): khi nào dùng được, khi nào cần người dịch?",
+    "seoTitle": "Dịch máy, AI và hậu biên tập: khi nào dùng được?",
+    "excerpt": "Dịch máy, AI dịch có dùng được cho hợp đồng, hồ sơ? Phân biệt hậu biên tập nhẹ và đầy đủ, lỗi thường gặp và cách chọn phương án phù hợp.",
+    "body": "<p class=\"lead\">Chỉ cần dán văn bản vào ô dịch, vài giây sau đã có bản tiếng Việt trôi chảy. Dịch máy và các mô hình AI đã thay đổi cách nhiều người làm việc với ngoại ngữ. Nhưng “trôi chảy” không đồng nghĩa với “chính xác”. Bài viết giúp bạn biết khi nào dịch máy là đủ, khi nào cần hậu biên tập, và khi nào nên giao hẳn cho người dịch.</p>\n<figure><img src=\"/assets/img/blog/fig-hau-bien-tap.svg\" alt=\"Quy trình dịch máy kết hợp hậu biên tập\" loading=\"lazy\" width=\"960\"><figcaption>Bản gốc sạch → dịch máy → hậu biên tập bởi người có chuyên môn → kiểm tra thuật ngữ, số liệu → bản dịch cuối.</figcaption></figure>\n\n<h2>Dịch máy làm tốt điều gì?</h2>\n<ul>\n  <li>Nắm ý chính của email, bài báo, tài liệu tham khảo nhanh chóng.</li>\n  <li>Văn bản câu ngắn, cấu trúc rõ, ít thuật ngữ đặc thù.</li>\n  <li>Bản nháp đầu tiên để người dịch chỉnh sửa, tiết kiệm thời gian gõ.</li>\n</ul>\n\n<h2>Những lỗi “trông rất hợp lý”</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Loại lỗi</th><th>Ví dụ rủi ro</th></tr>\n  <tr><td>Phủ định bị đảo</td><td>“not later than” dịch thành “không muộn hơn” đúng, nhưng “not less than 30 days” có thể bị dịch ngược ý</td></tr>\n  <tr><td>Thuật ngữ sai ngành</td><td>Từ có nghĩa thông dụng được chọn thay cho nghĩa pháp lý, kỹ thuật</td></tr>\n  <tr><td>Bỏ sót</td><td>Mất một mệnh đề, một điều kiện trong câu dài</td></tr>\n  <tr><td>Số liệu, ngày tháng</td><td>Nhầm định dạng ngày tháng, dấu thập phân</td></tr>\n  <tr><td>Thiếu nhất quán</td><td>Cùng một từ dịch nhiều kiểu trong một tài liệu</td></tr>\n</table></div>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Lỗi của dịch máy nguy hiểm vì câu văn vẫn mượt. Người không đọc được bản gốc rất khó phát hiện, nhất là trong hợp đồng và tài liệu kỹ thuật.</div></div>\n\n<h2>Hậu biên tập nhẹ và đầy đủ</h2>\n<div class=\"compare-grid\">\n  <div class=\"good\"><b>Hậu biên tập nhẹ</b>Sửa lỗi sai nghĩa, bỏ sót, lỗi nghiêm trọng; chấp nhận văn phong chưa tự nhiên. Phù hợp tài liệu nội bộ, tham khảo.</div>\n  <div class=\"good\"><b>Hậu biên tập đầy đủ</b>Đạt chất lượng tương đương người dịch: đúng nghĩa, đúng thuật ngữ, văn phong tự nhiên, trình bày chuẩn. Phù hợp tài liệu phát hành.</div>\n</div>\n<p>Tiêu chuẩn ISO 18587 mô tả yêu cầu đối với dịch vụ hậu biên tập bản dịch máy, trong đó người hậu biên tập cần có năng lực tương đương người dịch chuyên nghiệp.</p>\n\n<h2>Chọn phương án theo loại tài liệu</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Tài liệu</th><th>Phương án gợi ý</th></tr>\n  <tr><td>Email, tài liệu đọc tham khảo</td><td>Dịch máy, tự kiểm tra ý chính</td></tr>\n  <tr><td>Tài liệu nội bộ, hướng dẫn công việc</td><td>Dịch máy + hậu biên tập nhẹ</td></tr>\n  <tr><td>Website, catalogue, tài liệu phát hành</td><td>Hậu biên tập đầy đủ hoặc người dịch</td></tr>\n  <tr><td>Hợp đồng, hồ sơ pháp lý, y khoa</td><td>Người dịch có chuyên môn + hiệu đính</td></tr>\n  <tr><td>Giấy tờ cần chứng thực, công chứng</td><td>Người dịch đủ điều kiện theo quy định - xem <a href=\"/blog/chuan-bi-ho-so-dich-thuat-cong-chung\">checklist hồ sơ</a></td></tr>\n</table></div>\n\n<h2>Đầu vào sạch - bản dịch tốt hơn</h2>\n<p>Dịch máy rất nhạy với chất lượng văn bản gốc. Bản OCR lỗi dấu, câu bị ngắt dòng giữa chừng, bảng biểu vỡ cột sẽ cho bản dịch kém dù công cụ tốt đến đâu. Chuẩn bị bản gốc đánh máy sạch, không ngắt dòng cứng, có tiêu đề và bảng đúng cấu trúc là bước đơn giản giúp cả dịch máy lẫn người dịch làm việc hiệu quả hơn.</p>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Kết hợp với <a href=\"/blog/bang-thuat-ngu-dich-ky-thuat\">bảng thuật ngữ</a>: chốt trước cách dịch các thuật ngữ quan trọng, người hậu biên tập chỉ cần đối chiếu và thay thống nhất.</div></div>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Với tài liệu nhạy cảm, hãy kiểm tra chính sách dữ liệu của công cụ dịch trực tuyến trước khi dán nội dung. Xem thêm <a href=\"/blog/bao-mat-khi-thue-ngoai-danh-may\">bảo mật khi thuê ngoài xử lý tài liệu</a>.</div></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Dịch máy tốt cho nắm ý chính và bản nháp.</li><li>Lỗi dịch máy thường trông hợp lý - cần người đọc được bản gốc kiểm tra.</li><li>Chọn hậu biên tập nhẹ, đầy đủ hay người dịch theo mục đích tài liệu.</li><li>Bản gốc sạch giúp mọi phương án dịch cho kết quả tốt hơn.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Hậu biên tập (post-editing) là gì?",
+        "a": "Là việc người dịch có chuyên môn đọc và sửa bản dịch do máy tạo ra để đạt chất lượng mong muốn. Có tiêu chuẩn quốc tế riêng cho dịch vụ này là ISO 18587."
+      },
+      {
+        "q": "Có nên dùng dịch máy cho hợp đồng không?",
+        "a": "Có thể dùng để hiểu nội dung sơ bộ. Với bản dịch dùng để ký kết, nộp cơ quan nhà nước hoặc làm căn cứ pháp lý, cần người dịch có chuyên môn kiểm tra toàn bộ hoặc dịch lại."
+      },
+      {
+        "q": "Dịch máy có làm lộ thông tin tài liệu không?",
+        "a": "Tùy dịch vụ. Một số công cụ trực tuyến có thể lưu hoặc dùng nội dung gửi lên. Với tài liệu mật, hãy đọc chính sách dữ liệu hoặc dùng giải pháp có cam kết bảo mật."
+      }
+    ],
+    "cover": "/assets/img/blog/dich-may-va-hau-bien-tap.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 4
   },
@@ -407,6 +663,38 @@ DM.posts = [
     "read": 3
   },
   {
+    "slug": "dich-tom-tat-bai-bao-khoa-hoc",
+    "cat": "Dịch thuật",
+    "date": "2026-09-26",
+    "tags": [
+      "Abstract",
+      "Bài báo khoa học",
+      "Dịch học thuật",
+      "Luận văn"
+    ],
+    "title": "Viết và dịch tóm tắt (abstract) bài báo khoa học Việt - Anh: cấu trúc, thì động từ, lỗi thường gặp",
+    "seoTitle": "Viết và dịch tóm tắt (abstract) bài báo khoa học Việt - Anh",
+    "excerpt": "Cấu trúc tóm tắt (abstract) theo IMRaD, cách dùng thì, từ khóa, số liệu khi dịch Việt - Anh và những lỗi khiến tạp chí trả bài.",
+    "body": "<p class=\"lead\">Biên tập viên và người phản biện thường quyết định có đọc tiếp hay không chỉ sau vài phút với phần tóm tắt. Với nhà nghiên cứu Việt Nam, abstract tiếng Anh còn là “bộ mặt” khi bài đăng trên tạp chí trong nước được lập chỉ mục quốc tế. Một bản tóm tắt dịch sát chữ, sai thì động từ hay thiếu thông tin chính có thể làm giảm đáng kể sức thuyết phục của cả công trình.</p>\n\n<h2>Cấu trúc tóm tắt theo IMRaD</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Phần</th><th>Trả lời câu hỏi</th><th>Độ dài gợi ý</th></tr>\n  <tr><td>Bối cảnh / mục tiêu</td><td>Vì sao nghiên cứu? Mục tiêu là gì?</td><td>1-2 câu</td></tr>\n  <tr><td>Phương pháp</td><td>Làm thế nào, đối tượng, cỡ mẫu?</td><td>1-2 câu</td></tr>\n  <tr><td>Kết quả</td><td>Phát hiện chính, có số liệu</td><td>2-3 câu</td></tr>\n  <tr><td>Kết luận / ý nghĩa</td><td>Điều gì rút ra, đóng góp gì?</td><td>1-2 câu</td></tr>\n</table></div>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Một số tạp chí yêu cầu tóm tắt có cấu trúc với tiêu đề con (Background, Methods, Results, Conclusions). Luôn kiểm tra hướng dẫn tác giả của tạp chí mục tiêu.</div></div>\n\n<h2>Thì động từ trong abstract tiếng Anh</h2>\n<ul>\n  <li><b>Hiện tại đơn</b> cho bối cảnh và kết luận chung: <i>Digital literacy is essential for…</i></li>\n  <li><b>Quá khứ đơn</b> cho việc đã làm trong nghiên cứu: <i>We surveyed 412 students…</i>, <i>The results showed…</i></li>\n  <li><b>Hiện tại hoàn thành</b> khi nói về các nghiên cứu trước: <i>Few studies have examined…</i></li>\n</ul>\n\n<h2>Lỗi thường gặp khi dịch tóm tắt Việt - Anh</h2>\n<div class=\"compare-grid\">\n  <div class=\"bad\"><b>Nên tránh</b>Dịch từng chữ theo cấu trúc tiếng Việt; câu quá dài nhiều mệnh đề; viết tắt chưa giải thích; lặp lại tiêu đề; thiếu số liệu kết quả; dùng “we” và bị động lẫn lộn.</div>\n  <div class=\"good\"><b>Nên làm</b>Viết lại theo cách diễn đạt học thuật tiếng Anh; mỗi câu một ý; giải thích viết tắt lần đầu; nêu con số chính; thống nhất ngôi và thể trong toàn tóm tắt.</div>\n</div>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Không đưa vào tóm tắt thông tin không có trong bài (kết quả chưa báo cáo, trích dẫn tài liệu). Phần lớn tạp chí cũng không khuyến khích trích dẫn trong abstract.</div></div>\n\n<h2>Từ khóa (keywords)</h2>\n<ol class=\"steps\">\n  <li>Chọn 3-6 từ khóa theo yêu cầu tạp chí, ưu tiên cụm từ người đọc sẽ tìm kiếm.</li>\n  <li>Tránh lặp nguyên văn các từ đã có trong tiêu đề nếu tạp chí khuyến nghị.</li>\n  <li>Dùng thuật ngữ chuẩn của ngành, kiểm tra trong các bài báo cùng lĩnh vực.</li>\n</ol>\n\n<h2>Số liệu, đơn vị và tên riêng</h2>\n<ul>\n  <li>Đổi dấu thập phân: tiếng Việt <b>3,5</b> → tiếng Anh <b>3.5</b>; dấu phân cách hàng nghìn: 1.200 → 1,200.</li>\n  <li>Giữ nguyên ký hiệu thống kê (p, n, SD, CI) và định dạng theo hướng dẫn tạp chí.</li>\n  <li>Tên địa phương, cơ quan: dùng tên tiếng Anh chính thức nếu có, nếu không giữ tên tiếng Việt.</li>\n</ul>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Lập một <a href=\"/blog/bang-thuat-ngu-dich-ky-thuat\">bảng thuật ngữ</a> nhỏ cho đề tài: khái niệm chính, tên thang đo, tên biến - dùng thống nhất giữa abstract, bài báo và luận văn.</div></div>\n\n<h2>Quy trình gợi ý</h2>\n<ol class=\"steps\">\n  <li>Viết tóm tắt tiếng Việt đầy đủ 4 phần, có số liệu.</li>\n  <li>Dịch theo ý, không theo chữ; đối chiếu với vài bài cùng lĩnh vực trên tạp chí mục tiêu.</li>\n  <li>Nhờ người am hiểu chuyên ngành và tiếng Anh học thuật hiệu đính.</li>\n  <li>Kiểm tra số từ, từ khóa, định dạng theo hướng dẫn tác giả.</li>\n</ol>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Tóm tắt theo 4 phần: bối cảnh, phương pháp, kết quả, kết luận.</li><li>Quá khứ đơn cho việc đã làm, hiện tại đơn cho kết luận chung.</li><li>Dịch theo ý, nêu số liệu chính, giải thích viết tắt.</li><li>Luôn đọc hướng dẫn tác giả của tạp chí mục tiêu.</li></ul></div>\n<p>Cần trình bày luận văn, bài báo đúng mẫu? Xem dịch vụ <a href=\"/dich-vu/danh-may-hoc-thuat\">đánh máy học thuật</a> và bài <a href=\"/blog/trich-dan-apa-ieee-word\">trích dẫn APA, IEEE trong Word</a>.</p>",
+    "faq": [
+      {
+        "q": "Tóm tắt bài báo khoa học nên dài bao nhiêu từ?",
+        "a": "Phụ thuộc yêu cầu từng tạp chí, phổ biến khoảng 150-250 từ. Hãy đọc kỹ hướng dẫn tác giả (author guidelines) của tạp chí trước khi viết."
+      },
+      {
+        "q": "Dùng thì gì khi viết abstract tiếng Anh?",
+        "a": "Thường dùng quá khứ đơn cho phương pháp và kết quả của nghiên cứu đã thực hiện, hiện tại đơn cho bối cảnh, kết luận và những điều được xem là đúng chung."
+      },
+      {
+        "q": "Tên tác giả, địa danh tiếng Việt viết thế nào trong bản tiếng Anh?",
+        "a": "Theo yêu cầu của tạp chí; nhiều tạp chí chấp nhận giữ dấu tiếng Việt. Điều quan trọng là thống nhất cách viết tên tác giả giữa các bài để không bị tách thành nhiều hồ sơ tác giả."
+      }
+    ],
+    "cover": "/assets/img/blog/dich-tom-tat-bai-bao-khoa-hoc.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
     "slug": "chuan-bi-ho-so-dich-thuat-cong-chung",
     "cat": "Dịch thuật",
     "date": "2026-09-25",
@@ -454,6 +742,38 @@ DM.posts = [
     "read": 3
   },
   {
+    "slug": "trich-dan-apa-ieee-word",
+    "cat": "Học thuật",
+    "date": "2026-09-23",
+    "tags": [
+      "Trích dẫn",
+      "APA",
+      "IEEE",
+      "Tài liệu tham khảo"
+    ],
+    "title": "Trích dẫn APA 7, IEEE và tạo danh mục tài liệu tham khảo tự động trong Word",
+    "seoTitle": "Trích dẫn APA 7, IEEE và tạo tài liệu tham khảo trong Word",
+    "excerpt": "So sánh trích dẫn APA 7 và IEEE, cách tạo danh mục tài liệu tham khảo tự động bằng Word, Zotero, Mendeley và các lỗi cần tránh.",
+    "body": "<p class=\"lead\">Trích dẫn sai chuẩn là một trong những lý do phổ biến khiến luận văn phải chỉnh sửa trước khi nộp: lúc ghi (Nguyễn, 2024), lúc ghi [3], danh mục tài liệu tham khảo thiếu nguồn, thừa nguồn, sắp xếp lộn xộn. Hiểu hai kiểu trích dẫn phổ biến nhất - APA và IEEE - và để máy tự quản lý danh mục sẽ giúp bạn tiết kiệm hàng giờ chỉnh sửa.</p>\n\n<h2>APA 7 và IEEE: so sánh nhanh</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Tiêu chí</th><th>APA 7</th><th>IEEE</th></tr>\n  <tr><td>Lĩnh vực hay dùng</td><td>Khoa học xã hội, giáo dục, tâm lý, kinh tế</td><td>Kỹ thuật, điện - điện tử, công nghệ thông tin</td></tr>\n  <tr><td>Trích dẫn trong bài</td><td>(Tác giả, năm) hoặc Tác giả (năm)</td><td>[1], [2]… theo thứ tự xuất hiện</td></tr>\n  <tr><td>Sắp xếp danh mục</td><td>Theo chữ cái tên tác giả</td><td>Theo số thứ tự</td></tr>\n  <tr><td>Định dạng danh mục</td><td>Thụt lề treo (hanging indent)</td><td>Số trong ngoặc vuông ở đầu mỗi mục</td></tr>\n</table></div>\n\n<h2>Ví dụ trích dẫn bài báo</h2>\n<p><b>APA 7</b> - trong bài: (Trần &amp; Lê, 2023). Trong danh mục:</p>\n<p class=\"mono\" style=\"background:var(--bg-grey);padding:12px;border-radius:8px\">Trần, A. B., &amp; Lê, C. D. (2023). Tên bài báo viết hoa chữ đầu câu. <i>Tên Tạp Chí</i>, <i>12</i>(3), 45-60. https://doi.org/10.xxxx/xxxxx</p>\n<p><b>IEEE</b> - trong bài: …như đã chỉ ra trong [4]. Trong danh mục:</p>\n<p class=\"mono\" style=\"background:var(--bg-grey);padding:12px;border-radius:8px\">[4] A. B. Trần and C. D. Lê, “Tên bài báo,” <i>Tên Tạp Chí</i>, vol. 12, no. 3, pp. 45-60, 2023, doi: 10.xxxx/xxxxx.</p>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Đây là ví dụ minh họa cấu trúc. Hãy đối chiếu với tài liệu hướng dẫn chính thức của APA, IEEE và quy định riêng của trường hoặc tạp chí - đặc biệt cách ghi tên tác giả Việt Nam.</div></div>\n\n<h2>Tạo danh mục tự động bằng Word</h2>\n<ol class=\"steps\">\n  <li>Vào <b>References → Style</b>, chọn APA hoặc IEEE.</li>\n  <li><b>Insert Citation → Add New Source</b>: chọn loại nguồn (bài báo, sách, website), điền thông tin.</li>\n  <li>Lần sau trích lại nguồn đó, chọn trong danh sách đã lưu.</li>\n  <li>Đặt con trỏ ở cuối bài, chọn <b>Bibliography</b> để chèn danh mục; cập nhật bằng <kbd>F9</kbd>.</li>\n</ol>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Với luận văn có hàng trăm nguồn, phần mềm quản lý trích dẫn miễn phí như Zotero hoặc Mendeley có tiện ích gắn vào Word: lấy thông tin nguồn từ DOI, đổi kiểu trích dẫn cả bài chỉ bằng một cú nhấp.</div></div>\n\n<h2>Lỗi trích dẫn thường gặp</h2>\n<ul>\n  <li><b>Trộn kiểu</b>: vừa (tác giả, năm) vừa [số] trong cùng tài liệu.</li>\n  <li><b>Danh mục không khớp</b>: nguồn trích trong bài không có trong danh mục, hoặc ngược lại.</li>\n  <li><b>Thiếu thông tin</b>: không có năm, số tập, số trang, DOI.</li>\n  <li><b>Sắp xếp sai</b>: APA không theo chữ cái; IEEE không theo thứ tự xuất hiện.</li>\n  <li><b>Gõ tay số [1], [2]</b>: chèn nguồn mới ở giữa bài là phải đánh số lại toàn bộ.</li>\n</ul>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Trích dẫn đầy đủ không chỉ là hình thức: đó là cách thể hiện sự trung thực học thuật. Diễn giải ý của người khác mà không trích nguồn vẫn có thể bị coi là đạo văn.</div></div>\n\n<h2>Kiểm tra trước khi nộp</h2>\n<p>Dùng <kbd>Ctrl</kbd> + <kbd>F</kbd> tìm dấu “(” và “[” để rà nhanh các trích dẫn; đối chiếu từng nguồn với danh mục; kiểm tra định dạng thụt lề, phông chữ của danh mục theo mẫu của trường. Kết hợp với <a href=\"/blog/tao-muc-luc-tu-dong-word\">mục lục tự động</a> và <a href=\"/blog/dinh-dang-luan-van-chuan\">định dạng luận văn chuẩn</a> để hoàn thiện bản cuối.</p>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>APA dùng tác giả - năm; IEEE dùng số theo thứ tự xuất hiện.</li><li>Chọn một kiểu và dùng thống nhất cả tài liệu.</li><li>Để Word, Zotero hoặc Mendeley quản lý danh mục tự động.</li><li>Đối chiếu trích dẫn trong bài và danh mục trước khi nộp.</li></ul></div>",
+    "faq": [
+      {
+        "q": "APA và IEEE khác nhau thế nào?",
+        "a": "APA dùng kiểu tác giả - năm trong ngoặc (Nguyễn, 2024), danh mục xếp theo tên tác giả. IEEE dùng số thứ tự trong ngoặc vuông [1] theo thứ tự xuất hiện, danh mục xếp theo số."
+      },
+      {
+        "q": "Word có tự tạo danh mục tài liệu tham khảo không?",
+        "a": "Có. Vào References → Insert Citation để thêm nguồn, chọn Style (APA, IEEE…), sau đó Bibliography để chèn danh mục. Với tài liệu dài, phần mềm quản lý trích dẫn như Zotero, Mendeley tiện hơn."
+      },
+      {
+        "q": "Tên tác giả Việt Nam trích dẫn theo APA thế nào?",
+        "a": "Mỗi trường, mỗi tạp chí có thể có quy định riêng cho tên người Việt: có nơi ghi đầy đủ họ tên, có nơi theo quy tắc họ - viết tắt tên. Hãy theo hướng dẫn của trường hoặc tạp chí và thống nhất trong toàn bài."
+      }
+    ],
+    "cover": "/assets/img/blog/trich-dan-apa-ieee-word.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
     "slug": "trinh-bay-ban-dich-song-ngu",
     "cat": "Dịch thuật",
     "date": "2026-09-21",
@@ -482,6 +802,38 @@ DM.posts = [
       }
     ],
     "cover": "/assets/img/blog/trinh-bay-ban-dich-song-ngu.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
+    "slug": "go-tieng-viet-dien-thoai",
+    "cat": "Kỹ năng gõ phím",
+    "date": "2026-09-20",
+    "tags": [
+      "Gõ trên điện thoại",
+      "Bàn phím tiếng Việt",
+      "Nhập bằng giọng nói",
+      "Telex"
+    ],
+    "title": "Gõ tiếng Việt trên điện thoại nhanh và ít sai: chọn bàn phím, Telex hay VNI, nhập bằng giọng nói",
+    "seoTitle": "Gõ tiếng Việt trên điện thoại nhanh: bàn phím và giọng nói",
+    "excerpt": "Cách gõ tiếng Việt nhanh trên điện thoại: chọn bàn phím, Telex hay VNI, gõ vuốt, nhập bằng giọng nói và làm sạch văn bản khi sang Word.",
+    "body": "<p class=\"lead\">Ngày càng nhiều người soạn email, ghi chú, thậm chí cả báo cáo trên điện thoại. Nhưng màn hình nhỏ, phím sát nhau khiến việc gõ tiếng Việt có dấu dễ sai và chậm. Chỉ cần cài đặt đúng và tận dụng vài tính năng có sẵn, tốc độ soạn thảo trên điện thoại có thể cải thiện rõ rệt.</p>\n\n<h2>Chọn bàn phím phù hợp</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Bàn phím</th><th>Điểm mạnh</th><th>Lưu ý</th></tr>\n  <tr><td>Bàn phím mặc định iPhone</td><td>Có tiếng Việt Telex/VNI, nhập giọng nói tích hợp</td><td>Bật trong Cài đặt → Bàn phím</td></tr>\n  <tr><td>Gboard</td><td>Gõ vuốt, gợi ý từ, nhập giọng nói tiếng Việt</td><td>Thêm ngôn ngữ Tiếng Việt, chọn kiểu gõ</td></tr>\n  <tr><td>Laban Key</td><td>Phổ biến tại Việt Nam, nhiều tùy chọn gõ dấu</td><td>Cấp quyền bàn phím theo hướng dẫn</td></tr>\n</table></div>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Chỉ cài bàn phím từ kho ứng dụng chính thức. Bàn phím có thể đọc mọi thứ bạn gõ, nên tránh ứng dụng bàn phím không rõ nguồn gốc.</div></div>\n\n<h2>Telex, VNI hay gõ đơn giản?</h2>\n<p>Nếu bạn đã quen Telex trên máy tính, hãy dùng Telex trên điện thoại để giữ thói quen chung (xem <a href=\"/blog/telex-hay-vni\">Telex hay VNI</a>). Nhiều bàn phím còn có kiểu gõ hiện dấu bằng cách nhấn giữ phím nguyên âm, phù hợp người mới.</p>\n\n<h2>5 mẹo gõ nhanh hơn</h2>\n<ol class=\"steps\">\n  <li><b>Gõ vuốt</b>: vuốt ngón tay qua các chữ cái thay vì nhấn từng phím - nhanh với từ phổ biến.</li>\n  <li><b>Phím tắt văn bản</b>: tạo cụm ngắn như “dcbn” → “Địa chỉ: …”, “stk” → số tài khoản.</li>\n  <li><b>Nhấn đúp phím cách</b> để tự thêm dấu chấm và khoảng trắng (bật trong cài đặt).</li>\n  <li><b>Kéo phím cách</b> để di chuyển con trỏ chính xác thay vì chạm vào chữ.</li>\n  <li><b>Dùng gợi ý từ</b> phía trên bàn phím, nhất là với từ dài, tên riêng hay dùng.</li>\n</ol>\n\n<h2>Nhập bằng giọng nói tiếng Việt</h2>\n<p>Với ghi chú dài, nhập bằng giọng nói thường nhanh hơn gõ nhiều lần. Để kết quả tốt:</p>\n<ul>\n  <li>Nói rõ, tốc độ vừa phải, ở nơi yên tĩnh; đặt điện thoại gần miệng.</li>\n  <li>Nói từng câu trọn ý, dừng ngắn giữa các câu.</li>\n  <li>Đọc lại để sửa tên riêng, số liệu, thuật ngữ và dấu câu.</li>\n</ul>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Với ghi âm dài như phỏng vấn, cuộc họp, nhận dạng giọng nói tự động thường sai nhiều khi có nhiều người nói, tiếng ồn hoặc giọng địa phương. Xem <a href=\"/blog/chuyen-am-phong-van-nghien-cuu\">chuyển âm phỏng vấn</a> để biết khi nào cần người nghe gõ.</div></div>\n\n<h2>Khi chuyển văn bản sang máy tính</h2>\n<div class=\"compare-grid\">\n  <div class=\"bad\"><b>Lỗi hay gặp</b>Ngắt dòng giữa câu, khoảng trắng kép, dấu ngoặc kép cong lẫn thẳng, gạch nối lẫn gạch ngang, emoji trong văn bản chính thức.</div>\n  <div class=\"good\"><b>Cách làm sạch</b>Dán vào Word bằng <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> (chỉ giữ chữ), dùng Find &amp; Replace thay hai dấu cách thành một, định dạng lại tiêu đề bằng Styles.</div>\n</div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Soạn trên ứng dụng ghi chú có đồng bộ đám mây, khi về máy tính chỉ cần mở lại để chỉnh sửa, không phải gửi qua tin nhắn.</div></div>\n\n<h2>Cầm máy và luyện tập đúng cách</h2>\n<p>Gõ bằng hai ngón cái nhanh và ít mỏi hơn gõ một ngón. Với văn bản dài, xoay ngang điện thoại để bàn phím rộng hơn, giảm chạm nhầm phím. Hãy dành vài phút mỗi ngày luyện gõ một đoạn văn có dấu, chú ý các từ hay sai như “nghiêng”, “khuỷu”, “quyết”. Khi đã quen, tốc độ tăng lên mà độ chính xác vẫn giữ được. Nếu phải soạn tài liệu dài thường xuyên, một bàn phím Bluetooth nhỏ gọn kết nối với điện thoại là khoản đầu tư đáng cân nhắc.</p>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Nhiều điện thoại có chế độ hỗ trợ tiếp cận như phóng to bàn phím, rung khi chạm, đọc lại văn bản - hữu ích cho người lớn tuổi hoặc người có thị lực kém.</div></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Chọn bàn phím uy tín, dùng cùng kiểu gõ với máy tính.</li><li>Gõ vuốt, phím tắt văn bản, kéo phím cách giúp nhanh hơn.</li><li>Giọng nói tiện cho ghi chú, nhưng luôn đọc lại tên riêng và số liệu.</li><li>Làm sạch văn bản khi chuyển sang Word.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Điện thoại có gõ được tiếng Việt kiểu Telex không?",
+        "a": "Có. Bàn phím mặc định của iPhone và các bàn phím phổ biến trên Android như Gboard, Laban Key đều hỗ trợ tiếng Việt với kiểu Telex hoặc VNI, chọn trong phần cài đặt ngôn ngữ của bàn phím."
+      },
+      {
+        "q": "Nhập bằng giọng nói tiếng Việt có chính xác không?",
+        "a": "Khá tốt với giọng rõ, môi trường yên tĩnh và câu nói tự nhiên. Tên riêng, thuật ngữ và dấu câu vẫn hay sai nên cần đọc lại và sửa trước khi gửi hoặc nộp."
+      },
+      {
+        "q": "Văn bản soạn trên điện thoại chuyển sang Word bị lỗi gì?",
+        "a": "Thường gặp là ngắt dòng thừa, khoảng trắng kép, dấu ngoặc kép và dấu gạch khác kiểu. Hãy dùng Find & Replace để làm sạch và định dạng lại bằng Styles."
+      }
+    ],
+    "cover": "/assets/img/blog/go-tieng-viet-dien-thoai.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 4
   },
@@ -549,6 +901,38 @@ DM.posts = [
     "cover": "/assets/img/blog/phim-tat-word.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 3
+  },
+  {
+    "slug": "so-hoa-vo-ghi-bai-giang",
+    "cat": "Mẹo hay",
+    "date": "2026-09-15",
+    "tags": [
+      "Số hóa",
+      "Ghi chép",
+      "Ôn thi",
+      "Viết tay sang Word"
+    ],
+    "title": "Số hóa vở ghi bài giảng viết tay thành tài liệu ôn thi gọn gàng, dễ tìm kiếm",
+    "seoTitle": "Số hóa vở ghi bài giảng viết tay thành tài liệu ôn thi",
+    "excerpt": "Quy trình số hóa vở ghi bài giảng viết tay: chụp, sắp xếp theo chủ đề, đánh máy công thức, dựng đề cương và thẻ ôn tập.",
+    "body": "<p class=\"lead\">Cuối học kỳ, nhiều sinh viên có trong tay vài cuốn vở ghi kín chữ: chữ viết vội, mũi tên chú thích, công thức chen ngang. Đến mùa thi, tìm lại một định lý hay một ví dụ mẫu mất cả buổi. Số hóa vở ghi biến những trang giấy đó thành tài liệu ôn thi có mục lục, tìm kiếm được và dễ in gọn.</p>\n\n<h2>Bước 1: Chụp đúng ngay từ đầu</h2>\n<ul>\n  <li>Dùng ứng dụng quét tài liệu trên điện thoại để tự cắt viền, làm phẳng trang và tăng tương phản.</li>\n  <li>Chụp theo thứ tự trang, đặt tên tệp theo môn và buổi học: <span class=\"mono\">GiaiTich_Buoi05_tr1.jpg</span>.</li>\n  <li>Đủ sáng, không bóng tay - xem <a href=\"/blog/meo-chup-tai-lieu-bang-dien-thoai\">7 mẹo chụp tài liệu</a>.</li>\n</ul>\n\n<h2>Bước 2: Sắp xếp theo chủ đề, không theo ngày</h2>\n<p>Vở ghi theo buổi học, nhưng đề thi theo chủ đề. Hãy lập dàn ý môn học (chương, mục) rồi xếp ảnh vào từng mục. Đây là lúc bạn nhìn lại toàn bộ môn học - một hình thức ôn tập hiệu quả.</p>\n\n<h2>Bước 3: Đánh máy phần cốt lõi</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Nội dung</th><th>Nên đánh máy?</th><th>Lý do</th></tr>\n  <tr><td>Định nghĩa, định lý</td><td class=\"ok\">Có</td><td>Cần chính xác từng chữ, hay ra thi</td></tr>\n  <tr><td>Công thức</td><td class=\"ok\">Có</td><td>Gõ bằng Equation để in rõ, tìm kiếm được</td></tr>\n  <tr><td>Ví dụ mẫu, bài giải</td><td class=\"ok\">Có</td><td>Dùng để luyện lại</td></tr>\n  <tr><td>Sơ đồ, hình vẽ</td><td>Tùy</td><td>Có thể giữ ảnh, vẽ lại nếu quan trọng</td></tr>\n  <tr><td>Ghi chú lan man</td><td class=\"no\">Không</td><td>Giữ ảnh là đủ</td></tr>\n</table></div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Gõ công thức bằng Equation (<kbd>Alt</kbd> + <kbd>=</kbd>) ngay từ đầu - xem <a href=\"/blog/go-ma-tran-he-phuong-trinh-word\">gõ ma trận, hệ phương trình, tích phân</a>. Công thức dạng ảnh không tìm kiếm được và dễ mờ khi in.</div></div>\n\n<h2>Bước 4: Dựng đề cương ôn tập</h2>\n<ol class=\"steps\">\n  <li>Gán Heading cho chương, mục để có <a href=\"/blog/tao-muc-luc-tu-dong-word\">mục lục tự động</a>.</li>\n  <li>Đóng khung định nghĩa, tô màu công thức quan trọng một cách thống nhất.</li>\n  <li>Cuối mỗi chương thêm phần “Dạng bài thường gặp” và “Lỗi hay mắc”.</li>\n  <li>Xuất PDF để đọc trên điện thoại, in khổ A5 hai mặt để mang theo.</li>\n</ol>\n\n<h2>Bước 5: Tạo thẻ ôn tập (flashcard)</h2>\n<p>Từ đề cương, chuyển định nghĩa và công thức thành thẻ hỏi - đáp: mặt trước là câu hỏi “Điều kiện để hàm số liên tục tại một điểm?”, mặt sau là câu trả lời. Ôn bằng thẻ theo phương pháp lặp lại ngắt quãng giúp ghi nhớ lâu hơn đọc lại vở nhiều lần.</p>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Vở ghi có thể chứa nội dung bài giảng thuộc quyền của giảng viên. Chia sẻ trong nhóm học tập thường không vấn đề, nhưng đừng đăng bán hay phát tán công khai khi chưa được phép.</div></div>\n\n<h2>Không có thời gian tự gõ?</h2>\n<p>Mùa thi, thời gian quý hơn bao giờ hết. Bạn có thể tự sắp xếp dàn ý và chụp ảnh, phần đánh máy công thức và định dạng giao cho dịch vụ <a href=\"/dich-vu/viet-tay-sang-word\">chuyển chữ viết tay sang Word</a> - nhận bản Word sạch đẹp để ôn tập. Nhiều tiệm photocopy gần trường cũng là <a href=\"/doi-tac\">đối tác của Đánh máy 247</a>, bạn có thể hỏi mã QR ngay tại quầy.</p>\n\n<h2>Gợi ý công cụ cho từng bước</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Bước</th><th>Công cụ gợi ý</th></tr>\n  <tr><td>Chụp và làm phẳng trang</td><td>Ứng dụng quét tài liệu trên điện thoại</td></tr>\n  <tr><td>Lưu trữ, đồng bộ</td><td>Thư mục đám mây chia theo môn học</td></tr>\n  <tr><td>Đánh máy, công thức</td><td>Word, Google Docs (Equation), LaTeX</td></tr>\n  <tr><td>Thẻ ôn tập</td><td>Ứng dụng flashcard có lặp lại ngắt quãng</td></tr>\n</table></div>\n<p>Không cần dùng nhiều công cụ: một thư mục đám mây sắp xếp tốt cùng một tệp Word có mục lục đã đủ để ôn thi hiệu quả.</p>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Chụp thẳng, đủ sáng, đặt tên tệp theo môn và buổi.</li><li>Sắp xếp theo chủ đề, không theo ngày học.</li><li>Đánh máy phần cốt lõi: định nghĩa, công thức, ví dụ mẫu.</li><li>Dựng đề cương có mục lục và tạo thẻ ôn tập.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Nên chụp hay scan vở ghi?",
+        "a": "Điện thoại là đủ nếu chụp thẳng, đủ sáng và dùng ứng dụng quét tài liệu để tự cắt viền, làm phẳng trang. Máy scan phù hợp khi số trang rất nhiều."
+      },
+      {
+        "q": "Có nên đánh máy toàn bộ vở ghi không?",
+        "a": "Không nhất thiết. Hãy đánh máy phần cốt lõi: định nghĩa, công thức, ví dụ mẫu và phần thầy cô nhấn mạnh; phần còn lại có thể lưu dạng ảnh có mục lục."
+      },
+      {
+        "q": "Chia sẻ vở ghi đã số hóa cho bạn bè có sao không?",
+        "a": "Ghi chép của bạn có thể chứa nội dung bài giảng của giảng viên. Chia sẻ trong nhóm học tập thường được chấp nhận, nhưng không nên đăng bán hoặc phát tán công khai khi chưa được phép."
+      }
+    ],
+    "cover": "/assets/img/blog/so-hoa-vo-ghi-bai-giang.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
   },
   {
     "slug": "chuyen-am-phong-van-nghien-cuu",

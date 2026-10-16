@@ -136,6 +136,25 @@ module.exports = {
       <p style="white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:8px">${esc(text)}</p>${btn(SITE_URL + "/quan-tri", "Mở trang quản trị")}`);
   },
 
+  /* ---------- Đối tác (affiliate) ---------- */
+  affRegistered(a) {
+    send(ADMIN_EMAIL, `[Đối tác] Đăng ký mới - ${a.shop}`, "Có đối tác mới đăng ký",
+      `<table style="font-size:14.5px">${row("Cửa hàng", esc(a.shop))}${row("Người liên hệ", esc(a.name))}${row("Điện thoại", esc(a.phone))}${row("Email", esc(a.email))}${row("Địa chỉ", esc(a.address + (a.city ? ", " + a.city : "")))}${row("Mã giới thiệu", esc(a.code))}</table>
+      <p>Vào trang quản trị → tab <b>Đối tác</b> để duyệt tài khoản.</p>${btn(SITE_URL + "/quan-tri", "Mở trang quản trị")}`);
+    send(a.email, "Đã nhận đăng ký đối tác Đánh máy 247", "Cảm ơn bạn đã đăng ký",
+      `<p>Chào ${esc(a.name)},</p><p>Chúng tôi đã nhận đăng ký đối tác của <b>${esc(a.shop)}</b>. Tài khoản sẽ được duyệt trong vòng 24 giờ làm việc; bạn sẽ nhận email khi mã giới thiệu <b>${esc(a.code)}</b> được kích hoạt.</p>${btn(SITE_URL + "/doi-tac-tai-khoan", "Đăng nhập trang đối tác")}`);
+  },
+  affApproved(a) {
+    send(a.email, "Tài khoản đối tác đã được kích hoạt", "Mã giới thiệu của bạn đã hoạt động",
+      `<p>Chào ${esc(a.name)},</p><p>Tài khoản đối tác của <b>${esc(a.shop)}</b> đã được duyệt. Mỗi đơn hàng hoàn thành từ khách bạn giới thiệu, bạn nhận <b>${Math.round(a.rate * 100)}%</b> giá trị đơn.</p>
+      <table style="font-size:14.5px">${row("Mã giới thiệu", esc(a.code))}${row("Liên kết", esc(SITE_URL + "/?ref=" + a.code))}</table>
+      <p>Đăng nhập để tải mã QR và in poster dán tại cửa hàng.</p>${btn(SITE_URL + "/doi-tac-tai-khoan", "Mở trang đối tác")}`);
+  },
+  affPaid(a, amount, n) {
+    send(a.email, "Đánh máy 247 đã chi trả hoa hồng", "Đã chi trả hoa hồng",
+      `<p>Chào ${esc(a.name)},</p><p>Chúng tôi đã chuyển <b>${esc(fmt(amount))}</b> hoa hồng cho ${n} đơn hàng vào tài khoản ${esc(a.bank.bankName)} - ${esc(a.bank.account)}.</p>${btn(SITE_URL + "/doi-tac-tai-khoan", "Xem chi tiết")}`);
+  },
+
   contact(c) {
     send(ADMIN_EMAIL, `[Liên hệ] ${c.subject} - ${c.name}`, "Tin nhắn liên hệ mới",
       `<table style="font-size:14.5px">${row("Họ tên", esc(c.name))}${row("Email", esc(c.email))}${row("Điện thoại", esc(c.phone || "-"))}${row("Chủ đề", esc(c.subject))}</table>

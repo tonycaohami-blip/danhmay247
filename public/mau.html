@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bài mẫu đánh máy &amp; chuyển âm - Đánh máy 247</title>
-  <meta name="description" content="Xem mẫu tài liệu trước và sau khi đánh máy: chữ viết tay, hợp đồng scan, bảng biểu, bản chuyển âm phỏng vấn có mốc thời gian.">
+  <meta name="description" content="Xem mẫu trước và sau khi đánh máy: chữ viết tay, hợp đồng scan, đề thi Toán có công thức, giáo án Hóa học, phiếu khảo sát sang Excel, sửa lỗi font, học bạ chuẩn bị dịch thuật, chuyển âm có mốc thời gian.">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +27,7 @@
         <div class="filter-pills" id="filters" style="justify-content:center;margin-bottom:40px" role="group" aria-label="Lọc mẫu">
           <button type="button" class="is-active" data-f="all" aria-pressed="true">Tất cả</button>
           <button type="button" data-f="doc" aria-pressed="false">Đánh máy tài liệu</button>
+          <button type="button" data-f="formula" aria-pressed="false">Công thức Toán - Hóa</button>
           <button type="button" data-f="audio" aria-pressed="false">Chuyển âm</button>
         </div>
         <div class="samples-grid" id="samples"></div>
@@ -48,7 +49,7 @@
   (function () {
     var $ = DM.$, $$ = DM.$$;
     var docs = DM.samples.map(function (s) {
-      return '<article class="sample reveal" data-kind="doc"><h3>' + s.title + "</h3><p>" + s.desc + "</p>" + DM.compare(s) +
+      return '<article class="sample reveal" data-kind="' + (/công thức/i.test(s.tags.join(" ")) ? "doc formula" : "doc") + '"><h3>' + s.title + "</h3><p>" + s.desc + "</p>" + DM.compare(s) +
         '<div class="sample__meta">' + s.tags.map(function (t) { return '<span class="chip chip--grey">' + t + "</span>"; }).join("") + "</div></article>";
     }).join("");
     var waves = ""; for (var i = 0; i < 56; i++) waves += '<i style="height:' + (20 + Math.round(Math.abs(Math.sin(i * 1.7) * 70 + Math.cos(i * .6) * 20))) % 100 + '%"></i>';
@@ -62,7 +63,7 @@
     $$("#filters button").forEach(function (b) {
       b.addEventListener("click", function () {
         $$("#filters button").forEach(function (x) { x.classList.toggle("is-active", x === b); x.setAttribute("aria-pressed", x === b); });
-        $$(".sample").forEach(function (s) { s.classList.toggle("hidden", b.dataset.f !== "all" && s.dataset.kind !== b.dataset.f); s.classList.add("is-in"); });
+        $$(".sample").forEach(function (s) { s.classList.toggle("hidden", b.dataset.f !== "all" && s.dataset.kind.split(" ").indexOf(b.dataset.f) < 0); s.classList.add("is-in"); });
       });
     });
 

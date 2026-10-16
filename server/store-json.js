@@ -15,7 +15,7 @@ const config = require("./config");
 
 const FILE = path.join(config.DATA_DIR, "db.json");
 const BACKUP_DIR = path.join(config.DATA_DIR, "backups");
-const EMPTY = () => ({ orders: [], users: {}, contacts: [], reviews: [], loginTokens: {}, payments: [], settings: {}, staff: [] });
+const EMPTY = () => ({ orders: [], users: {}, contacts: [], reviews: [], loginTokens: {}, payments: [], settings: {}, staff: [], affiliates: [], affPayouts: [] });
 
 let data = EMPTY();
 let ready = false;
@@ -67,6 +67,8 @@ async function init() {
   // Dữ liệu từ phiên bản đầu tiên: users lưu theo dạng đối tượng, loginTokens có exp…
   if (!data.settings) data.settings = {};
   if (!data.staff) data.staff = [];
+  if (!data.affiliates) data.affiliates = [];
+  if (!data.affPayouts) data.affPayouts = [];
   data.orders.forEach((o) => { if (!o.internal) o.internal = []; });
   if (!config.SESSION_SECRET) {
     if (!data.settings.session_secret) data.settings.session_secret = crypto.randomBytes(48).toString("hex");
@@ -83,7 +85,7 @@ process.on("exit", () => { if (timer) flush(); });
 
 /* ---------- Đơn hàng ---------- */
 const find = (id) => data.orders.find((o) => o.id === id);
-const PATCHABLE = ["status", "name", "email", "phone", "notes", "paidAt", "paidAmount", "paySource", "receivedAmount", "deadline", "assignedTo", "assignedAt"];
+const PATCHABLE = ["status", "name", "email", "phone", "notes", "paidAt", "paidAmount", "paySource", "receivedAmount", "deadline", "assignedTo", "assignedAt", "affId", "affCode", "affRate", "affPaidAt", "affPayoutId"];
 
 const orders = {
   async exists(id) { return !!find(id); },
@@ -96,6 +98,7 @@ const orders = {
   },
   async get(id) { return clone(find(id)) || null; },
   async byStaff(staffId) { return clone(data.orders.filter((o) => o.assignedTo === staffId).sort((a, b) => b.created - a.created)); },
+  async byAffiliate(affId) { return clone(data.orders.filter((o) => o.affId === affId).sort((a, b) => b.created - a.created)); },
   async byEmail(email) { return clone(data.orders.filter((o) => o.email === email).sort((a, b) => b.created - a.created)); },
   async all(limit) { return clone(data.orders.slice().sort((a, b) => b.created - a.created).slice(0, limit || 1000)); },
   async update(id, patch, onlyIfStatus) {
@@ -158,6 +161,29 @@ const staff = {
     save();
     return true;
   }
+};
+
+/* ---------- Đối tác (affiliate) ---------- */
+const AFF_FIELDS = ["name", "shop", "phone", "address", "city", "bank", "passHash", "sessionVersion", "status", "rate", "note", "lastLogin", "approvedAt"];
+const affiliates = {
+  async list() { return clone(data.affiliates.slice().sort((a, b) => b.created - a.created)); },
+  async get(id) { return clone(data.affiliates.find((x) => x.id === id)) || null; },
+  async byEmail(e) { return clone(data.affiliates.find((x) => x.email === e)) || null; },
+  async byCode(c) { return clone(data.affiliates.find((x) => x.code === c)) || null; },
+  async create(a) { data.affiliates.push(Object.assign({ clicks: 0 }, clone(a))); flush(); },
+  async update(id, patch) {
+    const a = data.affiliates.find((x) => x.id === id);
+    if (!a) return false;
+    AFF_FIELDS.forEach((k) => { if (k in patch) a[k] = clone(patch[k]); });
+    save();
+    return true;
+  },
+  async addClick(id) { const a = data.affiliates.find((x) => x.id === id); if (a) { a.clicks = (a.clicks || 0) + 1; save(); } }
+};
+const affPayouts = {
+  async create(p) { data.affPayouts.push(clone(p)); flush(); },
+  async byAffiliate(affId) { return clone(data.affPayouts.filter((p) => p.affId === affId).sort((a, b) => b.at - a.at)); },
+  async all() { return clone(data.affPayouts.slice().sort((a, b) => b.at - a.at)); }
 };
 
 /* ---------- Khách hàng & đăng nhập ---------- */
@@ -224,4 +250,4 @@ const settings = {
   async set(name, value) { data.settings[name] = value; save(); }
 };
 
-module.exports = { kind: "json", file: FILE, _raw: () => data, init, close, isReady, flush, orders, staff, users, loginTokens, contacts, reviews, payments, settings };
+module.exports = { kind: "json", file: FILE, _raw: () => data, init, close, isReady, flush, orders, staff, affiliates, affPayouts, users, loginTokens, contacts, reviews, payments, settings };

@@ -314,7 +314,7 @@ function renderService(slug) {
    ========================================================= */
 const PAGE_NAMES = {
   "/bang-gia": "Bảng giá", "/gioi-thieu": "Giới thiệu", "/danh-gia": "Đánh giá", "/mau": "Bài mẫu", "/blog": "Blog",
-  "/hoi-dap": "Hỏi đáp", "/lien-he": "Liên hệ", "/dich-vu-chuyen-am": "Chuyển âm", "/dat-hang": "Đặt hàng"
+  "/hoi-dap": "Hỏi đáp", "/lien-he": "Liên hệ", "/dich-vu-chuyen-am": "Chuyển âm", "/dat-hang": "Đặt hàng", "/doi-tac": "Đối tác"
 };
 
 function transformHtml(urlPath, html) {
@@ -336,6 +336,10 @@ function transformHtml(urlPath, html) {
     jsonld.push({ "@context": "https://schema.org", "@type": "FAQPage",
       mainEntity: DM.faq.map((f) => ({ "@type": "Question", name: strip(f.q), acceptedAnswer: { "@type": "Answer", text: strip(f.a) } })) });
   }
+  if (urlPath === "/doi-tac" && DM.affiliateFaq) {
+    jsonld.push({ "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: DM.affiliateFaq.map((f) => ({ "@type": "Question", name: strip(f.q), acceptedAnswer: { "@type": "Answer", text: strip(f.a) } })) });
+  }
   if (urlPath === "/dich-vu-chuyen-am") {
     jsonld.push({ "@context": "https://schema.org", "@type": "Service", name: "Chuyển âm thanh, video thành văn bản", serviceType: "Chuyển âm (transcription)",
       provider: { "@id": ORG_ID(), "@type": "Organization", name: "Đánh máy 247" }, areaServed: { "@type": "Country", name: "Việt Nam" },
@@ -343,7 +347,7 @@ function transformHtml(urlPath, html) {
   }
   if (urlPath === "/blog") html = blogListHtml(html);
 
-  const tags = metaTags({ title: decode(title), description: decode(description), url, image: ogImage("default") }) +
+  const tags = metaTags({ title: decode(title), description: decode(description), url, image: ogImage(urlPath === "/doi-tac" ? "doi-tac" : "default") }) +
     '\n  <link rel="apple-touch-icon" href="/assets/img/logo-512.png">\n  ' + jsonld.map(ldScript).join("\n  ");
   return html.replace("</head>", "  " + tags + "\n</head>");
 }

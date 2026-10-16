@@ -105,6 +105,11 @@
               <div class="promo"><label class="sr-only" for="o-promo">Mã giảm giá</label><input class="input" id="o-promo" placeholder="Nhập mã" autocomplete="off"><button type="button" class="button" id="promo-apply">Áp dụng</button></div>
               <div class="field__hint" id="promo-msg" aria-live="polite"></div>
             </div>
+            <div style="margin:2px 0 4px"><button type="button" class="link" id="ref-toggle" aria-expanded="false" aria-controls="ref-box">Mã giới thiệu</button></div>
+            <div class="hidden" id="ref-box">
+              <div class="promo"><label class="sr-only" for="o-ref">Mã giới thiệu</label><input class="input" id="o-ref" placeholder="Mã của cửa hàng giới thiệu" autocomplete="off" maxlength="12"><button type="button" class="button" id="ref-apply">Áp dụng</button></div>
+              <div class="field__hint" id="ref-msg" aria-live="polite"></div>
+            </div>
             <div class="summary__row hidden" id="s-discount-row"><span>Giảm giá:</span><span class="green" id="s-discount"></span></div>
             <div class="summary__divider"></div>
             <div class="summary__total"><span>Tổng thanh toán:<br><small style="color:var(--muted)">VNĐ</small></span><div><s id="s-old" class="hidden"></s><b id="s-total">0 đ</b></div></div>
@@ -234,6 +239,24 @@
       update();
     }
     $("#promo-apply").addEventListener("click", applyPromo);
+
+    /* ---------- Mã giới thiệu đối tác (từ liên kết đã bấm hoặc khách tự nhập) ---------- */
+    var refCode = "";
+    function showRef(open) { $("#ref-box").classList.toggle("hidden", !open); $("#ref-toggle").setAttribute("aria-expanded", open); }
+    function checkRef(code, quiet) {
+      code = String(code || "").trim().toUpperCase();
+      var msg = $("#ref-msg");
+      if (!code) { refCode = ""; msg.textContent = ""; return; }
+      if (!/^[A-Z0-9]{4,12}$/.test(code)) { refCode = ""; msg.textContent = "Mã giới thiệu gồm 4-12 chữ cái hoặc số."; msg.style.color = "var(--red-dark)"; return; }
+      DM.api("/aff/check?code=" + encodeURIComponent(code)).then(function (d) {
+        if (d.valid) { refCode = d.code; $("#o-ref").value = d.code; msg.textContent = "✓ Được giới thiệu bởi " + d.shop + "."; msg.style.color = "var(--green)"; showRef(true); }
+        else { refCode = ""; if (!quiet) { msg.textContent = "Mã giới thiệu không tồn tại hoặc chưa được kích hoạt."; msg.style.color = "var(--red-dark)"; } }
+      }, function () { refCode = code; });
+    }
+    $("#ref-toggle").addEventListener("click", function () { var open = $("#ref-box").classList.contains("hidden"); showRef(open); if (open) $("#o-ref").focus(); });
+    $("#ref-apply").addEventListener("click", function () { checkRef($("#o-ref").value); });
+    $("#o-ref").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); checkRef(this.value); } });
+    if (DM.refCode()) checkRef(DM.refCode(), true);
     $("#o-promo").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyPromo(); } });
 
     /* ---------- Tệp đính kèm ---------- */
@@ -299,6 +322,8 @@
       fd.append("speakers", state.speakers);
       fd.append("extras", state.extras.join(","));
       if (state.promo) fd.append("promo", state.promo);
+      var ref = refCode || ($("#o-ref").value.trim().toUpperCase());
+      if (ref) fd.append("ref", ref);
       fd.append("docType", $("#o-doctype").value);
       fd.append("instructions", $("#o-instr").value);
       fd.append("name", $("#o-name").value.trim());

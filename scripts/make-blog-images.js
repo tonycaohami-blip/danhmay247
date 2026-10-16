@@ -104,6 +104,20 @@ function flow(steps, note, W = 960) {
   return s + `<text x="${W / 2}" y="305" text-anchor="middle" font-size="14" fill="#7f8491">${note}</text></svg>`;
 }
 
+/** Mã QR minh họa (không quét được) - ô vuông giả ngẫu nhiên cố định + 3 ô định vị */
+function qrish(x, y, size) {
+  const n = 21, c = size / n;
+  let s = `<rect x="${x - 8}" y="${y - 8}" width="${size + 16}" height="${size + 16}" fill="#fff"/>`;
+  const finder = (fx, fy) => `<rect x="${x + fx * c}" y="${y + fy * c}" width="${7 * c}" height="${7 * c}" fill="${INK}"/><rect x="${x + (fx + 1) * c}" y="${y + (fy + 1) * c}" width="${5 * c}" height="${5 * c}" fill="#fff"/><rect x="${x + (fx + 2) * c}" y="${y + (fy + 2) * c}" width="${3 * c}" height="${3 * c}" fill="${INK}"/>`;
+  let seed = 7;
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) {
+    seed = (seed * 9301 + 49297) % 233280;
+    const inFinder = (r < 8 && k < 8) || (r < 8 && k > 12) || (r > 12 && k < 8);
+    if (!inFinder && seed / 233280 > 0.52) s += `<rect x="${(x + k * c).toFixed(1)}" y="${(y + r * c).toFixed(1)}" width="${c.toFixed(1)}" height="${c.toFixed(1)}" fill="${INK}"/>`;
+  }
+  return s + finder(0, 0) + finder(14, 0) + finder(0, 14);
+}
+
 /* ---------- ẢNH BÌA ---------- */
 const covers = {
   // 6 bài cũ
@@ -353,7 +367,137 @@ const covers = {
     ${txt(935, 245, "00:00:01,200", { size: 19, family: "Courier New,monospace", fill: BLUE })}
     ${txt(935, 270, "--&gt; 00:00:04", { size: 19, family: "Courier New,monospace", fill: BLUE })}
     <rect x="935" y="290" width="160" height="11" rx="5.5" fill="#d9dbe6"/><rect x="935" y="315" width="120" height="11" rx="5.5" fill="#d9dbe6"/>
-    ${pill(950, 390, 140, ".SRT", RED)}`)
+    ${pill(950, 390, 140, ".SRT", RED)}`),
+
+  // Đợt 3: đối tác photocopy, Word, công thức, dịch thuật
+  "cua-hang-photocopy-tang-thu-nhap": svg("#c62828", AMBER, `
+    <g filter="url(#sh)"><rect x="150" y="250" width="380" height="250" rx="18" fill="#eef0f8"/><rect x="150" y="210" width="380" height="60" rx="14" fill="#d5d8e8"/>
+      <rect x="190" y="225" width="300" height="24" rx="6" fill="#9aa0c3"/><rect x="200" y="300" width="160" height="60" rx="10" fill="${INK}"/><rect x="214" y="314" width="132" height="32" rx="5" fill="#7fd3ff"/>
+      <circle cx="420" cy="330" r="16" fill="${GREEN}"/><circle cx="470" cy="330" r="16" fill="${RED}"/><rect x="190" y="400" width="300" height="70" rx="10" fill="#c9cde3"/></g>
+    <rect x="215" y="160" width="250" height="70" rx="4" fill="#fff" filter="url(#sh2)"/>${[0, 1, 2].map((i) => `<rect x="235" y="${178 + i * 15}" width="${i === 2 ? 120 : 200}" height="7" rx="3.5" fill="#d9dbe6"/>`).join("")}
+    ${card(600, 110, 260, 380)}${qrish(650, 190, 160)}
+    ${txt(730, 160, "Quét mã đặt đánh máy", { size: 17, weight: 700, anchor: "middle" })}
+    ${txt(730, 395, "MINHAN482", { size: 26, weight: 800, anchor: "middle", family: "Courier New,monospace", fill: NAVY })}
+    ${txt(730, 440, "Dán tại quầy", { size: 16, anchor: "middle", fill: "#7f8491" })}
+    <g filter="url(#sh)"><circle cx="1000" cy="250" r="105" fill="#fff"/></g>
+    ${txt(1000, 268, "30%", { size: 64, weight: 800, anchor: "middle", fill: RED })}
+    ${txt(1000, 305, "hoa hồng", { size: 20, weight: 700, anchor: "middle", fill: INK })}
+    ${pill(890, 420, 220, "Không cần vốn", GREEN)}`),
+  "dich-vu-an-theo-tiem-photocopy": svg("#00695c", "#26a69a", `
+    <g filter="url(#sh)"><rect x="170" y="170" width="440" height="330" rx="10" fill="#fff"/></g>
+    <path d="M150 170 h480 l-30 -70 h-420 z" fill="${RED}"/>
+    ${[0, 1, 2, 3, 4, 5].map((i) => `<path d="M${180 + i * 70} 170 a35 30 0 0 0 70 0" fill="${i % 2 ? RED : "#fff"}"/>`).join("")}
+    ${txt(390, 145, "PHOTO - IN ẤN", { size: 28, weight: 800, anchor: "middle", fill: "#fff" })}
+    <rect x="210" y="250" width="160" height="250" rx="6" fill="#cfe9e5"/><rect x="400" y="250" width="170" height="140" rx="6" fill="#e7f4f2"/>
+    ${[0, 1, 2].map((i) => `<rect x="420" y="${275 + i * 32}" width="${130 - i * 20}" height="12" rx="6" fill="#9cc9c2"/>`).join("")}
+    <circle cx="350" cy="380" r="8" fill="#00695c"/>
+    ${["Đóng gáy", "Scan PDF", "Đánh máy", "Luận văn", "Ép plastic", "In màu", "VPP"].map((t, i) => pill(700 + (i % 2) * 200, 110 + Math.floor(i / 2) * 80, 180, t, [RED, AMBER, NAVY, "#6a3fb5", GREEN, BLUE, INK][i])).join("")}`),
+  "tao-muc-luc-tu-dong-word": svg(BLUE, "#4a7fd0", `
+    ${card(330, 80, 540, 480)}
+    ${txt(600, 140, "MỤC LỤC", { size: 30, weight: 800, anchor: "middle" })}
+    ${[["CHƯƠNG 1. TỔNG QUAN", "1", 0, true], ["1.1. Cơ sở lý thuyết", "3", 1], ["1.1.1. Khái niệm", "3", 2], ["1.2. Tình hình nghiên cứu", "8", 1], ["CHƯƠNG 2. PHƯƠNG PHÁP", "15", 0, true], ["2.1. Đối tượng", "15", 1], ["2.2. Thiết kế nghiên cứu", "17", 1], ["CHƯƠNG 3. KẾT QUẢ", "24", 0, true]].map(([t, p, lv, b], i) => {
+      const y = 200 + i * 42, x = 380 + lv * 26;
+      return txt(x, y, t, { size: 18, weight: b ? 800 : 400 }) + `<path d="M${x + t.length * (b ? 11.4 : 9) + 10} ${y - 4} H790" stroke="#9aa0c3" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>` + txt(820, y, p, { size: 18, weight: 700, anchor: "end" });
+    }).join("")}
+    ${badge(150, 120, "W", BLUE)}${pill(150, 470, 120, "F9", RED)}`),
+  "go-ma-tran-he-phuong-trinh-word": svg("#303f9f", "#5c6bc0", `
+    ${card(140, 150, 300, 330)}
+    <path d="M190 210 q-26 105 0 210" fill="none" stroke="${INK}" stroke-width="5"/><path d="M390 210 q26 105 0 210" fill="none" stroke="${INK}" stroke-width="5"/>
+    ${[["1", "2"], ["3", "4"]].map((r, i) => r.map((v, j) => txt(250 + j * 80, 290 + i * 80, v, { size: 48, family: SERIF, anchor: "middle" })).join("")).join("")}
+    ${card(470, 150, 300, 330)}
+    <path d="M540 200 q-22 0 -22 30 v60 q0 25 -20 25 q20 0 20 25 v60 q0 30 22 30" fill="none" stroke="${INK}" stroke-width="5"/>
+    ${chem(650, 285, "2x + y = 5", { size: 34, italic: true })}${chem(650, 375, "x − y = 1", { size: 34, italic: true })}
+    ${card(800, 150, 300, 330)}
+    ${txt(870, 345, "∫", { size: 130, family: SERIF, anchor: "middle" })}
+    ${txt(900, 245, "1", { size: 26, family: SERIF })}${txt(890, 390, "0", { size: 26, family: SERIF })}
+    ${chem(990, 330, "x^2 dx", { size: 40, italic: true })}`),
+  "ve-cong-thuc-cau-tao-huu-co": svg("#1b5e20", "#43a047", (() => {
+    const cx = 420, cy = 360, r = 110, pts = Array.from({ length: 6 }, (_, i) => [cx + r * Math.cos(Math.PI / 6 + i * Math.PI / 3), cy + r * Math.sin(Math.PI / 6 + i * Math.PI / 3)]);
+    let g = card(230, 130, 760, 390);
+    g += `<polygon points="${pts.map((p) => p.join(",")).join(" ")}" fill="none" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/>`;
+    [0, 2, 4].forEach((i) => { const a = pts[i], b = pts[(i + 1) % 6], k = 0.78; const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2; const ix = cx + (mx - cx) * k, iy = cy + (my - cy) * k; const dx = (b[0] - a[0]) * 0.32, dy = (b[1] - a[1]) * 0.32; g += `<path d="M${ix - dx} ${iy - dy} L${ix + dx} ${iy + dy}" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>`; });
+    const top = pts[4];
+    g += `<path d="M${top[0]} ${top[1]} L${top[0]} ${top[1] - 70}" stroke="${INK}" stroke-width="7"/>` + txt(top[0], top[1] - 82, "OH", { size: 34, weight: 700, anchor: "middle", fill: RED });
+    g += `<path d="M620 380 l50 -30 l50 30 l50 -30 l50 30 l40 -23" fill="none" stroke="${INK}" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>` + txt(864, 370, "COOH", { size: 30, weight: 700, fill: RED });
+    g += txt(760, 230, "CH", { size: 34, family: SERIF }) + `<text x="806" y="242" font-family="${SERIF}" font-size="22" fill="${INK}">3</text>` + txt(822, 230, "-CH", { size: 34, family: SERIF }) + `<text x="883" y="242" font-family="${SERIF}" font-size="22" fill="${INK}">2</text>` + txt(899, 230, "-OH", { size: 34, family: SERIF });
+    return g;
+  })()),
+  "ky-hieu-dien-hoc-so-do-mach": svg("#0d2b5e", "#1e5aa8", `
+    ${card(170, 130, 620, 380)}
+    <g fill="none" stroke="${INK}" stroke-width="5" stroke-linejoin="round"><path d="M240 200 H420 M500 200 H720 V440 H520 M470 440 H240 V360 M240 290 V200"/></g>
+    <rect x="420" y="182" width="80" height="36" rx="3" fill="#fff" stroke="${INK}" stroke-width="5"/>
+    <path d="M470 410 V470 M490 400 V480" stroke="${INK}" stroke-width="6"/><path d="M490 440 H520" stroke="${INK}" stroke-width="5"/>
+    <path d="M215 290 H265 M225 360 H255" stroke="${INK}" stroke-width="6"/>
+    <circle cx="720" cy="320" r="30" fill="#fff" stroke="${INK}" stroke-width="5"/>${txt(720, 332, "A", { size: 30, weight: 800, anchor: "middle" })}
+    ${txt(460, 170, "R = 2,2 kΩ", { size: 22, weight: 700, anchor: "middle", fill: BLUE })}${txt(480, 505, "C = 4,7 µF", { size: 22, weight: 700, anchor: "middle", fill: BLUE })}
+    ${txt(190, 335, "ξ", { size: 34, family: SERIF, italic: true, anchor: "middle", fill: RED })}
+    ${["Ω", "µ", "Δ", "ε"].map((s, i) => keycap(860 + (i % 2) * 130, 170 + Math.floor(i / 2) * 140, 110, 110, s, { size: 54, fill: i === 0 ? RED : "#fff", color: i === 0 ? "#fff" : INK })).join("")}`),
+  "bang-thuat-ngu-dich-ky-thuat": svg("#4e342e", "#8d6e63", `
+    ${card(200, 110, 640, 420)}
+    <rect x="200" y="110" width="640" height="64" rx="20" fill="${INK}"/><rect x="200" y="150" width="640" height="24" fill="${INK}"/>
+    ${txt(360, 152, "English", { size: 26, weight: 800, anchor: "middle", fill: "#fff" })}${txt(680, 152, "Tiếng Việt", { size: 26, weight: 800, anchor: "middle", fill: "#fff" })}
+    ${[["bearing", "ổ bi"], ["torque", "mô-men xoắn"], ["valve", "van"], ["gear", "bánh răng"], ["shaft", "trục"]].map(([a, b], i) => `<path d="M200 ${236 + i * 62} H840" stroke="#eef0f6" stroke-width="2"/>` + txt(250, 220 + i * 62, a, { size: 24, family: "Courier New,monospace" }) + txt(560, 220 + i * 62, b, { size: 24, weight: 700, fill: i === 0 ? RED : INK })).join("")}
+    <path d="M520 174 V530" stroke="#e3e5ef" stroke-width="2"/>
+    <g filter="url(#sh)" transform="translate(990 300)"><circle r="95" fill="#fff"/>${Array.from({ length: 8 }, (_, i) => `<rect x="-14" y="-92" width="28" height="34" rx="6" fill="${AMBER}" transform="rotate(${i * 45})"/>`).join("")}<circle r="62" fill="${AMBER}"/><circle r="26" fill="#fff"/></g>`),
+  "dich-may-va-hau-bien-tap": svg("#4527a0", "#7e57c2", `
+    <g filter="url(#sh)" transform="translate(150 200)"><rect width="200" height="200" rx="36" fill="#fff"/>${txt(100, 128, "AI", { size: 80, weight: 800, anchor: "middle", fill: "#5a3fd0" })}</g>
+    ${arrow(380, 300, 470)}
+    ${paper(490, 130, 340, 400, { lines: 9 })}
+    <path d="M530 236 h170" stroke="${RED}" stroke-width="4"/><path d="M600 222 q30 -30 60 0" fill="none" stroke="${RED}" stroke-width="3"/>
+    <rect x="530" y="318" width="200" height="14" rx="7" fill="${RED}" opacity=".35"/>
+    <g transform="rotate(35 760 420)"><rect x="740" y="300" width="26" height="170" rx="6" fill="${RED}"/><path d="M740 470 l13 30 l13 -30 z" fill="${INK}"/></g>
+    ${arrow(850, 300, 930)}
+    ${check(1010, 300, 60)}${pill(930, 420, 170, "Hậu biên tập", INK)}`),
+  "dich-tom-tat-bai-bao-khoa-hoc": svg("#1a237e", "#3949ab", `
+    ${card(170, 90, 420, 470)}
+    ${txt(380, 150, "TẠP CHÍ KHOA HỌC", { size: 20, weight: 800, anchor: "middle", fill: "#7f8491" })}
+    <rect x="210" y="175" width="340" height="18" rx="9" fill="${INK}"/><rect x="250" y="205" width="260" height="14" rx="7" fill="${INK}" opacity=".6"/>
+    ${txt(210, 262, "TÓM TẮT", { size: 18, weight: 800, fill: RED })}
+    ${[0, 1, 2, 3, 4].map((i) => `<rect x="210" y="${280 + i * 26}" width="${i === 4 ? 200 : 340}" height="10" rx="5" fill="#d9dbe6"/>`).join("")}
+    ${txt(210, 430, "Từ khóa:", { size: 16, weight: 700 })}${[0, 1, 2].map((i) => `<rect x="${290 + i * 90}" y="418" width="78" height="18" rx="9" fill="#e3e6f6"/>`).join("")}
+    ${arrow(610, 320, 700)}
+    ${card(720, 90, 420, 470)}
+    ${txt(930, 150, "SCIENTIFIC JOURNAL", { size: 20, weight: 800, anchor: "middle", fill: "#7f8491" })}
+    <rect x="760" y="175" width="340" height="18" rx="9" fill="${INK}"/><rect x="800" y="205" width="260" height="14" rx="7" fill="${INK}" opacity=".6"/>
+    ${txt(760, 262, "ABSTRACT", { size: 18, weight: 800, fill: BLUE })}
+    ${[0, 1, 2, 3, 4].map((i) => `<rect x="760" y="${280 + i * 26}" width="${i === 4 ? 220 : 340}" height="10" rx="5" fill="#d9dbe6"/>`).join("")}
+    ${txt(760, 430, "Keywords:", { size: 16, weight: 700 })}${[0, 1, 2].map((i) => `<rect x="${850 + i * 84}" y="418" width="74" height="18" rx="9" fill="#e3e6f6"/>`).join("")}
+    ${pill(330, 490, 100, "VI", RED)}${pill(880, 490, 100, "EN", BLUE)}`),
+  "trich-dan-apa-ieee-word": svg("#006064", "#00838f", `
+    ${card(170, 100, 470, 450)}
+    ${[0, 1, 2].map((i) => `<rect x="210" y="${150 + i * 28}" width="${i === 2 ? 220 : 390}" height="11" rx="5.5" fill="#d9dbe6"/>`).join("")}
+    <rect x="210" y="234" width="170" height="34" rx="8" fill="#e0f7fa"/>${txt(295, 258, "(Trần, 2023)", { size: 19, weight: 700, anchor: "middle", fill: "#006064" })}
+    <rect x="400" y="234" width="60" height="34" rx="8" fill="#fde7e7"/>${txt(430, 258, "[1]", { size: 19, weight: 700, anchor: "middle", fill: RED })}
+    ${txt(210, 320, "TÀI LIỆU THAM KHẢO", { size: 18, weight: 800 })}
+    ${[0, 1, 2].map((i) => `<rect x="210" y="${344 + i * 58}" width="390" height="10" rx="5" fill="#c9cde3"/><rect x="240" y="${362 + i * 58}" width="300" height="10" rx="5" fill="#e3e5ef"/>`).join("")}
+    ${pill(690, 170, 170, "APA 7", "#006064")}${pill(690, 240, 170, "IEEE", RED)}${pill(690, 310, 170, "Zotero", AMBER)}
+    ${badge(960, 220, "W", BLUE)}${check(1040, 440, 40)}`),
+  "go-tieng-viet-dien-thoai": svg("#ad1457", "#ec407a", `
+    <g filter="url(#sh)"><rect x="440" y="70" width="320" height="520" rx="44" fill="${INK}"/><rect x="458" y="110" width="284" height="450" rx="16" fill="#eef0f8"/></g>
+    <rect x="478" y="140" width="200" height="56" rx="18" fill="#fff"/>${txt(498, 176, "Xin chào bạn!", { size: 20, weight: 700 })}
+    <rect x="530" y="210" width="190" height="56" rx="18" fill="#cfd8ff"/>${txt(548, 246, "Mình gửi tài liệu nhé", { size: 16 })}
+    ${[["q", "w", "e", "r", "t", "y"], ["a", "s", "d", "f", "g", "h"], ["z", "x", "c", "v", "b", "n"]].map((row, ri) => row.map((k, i) => `<rect x="${472 + ri * 10 + i * 44}" y="${340 + ri * 54}" width="38" height="46" rx="8" fill="#fff"/>` + txt(491 + ri * 10 + i * 44, 371 + ri * 54, k, { size: 20, weight: 700, anchor: "middle" })).join("")).join("")}
+    <rect x="520" y="506" width="160" height="40" rx="10" fill="#fff"/>
+    <g filter="url(#sh)" transform="translate(940 300)"><circle r="90" fill="#fff"/><rect x="-24" y="-52" width="48" height="74" rx="24" fill="${RED}"/><path d="M-40 6 a40 40 0 0 0 80 0 M0 46 v20 M-24 66 h48" fill="none" stroke="${RED}" stroke-width="8" stroke-linecap="round"/></g>
+    ${pill(150, 220, 160, "Telex", NAVY)}${pill(150, 300, 160, "VNI", AMBER)}${pill(150, 380, 160, "Gõ vuốt", GREEN)}`),
+  "so-hoa-vo-ghi-bai-giang": svg("#e65100", AMBER, `
+    <g transform="rotate(-6 300 330)"><rect x="160" y="140" width="300" height="400" rx="12" fill="#fffdf5" filter="url(#sh)"/>
+      ${Array.from({ length: 9 }, (_, i) => `<circle cx="160" cy="${170 + i * 42}" r="9" fill="none" stroke="#9aa0c3" stroke-width="5"/>`).join("")}
+      ${scribble(200, 200, 230, "#31407a", 8, 40)}</g>
+    ${arrow(490, 330, 580)}
+    <g filter="url(#sh)"><rect x="600" y="170" width="160" height="290" rx="26" fill="${INK}"/><rect x="612" y="200" width="136" height="230" rx="10" fill="#fffdf5"/></g>
+    ${scribble(625, 240, 105, "#9aa0c3", 4, 34)}
+    ${arrow(780, 330, 860)}
+    ${paper(880, 140, 250, 380, { lines: 9, head: "#e65100" })}`),
+  "doi-tac": svg("#b71c1c", AMBER, `
+    ${txt(90, 170, "Đối tác cửa hàng photocopy", { size: 52, weight: 800, fill: "#fff", family: SERIF })}
+    ${txt(90, 235, "Giới thiệu khách cần đánh máy - nhận hoa hồng", { size: 30, fill: "#fff" })}
+    <g filter="url(#sh)"><rect x="90" y="285" width="330" height="170" rx="24" fill="#fff"/></g>
+    ${txt(255, 405, "30%", { size: 110, weight: 800, anchor: "middle", fill: RED })}
+    ${pill(90, 490, 240, "Không cần vốn", GREEN)}${pill(350, 490, 260, "Mã QR in sẵn", NAVY)}
+    ${card(800, 140, 300, 400)}${qrish(860, 230, 180)}
+    ${txt(950, 200, "Quét để đặt hàng", { size: 20, weight: 700, anchor: "middle" })}
+    ${txt(950, 460, "MINHAN482", { size: 28, weight: 800, anchor: "middle", family: "Courier New,monospace", fill: NAVY })}`)
 };
 
 /* ---------- HÌNH MINH HỌA TRONG BÀI ---------- */
@@ -528,7 +672,52 @@ const figures = {
     [["Hai cột song song", 170], ["Xen kẽ từng đoạn", 480], ["Hai trang đối diện", 790]].forEach(([t, x]) => { s += txt(x, 395, t, { size: 18, weight: 800, anchor: "middle" }); });
     s += `<rect x="330" y="410" width="14" height="10" rx="3" fill="${EN}"/>` + txt(350, 420, "Tiếng Anh", { size: 13, fill: "#55586b" }) + `<rect x="460" y="410" width="14" height="10" rx="3" fill="${VI}"/>` + txt(480, 420, "Tiếng Việt", { size: 13, fill: "#55586b" });
     return s + "</svg>";
-  })()
+  })(),
+
+  // Quy trình đối tác giới thiệu khách
+  "fig-hoa-hong-doi-tac": flow([
+    ["Khách quét QR", "Poster tại quầy hoặc\nliên kết của tiệm", NAVY], ["Đặt hàng", "Khách gửi tài liệu,\nthanh toán VietQR", AMBER],
+    ["Đánh máy 247 làm", "Gõ, kiểm tra,\ngiao bản Word", BLUE], ["Đơn hoàn thành", "Hoa hồng\nđược duyệt", GREEN], ["Tiệm nhận 30%", "Chuyển khoản\nhằng tháng", RED]
+  ], "Tiệm không cần thu hộ, không cần người gõ - mọi đơn và hoa hồng hiện trong trang đối tác"),
+
+  // Heading → mục lục tự động
+  "fig-muc-luc-word": (() => {
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 430" role="img" font-family="${FONT}"><rect width="960" height="430" rx="18" fill="#f6f7fb"/>`;
+    s += `<rect x="40" y="40" width="380" height="350" rx="8" fill="#fff" stroke="#c9cbd8" stroke-width="2"/>`;
+    const rows = [["Heading 1", "CHƯƠNG 1. TỔNG QUAN", 0, NAVY], ["", "", 9], ["Heading 2", "1.1. Cơ sở lý thuyết", 1, BLUE], ["", "", 9], ["Heading 3", "1.1.1. Khái niệm", 2, GREEN], ["", "", 9], ["Heading 2", "1.2. Tình hình nghiên cứu", 1, BLUE], ["", "", 9]];
+    rows.forEach(([lab, t, lv, c], i) => {
+      const y = 82 + i * 38;
+      if (lv === 9) { s += `<rect x="70" y="${y - 12}" width="320" height="8" rx="4" fill="#e3e5ef"/>`; return; }
+      s += `<rect x="60" y="${y - 20}" width="78" height="26" rx="13" fill="${c}"/>` + txt(99, y - 2, lab, { size: 11.5, weight: 700, anchor: "middle", fill: "#fff" }) + txt(150 + lv * 14, y, t, { size: 15, weight: lv ? 400 : 800 });
+    });
+    s += `<path d="M445 215 H505" stroke="#9aa0c3" stroke-width="4"/><path d="M495 205 L507 215 L495 225" fill="none" stroke="#9aa0c3" stroke-width="4"/>` + txt(475, 250, "F9", { size: 15, weight: 800, anchor: "middle", fill: RED });
+    s += `<rect x="530" y="40" width="390" height="350" rx="8" fill="#fff" stroke="#c9cbd8" stroke-width="2"/>` + txt(725, 85, "MỤC LỤC", { size: 20, weight: 800, anchor: "middle" });
+    [["CHƯƠNG 1. TỔNG QUAN", "1", 0], ["1.1. Cơ sở lý thuyết", "3", 1], ["1.1.1. Khái niệm", "3", 2], ["1.2. Tình hình nghiên cứu", "8", 1], ["CHƯƠNG 2. PHƯƠNG PHÁP", "15", 0]].forEach(([t, p, lv], i) => {
+      const y = 135 + i * 46, x = 555 + lv * 18;
+      s += txt(x, y, t, { size: 14.5, weight: lv ? 400 : 800 }) + `<path d="M${x + t.length * (lv ? 7.4 : 8.6) + 6} ${y - 4} H870" stroke="#9aa0c3" stroke-width="2" stroke-dasharray="1.5 5" stroke-linecap="round"/>` + txt(895, y, p, { size: 14.5, weight: 700, anchor: "end" });
+    });
+    return s + txt(480, 418, "Gán Heading cho tiêu đề → References → Table of Contents → cập nhật bằng F9", { size: 14, anchor: "middle", fill: "#7f8491" }) + "</svg>";
+  })(),
+
+  // Ma trận, hệ phương trình, tích phân trong Word
+  "fig-ma-tran-word": (() => {
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" role="img" font-family="${FONT}"><rect width="960" height="400" rx="18" fill="#f6f7fb"/>`;
+    const panel = (x, title, codeTxt) => `<rect x="${x}" y="40" width="280" height="300" rx="14" fill="#fff" stroke="#e3e5ef" stroke-width="2"/>` + txt(x + 140, 75, title, { size: 17, weight: 800, anchor: "middle" }) +
+      `<rect x="${x + 16}" y="282" width="248" height="40" rx="8" fill="#1d2040"/>` + txt(x + 140, 308, codeTxt, { size: 13.5, family: "Courier New,monospace", anchor: "middle", fill: "#7fd3ff" });
+    s += panel(40, "Ma trận 2×2", "(\\matrix(a&amp;b@c&amp;d))") + panel(340, "Hệ phương trình", "Bracket → Cases") + panel(640, "Tích phân", "\\int_0^1 x^2 dx");
+    s += `<path d="M110 110 q-22 70 0 140" fill="none" stroke="${INK}" stroke-width="4"/><path d="M250 110 q22 70 0 140" fill="none" stroke="${INK}" stroke-width="4"/>`;
+    s += txt(150, 165, "a", { size: 38, family: SERIF, italic: true, anchor: "middle" }) + txt(210, 165, "b", { size: 38, family: SERIF, italic: true, anchor: "middle" }) + txt(150, 225, "c", { size: 38, family: SERIF, italic: true, anchor: "middle" }) + txt(210, 225, "d", { size: 38, family: SERIF, italic: true, anchor: "middle" });
+    s += `<path d="M400 110 q-18 0 -18 25 v35 q0 18 -16 18 q16 0 16 18 v35 q0 25 18 25" fill="none" stroke="${INK}" stroke-width="4"/>`;
+    s += chem(500, 165, "2x + y = 5", { size: 28, italic: true }) + chem(500, 230, "x − y = 1", { size: 28, italic: true });
+    s += txt(720, 235, "∫", { size: 110, family: SERIF, anchor: "middle" }) + txt(745, 140, "1", { size: 22, family: SERIF }) + txt(735, 262, "0", { size: 22, family: SERIF }) + chem(830, 205, "x^2 dx", { size: 34, italic: true });
+    return s + txt(480, 380, "Mở khung công thức bằng Alt + = rồi gõ cú pháp, nhấn phím cách để Word dựng công thức", { size: 14, anchor: "middle", fill: "#7f8491" }) + "</svg>";
+  })(),
+
+  // Dịch máy + hậu biên tập
+  "fig-hau-bien-tap": flow([
+    ["Bản gốc sạch", "Đánh máy, không\nngắt dòng cứng", "#8c877d"], ["Dịch máy", "Tạo bản nháp\nnhanh", "#5a3fd0"],
+    ["Hậu biên tập", "Sửa nghĩa, bỏ sót,\nvăn phong", RED], ["Kiểm tra", "Thuật ngữ, số liệu,\ntên riêng", AMBER], ["Bản dịch cuối", "Trình bày khớp\nbản gốc", GREEN]
+  ], "Mức độ hậu biên tập (nhẹ hay đầy đủ) phụ thuộc mục đích sử dụng bản dịch")
 };
 
 let n = 0;

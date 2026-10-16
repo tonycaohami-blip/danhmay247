@@ -213,6 +213,19 @@ DM.faq = [
   { cat: "Hỗ trợ", q: "Chính sách hoàn tiền như thế nào?", a: "<p>Nếu đơn hàng bị trễ hạn hoặc chất lượng không đạt cam kết và không thể khắc phục, bạn được hoàn tiền một phần hoặc toàn bộ. Yêu cầu hoàn tiền được xử lý trong vòng 3–5 ngày làm việc.</p>" }
 ];
 
+/* ---------- Chương trình đối tác (affiliate) ----------
+   rate: tỷ lệ hoa hồng trên giá trị đơn hoàn thành; cookieDays: số ngày ghi nhận khách sau khi bấm liên kết;
+   minPayout: số dư tối thiểu để chi trả; payoutDay: ngày chi trả hằng tháng */
+DM.affiliate = { rate: 0.3, cookieDays: 30, minPayout: 100000, payoutDay: 5 };
+DM.affiliateFaq = [
+  { q: "Ai có thể tham gia chương trình đối tác?", a: "Cửa hàng photocopy, in ấn, văn phòng phẩm, tiệm gần trường học, trung tâm gia sư, giáo viên, dịch vụ hành chính - bất kỳ ai thường xuyên gặp khách có nhu cầu đánh máy, chuyển âm, định dạng tài liệu. Tham gia miễn phí, không cần đặt cọc." },
+  { q: "Hoa hồng 30% được tính như thế nào?", a: "Bạn nhận 30% giá trị mỗi đơn hàng mà khách bạn giới thiệu đặt và đã hoàn thành. Ví dụ đơn 500.000 đ hoàn thành → bạn nhận 150.000 đ. Đơn bị hủy hoặc hoàn tiền không tính hoa hồng." },
+  { q: "Làm sao hệ thống biết khách do tôi giới thiệu?", a: "Mỗi đối tác có một mã giới thiệu và mã QR riêng. Khách quét QR hoặc bấm liên kết của bạn thì được ghi nhận trong 30 ngày; khách cũng có thể tự nhập mã của bạn ở trang đặt hàng." },
+  { q: "Khi nào tôi nhận được tiền?", a: "Hoa hồng được duyệt ngay khi đơn hoàn thành. Chúng tôi chuyển khoản vào tài khoản ngân hàng bạn đăng ký vào ngày 5 hằng tháng khi số dư từ 100.000 đ. Mọi khoản chi trả đều hiện trong trang đối tác." },
+  { q: "Tôi có phải tự đánh máy hay xử lý tài liệu không?", a: "Không. Bạn chỉ cần giới thiệu khách hoặc giúp khách quét mã QR. Khách đặt hàng, thanh toán và nhận tài liệu trực tiếp với Đánh máy 247; mọi việc đánh máy, kiểm tra, bảo mật do chúng tôi đảm nhận." },
+  { q: "Tôi có xem được thông tin của khách không?", a: "Để bảo vệ quyền riêng tư của khách, trang đối tác chỉ hiển thị mã đơn, loại dịch vụ, giá trị đơn và hoa hồng - không hiển thị tên, email hay số điện thoại của khách." }
+];
+
 /* Bài viết blog: xem public/assets/js/posts.js */
 
 /* ---------- Mẫu tài liệu trước / sau ---------- */
@@ -234,6 +247,36 @@ DM.samples = [
     desc: "Sổ ghi chép chi tiêu viết tay với nhiều con số.",
     before: '<div class="doc-hand"><h6>Chi tiêu tháng 9</h6><table><tr><td>2/9</td><td>Tiền nhà</td><td>4.500.000</td></tr><tr><td>5/9</td><td>Điện + nước</td><td>820.000</td></tr><tr><td>8/9</td><td>Đi chợ</td><td>1.250.000</td></tr><tr><td>12/9</td><td>Xăng xe</td><td>350.000</td></tr><tr><td>15/9</td><td>Học phí con</td><td>2.800.000</td></tr><tr><td>20/9</td><td>Internet</td><td>220.000</td></tr><tr><td>25/9</td><td>Hiếu hỉ</td><td>500.000</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10.440.000</b></td></tr></table></div>',
     after: '<div class="doc-typed"><h6>Chi tiêu tháng 9</h6><table><tr><th>Ngày</th><th>Khoản chi</th><th style="text-align:right">Số tiền (đ)</th></tr><tr><td>02/09</td><td>Tiền nhà</td><td style="text-align:right">4.500.000</td></tr><tr><td>05/09</td><td>Điện + nước</td><td style="text-align:right">820.000</td></tr><tr><td>08/09</td><td>Đi chợ</td><td style="text-align:right">1.250.000</td></tr><tr><td>12/09</td><td>Xăng xe</td><td style="text-align:right">350.000</td></tr><tr><td>15/09</td><td>Học phí con</td><td style="text-align:right">2.800.000</td></tr><tr><td>20/09</td><td>Internet</td><td style="text-align:right">220.000</td></tr><tr><td>25/09</td><td>Hiếu hỉ</td><td style="text-align:right">500.000</td></tr><tr><th colspan="2">Tổng cộng</th><th style="text-align:right">10.440.000</th></tr></table></div>'
+  },
+  {
+    title: "Đề kiểm tra Toán viết tay → Word có công thức", tags: ["Công thức toán", "Đề thi"],
+    desc: "Đề 15 phút giáo viên viết tay, có phân số, căn, số mũ và hình vẽ.",
+    before: '<div class="doc-hand"><h6>Kiểm tra 15\' - Toán 10</h6><p>Câu 1 (4đ). Giải pt: √(2x + 3) = x</p><p>Câu 2 (3đ). Tìm tập xác định của hàm số</p><p style="padding-left:30px">y = (x² - 1)/(x - 3) + √(5 - x)</p><p>Câu 3 (3đ). Cho Δ ABC vuông tại A, AB = 6, AC = 8. Tính BC và sin B.</p><p style="text-align:right;margin-top:10px">- Hết -</p></div>',
+    after: '<div class="doc-typed"><h6>Kiểm tra 15 phút - Toán 10</h6><p><b>Câu 1</b> <i>(4,0 điểm)</i>. Giải phương trình: √(2<i>x</i> + 3) = <i>x</i>.</p><p><b>Câu 2</b> <i>(3,0 điểm)</i>. Tìm tập xác định của hàm số</p><p style="text-align:center"><i>y</i> = <span style="display:inline-block;vertical-align:middle;text-align:center"><span style="display:block;border-bottom:1px solid #222;padding:0 4px"><i>x</i><sup>2</sup> − 1</span><span style="display:block"><i>x</i> − 3</span></span> + √(5 − <i>x</i>)</p><p><b>Câu 3</b> <i>(3,0 điểm)</i>. Cho tam giác <i>ABC</i> vuông tại <i>A</i>, có <i>AB</i> = 6 cm, <i>AC</i> = 8 cm. Tính <i>BC</i> và sin <i>B</i>.</p><p style="text-align:center;margin-top:10px">- HẾT -</p></div>'
+  },
+  {
+    title: "Giáo án Hóa học → Word chuẩn chỉ số", tags: ["Công thức hóa học", "Giáo án"],
+    desc: "Bản photo giáo án cũ: chỉ số, điện tích ion bị gõ ngang dòng, thiếu điều kiện phản ứng.",
+    before: '<div class="doc-scan"><h6>BAI 12: AXIT SUNFURIC</h6><p>I. Tinh chat hoa hoc</p><p>1. H2SO4 loang:</p><p>Fe + H2SO4 = FeSO4 + H2</p><p>CuO + H2SO4 = CuSO4 + H2O</p><p>2. H2SO4 dac nong:</p><p>Cu + 2H2SO4 = CuSO4 + SO2 + 2H2O</p><p>Ion SO4 2- nhan biet bang Ba2+:</p><p>Ba2+ + SO4 2- = BaSO4 (ket tua trang)</p></div>',
+    after: '<div class="doc-typed"><h6>Bài 12: Axit sunfuric</h6><p><b>I. Tính chất hóa học</b></p><p><b>1. H<sub>2</sub>SO<sub>4</sub> loãng</b></p><p style="text-align:center">Fe + H<sub>2</sub>SO<sub>4</sub> → FeSO<sub>4</sub> + H<sub>2</sub>↑</p><p style="text-align:center">CuO + H<sub>2</sub>SO<sub>4</sub> → CuSO<sub>4</sub> + H<sub>2</sub>O</p><p><b>2. H<sub>2</sub>SO<sub>4</sub> đặc, nóng</b></p><p style="text-align:center">Cu + 2H<sub>2</sub>SO<sub>4</sub> (đặc) <span style="display:inline-block;text-align:center;vertical-align:middle;line-height:1"><small style="display:block;font-size:10px">t°</small>→</span> CuSO<sub>4</sub> + SO<sub>2</sub>↑ + 2H<sub>2</sub>O</p><p><b>Nhận biết ion SO<sub>4</sub><sup>2−</sup></b> bằng Ba<sup>2+</sup>:</p><p style="text-align:center">Ba<sup>2+</sup> + SO<sub>4</sub><sup>2−</sup> → BaSO<sub>4</sub>↓ (kết tủa trắng)</p></div>'
+  },
+  {
+    title: "Phiếu khảo sát viết tay → bảng Excel", tags: ["Phiếu khảo sát", "Nhập liệu"],
+    desc: "200 phiếu khảo sát giấy; mỗi phiếu thành một dòng, câu trả lời mã hóa thống nhất.",
+    before: '<div class="doc-hand"><h6>Phiếu khảo sát số 087</h6><p>1. Giới tính: ☑ Nữ ☐ Nam</p><p>2. Tuổi: 21</p><p>3. Năm học: năm 3</p><p>4. Mỗi ngày dùng mạng XH: khoảng 3-4 tiếng</p><p>5. Mức độ hài lòng với thư viện (1-5): <b>④</b></p><p>6. Góp ý: <span class="strike">ít sách</span> nên mở cửa tới 9h tối, thêm ổ cắm sạc</p></div>',
+    after: '<div class="doc-typed"><h6>Kết quả nhập liệu (trích)</h6><table><tr><th>Mã phiếu</th><th>Giới tính</th><th>Tuổi</th><th>Năm học</th><th>Giờ MXH/ngày</th><th>Hài lòng</th><th>Góp ý</th></tr><tr><td>087</td><td>Nữ</td><td>21</td><td>3</td><td>3-4</td><td>4</td><td>Mở cửa tới 21h; thêm ổ cắm sạc</td></tr><tr><td>088</td><td>Nam</td><td>20</td><td>2</td><td>1-2</td><td>3</td><td>Thêm chỗ ngồi nhóm</td></tr><tr><td>089</td><td>Nữ</td><td>22</td><td>4</td><td>&gt;4</td><td>5</td><td>-</td></tr></table><p style="font-size:11.5px;color:#666">Quy ước mã hóa và danh sách phiếu nghi vấn được gửi kèm để nhóm nghiên cứu đối chiếu.</p></div>'
+  },
+  {
+    title: "Công văn cũ lỗi font TCVN3 → Unicode chuẩn Nghị định 30", tags: ["Sửa lỗi font", "Hành chính"],
+    desc: "Tệp soạn bằng phông .VnTime mở trên máy mới hiện ký tự lạ; trình bày lại đúng thể thức.",
+    before: '<div class="doc-scan" style="filter:none"><p>UBND X· B×nh Minh &nbsp;&nbsp;&nbsp;&nbsp; Céng hßa x· héi chñ nghÜa ViÖt Nam</p><p>Sè: 25/UBND-VP &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; §éc lËp - Tù do - H¹nh phóc</p><p>V/v tæ chøc tæng vÖ sinh m«i tr­êng</p><p>KÝnh göi: C¸c th«n trong x·</p><p>§Ó chµo mõng ngµy lÔ, UBND x· ®Ò nghÞ c¸c th«n tæ chøc tæng vÖ sinh vµo s¸ng chñ nhËt ngµy 20/10...</p></div>',
+    after: '<div class="doc-typed"><table style="border:0"><tr><td style="border:0;text-align:center;width:40%"><b>UBND XÃ BÌNH MINH</b><br>Số: 25/UBND-VP<br><small>V/v tổ chức tổng vệ sinh môi trường</small></td><td style="border:0;text-align:center"><b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br><b><u>Độc lập - Tự do - Hạnh phúc</u></b><br><i>Bình Minh, ngày 15 tháng 10 năm 2026</i></td></tr></table><p style="text-align:center">Kính gửi: Các thôn trong xã.</p><p>Để chào mừng ngày lễ, Ủy ban nhân dân xã đề nghị các thôn tổ chức tổng vệ sinh môi trường vào sáng Chủ nhật, ngày 20/10/2026…</p><p style="font-size:11.5px;color:#666">Phông Unicode Times New Roman, cỡ 13-14, lề trái 30 mm theo Nghị định 30/2020/NĐ-CP.</p></div>'
+  },
+  {
+    title: "Học bạ viết tay → bản đánh máy giữ nguyên văn để dịch thuật", tags: ["Chuẩn bị dịch thuật", "Giấy tờ"],
+    desc: "Học bạ cũ chữ viết tay, có dấu đỏ và chữ ký - gõ nguyên văn, ghi chú vị trí dấu, chữ ký.",
+    before: '<div class="doc-hand"><h6>Học bạ THCS - Lớp 9</h6><p>Họ tên: Nguyễn Hoàng Bảo Ng<span class="strike">ọ</span>c</p><p>Ngày sinh: 14/3/2010 &nbsp; Nơi sinh: Q. Hải Châu</p><table><tr><td>Toán</td><td>8,7</td><td>Ngữ văn</td><td>8,2</td></tr><tr><td>Tiếng Anh</td><td>9,4</td><td>Vật lí</td><td>8,0</td></tr></table><p>Xếp loại: Học lực Giỏi - Hạnh kiểm Tốt</p><p style="text-align:right">Hiệu trưởng (ký, đóng dấu)</p></div>',
+    after: '<div class="doc-typed"><h6>Học bạ trung học cơ sở - Lớp 9</h6><p><b>Họ và tên:</b> Nguyễn Hoàng Bảo Ngọc &nbsp; <b>Ngày sinh:</b> 14/03/2010</p><p><b>Nơi sinh:</b> Quận Hải Châu</p><table><tr><th>Môn học</th><th>Điểm TB cả năm</th><th>Môn học</th><th>Điểm TB cả năm</th></tr><tr><td>Toán</td><td>8,7</td><td>Ngữ văn</td><td>8,2</td></tr><tr><td>Tiếng Anh</td><td>9,4</td><td>Vật lí</td><td>8,0</td></tr></table><p><b>Xếp loại:</b> Học lực: Giỏi - Hạnh kiểm: Tốt</p><p style="text-align:right"><b>HIỆU TRƯỞNG</b><br>[Chữ ký] [Dấu tròn đỏ của trường]</p><p style="font-size:11.5px;color:#666">Bản gõ giữ nguyên văn, sẵn sàng gửi đơn vị dịch thuật. Thông tin cá nhân trong mẫu là giả định.</p></div>'
   }
 ];
 

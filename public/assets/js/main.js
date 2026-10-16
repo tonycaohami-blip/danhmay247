@@ -170,6 +170,7 @@
     { label: "Đánh giá", href: "/danh-gia" },
     { label: "Bài mẫu", href: "/mau" },
     { label: "Blog", href: "/blog" },
+    { label: "Đối tác", href: "/doi-tac" },
     { label: "Liên hệ", href: "/lien-he" }
   ];
   DM.logo = function (light) {
@@ -385,7 +386,7 @@
       '<div class="footer__menu"><div class="footer__title">Công ty</div><ul>' +
       '<li><a href="/gioi-thieu">Giới thiệu</a></li><li><a href="/bang-gia">Bảng giá</a></li><li><a href="/danh-gia">Đánh giá</a></li>' +
       '<li><a href="/hoi-dap">Hỏi đáp</a></li><li><a href="/blog">Blog</a></li><li><a href="/lien-he">Liên hệ</a></li>' +
-      '<li><a href="#" data-legal="cookie">Chính sách cookie</a></li><li><a href="/nhan-vien" rel="nofollow">Đăng nhập nhân viên</a></li></ul></div>' +
+      '<li><a href="#" data-legal="cookie">Chính sách cookie</a></li><li><a href="/doi-tac">Đối tác - hoa hồng 30%</a></li><li><a href="/doi-tac-tai-khoan" rel="nofollow">Đăng nhập đối tác</a></li><li><a href="/nhan-vien" rel="nofollow">Đăng nhập nhân viên</a></li></ul></div>' +
       '<div class="footer__menu"><div class="footer__title">Dịch vụ</div><ul>' +
       '<li><a href="/#services-section">Đánh máy lại</a></li><li><a href="/dich-vu-chuyen-am">Chuyển âm</a></li>' +
       '<li><a href="/dich-vu/pdf-sang-word">PDF sang Word</a></li><li><a href="/dich-vu/viet-tay-sang-word">Viết tay sang Word</a></li>' +
@@ -676,7 +677,7 @@
      opts: { key, fetch: () => Promise<{now, events}>, interval, onNew(events), onOpen(event), empty }
      ========================================================= */
   var BELL = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
-  var KIND_IC = { "new": "🧾", pay: "💳", paid: "✅", msg: "💬", staff: "🧑‍💻", cancel: "⛔", assign: "📌", note: "💬", sys: "🔔", done: "✅", contact: "✉️", review: "⭐" };
+  var KIND_IC = { aff: "🤝", "new": "🧾", pay: "💳", paid: "✅", msg: "💬", staff: "🧑‍💻", cancel: "⛔", assign: "📌", note: "💬", sys: "🔔", done: "✅", contact: "✉️", review: "⭐" };
   function timeAgo(ms, now) {
     var s = Math.max(0, Math.round((now - ms) / 1000));
     if (s < 60) return "vừa xong";
@@ -802,6 +803,24 @@
     document.addEventListener("visibilitychange", onVis);
     return api;
   };
+
+  /* ---------- Mã giới thiệu đối tác: /?ref=MA → ghi nhận trên trình duyệt (mặc định 30 ngày, lần bấm sau cùng được tính) ---------- */
+  DM.refCode = function () {
+    var r = DM.store.get("ref", null), days = (DM.affiliate && DM.affiliate.cookieDays) || 30;
+    return r && r.code && Date.now() - r.at < days * 86400e3 ? r.code : "";
+  };
+  function captureRef() {
+    var code = String(DM.param("ref") || "").trim().toUpperCase();
+    if (!code) return;
+    try { var u = new URL(location.href); u.searchParams.delete("ref"); history.replaceState(null, "", u.pathname + u.search + u.hash); } catch (e) { /* bỏ qua */ }
+    if (!/^[A-Z0-9]{4,12}$/.test(code)) return;
+    DM.store.set("ref", { code: code, at: Date.now() });
+    var day = new Date().toISOString().slice(0, 10), k = "refclick_" + code;
+    if (DM.store.get(k) === day) return;
+    DM.store.set(k, day);
+    DM.api("/aff/click", { body: { code: code } }).then(function (d) { if (!d.valid) DM.store.set("ref", null); }, function () { /* bỏ qua */ });
+  }
+  captureRef();
 
   /* ---------- Khởi động ---------- */
   document.addEventListener("DOMContentLoaded", function () {

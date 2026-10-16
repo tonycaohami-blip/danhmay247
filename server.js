@@ -73,7 +73,7 @@ seo.register(app, (req, res) => sendFile(req, res, 404, path.join(PUBLIC, "404.h
 app.get("/sitemap.xml", (req, res) => {
   const base = config.SITE_URL;
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
-  const pages = ["", "bang-gia", "dich-vu", "dich-vu-chuyen-am", "gioi-thieu", "danh-gia", "mau", "blog", "hoi-dap", "lien-he"];
+  const pages = ["", "bang-gia", "dich-vu", "dich-vu-chuyen-am", "gioi-thieu", "danh-gia", "mau", "blog", "hoi-dap", "doi-tac", "lien-he"];
   const posts = seo.posts();
   const services = Object.keys(DM.services || {});
   const today = new Date().toISOString().slice(0, 10);

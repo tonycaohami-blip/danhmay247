@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trang đối tác - Đánh máy 247</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .kpi { background: #fff; border-radius: 12px; box-shadow: var(--shadow-sm); padding: 18px 20px; }
+    .kpi small { color: var(--muted); font-size: 13px; }
+    .kpi b { display: block; font: 700 22px var(--sans); color: #000; margin-top: 4px; }
+    .kpi.hl b { color: var(--green); }
+    .share { display: grid; grid-template-columns: 200px 1fr; gap: 26px; align-items: center; }
+    .share img { width: 200px; height: 200px; border-radius: 12px; border: 1px solid var(--line); background: #fff; }
+    .copy-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .copy-row .input { flex: 1; font-family: "Courier New", monospace; }
+    .bigcode { font: 800 30px "Courier New", monospace; letter-spacing: 3px; color: var(--navy); }
+    .cs { font-size: 12.5px; padding: 3px 10px; }
+    @media (max-width: 900px) { .kpis { grid-template-columns: 1fr 1fr; } .share { grid-template-columns: 1fr; } .share img { margin: 0 auto; } }
+  </style>
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+  <main id="main" class="order-page"><div class="container" id="app"></div></main>
+  <div id="site-footer"></div>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, $$ = DM.$$, app = $("#app"), P = DM.affiliate;
+    var me = null, data = null, tab = "home";
+    var CS = {
+      waiting: ["Chờ khách thanh toán", "chip--amber"], processing: ["Đơn đang thực hiện", "chip--navy"],
+      approved: ["Đã duyệt - chờ chi trả", "chip--green"], paid: ["Đã chi trả", "chip--grey"], "void": ["Đơn đã hủy", "chip--red"]
+    };
+    var cs = function (k) { var c = CS[k] || [k, "chip--grey"]; return '<span class="chip cs ' + c[1] + '">' + c[0] + "</span>"; };
+    var fail = function (er) { if (er.status === 401) return login(); DM.toast(er.message, "error"); };
+
+    /* ---------- Đăng nhập ---------- */
+    function login(msg) {
+      me = null; data = null;
+      if (DM._notifier) DM._notifier.stop();
+      DM.setPortalUser(null);
+      app.innerHTML = '<div class="order-card" style="max-width:440px;margin:40px auto"><h1 class="order-card__title">Đăng nhập đối tác</h1>' +
+        '<p style="color:var(--muted);font-size:14.5px">Dành cho cửa hàng, cộng tác viên tham gia chương trình hoa hồng ' + Math.round(P.rate * 100) + "%.</p>" +
+        '<form id="lg" novalidate><div id="lg-msg">' + (msg ? '<div class="alert alert--error">' + DM.esc(msg) + "</div>" : "") + "</div>" +
+        '<div class="field"><label class="field__label" for="lg-e">Email</label><input class="input" id="lg-e" type="email" required autocomplete="username"><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="lg-p">Mật khẩu</label><div class="password"><input class="input" id="lg-p" type="password" required autocomplete="current-password"><button type="button" class="password__eye" aria-label="Hiện mật khẩu">' + DM.icon.eye + '</button></div><div class="field__error"></div></div>' +
+        '<button class="button button--w100" type="submit">Đăng nhập</button></form>' +
+        '<p class="field__hint" style="margin-top:14px">Chưa có tài khoản? <a href="/doi-tac#dang-ky" style="color:var(--red)">Đăng ký đối tác miễn phí</a>. Quên mật khẩu? Gọi ' + DM.esc(DM.site.phone) + ".</p></div>";
+      DM.bindEye($(".password__eye"));
+      $("#lg").addEventListener("submit", function (e) {
+        e.preventDefault(); if (!DM.validate(this)) return;
+        DM.api("/aff/login", { body: { email: $("#lg-e").value.trim(), password: $("#lg-p").value } }).then(load, function (er) { login(er.message); });
+      });
+    }
+    function logout() { DM.api("/aff/logout", { method: "POST" }).then(function () { login(); DM.toast("Đã đăng xuất."); }); }
+
+    function load() {
+      return DM.api("/aff/me").then(function (d) {
+        data = d; me = d.affiliate; render();
+        DM.setPortalUser({ name: me.shop, initials: DM.initials(me.shop), sub: "Đối tác · mã " + me.code, color: "var(--amber, #f3a33b)", links: [["/doi-tac-tai-khoan", "Trang đối tác"], ["/doi-tac", "Chương trình đối tác"]], logout: logout });
+        if (!DM._notifier) DM.notifier({
+          key: "aff_" + me.id, interval: 30000, empty: "Chưa có thông báo. Khi khách đặt đơn bằng mã của bạn, thông báo sẽ hiện ở đây.",
+          fetch: function () { return DM.api("/aff/notifications"); },
+          onNew: function () { if (!$(".modal.is-open")) DM.api("/aff/me").then(function (x) { data = x; me = x.affiliate; render(); }); },
+          onOpen: function () { tab = "orders"; render(); }
+        });
+      }, function (er) { if (er.status === 401) login(); else app.innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
+    }
+
+    function render() {
+      var s = data.stats;
+      app.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px"><div><h1 class="order-card__title" style="font-size:30px;margin:0">' + DM.esc(me.shop) + "</h1>" +
+        '<small style="color:var(--muted)">Đối tác Đánh máy 247 · hoa hồng ' + Math.round(me.rate * 100) + "% · mã <b>" + DM.esc(me.code) + "</b></small></div></div>" +
+        (DM.param("moi") ? '<div class="alert alert--success">Đăng ký thành công! Chúng tôi sẽ duyệt tài khoản trong 24 giờ làm việc và báo qua email.</div>' : "") +
+        (me.status === "pending" ? '<div class="alert alert--info"><b>Tài khoản đang chờ duyệt.</b> Mã giới thiệu sẽ hoạt động sau khi được duyệt - bạn có thể chuẩn bị poster QR trước.</div>' : "") +
+        (!me.bank.account ? '<div class="alert alert--info">Bạn chưa khai báo tài khoản ngân hàng nhận hoa hồng. <button type="button" class="link" data-go="account">Bổ sung ngay</button></div>' : "") +
+        '<div class="kpis">' +
+        '<div class="kpi"><small>Lượt quét / bấm liên kết</small><b>' + s.clicks + "</b></div>" +
+        '<div class="kpi"><small>Đơn giới thiệu (hoàn thành)</small><b>' + s.orders + " (" + s.done + ")</b></div>" +
+        '<div class="kpi"><small>Hoa hồng đang chờ</small><b>' + DM.fmt(s.waiting + s.processing) + "</b></div>" +
+        '<div class="kpi hl"><small>Đã duyệt - chờ chi trả</small><b>' + DM.fmt(s.approved) + "</b></div></div>" +
+        '<div class="filter-pills" style="margin-bottom:20px">' +
+        [["home", "Mã giới thiệu & QR"], ["orders", "Đơn giới thiệu (" + data.orders.length + ")"], ["payouts", "Chi trả (" + data.payouts.length + ")"], ["account", "Tài khoản"]].map(function (t) {
+          return '<button type="button" data-t="' + t[0] + '" class="' + (tab === t[0] ? "is-active" : "") + '">' + t[1] + "</button>";
+        }).join("") + '<button type="button" data-out>Đăng xuất</button></div><div id="pane"></div>';
+      $$("[data-t]").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.t; render(); }); });
+      $$("[data-go]").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.go; render(); }); });
+      $("[data-out]").addEventListener("click", logout);
+      ({ home: home, orders: orders, payouts: payouts, account: account })[tab]();
+    }
+
+    /* ---------- Mã giới thiệu, QR, poster ---------- */
+    function home() {
+      var msg = "Cần đánh máy tài liệu, chuyển PDF/ảnh/viết tay sang Word, gõ công thức, chuyển ghi âm thành văn bản? Đặt tại Đánh máy 247, nhận bản Word chỉ từ 6 giờ: " + me.link;
+      $("#pane").innerHTML = '<div class="order-card"><div class="share"><img src="/api/aff/qr.svg" alt="Mã QR giới thiệu của ' + DM.esc(me.shop) + '" width="200" height="200">' +
+        "<div><div class=\"field__label\">Mã giới thiệu</div><div class=\"bigcode\">" + DM.esc(me.code) + "</div>" +
+        '<p class="field__hint" style="margin:4px 0 16px">Khách nhập mã này ở ô “Mã giới thiệu” khi đặt hàng, hoặc quét mã QR.</p>' +
+        '<div class="field__label">Liên kết giới thiệu</div><div class="copy-row"><input class="input" id="lk" readonly value="' + DM.esc(me.link) + '"><button type="button" class="button button--sm" data-copy="lk">Sao chép</button></div>' +
+        '<div class="field__label">Tin nhắn mẫu gửi khách (Zalo, Facebook)</div><div class="copy-row"><textarea class="textarea" id="mm" readonly style="min-height:84px">' + DM.esc(msg) + '</textarea></div><button type="button" class="button button--sm button--black" data-copy="mm">Sao chép tin nhắn</button> ' +
+        '<button type="button" class="button button--sm" id="poster">In poster A4 có mã QR</button> <a class="button button--sm button--black" href="/api/aff/qr.svg" download="ma-qr-' + DM.esc(me.code) + '.svg">Tải mã QR</a></div></div></div>' +
+        '<div class="order-card"><h2 class="order-card__title">Mẹo giới thiệu hiệu quả</h2><ul style="padding-left:20px;line-height:1.8">' +
+        "<li>Dán poster QR ngay tại quầy và cạnh máy photocopy - nơi khách đứng chờ.</li>" +
+        "<li>Khi khách hỏi “gõ lại tài liệu này được không”, mở trang đặt hàng bằng mã QR cùng khách.</li>" +
+        "<li>Mùa thi, mùa luận văn (tháng 4-6, 11-12): nhắc sinh viên dịch vụ định dạng luận văn, gõ công thức.</li>" +
+        "<li>Chia sẻ liên kết trong nhóm Zalo khách quen, nhóm sinh viên gần tiệm.</li></ul></div>";
+      $$("[data-copy]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var el = $("#" + b.dataset.copy);
+          (navigator.clipboard ? navigator.clipboard.writeText(el.value) : Promise.reject()).then(function () { DM.toast("Đã sao chép."); }, function () { el.select(); document.execCommand("copy"); DM.toast("Đã sao chép."); });
+        });
+      });
+      $("#poster").addEventListener("click", printPoster);
+    }
+    function printPoster() {
+      var w = window.open("", "_blank");
+      if (!w) return DM.toast("Trình duyệt đã chặn cửa sổ in. Hãy cho phép cửa sổ bật lên.", "error");
+      var esc = DM.esc;
+      w.document.write('<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Poster ' + esc(me.code) + '</title><style>' +
+        "@page{size:A4;margin:14mm}body{font-family:Arial,Helvetica,sans-serif;color:#1d2040;text-align:center;margin:0}" +
+        ".b{border:6px solid #f24d50;border-radius:24px;padding:36px 30px;min-height:240mm;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between}" +
+        "h1{font-size:42px;margin:0 0 6px;line-height:1.15}h1 span{color:#f24d50}.s{font-size:22px;margin:10px 0 0}.l{font-size:19px;text-align:left;display:inline-block;margin:18px auto;line-height:1.7}" +
+        "img{width:95mm;height:95mm;margin:8px auto}.c{font:800 30px 'Courier New',monospace;letter-spacing:4px;background:#f3f4f9;border-radius:12px;padding:8px 20px;display:inline-block}" +
+        ".f{font-size:16px;color:#555}.logo{font:700 28px Georgia,serif}.logo span{color:#f24d50}</style></head><body><div class=\"b\">" +
+        '<div><div class="logo"><span>ĐÁNH MÁY</span> 247</div><h1>ĐÁNH MÁY THUÊ<br><span>NHANH - CHÍNH XÁC</span></h1><p class="s">Quét mã để gửi tài liệu và nhận báo giá ngay</p></div>' +
+        '<div class="l">✔ Viết tay, ảnh chụp, PDF scan → Word / Excel<br>✔ Gõ đề thi, công thức Toán - Lý - Hóa, LaTeX<br>✔ Định dạng luận văn, báo cáo<br>✔ Chuyển ghi âm, video thành văn bản<br>✔ Giao từ 6 giờ · Người thật đánh máy</div>' +
+        '<div><img src="/api/aff/qr.svg" alt="QR"><br><div class="c">' + esc(me.code) + '</div><p class="f">Hoặc vào <b>' + esc(location.host) + "</b> và nhập mã giới thiệu <b>" + esc(me.code) + "</b> khi đặt hàng</p></div>" +
+        '<p class="f">' + esc(me.shop) + (me.address ? " · " + esc(me.address) : "") + " · Hotline Đánh máy 247: " + esc(DM.site.phone) + "</p></div>" +
+        "<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script></body></html>");
+      w.document.close();
+    }
+
+    /* ---------- Đơn giới thiệu ---------- */
+    function orders() {
+      var list = data.orders;
+      $("#pane").innerHTML = '<div class="order-card" style="padding:20px">' + (list.length ?
+        '<p class="field__hint" style="margin-top:0">Vì quyền riêng tư của khách, chỉ hiển thị mã đơn, dịch vụ và giá trị đơn. Hoa hồng được duyệt khi đơn hoàn thành.</p>' +
+        '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Mã đơn</th><th>Dịch vụ</th><th>Giá trị đơn</th><th>Hoa hồng</th><th>Trạng thái</th></tr></thead><tbody>' +
+        list.map(function (o) {
+          return "<tr><td><b>#" + DM.esc(o.id) + '</b><br><small style="color:var(--muted)">' + DM.dateTime(o.created) + "</small></td>" +
+            "<td>" + DM.esc(o.typeLabel) + '<br><small style="color:var(--muted)">' + o.qty + " " + DM.esc(o.unit) + "</small></td>" +
+            "<td>" + DM.fmt(o.total) + "</td><td><b>" + DM.fmt(o.commission) + '</b><br><small style="color:var(--muted)">' + Math.round(o.rate * 100) + "%</small></td>" +
+            "<td>" + cs(o.cstatus) + (o.paidOutAt ? '<br><small style="color:var(--muted)">' + DM.dateTime(o.paidOutAt) + "</small>" : "") + "</td></tr>";
+        }).join("") + "</tbody></table></div>"
+        : '<div class="empty">' + DM.icon.users + "<p>Chưa có đơn nào từ mã của bạn. Hãy dán poster QR và chia sẻ liên kết giới thiệu!</p></div>") + "</div>";
+    }
+
+    /* ---------- Chi trả ---------- */
+    function payouts() {
+      var s = data.stats;
+      $("#pane").innerHTML = '<div class="order-card"><h2 class="order-card__title">Chi trả hoa hồng</h2>' +
+        '<div class="detail-grid"><div><span>Đã duyệt - chờ chi trả</span><b style="color:var(--green)">' + DM.fmt(s.approved) + "</b></div><div><span>Tổng đã nhận</span><b>" + DM.fmt(s.paid) + "</b></div>" +
+        "<div><span>Lịch chi trả</span><b>Ngày " + P.payoutDay + " hằng tháng, khi số dư từ " + DM.fmt(P.minPayout) + "</b></div>" +
+        "<div><span>Tài khoản nhận</span><b>" + (me.bank.account ? DM.esc(me.bank.bankName + " · " + me.bank.account + " · " + me.bank.holder) : '<button type="button" class="link" data-go="account">Chưa khai báo - bổ sung</button>') + "</b></div></div>" +
+        (data.payouts.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Ngày</th><th>Số tiền</th><th>Số đơn</th><th>Ghi chú</th></tr></thead><tbody>' +
+          data.payouts.map(function (p) { return "<tr><td>" + DM.dateTime(p.at) + "</td><td><b>" + DM.fmt(p.amount) + "</b></td><td>" + p.count + '<br><small style="color:var(--muted)">' + DM.esc(p.orderIds.map(function (x) { return "#" + x; }).join(", ")) + "</small></td><td>" + DM.esc(p.note || "-") + "</td></tr>"; }).join("") +
+          "</tbody></table></div>" : '<p class="field__hint">Chưa có lần chi trả nào.</p>') + "</div>";
+      $$("[data-go]").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.go; render(); }); });
+    }
+
+    /* ---------- Tài khoản ---------- */
+    function account() {
+      var f = function (id, label, val, extra) { return '<div class="field"><label class="field__label" for="' + id + '">' + label + '</label><input class="input" id="' + id + '" value="' + DM.esc(val || "") + '"' + (extra || "") + '><div class="field__error"></div></div>'; };
+      $("#pane").innerHTML = '<div class="order-card"><h2 class="order-card__title">Thông tin đối tác</h2><form id="pf" novalidate><div class="order-row">' +
+        f("a-shop", "Tên cửa hàng", me.shop, " required maxlength=\"150\"") + f("a-name", "Người liên hệ", me.name, " required maxlength=\"100\"") +
+        f("a-phone", "Số điện thoại", me.phone, ' required data-pattern="^\\+?[0-9 .\\-]{8,20}$" data-pattern-msg="Số điện thoại không hợp lệ."') + f("a-email", "Email đăng nhập", me.email, " disabled") +
+        f("a-address", "Địa chỉ", me.address, ' maxlength="255"') + f("a-city", "Tỉnh / thành phố", me.city, ' maxlength="80"') +
+        f("a-bank", "Ngân hàng", me.bank.bankName, ' maxlength="120"') + f("a-acc", "Số tài khoản", me.bank.account, ' maxlength="40" inputmode="numeric"') +
+        f("a-holder", "Chủ tài khoản", me.bank.holder, ' maxlength="100"') + "</div>" +
+        '<button class="button button--sm" type="submit">Lưu thông tin</button></form></div>' +
+        '<div class="order-card" style="max-width:560px"><h2 class="order-card__title">Đổi mật khẩu</h2><form id="pw" novalidate><div id="pw-msg"></div>' +
+        '<div class="field"><label class="field__label" for="pw-old">Mật khẩu hiện tại</label><input class="input" id="pw-old" type="password" required autocomplete="current-password"><div class="field__error"></div></div>' +
+        '<div class="field"><label class="field__label" for="pw-new">Mật khẩu mới (tối thiểu 8 ký tự)</label><input class="input" id="pw-new" type="password" required minlength="8" autocomplete="new-password"><div class="field__error"></div></div>' +
+        '<button class="button button--sm" type="submit">Cập nhật mật khẩu</button></form></div>';
+      $("#pf").addEventListener("submit", function (e) {
+        e.preventDefault(); if (!DM.validate(this)) return;
+        DM.api("/aff/me", { method: "PATCH", body: { shop: $("#a-shop").value.trim(), name: $("#a-name").value.trim(), phone: $("#a-phone").value.trim(), address: $("#a-address").value.trim(), city: $("#a-city").value.trim(),
+          bankName: $("#a-bank").value.trim(), bankAccount: $("#a-acc").value.trim(), bankHolder: $("#a-holder").value.trim() } })
+          .then(function (d) { me = d.affiliate; data.affiliate = me; DM.toast("Đã lưu thông tin."); load(); }, fail);
+      });
+      $("#pw").addEventListener("submit", function (e) {
+        e.preventDefault(); if (!DM.validate(this)) return;
+        DM.api("/aff/password", { body: { old: $("#pw-old").value, password: $("#pw-new").value } }).then(function () { DM.toast("Đã đổi mật khẩu."); $("#pw").reset(); },
+          function (er) { $("#pw-msg").innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
+      });
+    }
+
+    load();
+  })();
+  </script>
+</body>
+</html>

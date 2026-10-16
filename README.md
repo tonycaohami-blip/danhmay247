@@ -63,6 +63,18 @@ Lưu ý: nếu khách tự ghi thông tin cá nhân vào phần hướng dẫn h
 
 Nhân viên chỉ thấy đơn được giao cho mình, không tự hoàn thành đơn được. Khi khóa tài khoản hoặc đặt lại mật khẩu, nhân viên bị đăng xuất ngay.
 
+## Chương trình đối tác (affiliate) - hoa hồng 30%
+
+Dành cho cửa hàng photocopy, văn phòng phẩm, giáo viên, cộng tác viên… giới thiệu khách cần đánh máy.
+
+- **Trang giới thiệu (SEO):** `/doi-tac` - lợi ích, cách hoạt động, máy tính thu nhập, câu hỏi thường gặp (có dữ liệu FAQPage), form đăng ký. Có trong menu, chân trang và sitemap.
+- **Trang đối tác:** `/doi-tac-tai-khoan` - mã giới thiệu, liên kết, **mã QR**, nút **in poster A4**, tin nhắn mẫu gửi khách, lượt bấm, đơn giới thiệu, hoa hồng (chờ / đã duyệt / đã chi trả), lịch sử chi trả, thông tin ngân hàng, đổi mật khẩu, chuông thông báo.
+- **Ghi nhận khách:** khách quét QR / bấm `https://danhmay247.com/?ref=MÃ` → trình duyệt nhớ 30 ngày (lần bấm gần nhất được tính), ô "Mã giới thiệu" ở trang đặt hàng tự điền. Khách cũng có thể tự nhập mã. Quản trị có thể gắn mã cho đơn khách quên nhập (trong cửa sổ quản lý đơn).
+- **Hoa hồng:** 30% giá trị đơn, chỉ được duyệt khi đơn **hoàn thành**; đơn hủy không tính; không tính khi đối tác tự đặt (trùng email hoặc số điện thoại).
+- **Quản trị:** tab **Đối tác** - duyệt / khóa đối tác (đối tác nhận email khi được duyệt), đổi tỷ lệ riêng, xem đơn theo đối tác, nút **Chi trả** (chuyển khoản xong rồi bấm xác nhận, đối tác nhận email). Tệp Excel xuất đơn có thêm cột mã giới thiệu và hoa hồng.
+- **Quyền riêng tư:** đối tác chỉ thấy mã đơn, dịch vụ, giá trị và hoa hồng - không thấy tên, email, số điện thoại của khách.
+- **Cấu hình:** `public/assets/js/data.js` → `DM.affiliate = { rate: 0.3, cookieDays: 30, minPayout: 100000, payoutDay: 5 }`.
+
 ## Thông báo (biểu tượng chuông)
 
 Trang quản trị, trang nhân viên và trang khách hàng có **chuông thông báo** ở góc trên bên phải, kèm số chưa đọc, số trên tiêu đề tab, thông báo nổi và âm báo (bật/tắt được). Có thể bấm **"Bật thông báo trên máy tính"** để nhận thông báo cả khi đang mở tab khác. Bấm vào một thông báo để mở thẳng đơn hàng đó.
@@ -108,7 +120,7 @@ Cần Node.js 20 trở lên.
 ```bash
 npm install
 npm start      # http://localhost:3000
-npm test       # 126 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
+npm test       # 159 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
 ```
 
 Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_PASSWORD` để vào được trang quản trị.
@@ -116,7 +128,7 @@ Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_
 ## Chỉnh sửa nội dung
 
 - `public/assets/js/data.js`: giá, mã giảm giá, số điện thoại, email, tài khoản ngân hàng, dịch vụ, câu hỏi thường gặp.
-- `public/assets/js/posts.js`: **bài viết blog** (28 bài). Mỗi bài gồm tiêu đề, chuyên mục, ngày, thẻ, tóm tắt và nội dung HTML; tùy chọn `seoTitle` (thẻ title ngắn gọn cho Google) và `faq` (mục Câu hỏi thường gặp + dữ liệu FAQPage). Có sẵn các khối trình bày: `<p class="lead">` (đoạn mở đầu), hộp `callout--tip / --warn / --info`, `<figure>`, bảng `class="tbl"`, danh sách bước `class="steps"`, phím `<kbd>`, khung `takeaways` (điểm chính). Mục lục được tạo tự động từ các tiêu đề `<h2>`.
+- `public/assets/js/posts.js`: **bài viết blog** (40 bài). Mỗi bài gồm tiêu đề, chuyên mục, ngày, thẻ, tóm tắt và nội dung HTML; tùy chọn `seoTitle` (thẻ title ngắn gọn cho Google) và `faq` (mục Câu hỏi thường gặp + dữ liệu FAQPage). Có sẵn các khối trình bày: `<p class="lead">` (đoạn mở đầu), hộp `callout--tip / --warn / --info`, `<figure>`, bảng `class="tbl"`, danh sách bước `class="steps"`, phím `<kbd>`, khung `takeaways` (điểm chính). Mục lục được tạo tự động từ các tiêu đề `<h2>`.
 - Ảnh bìa và hình minh họa blog: `public/assets/img/blog/*.svg`, tạo lại bằng `node scripts/make-blog-images.js`. Bài mới cần thêm ảnh bìa trùng tên với `slug`.
 - `https://danhmay247.com/sitemap.xml` tự cập nhật theo danh sách bài viết; hãy khai báo địa chỉ này trong Google Search Console. Sau khi đổi giá cần **Redeploy** để máy chủ tính theo giá mới.
 - `public/assets/css/style.css`: giao diện.
@@ -129,6 +141,7 @@ server.js                  Khởi động website + API + sitemap.xml
 server/seo.js              SEO: dựng sẵn bài viết/dịch vụ, canonical, Open Graph, JSON-LD
 scripts/make-og-images.js  Tạo ảnh chia sẻ PNG cho Facebook/Zalo
 scripts/make-blog-images.js  Tạo ảnh bìa / hình minh họa SVG cho blog
+server/affiliate.js        Chương trình đối tác: đăng ký, mã giới thiệu, QR, hoa hồng, chi trả
 server/api.js              API: đơn hàng, tệp, tài khoản, tin nhắn, liên hệ, đánh giá, webhook, quản trị, nhân viên, xuất Excel
 server/db.js               Chọn nơi lưu: tệp (mặc định) hoặc MySQL
 server/store-json.js       Lưu trữ tệp db.json + sao lưu hằng ngày

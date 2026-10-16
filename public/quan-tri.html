@@ -88,6 +88,7 @@
           var openTab = function (t) { $$(".modal.is-open").forEach(function (m) { m._onclose = null; DM.modal.close(m); }); tab = t; render(); window.scrollTo(0, 0); };
           if (k === "contact") return DM.api("/admin/summary").then(function (x) { data = x; openTab("contacts"); });
           if (k === "review") return DM.api("/admin/summary").then(function (x) { data = x; openTab("reviews"); });
+          if (k === "aff") return openTab("affiliates");
           DM.api("/admin/summary").then(function (x) {
             data = x; openTab("orders");
             if (data.orders.some(function (o) { return o.id === ev.orderId; })) manage(ev.orderId);
@@ -111,13 +112,13 @@
         '<div class="kpi"><small>Doanh thu</small><b>' + DM.fmt(s.revenue) + "</b></div>" +
         '<div class="kpi' + (s.newContacts ? " warn" : "") + '"><small>Liên hệ mới</small><b>' + s.newContacts + "</b></div></div>" +
         '<div class="filter-pills" style="margin-bottom:20px">' +
-        [["orders", "Đơn hàng (" + s.orders + ")"], ["staff", "Nhân viên (" + data.staff.filter(function (x) { return x.active; }).length + ")"], ["payments", "Giao dịch ngân hàng (" + data.payments.length + ")"], ["contacts", "Liên hệ (" + data.contacts.length + ")"], ["reviews", "Đánh giá (" + s.pendingReviews + " chờ duyệt)"]].map(function (t) {
+        [["orders", "Đơn hàng (" + s.orders + ")"], ["staff", "Nhân viên (" + data.staff.filter(function (x) { return x.active; }).length + ")"], ["affiliates", "Đối tác (" + (s.affiliates || 0) + (s.pendingAffiliates ? ", " + s.pendingAffiliates + " chờ duyệt" : "") + ")"], ["payments", "Giao dịch ngân hàng (" + data.payments.length + ")"], ["contacts", "Liên hệ (" + data.contacts.length + ")"], ["reviews", "Đánh giá (" + s.pendingReviews + " chờ duyệt)"]].map(function (t) {
           return '<button type="button" data-t="' + t[0] + '" class="' + (tab === t[0] ? "is-active" : "") + '">' + t[1] + "</button>";
         }).join("") +
         '<button type="button" data-out>Đăng xuất</button></div><div id="pane"></div>';
       $$("[data-t]").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.t; render(); }); });
       $("[data-out]").addEventListener("click", logout);
-      ({ orders: orders, staff: staffPane, payments: payments, contacts: contacts, reviews: reviews })[tab]();
+      ({ orders: orders, staff: staffPane, affiliates: affiliatesPane, payments: payments, contacts: contacts, reviews: reviews })[tab]();
     }
 
     /* ---------- Đơn hàng ---------- */
@@ -184,6 +185,9 @@
         "<div><span>Thời hạn</span><b>" + DM.esc(o.urgencyLabel) + (o.deadline ? " → " + DM.dateTime(o.deadline) : "") + "</b></div><div><span>Bổ sung</span><b>" + (o.extras.length ? DM.esc(o.extras.join(", ")) : "Không") + "</b></div>" +
         "<div><span>Tổng tiền</span><b>" + DM.fmt(o.price.total) + (o.promo ? " (mã " + DM.esc(o.promo) + ")" : "") + "</b></div><div><span>Đã nhận</span><b>" + (o.paidAt ? DM.fmt(o.paidAmount) + " lúc " + DM.dateTime(o.paidAt) + " (" + (o.paySource === "sepay" ? "tự động" : "thủ công") + ")" : o.receivedAmount ? DM.fmt(o.receivedAmount) + " (chưa đủ)" : "Chưa") + "</b></div>" +
         "</div>" +
+        '<div class="field" style="background:#fff8ec;border-radius:10px;padding:12px 16px"><label class="field__label" for="m-ref">Đối tác giới thiệu ' +
+        (o.affCode ? '<span class="chip chip--green">' + DM.esc(o.affCode) + " · hoa hồng " + DM.fmt(Math.round(o.price.total * (o.affRate || 0))) + (o.affPaidAt ? " · đã chi trả" : "") + "</span>" : '<span class="chip chip--grey">Không có</span>') + "</label>" +
+        (o.affPaidAt ? "" : '<div style="display:flex;gap:10px;flex-wrap:wrap"><input class="input" id="m-ref" style="flex:1;min-width:160px;height:40px" maxlength="12" placeholder="Mã giới thiệu (để trống = bỏ)" value="' + DM.esc(o.affCode || "") + '"><button type="button" class="button button--sm button--black" data-ref>Lưu mã</button></div>') + "</div>" +
         (unpaid ? '<div class="alert alert--info">Kiểm tra tài khoản ' + DM.esc(DM.site.bank.shortName) + " " + DM.esc(DM.site.bank.account) + " có giao dịch <b>" + DM.fmt(o.price.total) + "</b> nội dung <b>" + o.id + '</b>. <button type="button" class="button button--sm" data-confirm style="margin-top:10px">Xác nhận đã nhận tiền</button></div>' : "") +
         '<div class="field" style="background:var(--bg-grey);border-radius:10px;padding:14px 16px"><label class="field__label" for="m-staff">Giao cho nhân viên <span class="tip" tabindex="0">?<span class="tip__text">Nhân viên chỉ thấy nội dung công việc, tệp khách gửi và hướng dẫn - không thấy tên, email, số điện thoại của khách và giá. Lưu ý: nếu khách ghi thông tin cá nhân trong phần hướng dẫn hoặc tên tệp, nhân viên vẫn đọc được.</span></span></label>' +
         '<div style="display:flex;gap:10px;flex-wrap:wrap"><select class="select" id="m-staff" style="flex:1;min-width:200px"><option value="">- Chưa giao -</option>' +
@@ -244,6 +248,13 @@
         DM.api("/admin/orders/" + o.id + "/files/" + fid + "/share", { body: { shared: share, complete: !!b.dataset.complete } }).then(function (d) {
           DM.toast(share ? (b.dataset.complete ? "Đã gửi tệp và hoàn thành đơn." : "Đã gửi tệp cho khách.") : "Đã thu hồi tệp."); reopen(d.order);
         }, function (er) { b.disabled = false; fail(er); });
+      });
+      var rb = $("[data-ref]", m);
+      if (rb) rb.addEventListener("click", function () {
+        DM.api("/admin/orders/" + o.id + "/affiliate", { body: { code: $("#m-ref", m).value.trim() } }).then(function (d) {
+          DM.toast(d.affCode ? "Đã gắn đơn cho đối tác " + d.affCode + "." : "Đã bỏ mã giới thiệu.");
+          DM.api("/admin/summary").then(function (x) { data = x; reopen(data.orders.find(function (y) { return y.id === o.id; })); });
+        }, fail);
       });
       var c = $("[data-confirm]", m);
       if (c) c.addEventListener("click", function () {
@@ -326,6 +337,88 @@
           });
         });
       });
+    }
+
+    /* ---------- Đối tác (affiliate) ---------- */
+    var AFF_ST = { pending: ["Chờ duyệt", "chip--amber"], active: ["Đang hoạt động", "chip--green"], locked: ["Đã khóa", "chip--red"] };
+    var affFilter = "";
+    function affiliatesPane() {
+      var pane = $("#pane");
+      pane.innerHTML = '<div class="order-card"><div class="empty"><span class="typing-dots"><i></i><i></i><i></i></span></div></div>';
+      DM.api("/admin/affiliates").then(function (d) {
+        var list = d.affiliates, P = d.program;
+        var due = list.reduce(function (t, a) { return t + a.stats.approved; }, 0), paid = list.reduce(function (t, a) { return t + a.stats.paid; }, 0);
+        var shown = affFilter ? d.orders.filter(function (o) { return o.affId === affFilter; }) : d.orders;
+        pane.innerHTML =
+          '<div class="kpis" style="grid-template-columns:repeat(4,1fr)">' +
+          '<div class="kpi"><small>Đối tác hoạt động</small><b>' + list.filter(function (a) { return a.status === "active"; }).length + "</b></div>" +
+          '<div class="kpi' + (list.some(function (a) { return a.status === "pending"; }) ? " warn" : "") + '"><small>Chờ duyệt</small><b>' + list.filter(function (a) { return a.status === "pending"; }).length + "</b></div>" +
+          '<div class="kpi' + (due ? " warn" : "") + '"><small>Hoa hồng chờ chi trả</small><b>' + DM.fmt(due) + "</b></div>" +
+          '<div class="kpi"><small>Đã chi trả</small><b>' + DM.fmt(paid) + "</b></div></div>" +
+          '<div class="order-card" style="padding:20px"><h2 class="order-card__title">Đối tác (' + list.length + ')</h2>' +
+          '<p class="field__hint" style="margin-top:-10px">Tỷ lệ mặc định ' + Math.round(P.rate * 100) + "% · ghi nhận " + P.cookieDays + " ngày · chi trả ngày " + P.payoutDay + " hằng tháng khi từ " + DM.fmt(P.minPayout) + ' (sửa trong data.js). Trang giới thiệu: <a href="/doi-tac" target="_blank" style="color:var(--red)">/doi-tac</a></p>' +
+          (list.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Đối tác</th><th>Mã / tỷ lệ</th><th>Lượt bấm</th><th>Đơn (xong)</th><th>Chờ chi trả</th><th>Đã trả</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
+            list.map(function (a) {
+              var st = AFF_ST[a.status] || [a.status, "chip--grey"];
+              return "<tr><td><b>" + DM.esc(a.shop) + "</b><br><small>" + DM.esc(a.name) + " · " + DM.esc(a.phone) + "<br>" + DM.esc(a.email) + (a.city ? " · " + DM.esc(a.city) : "") + "</small></td>" +
+                "<td><b>" + DM.esc(a.code) + "</b><br><small>" + Math.round(a.rate * 100) + "%</small></td><td>" + a.stats.clicks + "</td><td>" + a.stats.orders + " (" + a.stats.done + ")</td>" +
+                "<td><b" + (a.stats.approved ? ' style="color:var(--green)"' : "") + ">" + DM.fmt(a.stats.approved) + "</b></td><td>" + DM.fmt(a.stats.paid) + "</td>" +
+                '<td><span class="chip ' + st[1] + '">' + st[0] + "</span></td>" +
+                '<td><div style="display:flex;gap:6px;flex-wrap:wrap;min-width:170px">' +
+                (a.status !== "active" ? '<button type="button" class="button button--sm" data-ast="' + a.id + '" data-v="active">' + (a.status === "pending" ? "Duyệt" : "Mở khóa") + "</button>" : "") +
+                (a.status !== "locked" ? '<button type="button" class="button button--sm button--black" data-ast="' + a.id + '" data-v="locked">Khóa</button>' : "") +
+                (a.stats.approved ? '<button type="button" class="button button--sm" data-pay="' + a.id + '">Chi trả</button>' : "") +
+                '<button type="button" class="button button--sm button--black" data-aedit="' + a.id + '">Chi tiết</button>' +
+                '<button type="button" class="button button--sm button--black" data-aord="' + a.id + '">Xem đơn</button></div></td></tr>';
+            }).join("") + "</tbody></table></div>" : '<div class="empty">' + DM.icon.users + "<p>Chưa có đối tác nào đăng ký.</p></div>") + "</div>" +
+          '<div class="order-card" style="padding:20px"><h2 class="order-card__title">Đơn có mã giới thiệu' + (affFilter ? ' - <button type="button" class="link" data-aall>xem tất cả</button>' : "") + "</h2>" +
+          (shown.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Mã đơn</th><th>Khách</th><th>Đối tác</th><th>Giá trị</th><th>Hoa hồng</th><th>Trạng thái hoa hồng</th></tr></thead><tbody>' +
+            shown.map(function (o) {
+              var lab = { waiting: "Chờ thanh toán", processing: "Đang làm", approved: "Chờ chi trả", paid: "Đã chi trả", "void": "Hủy" }[o.cstatus];
+              return '<tr><td><button type="button" class="link" data-mo="' + o.id + '">#' + o.id + '</button><br><small style="color:var(--muted)">' + DM.dateTime(o.created) + "</small></td><td>" + DM.esc(o.customer) + "</td><td>" + DM.esc(o.affCode) + "</td><td>" + DM.fmt(o.total) + "</td><td><b>" + DM.fmt(o.commission) + "</b></td><td>" + lab + "</td></tr>";
+            }).join("") + "</tbody></table></div>" : '<p class="field__hint">Chưa có đơn nào.</p>') + "</div>";
+
+        $$("[data-ast]").forEach(function (b) {
+          b.addEventListener("click", function () {
+            var v = b.dataset.v;
+            if (v === "locked" && !confirm("Khóa đối tác này? Mã giới thiệu sẽ ngừng hoạt động và đối tác bị đăng xuất.")) return;
+            DM.api("/admin/affiliates/" + b.dataset.ast, { method: "PATCH", body: { status: v } }).then(function () { DM.toast(v === "active" ? "Đã kích hoạt đối tác (đã gửi email nếu có SMTP)." : "Đã khóa đối tác."); affiliatesPane(); }, function (er) { DM.toast(er.message, "error"); });
+          });
+        });
+        $$("[data-pay]").forEach(function (b) {
+          b.addEventListener("click", function () {
+            var a = list.find(function (x) { return x.id === b.dataset.pay; });
+            var m = DM.modal.open('<h2 class="modal__title">Chi trả hoa hồng - ' + DM.esc(a.shop) + "</h2>" +
+              '<div class="detail-grid"><div><span>Số tiền</span><b style="color:var(--green)">' + DM.fmt(a.stats.approved) + "</b></div><div><span>Chuyển vào</span><b>" + (a.bank.account ? DM.esc(a.bank.bankName + " · " + a.bank.account + " · " + a.bank.holder) : '<span style="color:var(--red)">Đối tác chưa khai báo tài khoản</span>') + "</b></div></div>" +
+              (a.stats.approved < P.minPayout ? '<div class="alert alert--info">Số dư thấp hơn mức chi trả tối thiểu ' + DM.fmt(P.minPayout) + " - vẫn có thể chi nếu bạn muốn.</div>" : "") +
+              '<p>Hãy chuyển khoản trước, sau đó bấm xác nhận để ghi nhận. Đối tác sẽ nhận email.</p><div class="field"><label class="field__label" for="po-note">Ghi chú (mã giao dịch…)</label><input class="input" id="po-note" maxlength="255"></div>' +
+              '<button type="button" class="button button--sm" data-ok>Xác nhận đã chuyển khoản</button>', { small: true });
+            $("[data-ok]", m).addEventListener("click", function () {
+              this.disabled = true;
+              DM.api("/admin/affiliates/" + a.id + "/payout", { body: { note: $("#po-note", m).value.trim() } }).then(function (x) { DM.modal.close(m); DM.toast("Đã ghi nhận chi trả " + DM.fmt(x.payout.amount) + "."); affiliatesPane(); }, function (er) { DM.toast(er.message, "error"); });
+            });
+          });
+        });
+        $$("[data-aedit]").forEach(function (b) {
+          b.addEventListener("click", function () {
+            var a = list.find(function (x) { return x.id === b.dataset.aedit; });
+            var m = DM.modal.open('<h2 class="modal__title">' + DM.esc(a.shop) + "</h2>" +
+              '<div class="detail-grid"><div><span>Người liên hệ</span><b>' + DM.esc(a.name) + "<br>" + DM.esc(a.phone) + "<br>" + DM.esc(a.email) + "</b></div><div><span>Địa chỉ</span><b>" + DM.esc((a.address || "-") + (a.city ? ", " + a.city : "")) + "</b></div>" +
+              "<div><span>Ngân hàng</span><b>" + (a.bank.account ? DM.esc(a.bank.bankName + " · " + a.bank.account + " · " + a.bank.holder) : "Chưa khai báo") + "</b></div><div><span>Liên kết</span><b>" + DM.esc(a.link) + "</b></div>" +
+              "<div><span>Đăng ký</span><b>" + DM.dateTime(a.created) + "</b></div><div><span>Đăng nhập gần nhất</span><b>" + (a.lastLogin ? DM.dateTime(a.lastLogin) : "-") + "</b></div></div>" +
+              '<form id="ae"><div class="field"><label class="field__label" for="ae-rate">Tỷ lệ hoa hồng (%) - áp dụng cho đơn mới</label><input class="input" id="ae-rate" type="number" min="0" max="50" step="1" value="' + Math.round(a.rate * 100) + '"></div>' +
+              '<div class="field"><label class="field__label" for="ae-note">Ghi chú nội bộ</label><textarea class="textarea" id="ae-note" style="min-height:70px">' + DM.esc(a.note || "") + "</textarea></div>" +
+              '<button class="button button--sm" type="submit">Lưu</button></form>');
+            $("#ae", m).addEventListener("submit", function (e) {
+              e.preventDefault();
+              DM.api("/admin/affiliates/" + a.id, { method: "PATCH", body: { rate: Number($("#ae-rate", m).value) / 100, note: $("#ae-note", m).value } }).then(function () { DM.modal.close(m); DM.toast("Đã lưu."); affiliatesPane(); }, function (er) { DM.toast(er.message, "error"); });
+            });
+          });
+        });
+        $$("[data-aord]").forEach(function (b) { b.addEventListener("click", function () { affFilter = b.dataset.aord; affiliatesPane(); }); });
+        var all = $("[data-aall]"); if (all) all.addEventListener("click", function () { affFilter = ""; affiliatesPane(); });
+        $$("[data-mo]").forEach(function (b) { b.addEventListener("click", function () { if (data.orders.some(function (o) { return o.id === b.dataset.mo; })) manage(b.dataset.mo); }); });
+      }, function (er) { pane.innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
     }
 
     /* ---------- Giao dịch ngân hàng (SePay) ---------- */
