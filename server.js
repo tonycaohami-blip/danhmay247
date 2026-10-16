@@ -21,6 +21,7 @@ const db = require("./server/db");
 const { router: api, startJobs } = require("./server/api");
 const { sameOrigin } = require("./server/security");
 const seo = require("./server/seo");
+const indexnow = require("./server/indexnow");
 const { DM } = require("./server/shared");
 
 const PUBLIC = config.PUBLIC_DIR;
@@ -71,20 +72,7 @@ seo.register(app, (req, res) => sendFile(req, res, 404, path.join(PUBLIC, "404.h
 
 /* ---------- Sitemap cho Google: trang công khai + dịch vụ + bài viết (kèm ảnh) ---------- */
 app.get("/sitemap.xml", (req, res) => {
-  const base = config.SITE_URL;
-  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
-  const pages = ["", "bang-gia", "dich-vu", "dich-vu-chuyen-am", "gioi-thieu", "danh-gia", "mau", "blog", "hoi-dap", "doi-tac", "dang-ky-doi-tac", "lien-he"];
-  const posts = seo.posts();
-  const services = Object.keys(DM.services || {});
-  const today = new Date().toISOString().slice(0, 10);
-  const url = (loc, extra) => "<url><loc>" + esc(base + loc) + "</loc>" + (extra || "") + "</url>";
-  const img = (src) => "<image:image><image:loc>" + esc(base + src) + "</image:loc></image:image>";
-  const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' +
-    pages.map((p) => url("/" + p, p === "blog" && posts[0] ? "<lastmod>" + posts[0].date + "</lastmod>" : p === "" ? "<lastmod>" + today + "</lastmod>" : "")).join("") +
-    services.map((s) => url("/dich-vu/" + s)).join("") +
-    posts.map((p) => url("/blog/" + p.slug, "<lastmod>" + p.date + "</lastmod>" + img("/assets/img/og/" + p.slug + ".png"))).join("") +
-    "</urlset>";
-  res.set({ "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }).send(xml);
+  res.set({ "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }).send(seo.sitemapXml());
 });
 
 /* ---------- Website tĩnh ---------- */
@@ -162,6 +150,7 @@ async function connectDb() {
 
 async function start() {
   await connectDb();
+  indexnow.schedule(); // báo URL mới cho Bing… sau mỗi lần deploy (chỉ khi chạy trên tên miền thật)
   const onListen = () => {
     console.log("Đánh máy 247 đang chạy tại " + (typeof config.PORT === "number" ? "http://localhost:" + config.PORT : "socket " + config.PORT));
     console.log("  Dữ liệu:   " + (db.kind === "mysql" ? "MySQL " + config.DB.user + "@" + config.DB.host + "/" + config.DB.database + (config.DB.prefix ? " (tiền tố " + config.DB.prefix + ")" : "") : config.DATA_DIR));

@@ -416,6 +416,16 @@ async function cleanup() {
   ok("mã của đối tác bị khóa không còn được tính", !(await r.json()).order.affCode);
   ok("quản trị: tỷ lệ hoa hồng tối đa 50%", (await j("PATCH", "/api/admin/affiliates/" + aff.id, { rate: 0.9 }, { Cookie: admin })).status === 400);
 
+  // --- Sitemap đầy đủ + IndexNow
+  pg = await getRaw("/sitemap.xml");
+  const smLocs = (pg.h.match(/<loc>/g) || []).length, seoMod = require(path.join(ROOT, "server/seo.js"));
+  ok("sitemap: đủ trang công khai + mọi dịch vụ + mọi bài viết", smLocs === 12 + Object.keys(require(path.join(ROOT, "server/shared.js")).DM.services).length + seoMod.posts().length && smLocs === seoMod.sitemapUrls().length);
+  ok("sitemap: mọi bài viết có lastmod và ảnh", seoMod.sitemapUrls().filter((u) => /\/blog\/.+/.test(u.loc)).every((u) => u.lastmod && u.image));
+  const inx = require(path.join(ROOT, "server/indexnow.js"));
+  r = await fetch(B + "/" + inx.KEY + ".txt");
+  ok("IndexNow: tệp khóa xác minh truy cập được", r.ok && (await r.text()).trim() === inx.KEY);
+  ok("IndexNow: không gửi khi chạy trên máy (localhost)", inx.enabled() === false);
+
   // --- Header bảo mật
   r = await fetch(B + "/");
   const csp = r.headers.get("content-security-policy") || "";

@@ -369,4 +369,23 @@ function register(app, send404) {
   app.get("/dich-vu/:slug", (req, res) => { const h = renderService(req.params.slug); h ? sendHtml(req, res, h) : send404(req, res); });
 }
 
-module.exports = { register, transformHtml, posts, renderPost, renderService };
+/* =========================================================
+   SITEMAP - danh sách URL công khai (dùng cho /sitemap.xml và IndexNow)
+   ========================================================= */
+const SITEMAP_PAGES = ["", "bang-gia", "dich-vu", "dich-vu-chuyen-am", "gioi-thieu", "danh-gia", "mau", "blog", "hoi-dap", "doi-tac", "dang-ky-doi-tac", "lien-he"];
+function sitemapUrls() {
+  const base = SITE(), list = posts(), newest = list[0] ? list[0].date : null;
+  const out = SITEMAP_PAGES.map((p) => ({ loc: base + "/" + p, lastmod: (p === "" || p === "blog") ? newest : null }));
+  Object.keys(DM.services || {}).forEach((s) => out.push({ loc: base + "/dich-vu/" + s }));
+  list.forEach((p) => out.push({ loc: base + "/blog/" + p.slug, lastmod: p.date, image: ogImage(p.slug) }));
+  return out;
+}
+function sitemapXml() {
+  const x = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
+    sitemapUrls().map((u) => "  <url><loc>" + x(u.loc) + "</loc>" + (u.lastmod ? "<lastmod>" + u.lastmod + "</lastmod>" : "") +
+      (u.image ? "<image:image><image:loc>" + x(u.image) + "</image:loc></image:image>" : "") + "</url>").join("\n") +
+    "\n</urlset>\n";
+}
+
+module.exports = { sitemapUrls, sitemapXml, register, transformHtml, posts, renderPost, renderService };

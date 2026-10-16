@@ -106,7 +106,8 @@ Thông báo được tổng hợp từ dữ liệu đơn hàng, không cần c�
 - **Đường dẫn đẹp:** `/blog/<slug>`, `/dich-vu/<slug>`. Đường dẫn cũ `/bai-viet?slug=…`, `/dich-vu?slug=…` tự chuyển hướng 301.
 - **Mọi trang công khai** có `canonical`, Open Graph, Twitter card với ảnh PNG 1200×630 (`public/assets/img/og/`).
 - **Dữ liệu có cấu trúc (JSON-LD):** Organization + WebSite (trang chủ), BlogPosting + BreadcrumbList (bài viết), Service (dịch vụ), FAQPage (hỏi đáp). Không gắn điểm đánh giá vì các đánh giá mẫu chưa phải đánh giá thật.
-- **`/sitemap.xml`** tự sinh theo danh sách dịch vụ và bài viết, kèm ảnh.
+- **`/sitemap.xml`** tự sinh: 12 trang công khai + mọi trang dịch vụ + mọi bài viết (kèm ngày cập nhật và ảnh). Thêm bài vào `posts.js` là sitemap tự có, không cần sửa tay.
+- **IndexNow** (`server/indexnow.js`): sau mỗi lần Redeploy khoảng 90 giây, máy chủ tự báo các URL mới hoặc vừa cập nhật cho Bing và các công cụ hỗ trợ IndexNow (tệp khóa `public/26c6ca444b5c59134efd40581c369de2.txt`). Xem log Hostinger dòng `[IndexNow]`. Tắt bằng biến `INDEXNOW=0`.
 
 **Khi thêm bài viết mới:** thêm vào `posts.js` → `node scripts/make-blog-images.js` (ảnh bìa) → `npm install --no-save @resvg/resvg-js && node scripts/make-og-images.js` (ảnh chia sẻ PNG) → commit, push, Redeploy.
 
@@ -133,7 +134,7 @@ Cần Node.js 20 trở lên.
 ```bash
 npm install
 npm start      # http://localhost:3000
-npm test       # 159 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
+npm test       # 163 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
 ```
 
 Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_PASSWORD` để vào được trang quản trị.
