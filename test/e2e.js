@@ -242,6 +242,32 @@ async function cleanup() {
   d = await (await fetch(B + "/api/orders/" + id2, { headers: { "X-Order-Token": token2 } })).json();
   ok("khách thấy tệp như do Đánh máy 247 gửi", d.order.files.some((f) => f.name === "Kết quả nhân viên.docx" && f.by === "admin"));
 
+  // --- Thông báo
+  await j("POST", "/api/admin/orders/" + id2 + "/internal", { text: "Cảm ơn Lan, bản rất tốt" }, { Cookie: admin });
+  r = await fetch(B + "/api/admin/notifications", { headers: { Cookie: admin } });
+  d = await r.json();
+  const aev = d.events || [];
+  ok("thông báo quản trị: đơn mới, khách báo chuyển khoản, khách nhắn tin, nhân viên cập nhật",
+    r.ok && d.now > 0 && aev.some((e) => e.kind === "new" && e.orderId === id2) && aev.some((e) => e.kind === "pay" && e.orderId === id) &&
+    aev.some((e) => e.kind === "msg" && /Khi nào xong/.test(e.text)) && aev.some((e) => e.kind === "staff" && e.orderId === id2 && /gửi quản trị kiểm tra/.test(e.text)));
+  ok("thông báo quản trị: mới nhất trước, mã không trùng", aev.every((e, i) => !i || aev[i - 1].at >= e.at) && new Set(aev.map((e) => e.id)).size === aev.length);
+  ok("thông báo quản trị: chỉ quản trị xem được", (await fetch(B + "/api/admin/notifications", { headers: { Cookie: staffCk } })).status === 401 && (await fetch(B + "/api/admin/notifications")).status === 401);
+  r = await fetch(B + "/api/staff/notifications", { headers: { Cookie: staffCk } });
+  d = await r.json();
+  const sev = d.events || [], sevJson = JSON.stringify(sev);
+  ok("thông báo nhân viên: được giao đơn, quản trị nhắn, đơn hoàn thành",
+    r.ok && sev.some((e) => e.kind === "assign" && e.orderId === id2) && sev.some((e) => e.kind === "note" && /bản rất tốt/.test(e.text)) && sev.some((e) => e.kind === "done" && e.orderId === id2));
+  ok("thông báo nhân viên: không lộ thông tin khách, giá, đơn của người khác", !/Trần Bí Mật|bimat@khach\.vn|0911222333|đ"|DANHMAY10/.test(sevJson) && sev.every((e) => e.orderId === id2));
+  ok("thông báo nhân viên: nhân viên khác không thấy", ((await (await fetch(B + "/api/staff/notifications", { headers: { Cookie: minhCk } })).json()).events || []).length === 0);
+  r = await j("POST", "/api/notifications", { tokens: { [id2]: token2 } });
+  d = await r.json();
+  const cev = d.events || [], cevJson = JSON.stringify(cev);
+  ok("thông báo khách: tin từ Đánh máy 247 (thanh toán, hoàn thành) theo mã truy cập", r.ok && cev.some((e) => e.orderId === id2 && /hoàn thành/.test(e.text)) && cev.some((e) => /nhận được thanh toán/.test(e.text)));
+  ok("thông báo khách: không lộ trao đổi nội bộ, tên nhân viên, tin nhắn của chính khách", !/Nguyễn Thị Lan|bản rất tốt|bị mờ/.test(cevJson) && cev.every((e) => e.orderId === id2));
+  r = await j("POST", "/api/notifications", { tokens: { [id2]: "ma-sai", [id]: token2 } });
+  ok("thông báo khách: mã truy cập sai → không thấy gì", r.ok && (await r.json()).events.length === 0);
+  ok("thông báo khách: chặn gọi từ trang lạ", (await j("POST", "/api/notifications", { tokens: {} }, { Origin: "https://evil.com" })).status === 403);
+
   // Đổi mật khẩu & khóa tài khoản
   r = await j("POST", "/api/staff/password", { old: "matkhau123", password: "matkhaumoi789" }, { Cookie: staffCk });
   const newCk = (r.headers.get("set-cookie") || "").split(";")[0];

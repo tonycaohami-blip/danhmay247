@@ -659,6 +659,139 @@
   }
   DM.initReveal = initReveal;
 
+  /* =========================================================
+     THÔNG BÁO (chuông trên thanh đầu trang) — dùng cho quản trị, nhân viên, khách hàng.
+     Hỏi máy chủ định kỳ; nhớ thông báo đã đọc trên trình duyệt (theo mốc giờ máy chủ).
+     opts: { key, fetch: () => Promise<{now, events}>, interval, onNew(events), onOpen(event), empty }
+     ========================================================= */
+  var BELL = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
+  var KIND_IC = { "new": "🧾", pay: "💳", paid: "✅", msg: "💬", staff: "🧑‍💻", cancel: "⛔", assign: "📌", note: "💬", sys: "🔔", done: "✅", contact: "✉️", review: "⭐" };
+  function timeAgo(ms, now) {
+    var s = Math.max(0, Math.round((now - ms) / 1000));
+    if (s < 60) return "vừa xong";
+    if (s < 3600) return Math.floor(s / 60) + " phút trước";
+    if (s < 86400) return Math.floor(s / 3600) + " giờ trước";
+    if (s < 7 * 86400) return Math.floor(s / 86400) + " ngày trước";
+    return DM.dateTime(ms);
+  }
+  function beep() {
+    try {
+      var C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+      var ctx = beep.ctx || (beep.ctx = new C());
+      [880, 1175].forEach(function (f, i) {
+        var o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + i * 0.16;
+        o.frequency.value = f; o.type = "sine";
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.18, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+        o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + 0.32);
+      });
+    } catch (e) { /* trình duyệt chặn âm thanh */ }
+  }
+
+  DM.notifier = function (opts) {
+    if (DM._notifier) DM._notifier.stop();
+    var KEY = "notif_" + opts.key;
+    var st = DM.store.get(KEY, null);
+    var state = st || { seen: 0, read: [], sound: true, known: [] };
+    var events = [], serverNow = Date.now(), first = !st, timer = null, stopped = false, el = null, baseTitle = document.title.replace(/^\(\d+\+?\)\s*/, "");
+    var save = function () { state.read = state.read.slice(-300); DM.store.set(KEY, state); };
+    var isUnread = function (e) { return e.at > state.seen && state.read.indexOf(e.id) < 0; };
+
+    function mount() {
+      var header = $("#header .container");
+      if (!header) return document.addEventListener("DOMContentLoaded", mount);
+      var old = $("#notif"); if (old) old.remove();
+      el = document.createElement("div");
+      el.className = "notif"; el.id = "notif";
+      el.innerHTML = '<button type="button" class="notif__btn" aria-haspopup="true" aria-expanded="false" aria-label="Thông báo">' + BELL + '<span class="notif__badge" hidden></span></button>' +
+        '<div class="notif__panel" role="dialog" aria-label="Thông báo"><div class="notif__head"><b>Thông báo</b><button type="button" class="link" data-readall>Đánh dấu đã đọc</button></div>' +
+        '<div class="notif__list" aria-live="polite"></div>' +
+        '<div class="notif__foot"><button type="button" class="link" data-sound></button>' +
+        ("Notification" in window ? '<button type="button" class="link" data-desk></button>' : "") + "</div></div>";
+      header.insertBefore(el, $("#hamburger", header));
+      var btn = $(".notif__btn", el);
+      btn.addEventListener("click", function (e) { e.stopPropagation(); toggle(!el.classList.contains("is-open")); });
+      document.addEventListener("click", function (e) { if (el && !el.contains(e.target)) toggle(false); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") toggle(false); });
+      $("[data-readall]", el).addEventListener("click", function () { state.seen = serverNow; state.read = []; save(); draw(); });
+      $("[data-sound]", el).addEventListener("click", function () { state.sound = !state.sound; save(); draw(); if (state.sound) beep(); });
+      var desk = $("[data-desk]", el);
+      if (desk) desk.addEventListener("click", function () {
+        if (Notification.permission === "default") Notification.requestPermission().then(draw);
+        else DM.toast(Notification.permission === "granted" ? "Thông báo trên máy tính đã bật. Có thể tắt trong cài đặt trình duyệt." : "Trình duyệt đang chặn thông báo. Hãy cho phép trong cài đặt trang web.");
+      });
+      $(".notif__list", el).addEventListener("click", function (e) {
+        var a = e.target.closest("[data-ev]"); if (!a) return;
+        var ev = events.find(function (x) { return x.id === a.dataset.ev; });
+        if (!ev) return;
+        if (state.read.indexOf(ev.id) < 0) state.read.push(ev.id);
+        save(); draw(); toggle(false);
+        if (opts.onOpen) opts.onOpen(ev);
+      });
+      draw();
+    }
+    function toggle(open) {
+      if (!el) return;
+      el.classList.toggle("is-open", open);
+      $(".notif__btn", el).setAttribute("aria-expanded", open);
+    }
+    function draw() {
+      if (!el) return;
+      var n = events.filter(isUnread).length;
+      var badge = $(".notif__badge", el);
+      badge.hidden = !n; badge.textContent = n > 9 ? "9+" : n;
+      $(".notif__btn", el).setAttribute("aria-label", n ? "Thông báo — " + n + " chưa đọc" : "Thông báo");
+      document.title = (n ? "(" + (n > 9 ? "9+" : n) + ") " : "") + baseTitle;
+      $(".notif__list", el).innerHTML = events.length ? events.map(function (e) {
+        var k = e.kind.split(":")[0];
+        return '<button type="button" class="notif__item' + (isUnread(e) ? " is-unread" : "") + '" data-ev="' + DM.esc(e.id) + '"><span class="notif__ic" aria-hidden="true">' + (KIND_IC[k] || "🔔") + "</span>" +
+          "<span><b>" + DM.esc(e.title) + "</b><small>" + DM.esc(e.text) + "</small><time>" + timeAgo(e.at, serverNow) + "</time></span></button>";
+      }).join("") : '<p class="notif__empty">' + DM.esc(opts.empty || "Chưa có thông báo nào.") + "</p>";
+      $("[data-sound]", el).textContent = state.sound ? "🔊 Âm báo: bật" : "🔈 Âm báo: tắt";
+      var desk = $("[data-desk]", el);
+      if (desk) desk.textContent = Notification.permission === "granted" ? "🖥 Thông báo máy tính: bật" : "🖥 Bật thông báo trên máy tính";
+    }
+    function poll() {
+      if (stopped) return;
+      opts.fetch().then(function (d) {
+        if (stopped) return;
+        serverNow = d.now; events = d.events || [];
+        if (first) { state.seen = d.now; first = false; } // lần đầu dùng: không coi lịch sử cũ là mới
+        var known = state.known || [];
+        var fresh = events.filter(function (e) { return isUnread(e) && known.indexOf(e.id) < 0; });
+        state.known = events.map(function (e) { return e.id; });
+        save(); draw();
+        if (!fresh.length) return;
+        if (poll.started) {
+          fresh.slice(0, 3).forEach(function (e) { DM.toast("🔔 " + e.title + (e.text ? " — " + e.text : "")); });
+          if (fresh.length > 3) DM.toast("Và " + (fresh.length - 3) + " thông báo mới khác.");
+          if (state.sound) beep();
+          if (document.hidden && "Notification" in window && Notification.permission === "granted") {
+            try { var nf = new Notification(fresh[0].title, { body: fresh[0].text, icon: "/assets/img/logo-512.png", tag: "dm247" }); nf.onclick = function () { window.focus(); nf.close(); if (opts.onOpen) opts.onOpen(fresh[0]); }; } catch (e) { /* bỏ qua */ }
+          }
+        } else {
+          DM.toast("🔔 Bạn có " + fresh.length + " thông báo mới chưa đọc.");
+        }
+        if (opts.onNew) opts.onNew(fresh);
+      }, function (er) {
+        if (er.status === 401 || er.status === 403) return api.stop();
+      }).then(function () { poll.started = true; });
+    }
+    function schedule() { clearInterval(timer); timer = setInterval(function () { if (!document.hidden) poll(); }, opts.interval || 20000); }
+    function onVis() { if (!document.hidden) poll(); }
+    var api = {
+      stop: function () {
+        stopped = true; clearInterval(timer); document.removeEventListener("visibilitychange", onVis);
+        if (el) el.remove(); el = null; document.title = baseTitle;
+        if (DM._notifier === api) DM._notifier = null;
+      },
+      refresh: poll
+    };
+    DM._notifier = api;
+    mount(); poll(); schedule();
+    document.addEventListener("visibilitychange", onVis);
+    return api;
+  };
+
   /* ---------- Khởi động ---------- */
   document.addEventListener("DOMContentLoaded", function () {
     renderHeader();

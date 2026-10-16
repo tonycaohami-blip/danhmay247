@@ -10,7 +10,7 @@ const multer = require("multer");
 
 const config = require("./config");
 const db = require("./db");
-const { DM, STATUS } = require("./shared");
+const { DM, STATUS, fmt } = require("./shared");
 const mail = require("./mailer");
 const sec = require("./security");
 
@@ -637,6 +637,96 @@ router.get("/staff/orders/:id/files/:fileId", staffOnly, wrap(async (req, res) =
   if (!full.startsWith(config.UPLOAD_DIR + path.sep) || !fs.existsSync(full)) throw new HttpError(404, "Tệp không còn tồn tại trên máy chủ.");
   res.setHeader("Cache-Control", "private, no-store");
   res.download(full, f.name);
+}));
+
+/* =========================================================
+   THÔNG BÁO — tổng hợp từ dữ liệu đơn hàng (không lưu riêng).
+   Trình duyệt hỏi định kỳ, tự nhớ thông báo nào đã đọc. Mỗi vai trò chỉ thấy sự kiện mình được phép thấy.
+   ========================================================= */
+const NOTIF_LIMIT = 40;
+const cut = (s, n) => { s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n - 1) + "…" : s; };
+const evt = (o, kind, at, title, text) => ({ id: (o ? o.id : "x") + ":" + kind + ":" + at, orderId: o ? o.id : null, kind, at, title, text: cut(text, 160) });
+const newest = (list) => list.filter((e) => e.at).sort((a, b) => b.at - a.at).slice(0, NOTIF_LIMIT);
+
+/** Quản trị: đơn mới, khách báo chuyển khoản / nhắn tin / hủy đơn, tiền về tự động, nhân viên cập nhật, liên hệ & đánh giá mới. */
+function adminEvents(orders, contacts, reviews) {
+  const out = [];
+  for (const o of orders) {
+    out.push(evt(o, "new", o.created, "Đơn hàng mới #" + o.id, o.name + " · " + o.typeLabel + " · " + o.qty + " " + o.unit + " · " + fmt(o.price.total)));
+    for (const h of o.history || []) {
+      if (h.status === "verifying") out.push(evt(o, "pay", h.at, "Khách báo đã chuyển khoản #" + o.id, "Cần đối soát " + fmt(o.price.total) + " — " + o.name));
+      if (h.status === "cancelled") {
+        const byAdmin = (o.messages || []).some((m) => !m.me && m.from === "Hệ thống" && Math.abs(m.at - h.at) < 5000);
+        if (!byAdmin) out.push(evt(o, "cancel", h.at, "Khách đã hủy đơn #" + o.id, o.name));
+      }
+    }
+    if (o.paidAt && o.paySource === "sepay") out.push(evt(o, "paid", o.paidAt, "Đã nhận tiền tự động #" + o.id, fmt(o.paidAmount || o.price.total) + " qua chuyển khoản ngân hàng"));
+    for (const m of o.messages || []) if (m.me) out.push(evt(o, "msg", m.at, "Khách nhắn tin #" + o.id, o.name + ": " + m.text));
+    for (const n of o.internal || []) if (n.role === "staff") out.push(evt(o, "staff", n.at, n.from + " — đơn #" + o.id, n.text));
+  }
+  for (const c of contacts || []) if (!c.read) out.push(evt(null, "contact:" + c.id, c.at, "Liên hệ mới: " + cut(c.subject, 60), c.name + " — " + c.message));
+  for (const r of reviews || []) if (!r.approved) out.push(evt(null, "review:" + r.id, r.at, "Đánh giá mới chờ duyệt", (r.name || "Khách hàng") + ": " + (r.text || r.content || "")));
+  return newest(out);
+}
+
+/** Nhân viên: được giao đơn, quản trị nhắn, duyệt / thu hồi tệp, đơn được thanh toán / hoàn thành / hủy. Không có thông tin khách và giá. */
+function staffEvents(orders) {
+  const out = [];
+  for (const o of orders) {
+    const from = (o.assignedAt || 0) - 1000;
+    if (o.assignedAt) out.push(evt(o, "assign", o.assignedAt, "Bạn được giao đơn #" + o.id, o.typeLabel + " · " + o.qty + " " + o.unit + (o.deadline ? " · hạn " + vnTime(o.deadline) : "")));
+    for (const n of o.internal || []) {
+      if (n.at < from) continue;
+      if (n.role === "admin") out.push(evt(o, "note", n.at, "Quản trị nhắn — đơn #" + o.id, n.text));
+      else if (n.role === "system" && !/^Đã (giao|bỏ giao) đơn/.test(n.text)) out.push(evt(o, "sys", n.at, "Cập nhật đơn #" + o.id, n.text));
+    }
+    for (const h of o.history || []) {
+      if (h.at < from) continue;
+      if (h.status === "paid") out.push(evt(o, "paid", h.at, "Đơn #" + o.id + " đã được thanh toán", "Bạn có thể bắt đầu thực hiện."));
+      if (h.status === "done") out.push(evt(o, "done", h.at, "Đơn #" + o.id + " đã hoàn thành", "Quản trị đã duyệt và giao cho khách."));
+      if (h.status === "cancelled") out.push(evt(o, "cancel", h.at, "Đơn #" + o.id + " đã bị hủy", "Dừng xử lý đơn này."));
+    }
+  }
+  return newest(out);
+}
+
+/** Khách hàng: mọi tin nhắn từ phía Đánh máy 247 (xác nhận thanh toán, đổi trạng thái, gửi tệp, trả lời…). */
+function customerEvents(orders) {
+  const out = [];
+  for (const o of orders) {
+    for (const m of o.messages || []) {
+      if (m.me || m.at === o.created) continue;
+      out.push(evt(o, "msg", m.at, (m.from || "Đánh máy 247") + " — đơn #" + o.id, m.text));
+    }
+  }
+  return newest(out);
+}
+/** "14:30 ngày 17/10" theo giờ Việt Nam */
+const vnTime = (ms) => { const d = new Date(ms + 7 * 3600e3), p = (n) => String(n).padStart(2, "0"); return p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()) + " ngày " + p(d.getUTCDate()) + "/" + p(d.getUTCMonth() + 1); };
+
+router.get("/admin/notifications", adminOnly, wrap(async (req, res) => {
+  const [orders, contacts, reviews] = await Promise.all([db.orders.all(500), db.contacts.list(), db.reviews.all()]);
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ now: now(), events: adminEvents(orders, contacts, reviews) });
+}));
+
+router.get("/staff/notifications", staffOnly, wrap(async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ now: now(), events: staffEvents(await db.orders.byStaff(req.staff.id)) });
+}));
+
+/** Khách: đơn của tài khoản đang đăng nhập + các đơn có mã truy cập lưu trên thiết bị (gửi trong body). */
+router.post("/notifications", sec.rateLimit("notif", 120, 600e3), wrap(async (req, res) => {
+  const list = req.userEmail ? await db.orders.byEmail(req.userEmail) : [];
+  const have = new Set(list.map((o) => o.id));
+  const tokens = (req.body && typeof req.body.tokens === "object" && req.body.tokens) || {};
+  for (const [id, t] of Object.entries(tokens).slice(0, 30)) {
+    if (have.has(id) || typeof t !== "string") continue;
+    const o = await db.orders.get(String(id).slice(0, 12));
+    if (o && sec.safeEqual(sec.sha256(t), o.tokenHash)) { list.push(o); have.add(o.id); }
+  }
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ now: now(), events: customerEvents(list) });
 }));
 
 /* =========================================================

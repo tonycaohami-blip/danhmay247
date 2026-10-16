@@ -61,8 +61,32 @@
       });
     }
 
+    /** Chuông thông báo: tin nhắn, xác nhận thanh toán, đổi trạng thái, tệp hoàn thành từ Đánh máy 247. */
+    var notifKey = null;
+    function startNotifier() {
+      var key = DM.me ? "user_" + DM.me.email : "device";
+      if (!DM.me && !Object.keys(DM.orderTokens.all()).length) { if (DM._notifier) DM._notifier.stop(); notifKey = null; return; }
+      if (DM._notifier && notifKey === key) return;
+      notifKey = key;
+      DM.notifier({
+        key: key, interval: 25000, empty: "Chưa có thông báo. Mọi cập nhật về đơn hàng sẽ hiện ở đây.",
+        fetch: function () { return DM.api("/notifications", { body: { tokens: DM.orderTokens.all() } }); },
+        onNew: function (evs) {
+          if ($(".modal.is-open")) return;
+          if (view === "order" && openId && evs.some(function (e) { return e.orderId === openId; })) {
+            DM.orders.get(openId).then(function (o) {
+              var t = $("#msg-input") ? $("#msg-input").value : "";
+              drawOrder(o); if (t) $("#msg-input").value = t;
+            }, function () { /* thử lại sau */ });
+          } else if (view === "orders") renderOrders();
+        },
+        onOpen: function (ev) { if (ev.orderId) go("order", ev.orderId); }
+      });
+    }
+
     function render() {
       clearInterval(pollTimer);
+      startNotifier();
       var u = DM.me;
       app.innerHTML =
         '<div class="account">' +

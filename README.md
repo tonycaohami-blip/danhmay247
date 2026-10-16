@@ -63,6 +63,18 @@ Lưu ý: nếu khách tự ghi thông tin cá nhân vào phần hướng dẫn h
 
 Nhân viên chỉ thấy đơn được giao cho mình, không tự hoàn thành đơn được. Khi khóa tài khoản hoặc đặt lại mật khẩu, nhân viên bị đăng xuất ngay.
 
+## Thông báo (biểu tượng chuông)
+
+Trang quản trị, trang nhân viên và trang khách hàng có **chuông thông báo** ở góc trên bên phải, kèm số chưa đọc, số trên tiêu đề tab, thông báo nổi và âm báo (bật/tắt được). Có thể bấm **"Bật thông báo trên máy tính"** để nhận thông báo cả khi đang mở tab khác. Bấm vào một thông báo để mở thẳng đơn hàng đó.
+
+| Ai | Được báo khi |
+|---|---|
+| Quản trị (`/quan-tri`, kiểm tra mỗi 15 giây) | Có đơn mới; khách bấm "Tôi đã chuyển khoản"; tiền về tự động qua SePay; khách nhắn tin hoặc tự hủy đơn; nhân viên ghi chú, tải tệp, gửi kiểm tra; có liên hệ mới, đánh giá chờ duyệt |
+| Nhân viên (`/nhan-vien`, mỗi 20 giây) | Được giao đơn; quản trị nhắn trong trao đổi nội bộ; quản trị duyệt / thu hồi tệp; đơn được thanh toán, hoàn thành hoặc bị hủy. Không chứa thông tin khách hay giá |
+| Khách hàng (`/tai-khoan`, mỗi 25 giây) | Mọi tin từ Đánh máy 247: xác nhận thanh toán, đổi trạng thái, gửi tệp hoàn thành, trả lời tin nhắn. Không thấy trao đổi nội bộ hay tên nhân viên |
+
+Thông báo được tổng hợp từ dữ liệu đơn hàng, không cần cấu hình thêm. Trạng thái "đã đọc" được nhớ trên từng trình duyệt. Email vẫn được gửi như trước (nếu đã cấu hình SMTP).
+
 ## SEO (đã cài sẵn trong code)
 
 - **Bài viết và trang dịch vụ được máy chủ dựng sẵn HTML** (`server/seo.js`): Google, Cốc Cốc, Bing, Facebook, Zalo đọc được tiêu đề, mô tả, nội dung mà không cần chạy JavaScript.
@@ -82,7 +94,7 @@ Cần Node.js 20 trở lên.
 ```bash
 npm install
 npm start      # http://localhost:3000
-npm test       # 109 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
+npm test       # 119 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
 ```
 
 Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_PASSWORD` để vào được trang quản trị.

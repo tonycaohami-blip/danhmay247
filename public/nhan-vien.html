@@ -53,6 +53,7 @@
     /* ---------- Đăng nhập ---------- */
     function login(msg) {
       clearInterval(timer); me = null;
+      if (DM._notifier) DM._notifier.stop();
       app.innerHTML = '<div class="order-card" style="max-width:420px;margin:40px auto"><h1 class="order-card__title">Khu vực nhân viên</h1>' +
         '<p style="color:var(--muted);font-size:14.5px">Đăng nhập bằng tài khoản quản trị đã cấp cho bạn.</p>' +
         '<form id="lg" novalidate><div id="lg-msg">' + (msg ? '<div class="alert alert--error">' + DM.esc(msg) + "</div>" : "") + "</div>" +
@@ -69,8 +70,28 @@
       });
     }
 
+    /** Chuông thông báo: được giao đơn, quản trị nhắn, duyệt tệp, đơn thanh toán / hoàn thành / hủy. */
+    function startNotifier() {
+      DM.notifier({
+        key: "staff_" + me.id, interval: 20000, empty: "Chưa có thông báo. Khi quản trị giao đơn hoặc nhắn tin, bạn sẽ thấy ở đây.",
+        fetch: function () { return DM.api("/staff/notifications"); },
+        onNew: function (evs) {
+          if ($(".modal.is-open")) return;
+          if (view === "list") return renderList();
+          if (view === "order" && evs.some(function (e) { return e.orderId === openId; })) {
+            DM.api("/staff/orders/" + encodeURIComponent(openId)).then(function (x) {
+              var t = $("#note-input") ? $("#note-input").value : "";
+              draw(x); if (t) $("#note-input").value = t;
+            }, function () { /* thử lại sau */ });
+          }
+        },
+        onOpen: function (ev) { if (ev.orderId) go("order", ev.orderId); }
+      });
+    }
+
     function render() {
       clearInterval(timer);
+      if (!DM._notifier) startNotifier();
       app.innerHTML =
         '<div class="account"><aside class="account__side">' +
         '<div class="account__user"><span class="login__avatar" style="background:var(--green)" aria-hidden="true">' + DM.esc(DM.initials(me.name)) + "</span><div><b>" + DM.esc(me.name) + "</b><small>Nhân viên · " + DM.esc(me.username) + "</small></div></div>" +

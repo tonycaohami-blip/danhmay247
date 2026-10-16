@@ -46,6 +46,7 @@
 
     function gate(msg) {
       clearInterval(timer);
+      if (DM._notifier) DM._notifier.stop();
       app.innerHTML = '<div class="order-card" style="max-width:420px;margin:40px auto"><h1 class="order-card__title">Khu vực quản trị</h1>' +
         '<form id="gate" novalidate><div id="g-msg">' + (msg ? '<div class="alert alert--error">' + DM.esc(msg) + "</div>" : "") + '</div>' +
         '<div class="field"><label class="field__label" for="g-pass">Mật khẩu quản trị</label><div class="password"><input class="input" id="g-pass" type="password" required autocomplete="current-password"><button type="button" class="password__eye" aria-label="Hiện mật khẩu">' + DM.icon.eye + '</button></div><div class="field__error"></div></div>' +
@@ -60,12 +61,36 @@
     function load() {
       return DM.api("/admin/summary").then(function (d) {
         data = d; render();
+        if (!DM._notifier) startNotifier();
         clearInterval(timer);
         timer = setInterval(function () {
           if ($(".modal.is-open")) return; // không làm gián đoạn khi đang thao tác
           DM.api("/admin/summary").then(function (x) { data = x; render(); }, function () { /* bỏ qua */ });
         }, 30000);
       }, function (er) { if (er.status === 401) gate(); else app.innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
+    }
+
+    /** Chuông thông báo: đơn mới, khách chuyển khoản / nhắn tin, nhân viên cập nhật, liên hệ, đánh giá. */
+    function refresh() {
+      if ($(".modal.is-open")) return;
+      DM.api("/admin/summary").then(function (x) { data = x; render(); }, function () { /* bỏ qua */ });
+    }
+    function startNotifier() {
+      DM.notifier({
+        key: "admin", interval: 15000, empty: "Chưa có hoạt động nào.",
+        fetch: function () { return DM.api("/admin/notifications"); },
+        onNew: refresh,
+        onOpen: function (ev) {
+          var k = ev.kind.split(":")[0];
+          var openTab = function (t) { $$(".modal.is-open").forEach(function (m) { m._onclose = null; DM.modal.close(m); }); tab = t; render(); window.scrollTo(0, 0); };
+          if (k === "contact") return DM.api("/admin/summary").then(function (x) { data = x; openTab("contacts"); });
+          if (k === "review") return DM.api("/admin/summary").then(function (x) { data = x; openTab("reviews"); });
+          DM.api("/admin/summary").then(function (x) {
+            data = x; openTab("orders");
+            if (data.orders.some(function (o) { return o.id === ev.orderId; })) manage(ev.orderId);
+          });
+        }
+      });
     }
 
     function render() {
