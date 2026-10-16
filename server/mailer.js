@@ -31,7 +31,7 @@ const row = (k, v) => `<tr><td style="padding:6px 12px 6px 0;color:#777;white-sp
 function orderTable(o) {
   return `<table style="border-collapse:collapse;font-size:14.5px;margin:6px 0 10px">
     ${row("Mã đơn", "#" + esc(o.id))}
-    ${row("Dịch vụ", esc(o.serviceLabel + " — " + o.typeLabel))}
+    ${row("Dịch vụ", esc(o.serviceLabel + " - " + o.typeLabel))}
     ${row("Khối lượng", esc(o.qty + " " + o.unit + (o.speakers ? " · " + o.speakers : "")))}
     ${row("Thời hạn", esc(o.urgencyLabel + " (tính từ khi thanh toán)"))}
     ${o.extras.length ? row("Bổ sung", esc(o.extras.join(", "))) : ""}
@@ -68,11 +68,11 @@ module.exports = {
   ready: !!transport,
 
   orderCreated(o, token) {
-    send(o.email, `Đã nhận đơn hàng #${o.id} — Đánh máy 247`, "Cảm ơn bạn đã đặt hàng!",
+    send(o.email, `Đã nhận đơn hàng #${o.id} - Đánh máy 247`, "Cảm ơn bạn đã đặt hàng!",
       `<p>Xin chào ${esc(o.name)},</p><p>Chúng tôi đã nhận được đơn hàng của bạn. Đơn sẽ được bắt đầu ngay khi nhận được thanh toán.</p>
       ${orderTable(o)}${bankBox(o)}${btn(orderLink(o, token), "Xem & theo dõi đơn hàng")}
       <p style="font-size:13px;color:#888">Hãy giữ email này: liên kết trên cho phép bạn xem đơn hàng mà không cần mật khẩu.</p>`);
-    send(ADMIN_EMAIL, `[Đơn mới] #${o.id} — ${fmt(o.price.total)} — ${o.name}`, "Có đơn hàng mới",
+    send(ADMIN_EMAIL, `[Đơn mới] #${o.id} - ${fmt(o.price.total)} - ${o.name}`, "Có đơn hàng mới",
       `${orderTable(o)}<p>Khách: <b>${esc(o.name)}</b> · ${esc(o.email)} · ${esc(o.phone)}</p>
       ${o.instructions ? `<p style="white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:8px">${esc(o.instructions)}</p>` : ""}
       ${btn(SITE_URL + "/quan-tri", "Mở trang quản trị")}`);
@@ -95,7 +95,7 @@ module.exports = {
     if (o.status === "done") {
       send(o.email, `Đơn #${o.id} đã hoàn thành`, "Tài liệu của bạn đã sẵn sàng!",
         `<p>Xin chào ${esc(o.name)},</p><p>Đơn hàng <b>#${esc(o.id)}</b> đã hoàn thành và được biên tập viên kiểm tra. Bạn có thể tải tài liệu trong tài khoản.</p>
-        ${btn(orderLink(o), "Tải tài liệu")}<p>Nếu cần chỉnh sửa, hãy nhắn cho chúng tôi trong vòng 14 ngày — hoàn toàn miễn phí.</p>`);
+        ${btn(orderLink(o), "Tải tài liệu")}<p>Nếu cần chỉnh sửa, hãy nhắn cho chúng tôi trong vòng 14 ngày - hoàn toàn miễn phí.</p>`);
     } else if (o.status === "cancelled") {
       send(o.email, `Đơn #${o.id} đã được hủy`, "Đơn hàng đã hủy", `<p>Đơn hàng <b>#${esc(o.id)}</b> đã được hủy. Nếu đây là nhầm lẫn, vui lòng liên hệ ${esc(DM.site.phone)}.</p>`);
     }
@@ -103,7 +103,7 @@ module.exports = {
 
   newMessage(o, fromCustomer, text) {
     if (fromCustomer) {
-      send(ADMIN_EMAIL, `[Tin nhắn] Đơn #${o.id} — ${o.name}`, "Khách hàng gửi tin nhắn",
+      send(ADMIN_EMAIL, `[Tin nhắn] Đơn #${o.id} - ${o.name}`, "Khách hàng gửi tin nhắn",
         `<p style="white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:8px">${esc(text)}</p>${btn(SITE_URL + "/quan-tri", "Trả lời")}`);
     } else {
       send(o.email, `Tin nhắn mới về đơn #${o.id}`, "Bạn có tin nhắn mới",
@@ -117,13 +117,13 @@ module.exports = {
       <p style="font-size:13px;color:#888">Nếu bạn không yêu cầu đăng nhập, hãy bỏ qua email này.</p>`);
   },
 
-  /** Báo nhân viên có đơn mới — tuyệt đối KHÔNG kèm thông tin khách hay giá. */
+  /** Báo nhân viên có đơn mới - tuyệt đối KHÔNG kèm thông tin khách hay giá. */
   staffAssigned(st, o) {
     if (!st.email) return;
-    send(st.email, `[Giao việc] Đơn #${o.id} — ${o.typeLabel}`, "Bạn được giao một đơn mới",
+    send(st.email, `[Giao việc] Đơn #${o.id} - ${o.typeLabel}`, "Bạn được giao một đơn mới",
       `<p>Chào ${esc(st.name)},</p><p>Quản trị vừa giao cho bạn đơn <b>#${esc(o.id)}</b>:</p>
       <table style="border-collapse:collapse;font-size:14.5px;margin:6px 0 10px">
-        ${row("Dịch vụ", esc(o.serviceLabel + " — " + o.typeLabel))}
+        ${row("Dịch vụ", esc(o.serviceLabel + " - " + o.typeLabel))}
         ${row("Khối lượng", esc(o.qty + " " + o.unit + (o.speakers ? " · " + o.speakers : "")))}
         ${row("Hạn hoàn thành", o.deadline ? esc(new Date(o.deadline).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })) : "Chờ khách thanh toán")}
       </table>${btn(SITE_URL + "/nhan-vien?order=" + encodeURIComponent(o.id), "Mở đơn hàng")}`);
@@ -131,14 +131,14 @@ module.exports = {
 
   /** Nhân viên gửi ghi chú / gửi kiểm tra → báo quản trị. */
   staffUpdate(o, st, text) {
-    send(ADMIN_EMAIL, `[Nhân viên] ${st.name} — đơn #${o.id}`, "Cập nhật từ nhân viên",
+    send(ADMIN_EMAIL, `[Nhân viên] ${st.name} - đơn #${o.id}`, "Cập nhật từ nhân viên",
       `<p><b>${esc(st.name)}</b> cập nhật đơn <b>#${esc(o.id)}</b>:</p>
       <p style="white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:8px">${esc(text)}</p>${btn(SITE_URL + "/quan-tri", "Mở trang quản trị")}`);
   },
 
   contact(c) {
-    send(ADMIN_EMAIL, `[Liên hệ] ${c.subject} — ${c.name}`, "Tin nhắn liên hệ mới",
-      `<table style="font-size:14.5px">${row("Họ tên", esc(c.name))}${row("Email", esc(c.email))}${row("Điện thoại", esc(c.phone || "—"))}${row("Chủ đề", esc(c.subject))}</table>
+    send(ADMIN_EMAIL, `[Liên hệ] ${c.subject} - ${c.name}`, "Tin nhắn liên hệ mới",
+      `<table style="font-size:14.5px">${row("Họ tên", esc(c.name))}${row("Email", esc(c.email))}${row("Điện thoại", esc(c.phone || "-"))}${row("Chủ đề", esc(c.subject))}</table>
       <p style="white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:8px">${esc(c.message)}</p>`);
   },
 

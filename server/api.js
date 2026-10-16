@@ -1,5 +1,5 @@
 /**
- * API của Đánh máy 247 — gắn tại /api. Dữ liệu lưu trong MySQL (xem server/db.js).
+ * API của Đánh máy 247 - gắn tại /api. Dữ liệu lưu trong MySQL (xem server/db.js).
  */
 "use strict";
 
@@ -35,7 +35,7 @@ async function newOrderId() {
   }
 }
 
-/** Multer giải mã tên tệp UTF-8 thành latin1 — sửa lại để giữ tiếng Việt. */
+/** Multer giải mã tên tệp UTF-8 thành latin1 - sửa lại để giữ tiếng Việt. */
 function fixName(name) {
   if (/^[\x00-\xff]*$/.test(name)) {
     const u = Buffer.from(name, "latin1").toString("utf8");
@@ -45,6 +45,14 @@ function fixName(name) {
 }
 function safeFileName(name) {
   return fixName(name).replace(/[\\/:*?"<>|\x00-\x1f]/g, "_").slice(0, 150) || "tep";
+}
+
+/** Gửi tệp người dùng tải lên: luôn tải về (không mở trong trình duyệt), chặn chạy mã nếu tệp bị giả dạng. */
+function sendStored(res, full, name) {
+  res.setHeader("Cache-Control", "private, no-store");
+  res.setHeader("Content-Security-Policy", "default-src 'none'; sandbox");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.download(full, name);
 }
 
 /** Ai được xem đơn: quản trị, chủ tài khoản (đã đăng nhập), hoặc người có mã truy cập của đơn. */
@@ -186,7 +194,7 @@ router.post("/orders", sec.rateLimit("order", 15, 3600e3), upload.array("files",
     if (b.agree !== "on" && b.agree !== "true") throw new HttpError(400, "Vui lòng đồng ý với điều khoản.");
     const docType = DM.docTypes.includes(b.docType) ? b.docType : DM.docTypes[0];
 
-    // Máy chủ tự tính giá — không dùng giá gửi từ trình duyệt
+    // Máy chủ tự tính giá - không dùng giá gửi từ trình duyệt
     const price = DM.calcPrice({ service, type: type.key, urgency: urg.key, qty, speakers: speakers && speakers.key, extras, promo });
 
     const token = sec.randomToken(24);
@@ -259,12 +267,11 @@ router.get("/orders/:id/files/:fileId", wrap(async (req, res) => {
   if (!f.stored) throw new HttpError(410, "Tệp đã được xóa theo chính sách lưu trữ 30 ngày.");
   const full = path.join(config.UPLOAD_DIR, f.stored);
   if (!full.startsWith(config.UPLOAD_DIR + path.sep) || !fs.existsSync(full)) throw new HttpError(404, "Tệp không còn tồn tại trên máy chủ.");
-  res.setHeader("Cache-Control", "private, no-store");
-  res.download(full, f.name);
+  sendStored(res, full, f.name);
 }));
 
 /* =========================================================
-   TÀI KHOẢN — đăng nhập bằng liên kết gửi qua email (không mật khẩu)
+   TÀI KHOẢN - đăng nhập bằng liên kết gửi qua email (không mật khẩu)
    ========================================================= */
 router.post("/auth/request-link", sec.rateLimit("login", 5, 900e3), wrap(async (req, res) => {
   const email = str(req.body && req.body.email, 160).toLowerCase();
@@ -336,7 +343,7 @@ router.post("/reviews", sec.rateLimit("review", 3, 3600e3), wrap(async (req, res
 }));
 
 /* =========================================================
-   WEBHOOK ĐỐI SOÁT CHUYỂN KHOẢN — SePay (https://sepay.vn)
+   WEBHOOK ĐỐI SOÁT CHUYỂN KHOẢN - SePay (https://sepay.vn)
    Cấu hình trên SePay: URL = {SITE_URL}/api/webhooks/sepay, kiểu xác thực "API Key".
    ========================================================= */
 router.post("/webhooks/sepay", wrap(async (req, res) => {
@@ -543,7 +550,7 @@ router.patch("/admin/staff/:id", adminOnly, wrap(async (req, res) => {
 }));
 
 /* =========================================================
-   NHÂN VIÊN — chỉ thấy đơn được giao, không thấy thông tin khách và giá
+   NHÂN VIÊN - chỉ thấy đơn được giao, không thấy thông tin khách và giá
    ========================================================= */
 router.post("/staff/login", sec.rateLimit("staff-login", 10, 900e3), wrap(async (req, res) => {
   const username = str(req.body && req.body.username, 40).toLowerCase();
@@ -617,7 +624,7 @@ router.post("/staff/orders/:id/notes", staffOnly, sec.rateLimit("staff-note", 60
   res.json({ order: staffView(await db.orders.get(o.id)) });
 }));
 
-/** Nhân viên tải tệp kết quả lên — chưa hiện cho khách cho tới khi quản trị duyệt. */
+/** Nhân viên tải tệp kết quả lên - chưa hiện cho khách cho tới khi quản trị duyệt. */
 router.post("/staff/orders/:id/files", staffOnly, upload.array("files", config.MAX_FILES), wrap(async (req, res) => {
   let o;
   try { o = await getStaffOrder(req); } catch (e) { removeTemp(req.files); throw e; }
@@ -635,12 +642,11 @@ router.get("/staff/orders/:id/files/:fileId", staffOnly, wrap(async (req, res) =
   if (!f.stored) throw new HttpError(410, "Tệp đã được xóa theo chính sách lưu trữ 30 ngày.");
   const full = path.join(config.UPLOAD_DIR, f.stored);
   if (!full.startsWith(config.UPLOAD_DIR + path.sep) || !fs.existsSync(full)) throw new HttpError(404, "Tệp không còn tồn tại trên máy chủ.");
-  res.setHeader("Cache-Control", "private, no-store");
-  res.download(full, f.name);
+  sendStored(res, full, f.name);
 }));
 
 /* =========================================================
-   THÔNG BÁO — tổng hợp từ dữ liệu đơn hàng (không lưu riêng).
+   THÔNG BÁO - tổng hợp từ dữ liệu đơn hàng (không lưu riêng).
    Trình duyệt hỏi định kỳ, tự nhớ thông báo nào đã đọc. Mỗi vai trò chỉ thấy sự kiện mình được phép thấy.
    ========================================================= */
 const NOTIF_LIMIT = 40;
@@ -654,7 +660,7 @@ function adminEvents(orders, contacts, reviews) {
   for (const o of orders) {
     out.push(evt(o, "new", o.created, "Đơn hàng mới #" + o.id, o.name + " · " + o.typeLabel + " · " + o.qty + " " + o.unit + " · " + fmt(o.price.total)));
     for (const h of o.history || []) {
-      if (h.status === "verifying") out.push(evt(o, "pay", h.at, "Khách báo đã chuyển khoản #" + o.id, "Cần đối soát " + fmt(o.price.total) + " — " + o.name));
+      if (h.status === "verifying") out.push(evt(o, "pay", h.at, "Khách báo đã chuyển khoản #" + o.id, "Cần đối soát " + fmt(o.price.total) + " - " + o.name));
       if (h.status === "cancelled") {
         const byAdmin = (o.messages || []).some((m) => !m.me && m.from === "Hệ thống" && Math.abs(m.at - h.at) < 5000);
         if (!byAdmin) out.push(evt(o, "cancel", h.at, "Khách đã hủy đơn #" + o.id, o.name));
@@ -662,9 +668,9 @@ function adminEvents(orders, contacts, reviews) {
     }
     if (o.paidAt && o.paySource === "sepay") out.push(evt(o, "paid", o.paidAt, "Đã nhận tiền tự động #" + o.id, fmt(o.paidAmount || o.price.total) + " qua chuyển khoản ngân hàng"));
     for (const m of o.messages || []) if (m.me) out.push(evt(o, "msg", m.at, "Khách nhắn tin #" + o.id, o.name + ": " + m.text));
-    for (const n of o.internal || []) if (n.role === "staff") out.push(evt(o, "staff", n.at, n.from + " — đơn #" + o.id, n.text));
+    for (const n of o.internal || []) if (n.role === "staff") out.push(evt(o, "staff", n.at, n.from + " - đơn #" + o.id, n.text));
   }
-  for (const c of contacts || []) if (!c.read) out.push(evt(null, "contact:" + c.id, c.at, "Liên hệ mới: " + cut(c.subject, 60), c.name + " — " + c.message));
+  for (const c of contacts || []) if (!c.read) out.push(evt(null, "contact:" + c.id, c.at, "Liên hệ mới: " + cut(c.subject, 60), c.name + " - " + c.message));
   for (const r of reviews || []) if (!r.approved) out.push(evt(null, "review:" + r.id, r.at, "Đánh giá mới chờ duyệt", (r.name || "Khách hàng") + ": " + (r.text || r.content || "")));
   return newest(out);
 }
@@ -677,7 +683,7 @@ function staffEvents(orders) {
     if (o.assignedAt) out.push(evt(o, "assign", o.assignedAt, "Bạn được giao đơn #" + o.id, o.typeLabel + " · " + o.qty + " " + o.unit + (o.deadline ? " · hạn " + vnTime(o.deadline) : "")));
     for (const n of o.internal || []) {
       if (n.at < from) continue;
-      if (n.role === "admin") out.push(evt(o, "note", n.at, "Quản trị nhắn — đơn #" + o.id, n.text));
+      if (n.role === "admin") out.push(evt(o, "note", n.at, "Quản trị nhắn - đơn #" + o.id, n.text));
       else if (n.role === "system" && !/^Đã (giao|bỏ giao) đơn/.test(n.text)) out.push(evt(o, "sys", n.at, "Cập nhật đơn #" + o.id, n.text));
     }
     for (const h of o.history || []) {
@@ -696,7 +702,7 @@ function customerEvents(orders) {
   for (const o of orders) {
     for (const m of o.messages || []) {
       if (m.me || m.at === o.created) continue;
-      out.push(evt(o, "msg", m.at, (m.from || "Đánh máy 247") + " — đơn #" + o.id, m.text));
+      out.push(evt(o, "msg", m.at, (m.from || "Đánh máy 247") + " - đơn #" + o.id, m.text));
     }
   }
   return newest(out);

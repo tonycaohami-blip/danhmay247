@@ -1,5 +1,5 @@
 /* =========================================================
-   Đánh máy 247 — Script dùng chung cho mọi trang
+   Đánh máy 247 - Script dùng chung cho mọi trang
    ========================================================= */
 (function () {
   "use strict";
@@ -173,7 +173,7 @@
     { label: "Liên hệ", href: "/lien-he" }
   ];
   DM.logo = function (light) {
-    return '<a href="/" class="logo' + (light ? " logo--light" : "") + '" aria-label="Đánh máy 247 — Trang chủ">' +
+    return '<a href="/" class="logo' + (light ? " logo--light" : "") + '" aria-label="Đánh máy 247 - Trang chủ">' +
       '<span class="logo__red">ĐÁNH MÁY</span><span class="logo__black">247</span><span class="logo__caret" aria-hidden="true"></span></a>';
   };
 
@@ -238,9 +238,16 @@
   function renderLogin() {
     var box = $("#login");
     if (!box) return;
-    var u = DM.auth.current();
+    var u = DM.auth.current(), p = DM.portalUser;
     var wasOpen = box.classList.contains("is-open");
-    if (u) {
+    if (p) {
+      // Trang quản trị / nhân viên: hiện người đang đăng nhập khu vực đó
+      box.innerHTML =
+        '<button class="login__toggle" aria-expanded="false" aria-controls="login-panel"><span class="login__avatar" style="background:' + (p.color || "var(--navy)") + '" aria-hidden="true">' + DM.esc(p.initials || DM.initials(p.name)) + "</span><span class=\"login__name\">" + DM.esc(p.name) + "</span></button>" +
+        '<div class="login__panel login__menu" id="login-panel"><div class="login__email">' + DM.esc(p.sub || "") + "</div>" +
+        (p.links || []).map(function (l) { return '<a href="' + l[0] + '">' + DM.esc(l[1]) + "</a>"; }).join("") +
+        '<button type="button" data-portal-logout>Đăng xuất</button></div>';
+    } else if (u) {
       box.innerHTML =
         '<button class="login__toggle" aria-expanded="false" aria-controls="login-panel"><span class="login__avatar" aria-hidden="true">' + DM.esc(DM.initials(u.name)) + "</span>" + DM.esc(u.name.split(" ").slice(-1)[0]) + "</button>" +
         '<div class="login__panel login__menu" id="login-panel"><div class="login__email">' + DM.esc(u.email) + "</div>" +
@@ -280,6 +287,8 @@
     });
     var close = $(".login__close", box);
     if (close) close.addEventListener("click", function () { box.classList.remove("is-open"); toggle.focus(); });
+    var plo = $("[data-portal-logout]", box);
+    if (plo) plo.addEventListener("click", function () { box.classList.remove("is-open"); if (DM.portalUser && DM.portalUser.logout) DM.portalUser.logout(); });
     var lo = $("[data-logout]", box);
     if (lo) lo.addEventListener("click", function () {
       DM.auth.logout().then(function () {
@@ -291,6 +300,8 @@
     if (form) form.addEventListener("submit", function (e) { e.preventDefault(); DM.loginSubmit(form, $(".login__msg", form)); });
   }
   DM.renderLogin = renderLogin;
+  /** Đặt / xóa người dùng khu vực quản trị hoặc nhân viên hiển thị trên thanh đầu trang. */
+  DM.setPortalUser = function (p) { DM.portalUser = p || null; renderLogin(); };
   document.addEventListener("click", function (e) {
     var box = $("#login");
     if (box && box.classList.contains("is-open") && !box.contains(e.target) && window.innerWidth > 1099) {
@@ -519,8 +530,8 @@
       var s = q.toLowerCase();
       var r = DM.prices.retyping.base, t = DM.prices.transcription.base;
       if (/giá|bao nhiêu|chi phí|phí/.test(s)) return "Giá đánh máy lại chỉ từ <b>" + DM.fmt(r["30d"]) + "/trang</b>, chuyển âm từ <b>" + DM.fmt(t["10d"]) + "/phút</b>. Xem chi tiết tại <a href='/bang-gia' style='text-decoration:underline'>Bảng giá</a> nhé!";
-      if (/gấp|nhanh|bao lâu|thời gian|hạn|giao/.test(s)) return "Thời hạn nhanh nhất là <b>6 giờ</b>. Bạn có thể chọn từ 6 giờ đến 30 ngày — đặt càng sớm, giá càng tốt.";
-      if (/thanh toán|chuyển khoản|momo|thẻ|visa|zalopay/.test(s)) return "Bạn thanh toán bằng chuyển khoản: quét mã VietQR bằng app ngân hàng bất kỳ, MoMo hoặc ZaloPay — số tiền và nội dung điền sẵn, hệ thống tự xác nhận.";
+      if (/gấp|nhanh|bao lâu|thời gian|hạn|giao/.test(s)) return "Thời hạn nhanh nhất là <b>6 giờ</b>. Bạn có thể chọn từ 6 giờ đến 30 ngày - đặt càng sớm, giá càng tốt.";
+      if (/thanh toán|chuyển khoản|momo|thẻ|visa|zalopay/.test(s)) return "Bạn thanh toán bằng chuyển khoản: quét mã VietQR bằng app ngân hàng bất kỳ, MoMo hoặc ZaloPay - số tiền và nội dung điền sẵn, hệ thống tự xác nhận.";
       if (/bảo mật|nda|riêng tư|an toàn/.test(s)) return "Toàn bộ nhân sự làm việc theo NDA, tệp được xóa sau 30 ngày kể từ khi hoàn thành. Tài liệu của bạn luôn an toàn 🔒";
       if (/file|tệp|tải|gửi|upload/.test(s)) return "Bạn tải lên tối đa 6 tệp (PDF, ảnh, Word, MP3, WAV…) ở trang <a href='/dat-hang' style='text-decoration:underline'>Đặt hàng</a>, hoặc gửi link Google Drive trong phần hướng dẫn.";
       if (/viết tay|chữ tay/.test(s)) return "Có, chúng tôi chuyên đánh máy chữ viết tay, kể cả chữ khó đọc. Những từ không đọc được sẽ được đánh dấu rõ để bạn kiểm tra.";
@@ -660,7 +671,7 @@
   DM.initReveal = initReveal;
 
   /* =========================================================
-     THÔNG BÁO (chuông trên thanh đầu trang) — dùng cho quản trị, nhân viên, khách hàng.
+     THÔNG BÁO (chuông trên thanh đầu trang) - dùng cho quản trị, nhân viên, khách hàng.
      Hỏi máy chủ định kỳ; nhớ thông báo đã đọc trên trình duyệt (theo mốc giờ máy chủ).
      opts: { key, fetch: () => Promise<{now, events}>, interval, onNew(events), onOpen(event), empty }
      ========================================================= */
@@ -739,7 +750,7 @@
       var n = events.filter(isUnread).length;
       var badge = $(".notif__badge", el);
       badge.hidden = !n; badge.textContent = n > 9 ? "9+" : n;
-      $(".notif__btn", el).setAttribute("aria-label", n ? "Thông báo — " + n + " chưa đọc" : "Thông báo");
+      $(".notif__btn", el).setAttribute("aria-label", n ? "Thông báo - " + n + " chưa đọc" : "Thông báo");
       document.title = (n ? "(" + (n > 9 ? "9+" : n) + ") " : "") + baseTitle;
       $(".notif__list", el).innerHTML = events.length ? events.map(function (e) {
         var k = e.kind.split(":")[0];
@@ -762,7 +773,7 @@
         save(); draw();
         if (!fresh.length) return;
         if (poll.started) {
-          fresh.slice(0, 3).forEach(function (e) { DM.toast("🔔 " + e.title + (e.text ? " — " + e.text : "")); });
+          fresh.slice(0, 3).forEach(function (e) { DM.toast("🔔 " + e.title + (e.text ? " - " + e.text : "")); });
           if (fresh.length > 3) DM.toast("Và " + (fresh.length - 3) + " thông báo mới khác.");
           if (state.sound) beep();
           if (document.hidden && "Notification" in window && Notification.permission === "granted") {

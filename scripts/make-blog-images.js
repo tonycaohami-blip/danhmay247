@@ -1,5 +1,5 @@
 /**
- * Tạo ảnh bìa (1200×630) và hình minh họa SVG cho blog — chạy: node scripts/make-blog-images.js
+ * Tạo ảnh bìa (1200×630) và hình minh họa SVG cho blog - chạy: node scripts/make-blog-images.js
  * Ảnh vector, nhẹ, sắc nét trên mọi màn hình, đồng bộ màu thương hiệu Đánh máy 247.
  */
 "use strict";
@@ -372,10 +372,10 @@ const figures = {
       s += `<rect x="${x}" y="${y}" width="68" height="72" rx="10" fill="${colors[f]}" opacity="${ri === 1 ? 1 : 0.78}"/><text x="${x + 34}" y="${y + 46}" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">${ch}</text>`;
       if (home) s += `<rect x="${x + 22}" y="${y + 58}" width="24" height="5" rx="2.5" fill="#fff"/>`;
     }));
-    s += `<rect x="236" y="310" width="430" height="58" rx="10" fill="#9aa0c3"/><text x="451" y="347" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">Phím cách — ngón cái</text>`;
+    s += `<rect x="236" y="310" width="430" height="58" rx="10" fill="#9aa0c3"/><text x="451" y="347" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">Phím cách - ngón cái</text>`;
     const legend = [["lp", "Út trái"], ["lr", "Áp út trái"], ["lm", "Giữa trái"], ["li", "Trỏ trái"], ["ri", "Trỏ phải"], ["rm", "Giữa phải"], ["rr", "Áp út phải"], ["rp", "Út phải"]];
     legend.forEach(([k, t], i) => { const x = 40 + i * 113; s += `<rect x="${x}" y="400" width="18" height="18" rx="4" fill="${colors[k]}"/><text x="${x + 24}" y="414" font-size="15" fill="#33354a">${t}</text>`; });
-    return s + `<text x="480" y="452" text-anchor="middle" font-size="14" fill="#7f8491">Hàng phím cơ sở (A S D F — J K L ;): hai phím F và J có gờ nổi để định vị ngón trỏ mà không cần nhìn</text></svg>`;
+    return s + `<text x="480" y="452" text-anchor="middle" font-size="14" fill="#7f8491">Hàng phím cơ sở (A S D F - J K L ;): hai phím F và J có gờ nổi để định vị ngón trỏ mà không cần nhìn</text></svg>`;
   })(),
 
   // Khổ giấy & lề theo Nghị định 30/2020
@@ -385,7 +385,7 @@ const figures = {
     s += `<rect x="${X}" y="${Y}" width="${W}" height="${H}" fill="#fff" stroke="#c9cbd8" stroke-width="2"/>`;
     const L = 58, R = 30, T = 38, B = 38; // tỉ lệ ~ 30mm/15–20mm/20mm
     s += `<rect x="${X + L}" y="${Y + T}" width="${W - L - R}" height="${H - T - B}" fill="none" stroke="${RED}" stroke-width="2" stroke-dasharray="8 6"/>`;
-    // Phần đầu: tên cơ quan (trái, ~35% bề ngang) — quốc hiệu, tiêu ngữ (phải, ~65%)
+    // Phần đầu: tên cơ quan (trái, ~35% bề ngang) - quốc hiệu, tiêu ngữ (phải, ~65%)
     const cx1 = X + L + (W - L - R) * 0.17, cx2 = X + L + (W - L - R) * 0.66;
     s += `<text x="${cx1}" y="${Y + T + 24}" text-anchor="middle" font-size="9" font-weight="700" fill="#33354a">TÊN CƠ QUAN</text>`;
     s += `<rect x="${cx1 - 22}" y="${Y + T + 30}" width="44" height="1.6" fill="#33354a"/>`;

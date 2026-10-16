@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Đơn hàng của tôi — Đánh máy 247</title>
+  <title>Đơn hàng của tôi - Đánh máy 247</title>
   <meta name="robots" content="noindex">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,7 +111,7 @@
     function loginBox() {
       return '<div class="order-card"><h2 class="order-card__title">Đăng nhập để xem tất cả đơn hàng</h2>' +
         (DM.param("login") === "expired" ? '<div class="alert alert--error">Liên kết đăng nhập đã hết hạn hoặc đã được sử dụng. Vui lòng yêu cầu liên kết mới.</div>' : "") +
-        '<p style="color:var(--muted);font-size:15px">Nhập email bạn đã dùng khi đặt hàng. Chúng tôi sẽ gửi liên kết đăng nhập — không cần mật khẩu.</p>' +
+        '<p style="color:var(--muted);font-size:15px">Nhập email bạn đã dùng khi đặt hàng. Chúng tôi sẽ gửi liên kết đăng nhập - không cần mật khẩu.</p>' +
         '<form id="auth" novalidate><div id="auth-msg" aria-live="polite"></div><div class="phone-group" style="grid-template-columns:1fr auto">' +
         '<div class="field" style="margin:0"><label class="sr-only" for="a-email">Email</label><input class="input" id="a-email" type="email" required autocomplete="email" placeholder="ban@email.com"><div class="field__error"></div></div>' +
         '<button class="button" type="submit" style="height:46px;width:auto">Gửi liên kết</button></div></form></div>';
@@ -197,7 +197,7 @@
         (o.status === "verifying" ? '<div class="alert alert--info">Chúng tôi đang đối soát giao dịch chuyển khoản của bạn. Trang sẽ tự cập nhật khi xác nhận xong.</div>' : "") +
         (results.length ? '<div class="alert alert--success"><b>Tài liệu hoàn thành đã sẵn sàng.</b> Bấm vào tệp bên dưới để tải về.</div>' + fileList(results) : "") +
         '<div class="detail-grid">' +
-        "<div><span>Dịch vụ</span><b>" + DM.esc(o.serviceLabel + " — " + o.typeLabel) + "</b></div>" +
+        "<div><span>Dịch vụ</span><b>" + DM.esc(o.serviceLabel + " - " + o.typeLabel) + "</b></div>" +
         "<div><span>Khối lượng</span><b>" + o.qty + " " + o.unit + (o.speakers ? " · " + DM.esc(o.speakers) : "") + "</b></div>" +
         "<div><span>Thời hạn</span><b>" + (o.deadline ? DM.dateTime(o.deadline) : o.urgencyLabel + " kể từ khi thanh toán") + "</b></div>" +
         "<div><span>Loại tài liệu</span><b>" + DM.esc(o.docType) + "</b></div>" +

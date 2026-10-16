@@ -1,5 +1,5 @@
 /* =========================================================
-   Đánh máy 247 — Hộp thoại thanh toán chuyển khoản VietQR
+   Đánh máy 247 - Hộp thoại thanh toán chuyển khoản VietQR
    - Mã QR tạo theo tài khoản trong DM.site.bank, số tiền và nội dung = mã đơn
    - "Tôi đã chuyển khoản" báo cho máy chủ; trạng thái tự cập nhật khi
      ngân hàng xác nhận (webhook SePay) hoặc quản trị xác nhận thủ công
@@ -20,7 +20,7 @@
       '<div id="pay-body">' +
       '<h2 class="modal__title">Thanh toán đơn #' + order.id + "</h2>" +
       '<div class="summary__row"><span>Số tiền cần thanh toán</span><span style="font-size:20px">' + DM.fmt(order.price.total) + "</span></div>" +
-      '<p style="font-size:14.5px;margin:6px 0 16px">Quét mã bằng ứng dụng ngân hàng, MoMo hoặc ZaloPay — số tiền và nội dung đã điền sẵn. Hoặc chuyển khoản thủ công theo thông tin dưới đây.</p>' +
+      '<p style="font-size:14.5px;margin:6px 0 16px">Quét mã bằng ứng dụng ngân hàng, MoMo hoặc ZaloPay - số tiền và nội dung đã điền sẵn. Hoặc chuyển khoản thủ công theo thông tin dưới đây.</p>' +
       '<div class="qr-box"><div class="qr-slot"></div><dl>' +
       "<dt>Ngân hàng</dt><dd>" + DM.esc(b.name) + "</dd>" +
       "<dt>Số tài khoản</dt>" + copy(b.account, "số tài khoản") +
@@ -39,7 +39,7 @@
     var img = new Image(150, 150);
     img.alt = "Mã VietQR thanh toán đơn " + order.id;
     img.style.cssText = "background:#fff;border-radius:8px;padding:6px";
-    img.onerror = function () { $(".qr-slot", m).innerHTML = '<div style="font-size:13px;color:var(--muted)">Không tải được mã QR — vui lòng chuyển khoản theo thông tin bên cạnh.</div>'; };
+    img.onerror = function () { $(".qr-slot", m).innerHTML = '<div style="font-size:13px;color:var(--muted)">Không tải được mã QR - vui lòng chuyển khoản theo thông tin bên cạnh.</div>'; };
     img.src = qr;
     $(".qr-slot", m).appendChild(img);
 
@@ -52,9 +52,9 @@
 
     var poll = null;
     function waiting() {
-      $("#pay-state", m).innerHTML = '<div class="alert alert--info" style="display:flex;gap:10px;align-items:center"><span class="typing-dots"><i></i><i></i><i></i></span><span>Đang chờ xác nhận giao dịch. Trang sẽ tự cập nhật khi chúng tôi nhận được tiền — thường trong 1–5 phút.</span></div>';
+      $("#pay-state", m).innerHTML = '<div class="alert alert--info" style="display:flex;gap:10px;align-items:center"><span class="typing-dots"><i></i><i></i><i></i></span><span>Đang chờ xác nhận giao dịch. Trang sẽ tự cập nhật khi chúng tôi nhận được tiền - thường trong 1–5 phút.</span></div>';
       var btn = $("#pay-confirm", m);
-      btn.textContent = "Đóng — tôi sẽ theo dõi sau";
+      btn.textContent = "Đóng - tôi sẽ theo dõi sau";
       btn.onclick = function () { DM.modal.close(m); };
       clearInterval(poll);
       poll = setInterval(function () {

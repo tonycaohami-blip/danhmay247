@@ -44,7 +44,8 @@ function parseCookies(req) {
 }
 function setCookie(res, name, value, maxAgeSec) {
   const parts = [name + "=" + encodeURIComponent(value), "Path=/", "HttpOnly", "SameSite=Lax", "Max-Age=" + maxAgeSec];
-  if (IS_PROD) parts.push("Secure");
+  // Secure khi chạy production hoặc khi yêu cầu đến qua HTTPS (Hostinger không phải lúc nào cũng đặt NODE_ENV)
+  if (IS_PROD || (res.req && res.req.secure)) parts.push("Secure");
   const prev = res.getHeader("Set-Cookie");
   res.setHeader("Set-Cookie", (Array.isArray(prev) ? prev : prev ? [prev] : []).concat(parts.join("; ")));
 }

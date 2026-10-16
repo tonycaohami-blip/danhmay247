@@ -1,5 +1,5 @@
 /* =========================================================
-   Đánh máy 247 — Dữ liệu dùng chung (giá, dịch vụ, nội dung)
+   Đánh máy 247 - Dữ liệu dùng chung (giá, dịch vụ, nội dung)
    Chỉnh sửa giá / nội dung tại đây, toàn bộ trang sẽ tự cập nhật.
    ========================================================= */
 window.DM = window.DM || {};
@@ -126,13 +126,13 @@ DM.calcPrice = function (o) {
 /* ---------- Dịch vụ chi tiết (trang /dich-vu/...) ---------- */
 DM.services = {
   "pdf-sang-word": { title: "Chuyển PDF sang Word", service: "retyping", type: "pdf-word", icon: ["PDF", "#ff6b5b"],
-    intro: "Đánh máy lại thủ công mọi tệp PDF — kể cả bản scan mờ, có dấu mộc, chữ ký hay hình mờ — thành tệp Word chỉnh sửa được, giữ nguyên bố cục gốc.",
+    intro: "Đánh máy lại thủ công mọi tệp PDF - kể cả bản scan mờ, có dấu mộc, chữ ký hay hình mờ - thành tệp Word chỉnh sửa được, giữ nguyên bố cục gốc.",
     points: ["Giữ nguyên định dạng, bảng biểu, chú thích và đánh số trang", "Xử lý tốt bản scan chất lượng thấp mà phần mềm OCR bỏ sót", "Kiểm tra lại 100% bởi biên tập viên trước khi giao", "Bàn giao định dạng .docx, Google Docs hoặc .odt theo yêu cầu"] },
   "viet-tay-sang-word": { title: "Chuyển chữ viết tay sang Word", service: "retyping", type: "hand-word", icon: ["✍", "#f3a33b"],
     intro: "Ghi chép, nhật ký, thư tay, biên bản họp viết vội… đội ngũ của chúng tôi đọc và gõ lại chính xác từng chữ, kể cả nét chữ khó đọc.",
     points: ["Đánh dấu rõ những từ không đọc được thay vì tự đoán", "Giữ nguyên chính tả gốc hoặc chuẩn hóa theo yêu cầu", "Phù hợp với tài liệu gia phả, hồi ký, ghi chép nghiên cứu", "Có thể kết hợp định dạng và biên tập"] },
   "anh-sang-word": { title: "Chuyển ảnh (PNG/JPEG) sang Word", service: "retyping", type: "img-word", icon: ["IMG", "#6c8cff"],
-    intro: "Ảnh chụp điện thoại, ảnh màn hình, ảnh tài liệu cũ — chúng tôi chuyển tất cả thành văn bản Word sạch đẹp, dễ chỉnh sửa.",
+    intro: "Ảnh chụp điện thoại, ảnh màn hình, ảnh tài liệu cũ - chúng tôi chuyển tất cả thành văn bản Word sạch đẹp, dễ chỉnh sửa.",
     points: ["Nhận ảnh nghiêng, thiếu sáng, độ phân giải thấp", "Gộp nhiều ảnh thành một tài liệu thống nhất", "Giữ bảng biểu, danh sách, tiêu đề", "Bảo mật tuyệt đối hình ảnh của bạn"] },
   "word-sang-excel": { title: "Chuyển Word / PDF sang Excel", service: "retyping", type: "word-excel", icon: ["XLS", "#1d7a45"],
     intro: "Nhập liệu từ văn bản, phiếu in, hóa đơn, danh sách sang bảng tính Excel có cấu trúc, sẵn sàng lọc, sắp xếp và tính toán.",
@@ -147,16 +147,16 @@ DM.services = {
     intro: "Biến bản thảo viết tay hay đánh máy cũ của tiểu thuyết, hồi ký, kịch bản thành bản điện tử chuẩn trình bày xuất bản.",
     points: ["Trình bày theo chuẩn nhà xuất bản", "Giữ giọng văn và cách dùng từ của tác giả", "Có thể kèm hiệu đính chính tả", "Cam kết không sao chép, không phát tán"] },
   "bien-tap-tai-lieu": { title: "Biên tập, hiệu đính tài liệu", service: "retyping", type: "pdf-word", extras: ["edit"], icon: ["✔", "#3bb54a"],
-    intro: "Rà soát chính tả, ngữ pháp, dấu câu, tính mạch lạc và nhất quán thuật ngữ — giúp văn bản của bạn chuyên nghiệp và dễ đọc hơn.",
+    intro: "Rà soát chính tả, ngữ pháp, dấu câu, tính mạch lạc và nhất quán thuật ngữ - giúp văn bản của bạn chuyên nghiệp và dễ đọc hơn.",
     points: ["Biên tập viên có chuyên môn theo lĩnh vực", "Theo dõi thay đổi (Track Changes) minh bạch", "Góp ý cấu trúc và cách diễn đạt", "Chuẩn hóa trích dẫn APA, IEEE, Harvard…"] },
   "danh-may-cong-thuc": { title: "Đánh máy công thức, phương trình", service: "retyping", type: "equation", icon: ["∑", "#d03c3f"],
     intro: "Gõ lại công thức toán, lý, hóa bằng Equation Editor / MathType hoặc LaTeX, chính xác đến từng chỉ số và ký hiệu.",
     points: ["Hỗ trợ Word Equation, MathType, LaTeX", "Đánh số và tham chiếu phương trình", "Vẽ lại sơ đồ, đồ thị đơn giản", "Phù hợp đề thi, giáo án, bài báo"] },
   "danh-may-hoc-thuat": { title: "Đánh máy tài liệu học thuật", service: "retyping", type: "pdf-word", icon: ["🎓", "#2d3078"],
-    intro: "Luận văn, khóa luận, bài giảng, đề cương, tài liệu tham khảo — trình bày đúng quy định của trường và hội đồng.",
+    intro: "Luận văn, khóa luận, bài giảng, đề cương, tài liệu tham khảo - trình bày đúng quy định của trường và hội đồng.",
     points: ["Định dạng theo quy chuẩn từng trường", "Tạo mục lục, danh mục bảng/hình tự động", "Trích dẫn và tài liệu tham khảo chuẩn", "Bảo mật nội dung nghiên cứu"] },
   "danh-may-van-ban-phap-ly": { title: "Đánh máy văn bản pháp lý", service: "retyping", type: "pdf-word", icon: ["⚖", "#7a4b2a"],
-    intro: "Hợp đồng, bản án, hồ sơ tố tụng, biên bản, quyết định — đánh máy chính xác thuật ngữ pháp lý, giữ nguyên thể thức văn bản.",
+    intro: "Hợp đồng, bản án, hồ sơ tố tụng, biên bản, quyết định - đánh máy chính xác thuật ngữ pháp lý, giữ nguyên thể thức văn bản.",
     points: ["Đúng thể thức văn bản hành chính (Nghị định 30/2020)", "Nhân sự ký cam kết bảo mật (NDA)", "Đối chiếu số liệu, ngày tháng, tên riêng hai lần", "Giao gấp từ 6 giờ"] },
   "dinh-dang-tai-lieu": { title: "Định dạng tài liệu", service: "retyping", type: "pdf-word", extras: ["format"], icon: ["¶", "#f24d50"],
     intro: "Chuẩn hóa font chữ, lề, giãn dòng, tiêu đề, mục lục, đầu/chân trang… để tài liệu trông chuyên nghiệp và nhất quán.",
@@ -201,7 +201,7 @@ DM.reviews = [
 DM.faq = [
   { cat: "Dịch vụ", q: "Các bạn cung cấp những dịch vụ đánh máy nào?", a: "<p>Chúng tôi chuyển ghi chép viết tay, PDF, bản scan, hình ảnh, giấy tờ đánh máy cũ, công văn… thành tài liệu Word chỉnh sửa được, trình bày gọn đẹp. Ngoài ra, chúng tôi còn chuyển âm mọi bản ghi âm, video sang văn bản với độ chính xác cao.</p>" },
   { cat: "Giá & thanh toán", q: "Báo giá đã bao gồm những gì?", a: "<p>Báo giá bao gồm loại dịch vụ tương ứng, khối lượng công việc (số trang/số phút), giao đúng hạn, cam kết chất lượng và sự khớp đúng của sản phẩm cuối cùng so với bản gốc. Không có phí ẩn.</p>" },
-  { cat: "Đặt hàng", q: "Tôi gửi tệp đính kèm cho các bạn bằng cách nào?", a: "<p>Bạn có thể tải lên tối đa 6 tệp — từ PDF, JPEG đến MP3, WAV — ngay trên trang đặt hàng.</p><p>Nếu gặp sự cố, hãy tải tệp lên Google Drive, Dropbox hoặc dịch vụ lưu trữ đám mây bất kỳ rồi dán đường dẫn vào phần hướng dẫn. Bạn cũng có thể gửi tệp tới <a href=\"mailto:trungtamdanhmay247@gmail.com\">trungtamdanhmay247@gmail.com</a> và ghi chú trong phần hướng dẫn rằng tệp đã được gửi qua email.</p>" },
+  { cat: "Đặt hàng", q: "Tôi gửi tệp đính kèm cho các bạn bằng cách nào?", a: "<p>Bạn có thể tải lên tối đa 6 tệp - từ PDF, JPEG đến MP3, WAV - ngay trên trang đặt hàng.</p><p>Nếu gặp sự cố, hãy tải tệp lên Google Drive, Dropbox hoặc dịch vụ lưu trữ đám mây bất kỳ rồi dán đường dẫn vào phần hướng dẫn. Bạn cũng có thể gửi tệp tới <a href=\"mailto:trungtamdanhmay247@gmail.com\">trungtamdanhmay247@gmail.com</a> và ghi chú trong phần hướng dẫn rằng tệp đã được gửi qua email.</p>" },
   { cat: "Đặt hàng", q: "Làm sao để tôi theo dõi đơn hàng?", a: "<p>Ngay sau khi thanh toán, bạn sẽ có quyền truy cập vào tài khoản cá nhân. Tại đó, bạn có thể trao đổi với người thực hiện đơn, liên hệ đội hỗ trợ và theo dõi tiến độ công việc một cách thuận tiện.</p><p>Khi có tin nhắn từ chuyên viên hoặc trạng thái đơn thay đổi (ví dụ từ “Đang thực hiện” sang “Hoàn thành”), chúng tôi sẽ tự động gửi thông báo qua email.</p>" },
   { cat: "Bảo mật", q: "Quyền riêng tư và bảo mật thông tin được đảm bảo thế nào?", a: "<p>Mục tiêu của Đánh máy 247 là xây dựng niềm tin với từng khách hàng. Chúng tôi tôn trọng quyền riêng tư và đảm bảo bảo mật trong suốt quá trình hợp tác.</p><p>Nhân viên đánh máy, thiết kế, biên tập của chúng tôi đều được đào tạo bài bản, tuân thủ quy tắc đạo đức nghề nghiệp và làm việc theo thỏa thuận bảo mật (NDA). Mọi thông tin bạn chia sẻ đều được giữ kín tuyệt đối.</p>" },
   { cat: "Dịch vụ", q: "Các bạn đảm bảo chất lượng dịch vụ ra sao?", a: "<p>Chúng tôi có đội ngũ chuyên viên với hơn 5 năm kinh nghiệm đánh máy thủ công và chuyển âm, cùng quy trình kiểm soát chất lượng nhiều bước.</p><p>Khi đã nhận hạn chót, chúng tôi sẽ giao đúng hạn. Nếu không đáp ứng được yêu cầu của bạn trong thời gian đã thỏa thuận, bạn sẽ được hoàn tiền.</p>" },
@@ -220,14 +220,14 @@ DM.samples = [
   {
     title: "Biên bản họp viết tay → Word", tags: ["Viết tay sang Word", "Định dạng"],
     desc: "Ghi chép viết vội trong cuộc họp, có gạch xóa và chèn chữ.",
-    before: '<div class="doc-hand"><h6>Biên bản họp nhóm</h6><p>Ngày 12/9 — phòng họp tầng 3</p><p>Thành phần: Lan, Hùng, Minh, <span class="strike">Tú</span> Thảo</p><p>1. Rà soát tiến độ dự án Q3 → chậm 1 tuần do thiếu số liệu kho</p><p>2. Hùng phụ trách liên hệ nhà cung cấp trước thứ 6</p><p>3. Thống nhất ngân sách quảng cáo tháng 10: 45tr</p><p>4. Minh làm báo cáo tổng hợp gửi BGĐ</p><p>→ Họp lại ngày 19/9, 9h sáng</p><p style="text-align:right;margin-top:14px">Thư ký: Lan</p></div>',
+    before: '<div class="doc-hand"><h6>Biên bản họp nhóm</h6><p>Ngày 12/9 - phòng họp tầng 3</p><p>Thành phần: Lan, Hùng, Minh, <span class="strike">Tú</span> Thảo</p><p>1. Rà soát tiến độ dự án Q3 → chậm 1 tuần do thiếu số liệu kho</p><p>2. Hùng phụ trách liên hệ nhà cung cấp trước thứ 6</p><p>3. Thống nhất ngân sách quảng cáo tháng 10: 45tr</p><p>4. Minh làm báo cáo tổng hợp gửi BGĐ</p><p>→ Họp lại ngày 19/9, 9h sáng</p><p style="text-align:right;margin-top:14px">Thư ký: Lan</p></div>',
     after: '<div class="doc-typed"><h6>Biên bản họp nhóm</h6><p><b>Thời gian:</b> Ngày 12/9 &nbsp;|&nbsp; <b>Địa điểm:</b> Phòng họp tầng 3</p><p><b>Thành phần:</b> Lan, Hùng, Minh, Thảo</p><p><b>Nội dung:</b></p><p>1. Rà soát tiến độ dự án Q3: chậm 1 tuần do thiếu số liệu kho.</p><p>2. Anh Hùng phụ trách liên hệ nhà cung cấp trước thứ Sáu.</p><p>3. Thống nhất ngân sách quảng cáo tháng 10: 45.000.000 đồng.</p><p>4. Anh Minh lập báo cáo tổng hợp gửi Ban Giám đốc.</p><p><b>Kết luận:</b> Họp lại vào 9h00 ngày 19/9.</p><p style="text-align:right;margin-top:14px"><i>Thư ký: Lan</i></p></div>'
   },
   {
     title: "Hợp đồng scan có mộc → Word", tags: ["PDF sang Word", "Pháp lý"],
     desc: "Bản scan mờ, có hình mờ và dấu mộc đè lên chữ.",
-    before: '<div class="doc-scan"><div class="watermark">BẢN SAO</div><h6>HỢP ĐỒNG DỊCH VỤ</h6><p>Số: 15/2026/HĐDV</p><p>Hôm nay, ngày 05 tháng 9 năm 2026, tại TP.HCM, chúng tôi gồm:</p><p>BÊN A: CÔNG TY TNHH ABC</p><p>Đại diện: Ông Nguyễn Văn A — Giám đốc</p><p>BÊN B: CÔNG TY CP XYZ</p><p>Đại diện: Bà Trần Thị B — Phó Giám đốc</p><p>Điều 1. Nội dung dịch vụ: Bên B cung cấp dịch vụ số hóa 2.000 trang hồ sơ lưu trữ...</p><p>Điều 2. Giá trị hợp đồng: 58.000.000đ (Năm mươi tám triệu đồng)...</p><div class="stamp">ĐÃ KÝ</div></div>',
-    after: '<div class="doc-typed"><h6>Hợp đồng dịch vụ</h6><p style="text-align:center">Số: 15/2026/HĐDV</p><p>Hôm nay, ngày 05 tháng 9 năm 2026, tại TP. Hồ Chí Minh, chúng tôi gồm:</p><p><b>BÊN A: CÔNG TY TNHH ABC</b><br>Đại diện: Ông Nguyễn Văn A — Chức vụ: Giám đốc</p><p><b>BÊN B: CÔNG TY CỔ PHẦN XYZ</b><br>Đại diện: Bà Trần Thị B — Chức vụ: Phó Giám đốc</p><p><b>Điều 1. Nội dung dịch vụ</b><br>Bên B cung cấp dịch vụ số hóa 2.000 trang hồ sơ lưu trữ…</p><p><b>Điều 2. Giá trị hợp đồng</b><br>58.000.000 đồng (Năm mươi tám triệu đồng)…</p></div>'
+    before: '<div class="doc-scan"><div class="watermark">BẢN SAO</div><h6>HỢP ĐỒNG DỊCH VỤ</h6><p>Số: 15/2026/HĐDV</p><p>Hôm nay, ngày 05 tháng 9 năm 2026, tại TP.HCM, chúng tôi gồm:</p><p>BÊN A: CÔNG TY TNHH ABC</p><p>Đại diện: Ông Nguyễn Văn A - Giám đốc</p><p>BÊN B: CÔNG TY CP XYZ</p><p>Đại diện: Bà Trần Thị B - Phó Giám đốc</p><p>Điều 1. Nội dung dịch vụ: Bên B cung cấp dịch vụ số hóa 2.000 trang hồ sơ lưu trữ...</p><p>Điều 2. Giá trị hợp đồng: 58.000.000đ (Năm mươi tám triệu đồng)...</p><div class="stamp">ĐÃ KÝ</div></div>',
+    after: '<div class="doc-typed"><h6>Hợp đồng dịch vụ</h6><p style="text-align:center">Số: 15/2026/HĐDV</p><p>Hôm nay, ngày 05 tháng 9 năm 2026, tại TP. Hồ Chí Minh, chúng tôi gồm:</p><p><b>BÊN A: CÔNG TY TNHH ABC</b><br>Đại diện: Ông Nguyễn Văn A - Chức vụ: Giám đốc</p><p><b>BÊN B: CÔNG TY CỔ PHẦN XYZ</b><br>Đại diện: Bà Trần Thị B - Chức vụ: Phó Giám đốc</p><p><b>Điều 1. Nội dung dịch vụ</b><br>Bên B cung cấp dịch vụ số hóa 2.000 trang hồ sơ lưu trữ…</p><p><b>Điều 2. Giá trị hợp đồng</b><br>58.000.000 đồng (Năm mươi tám triệu đồng)…</p></div>'
   },
   {
     title: "Bảng chi tiêu viết tay → Excel", tags: ["Viết tay sang Excel", "Bảng biểu"],

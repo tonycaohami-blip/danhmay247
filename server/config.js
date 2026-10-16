@@ -25,7 +25,7 @@ const env = process.env;
 /**
  * Thư mục lưu đơn hàng + tệp khách gửi.
  * Mặc định: <thư mục gốc tài khoản>/danhmay247-data (vd /home/u123456789/danhmay247-data trên Hostinger)
- * — nằm NGOÀI thư mục code nên deploy lại không bị mất dữ liệu. Không ghi được thì dùng ./data.
+ * - nằm NGOÀI thư mục code nên deploy lại không bị mất dữ liệu. Không ghi được thì dùng ./data.
  */
 function pickDataDir() {
   const candidates = env.DATA_DIR ? [path.resolve(ROOT, env.DATA_DIR)] : [path.join(require("os").homedir(), "danhmay247-data"), path.join(ROOT, "data")];
@@ -41,14 +41,14 @@ function pickDataDir() {
   // Không để cả website sập: dùng thư mục tạm và cảnh báo rõ trong log
   const tmp = path.join(require("os").tmpdir(), "danhmay247-data");
   fs.mkdirSync(path.join(tmp, "uploads"), { recursive: true });
-  console.error("[config] CẢNH BÁO: đang lưu dữ liệu tạm tại " + tmp + " — hãy đặt biến DATA_DIR tới một thư mục ghi được để không mất đơn.");
+  console.error("[config] CẢNH BÁO: đang lưu dữ liệu tạm tại " + tmp + " - hãy đặt biến DATA_DIR tới một thư mục ghi được để không mất đơn.");
   return tmp;
 }
 const DATA_DIR = pickDataDir();
 
 // Đang chạy thật (production) mà SITE_URL vẫn trỏ về máy cục bộ → email sẽ có liên kết hỏng, nên tự sửa
 if (env.NODE_ENV === "production" && /localhost|127\.0\.0\.1/i.test(env.SITE_URL || "")) {
-  console.warn("[config] SITE_URL đang là " + env.SITE_URL + " — dùng https://danhmay247.com cho liên kết trong email.");
+  console.warn("[config] SITE_URL đang là " + env.SITE_URL + " - dùng https://danhmay247.com cho liên kết trong email.");
   env.SITE_URL = "https://danhmay247.com";
 }
 
@@ -59,7 +59,7 @@ module.exports = {
   PUBLIC_DIR: path.join(ROOT, "public"),
   DATA_DIR,
   UPLOAD_DIR: path.join(DATA_DIR, "uploads"),
-  // Số cổng (vd 3000) hoặc đường dẫn socket do LiteSpeed/Hostinger cấp — giữ nguyên dạng chuỗi nếu không phải số
+  // Số cổng (vd 3000) hoặc đường dẫn socket do LiteSpeed/Hostinger cấp - giữ nguyên dạng chuỗi nếu không phải số
   PORT: /^\d+$/.test(String(env.PORT || "").trim()) ? Number(env.PORT) : (String(env.PORT || "").trim() || 3000),
   HOST: env.HOST || "0.0.0.0",
   IS_PROD: env.NODE_ENV === "production",
@@ -81,7 +81,7 @@ module.exports = {
   SEPAY_API_KEY: env.SEPAY_API_KEY || "",
   MAX_FILES: 6,
   MAX_FILE_MB: Number(env.MAX_FILE_MB) || 50,
-  // MySQL — lấy trong hPanel → Databases → MySQL Databases
+  // MySQL - lấy trong hPanel → Databases → MySQL Databases
   DB: {
     host: env.DB_HOST || "localhost",
     port: Number(env.DB_PORT) || 3306,

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Khu vực nhân viên — Đánh máy 247</title>
+  <title>Khu vực nhân viên - Đánh máy 247</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,6 +54,7 @@
     function login(msg) {
       clearInterval(timer); me = null;
       if (DM._notifier) DM._notifier.stop();
+      DM.setPortalUser(null);
       app.innerHTML = '<div class="order-card" style="max-width:420px;margin:40px auto"><h1 class="order-card__title">Khu vực nhân viên</h1>' +
         '<p style="color:var(--muted);font-size:14.5px">Đăng nhập bằng tài khoản quản trị đã cấp cho bạn.</p>' +
         '<form id="lg" novalidate><div id="lg-msg">' + (msg ? '<div class="alert alert--error">' + DM.esc(msg) + "</div>" : "") + "</div>" +
@@ -71,6 +72,7 @@
     }
 
     /** Chuông thông báo: được giao đơn, quản trị nhắn, duyệt tệp, đơn thanh toán / hoàn thành / hủy. */
+    function logout() { DM.api("/staff/logout", { method: "POST" }).then(function () { login(); DM.toast("Đã đăng xuất."); }); }
     function startNotifier() {
       DM.notifier({
         key: "staff_" + me.id, interval: 20000, empty: "Chưa có thông báo. Khi quản trị giao đơn hoặc nhắn tin, bạn sẽ thấy ở đây.",
@@ -92,6 +94,7 @@
     function render() {
       clearInterval(timer);
       if (!DM._notifier) startNotifier();
+      DM.setPortalUser({ name: me.name, sub: "Nhân viên · " + me.username, color: "var(--green)", links: [["/nhan-vien", "Đơn được giao"]], logout: logout });
       app.innerHTML =
         '<div class="account"><aside class="account__side">' +
         '<div class="account__user"><span class="login__avatar" style="background:var(--green)" aria-hidden="true">' + DM.esc(DM.initials(me.name)) + "</span><div><b>" + DM.esc(me.name) + "</b><small>Nhân viên · " + DM.esc(me.username) + "</small></div></div>" +
@@ -101,7 +104,7 @@
         '<p class="field__hint" style="margin-top:14px;padding:0 6px">Bạn chỉ thấy nội dung công việc. Thông tin khách hàng và giá được bảo mật theo quy định.</p></aside>' +
         '<section id="pane"></section></div>';
       $$("[data-tab]").forEach(function (b) { b.addEventListener("click", function () { go(b.dataset.tab); }); });
-      $("[data-out]").addEventListener("click", function () { DM.api("/staff/logout", { method: "POST" }).then(function () { login(); }); });
+      $("[data-out]").addEventListener("click", logout);
       if (view === "order" && openId) renderOrder(openId);
       else if (view === "password") renderPassword();
       else renderList();
@@ -122,12 +125,12 @@
           '<div class="kpi"><small>Chờ kiểm tra</small><b>' + all.filter(function (o) { return o.status === "review"; }).length + "</b></div>" +
           '<div class="kpi"><small>Đã hoàn thành</small><b>' + all.filter(function (o) { return o.status === "done"; }).length + "</b></div></div>" +
           '<div class="order-card" style="padding:20px"><div class="filter-pills" style="margin-bottom:16px">' +
-          [["active", "Đang xử lý (" + active.length + ")"], ["done", "Đã hoàn thành"], ["all", "Tất cả"]].map(function (t) {
+          [["active", "Đang xử lý (" + active.length + ")"], ["done", "Đã hoàn thành (" + all.filter(function (o) { return o.status === "done"; }).length + ")"], ["all", "Tất cả (" + all.length + ")"]].map(function (t) {
             return '<button type="button" data-f="' + t[0] + '" class="' + (filter === t[0] ? "is-active" : "") + '">' + t[1] + "</button>";
           }).join("") + "</div>" +
           (list.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Mã đơn</th><th>Công việc</th><th>Hạn hoàn thành</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
             list.slice().sort(function (a, b) { return (a.deadline || 9e15) - (b.deadline || 9e15); }).map(function (o) {
-              return '<tr><td><b>#' + o.id + '</b><br><small style="color:var(--muted)">Giao lúc ' + (o.assignedAt ? DM.dateTime(o.assignedAt) : "—") + "</small></td>" +
+              return '<tr><td><b>#' + o.id + '</b><br><small style="color:var(--muted)">Giao lúc ' + (o.assignedAt ? DM.dateTime(o.assignedAt) : "-") + "</small></td>" +
                 "<td>" + DM.esc(o.typeLabel) + '<br><small style="color:var(--muted)">' + o.qty + " " + o.unit + (o.speakers ? " · " + DM.esc(o.speakers) : "") + "</small></td>" +
                 "<td>" + dueText(o) + "</td><td>" + chip(o.status) + "</td>" +
                 '<td><button type="button" class="button button--sm' + (o.status === "paid" ? "" : " button--black") + '" data-open="' + o.id + '">' + (o.status === "paid" ? "Bắt đầu" : "Mở") + "</button></td></tr>";
@@ -175,21 +178,21 @@
         '<h1 class="order-card__title" style="margin:0">Đơn #' + o.id + "</h1></div>" + chip(o.status) + "</div>" +
         (o.status === "review" ? '<div class="alert alert--info">Đã gửi quản trị kiểm tra. Bạn vẫn có thể tải thêm tệp hoặc ghi chú nếu cần.</div>' : "") +
         (o.status === "done" ? '<div class="alert alert--success">Đơn đã hoàn thành và được giao cho khách. Cảm ơn bạn!</div>' : "") +
-        (["unpaid", "verifying"].indexOf(o.status) > -1 ? '<div class="alert alert--info">Đơn đang chờ khách thanh toán — bạn có thể xem trước tài liệu, nhưng chưa bắt đầu làm.</div>' : "") +
+        (["unpaid", "verifying"].indexOf(o.status) > -1 ? '<div class="alert alert--info">Đơn đang chờ khách thanh toán - bạn có thể xem trước tài liệu, nhưng chưa bắt đầu làm.</div>' : "") +
         '<div class="detail-grid">' +
-        "<div><span>Công việc</span><b>" + DM.esc(o.serviceLabel + " — " + o.typeLabel) + "</b></div>" +
+        "<div><span>Công việc</span><b>" + DM.esc(o.serviceLabel + " - " + o.typeLabel) + "</b></div>" +
         "<div><span>Khối lượng</span><b>" + o.qty + " " + o.unit + (o.speakers ? " · " + DM.esc(o.speakers) : "") + "</b></div>" +
         "<div><span>Hạn hoàn thành</span><b>" + dueText(o) + "</b></div>" +
         "<div><span>Loại tài liệu</span><b>" + DM.esc(o.docType) + "</b></div>" +
         "<div><span>Yêu cầu thêm</span><b>" + (o.extras.length ? DM.esc(o.extras.join(", ")) : "Không") + "</b></div>" +
         "<div><span>Thời hạn gốc</span><b>" + DM.esc(o.urgencyLabel) + "</b></div></div>" +
         '<div class="field__label">Hướng dẫn của khách</div><div style="background:var(--bg-grey);border-radius:8px;padding:12px 14px;font-size:14.5px;white-space:pre-wrap;margin-bottom:18px">' + (o.instructions ? DM.esc(o.instructions) : "<i>Không có hướng dẫn thêm.</i>") + "</div>" +
-        '<div class="field__label">Tài liệu gốc của khách</div>' + list(o.files.filter(function (f) { return f.by === "customer"; }), "Khách chưa gửi tệp — xem ghi chú nội bộ hoặc hỏi quản trị.") +
+        '<div class="field__label">Tài liệu gốc của khách</div>' + list(o.files.filter(function (f) { return f.by === "customer"; }), "Khách chưa gửi tệp - xem ghi chú nội bộ hoặc hỏi quản trị.") +
         '<div class="field__label">Tệp kết quả</div>' + list(o.files.filter(function (f) { return f.by !== "customer"; }), "Chưa có tệp kết quả.") +
         (canWork ? '<form id="up" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px"><label class="sr-only" for="up-file">Chọn tệp kết quả</label><input type="file" id="up-file" multiple class="input" style="padding:8px;flex:1;min-width:200px"><button type="submit" class="button button--sm">Tải tệp kết quả lên</button></form>' : "") +
         '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
         (o.status === "paid" ? '<button type="button" class="button button--sm" data-st="progress">Bắt đầu làm</button>' : "") +
-        (o.status === "progress" ? '<button type="button" class="button button--sm" data-st="review">Đã xong — gửi quản trị kiểm tra</button>' : "") +
+        (o.status === "progress" ? '<button type="button" class="button button--sm" data-st="review">Đã xong - gửi quản trị kiểm tra</button>' : "") +
         (o.status === "review" ? '<button type="button" class="button button--sm button--black" data-st="progress">Rút lại để làm tiếp</button>' : "") +
         "</div></div>" +
 

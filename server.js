@@ -4,7 +4,7 @@
  *
  *  - URL sạch: /bang-gia → public/bang-gia.html; /bang-gia.html, /index, /blog/ → 301 về URL sạch
  *  - Nén gzip, ETag, header bảo mật, trang 404
- *  - Cấu hình qua biến môi trường — xem .env.example
+ *  - Cấu hình qua biến môi trường - xem .env.example
  *
  * Chạy: npm start
  */
@@ -30,13 +30,33 @@ app.disable("x-powered-by");
 // không tin toàn bộ X-Forwarded-For (khách có thể tự giả để né giới hạn số lần thử mật khẩu)
 app.set("trust proxy", 1);
 
+// CSP: chỉ cho tải mã, kiểu chữ, ảnh từ chính website + Google Fonts + ảnh mã VietQR; chặn nhúng trang vào website lạ
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com data:",
+  "img-src 'self' data: https://img.vietqr.io",
+  "connect-src 'self'",
+  "frame-src 'none'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'"
+].join("; ");
 const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
   "X-Frame-Options": "SAMEORIGIN",
   "Referrer-Policy": "strict-origin-when-cross-origin",
-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+  "Content-Security-Policy": CSP
 };
-app.use((req, res, next) => { res.set(SECURITY_HEADERS); next(); });
+app.use((req, res, next) => {
+  res.set(SECURITY_HEADERS);
+  // Chỉ bật HSTS khi đang chạy HTTPS thật (sau proxy của Hostinger) - trình duyệt luôn dùng HTTPS trong 180 ngày
+  if (req.secure) res.set("Strict-Transport-Security", "max-age=15552000");
+  next();
+});
 
 /* ---------- API ---------- */
 app.use("/api", express.json({ limit: "100kb" }));
@@ -146,8 +166,9 @@ async function start() {
     console.log("  Dữ liệu:   " + (db.kind === "mysql" ? "MySQL " + config.DB.user + "@" + config.DB.host + "/" + config.DB.database + (config.DB.prefix ? " (tiền tố " + config.DB.prefix + ")" : "") : config.DATA_DIR));
     console.log("  Liên kết:  " + config.SITE_URL);
     console.log("  Tệp tải lên: " + config.UPLOAD_DIR);
-    console.log("  Email:     " + (config.SMTP ? "đã cấu hình (" + config.SMTP.host + ")" : "CHƯA cấu hình SMTP — email chỉ ghi ra log"));
-    console.log("  Quản trị:  " + (config.ADMIN_PASSWORD ? "đã đặt mật khẩu" : "CHƯA đặt ADMIN_PASSWORD — trang /quan-tri bị khóa"));
+    console.log("  Email:     " + (config.SMTP ? "đã cấu hình (" + config.SMTP.host + ")" : "CHƯA cấu hình SMTP - email chỉ ghi ra log"));
+    console.log("  Quản trị:  " + (config.ADMIN_PASSWORD ? "đã đặt mật khẩu" : "CHƯA đặt ADMIN_PASSWORD - trang /quan-tri bị khóa"));
+    if (config.ADMIN_PASSWORD && config.ADMIN_PASSWORD.length < 12) console.warn("  CẢNH BÁO:  ADMIN_PASSWORD quá ngắn (" + config.ADMIN_PASSWORD.length + " ký tự) - nên dùng tối thiểu 12 ký tự gồm chữ, số, ký hiệu.");
     console.log("  SePay:     " + (config.SEPAY_API_KEY ? "webhook đang bật" : "tắt (xác nhận thanh toán thủ công)"));
   };
   // Cổng số → nghe trên HOST; đường dẫn socket (LiteSpeed) → nghe trực tiếp trên socket đó
@@ -160,7 +181,7 @@ async function start() {
 }
 
 // Tự khởi động cả khi được chạy trực tiếp (node server.js / npm start)
-// lẫn khi được nạp bằng require() — cách LiteSpeed/Hostinger khởi chạy ứng dụng Node.js.
+// lẫn khi được nạp bằng require() - cách LiteSpeed/Hostinger khởi chạy ứng dụng Node.js.
 // Bộ kiểm thử đặt DM_NO_AUTOSTART=1 để tự gọi start().
 if (!process.env.DM_NO_AUTOSTART) start();
 module.exports = { app, start };

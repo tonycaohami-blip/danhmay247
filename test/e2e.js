@@ -1,6 +1,6 @@
 /**
  * Kiểm thử tích hợp: npm test
- * - Mặc định chạy với kho lưu trữ tệp (thư mục tạm, xóa khi xong) — không cần cài gì.
+ * - Mặc định chạy với kho lưu trữ tệp (thư mục tạm, xóa khi xong) - không cần cài gì.
  * - Nếu .env có DB_USER/DB_NAME: chạy trên MySQL với bảng tiền tố riêng (t<ngẫu nhiên>_) và XÓA sạch khi xong.
  * - Chặn email để lấy liên kết đăng nhập.
  */
@@ -23,7 +23,7 @@ const { start } = require(path.join(ROOT, "server.js"));
 const B = "http://localhost:3999";
 const H = { Origin: B };
 let pass = 0, fail = 0;
-const ok = (name, cond, extra) => { cond ? pass++ : fail++; console.log((cond ? "  ✓ " : "  ✗ ") + name + (extra ? " — " + extra : "")); };
+const ok = (name, cond, extra) => { cond ? pass++ : fail++; console.log((cond ? "  ✓ " : "  ✗ ") + name + (extra ? " - " + extra : "")); };
 const j = (method, url, body, headers) => fetch(B + url, { method, headers: Object.assign({ "Content-Type": "application/json" }, H, headers), body: body ? JSON.stringify(body) : undefined, redirect: "manual" });
 
 let server;
@@ -37,7 +37,7 @@ async function cleanup() {
 (async () => {
   server = await start();
   await new Promise((r) => setTimeout(r, 300));
-  console.log(db.kind === "mysql" ? "  (MySQL — bảng thử nghiệm: " + PREFIX + "*)" : "  (lưu trữ tệp — thư mục tạm " + DATA + ")");
+  console.log(db.kind === "mysql" ? "  (MySQL - bảng thử nghiệm: " + PREFIX + "*)" : "  (lưu trữ tệp - thư mục tạm " + DATA + ")");
 
   // --- Đặt hàng hợp lệ & không hợp lệ
   const mk = (over) => { const f = new FormData(); const v = Object.assign({ service: "transcription", type: "interview", urgency: "48h", qty: "30", speakers: "2", extras: "timestamps", name: "Lê Văn Đạt", email: "Dat.Le@Example.com", phone: "+84 988058030", agree: "on", instructions: "Ghi chú có dấu: Việt Nam 🇻🇳" }, over); for (const k in v) f.append(k, v[k]); return f; };
@@ -146,6 +146,7 @@ async function cleanup() {
   const result = d.order.files.find((f) => f.by === "admin");
   r = await fetch(B + "/api/orders/" + id + "/files/" + result.id + "?t=" + token);
   ok("khách tải được tệp hoàn thành", r.ok && (await r.text()) === "ket qua");
+  ok("bảo mật: tệp tải về luôn ở dạng tệp đính kèm, chặn chạy mã", /attachment/.test(r.headers.get("content-disposition") || "") && /sandbox/.test(r.headers.get("content-security-policy") || "") && r.headers.get("x-content-type-options") === "nosniff");
   r = await j("PATCH", "/api/admin/orders/" + id, { status: "progress", notes: "Ưu tiên" }, { Cookie: admin });
   d = await r.json();
   ok("đổi trạng thái + ghi chú nội bộ", d.order.status === "progress" && d.order.notes === "Ưu tiên");
@@ -296,7 +297,7 @@ async function cleanup() {
   const getRaw = async (u) => { const x = await fetch(B + u, { redirect: "manual" }); return { s: x.status, loc: x.headers.get("location"), h: x.status === 200 ? await x.text() : "" }; };
   const ld = (h) => [...h.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
   let pg = await getRaw("/blog/go-10-ngon-30-ngay");
-  ok("bài viết dựng sẵn: tiêu đề riêng trong HTML", pg.s === 200 && /<title>Gõ 10 ngón trong 30 ngày[^<]*— Đánh máy 247<\/title>/.test(pg.h));
+  ok("bài viết dựng sẵn: tiêu đề riêng trong HTML", pg.s === 200 && /<title>Gõ 10 ngón trong 30 ngày[^<]*- Đánh máy 247<\/title>/.test(pg.h));
   ok("bài viết dựng sẵn: nội dung có trong HTML", pg.h.includes("Nền tảng: hàng phím cơ sở") && pg.h.includes('<article class="prose"'));
   ok("bài viết: mục lục + id tiêu đề", /<nav class="toc"/.test(pg.h) && /<h2 id="muc-1">/.test(pg.h));
   ok("bài viết: canonical đường dẫn sạch", pg.h.includes('<link rel="canonical" href="http://localhost:3999/blog/go-10-ngon-30-ngay">'));
@@ -306,7 +307,7 @@ async function cleanup() {
   ok("bài viết: JSON-LD BlogPosting + Breadcrumb hợp lệ", pld.some((x) => x["@type"] === "BlogPosting" && x.headline && x.datePublished) && pld.some((x) => x["@type"] === "BreadcrumbList" && x.itemListElement.length === 3));
   pg = await getRaw("/blog/go-cong-thuc-hoa-hoc-trong-word");
   const fld = ld(pg.h).find((x) => x["@type"] === "FAQPage");
-  ok("bài có hỏi đáp: tiêu đề SEO riêng + mục Câu hỏi thường gặp + JSON-LD FAQPage", /<title>Cách gõ công thức hóa học trong Word nhanh, chuẩn — Đánh máy 247<\/title>/.test(pg.h) &&
+  ok("bài có hỏi đáp: tiêu đề SEO riêng + mục Câu hỏi thường gặp + JSON-LD FAQPage", /<title>Cách gõ công thức hóa học trong Word nhanh, chuẩn - Đánh máy 247<\/title>/.test(pg.h) &&
     pg.h.includes('class="post-faq"') && fld && fld.mainEntity.length === 3 && fld.mainEntity.every((q) => q.name && q.acceptedAnswer.text));
   pg = await getRaw("/bai-viet?slug=telex-hay-vni");
   ok("đường dẫn cũ /bai-viet?slug= → 301 /blog/…", pg.s === 301 && pg.loc === "/blog/telex-hay-vni");
@@ -315,7 +316,7 @@ async function cleanup() {
   ok("trang /blog: danh sách bài có sẵn trong HTML", pg.s === 200 && (pg.h.match(/class="post-card" href="\/blog\/[a-z0-9-]+"/g) || []).length === 9 && pg.h.includes('class="post-feature"'));
 
   pg = await getRaw("/dich-vu/pdf-sang-word");
-  ok("dịch vụ dựng sẵn: tiêu đề, nội dung, giá", pg.s === 200 && /<title>Chuyển PDF sang Word — Đánh máy 247/.test(pg.h) && pg.h.includes("Bạn nhận được gì?") && pg.h.includes("Chỉ từ"));
+  ok("dịch vụ dựng sẵn: tiêu đề, nội dung, giá", pg.s === 200 && /<title>Chuyển PDF sang Word - Đánh máy 247/.test(pg.h) && pg.h.includes("Bạn nhận được gì?") && pg.h.includes("Chỉ từ"));
   ok("dịch vụ: JSON-LD Service có giá VND", ld(pg.h).some((x) => x["@type"] === "Service" && x.offers.priceCurrency === "VND" && x.offers.price > 0));
   ok("đường dẫn cũ /dich-vu?slug= → 301 /dich-vu/…", (await getRaw("/dich-vu?slug=danh-may-latex")).loc === "/dich-vu/danh-may-latex");
   pg = await getRaw("/dich-vu");
@@ -334,6 +335,17 @@ async function cleanup() {
   ok("sitemap: đường dẫn sạch + ảnh PNG, không có trang riêng tư", pg.h.includes("/blog/telex-hay-vni") && pg.h.includes("/dich-vu/pdf-sang-word") && /og\/[a-z0-9-]+\.png/.test(pg.h) && !/bai-viet|\?slug=|dat-hang|tai-khoan/.test(pg.h));
 
   // --- Khóa phiên lưu trong MySQL (không đổi sau khi khởi động lại)
+  // --- Header bảo mật
+  r = await fetch(B + "/");
+  const csp = r.headers.get("content-security-policy") || "";
+  ok("bảo mật: có CSP chặn mã/khung từ nguồn lạ", /default-src 'self'/.test(csp) && /object-src 'none'/.test(csp) && /frame-ancestors 'self'/.test(csp) && r.headers.get("x-frame-options") === "SAMEORIGIN" && r.headers.get("x-content-type-options") === "nosniff");
+  ok("bảo mật: HTTP thường không gửi HSTS", !r.headers.get("strict-transport-security"));
+  r = await fetch(B + "/", { headers: { "X-Forwarded-Proto": "https" } });
+  ok("bảo mật: HTTPS (sau proxy) bật HSTS", /max-age=\d+/.test(r.headers.get("strict-transport-security") || ""));
+  r = await j("POST", "/api/staff/login", { username: "minh.nv", password: "matkhau456" }, { "X-Forwarded-Proto": "https" });
+  ok("bảo mật: cookie đăng nhập qua HTTPS có Secure + HttpOnly + SameSite", /;\s*Secure/.test(r.headers.get("set-cookie") || "") && /HttpOnly/.test(r.headers.get("set-cookie") || "") && /SameSite=Lax/.test(r.headers.get("set-cookie") || ""));
+  ok("bảo mật: không lộ phiên bản máy chủ", !r.headers.get("x-powered-by"));
+  ok("bảo mật: không đọc được tệp ngoài thư mục website", (await fetch(B + "/..%2f..%2fpackage.json")).status === 404 && (await fetch(B + "/%2e%2e/server.js")).status === 404);
   ok("khóa phiên được lưu (không đăng xuất khách khi khởi động lại)", (await db.settings.get("session_secret")) === config.SESSION_SECRET);
 
   console.log(`\n${pass} đạt, ${fail} lỗi`);

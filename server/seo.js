@@ -1,5 +1,5 @@
 /**
- * SEO phía máy chủ — để Google, Cốc Cốc, Bing, Facebook, Zalo đọc được nội dung mà KHÔNG cần chạy JavaScript.
+ * SEO phía máy chủ - để Google, Cốc Cốc, Bing, Facebook, Zalo đọc được nội dung mà KHÔNG cần chạy JavaScript.
  *
  *  - /blog/:slug         bài viết dựng sẵn HTML (tiêu đề, mô tả, nội dung, mục lục, JSON-LD BlogPosting + Breadcrumb)
  *  - /dich-vu, /dich-vu/:slug   danh sách & chi tiết dịch vụ dựng sẵn (JSON-LD Service + Breadcrumb)
@@ -53,7 +53,7 @@ function organization() {
     url: SITE() + "/",
     logo: SITE() + "/assets/img/logo-512.png",
     image: SITE() + "/assets/img/og/default.png",
-    description: "Dịch vụ đánh máy lại tài liệu, chuyển âm thành văn bản và định dạng tài liệu — 100% do con người thực hiện.",
+    description: "Dịch vụ đánh máy lại tài liệu, chuyển âm thành văn bản và định dạng tài liệu - 100% do con người thực hiện.",
     email: DM.site.email,
     telephone: "+84" + DM.site.phoneHref.replace(/^0/, ""),
     parentOrganization: { "@type": "Organization", name: DM.site.owner },
@@ -176,7 +176,7 @@ function renderPost(slug) {
         <div class="routine-tasks" style="margin-top:44px"><div class="routine-tasks__title">Cần đánh máy tài liệu ngay?</div><p>Đặt hàng trong 3 phút, nhận kết quả chỉ từ 6 giờ. 100% do người thật gõ, bảo mật tuyệt đối.</p><a href="/dat-hang" class="button" style="text-decoration:none;color:#fff">Đặt hàng ngay</a></div>
       </article>
       <aside class="post-aside">${toc}
-        <div class="aside-cta"><b>Gõ lại tài liệu chỉ từ ${fmt(DM.prices.retyping.base["30d"])}/trang</b>PDF, ảnh chụp, chữ viết tay sang Word — giữ nguyên định dạng, có biên tập viên kiểm tra.<a href="/bang-gia" class="button">Xem bảng giá</a></div>
+        <div class="aside-cta"><b>Gõ lại tài liệu chỉ từ ${fmt(DM.prices.retyping.base["30d"])}/trang</b>PDF, ảnh chụp, chữ viết tay sang Word - giữ nguyên định dạng, có biên tập viên kiểm tra.<a href="/bang-gia" class="button">Xem bảng giá</a></div>
       </aside>
     </div></div></section>
     <section class="section section--grey"><div class="container"><h2 class="section-title">Bài viết liên quan</h2><div class="blog-grid">${related.map(postCard).join("")}</div></div></section>
@@ -188,7 +188,7 @@ addEventListener("scroll",s,{passive:true});s();
 var cp=document.getElementById("copy");cp.addEventListener("click",function(){var u=cp.getAttribute("data-url");if(navigator.clipboard)navigator.clipboard.writeText(u).then(function(){DM.toast("Đã sao chép liên kết bài viết.")},function(){DM.toast("Không thể sao chép, hãy copy từ thanh địa chỉ.","error")})});})();`;
 
   return shell({
-    title: (p.seoTitle || p.title) + " — Đánh máy 247", description: p.excerpt, url, image, type: "article",
+    title: (p.seoTitle || p.title) + " - Đánh máy 247", description: p.excerpt, url, image, type: "article",
     jsonld: [
       {
         "@context": "https://schema.org", "@type": "BlogPosting", "@id": url + "#bai-viet",
@@ -240,14 +240,14 @@ function renderServiceList() {
   const trans = keys.filter((k) => DM.services[k].service === "transcription");
   const body = `<main id="main">
     <section class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Trang chủ</a><span>/</span><span aria-current="page">Dịch vụ</span></nav>
-      <h1>Tất cả dịch vụ</h1><p>Đánh máy lại, chuyển đổi định dạng, biên tập và chuyển âm — mọi công việc với tài liệu, do con người thực hiện.</p></div></section>
+      <h1>Tất cả dịch vụ</h1><p>Đánh máy lại, chuyển đổi định dạng, biên tập và chuyển âm - mọi công việc với tài liệu, do con người thực hiện.</p></div></section>
     <section class="section"><div class="container"><h2 class="section-title">Đánh máy &amp; chuyển đổi</h2><div class="grid-3">${retyping.map(svcCard).join("")}</div></div></section>
     <section class="section section--grey"><div class="container"><h2 class="section-title">Chuyển âm</h2><div class="grid-3">${trans.map(svcCard).join("")}
       <a class="svc-card" href="/dich-vu-chuyen-am"><span class="svc-badge" style="background:#3bb54a" aria-hidden="true">▶</span><h3>Chuyển âm video &amp; âm thanh</h3><p>Phỏng vấn, hội thảo, bài giảng, podcast, video YouTube… chuyển thành văn bản chính xác, có mốc thời gian.</p><span class="from">Từ ${fmt(DM.prices.transcription.base["10d"])}/phút</span></a>
     </div></div></section>
   </main>`;
   return shell({
-    title: "Dịch vụ đánh máy & chuyển đổi tài liệu — Đánh máy 247",
+    title: "Dịch vụ đánh máy & chuyển đổi tài liệu - Đánh máy 247",
     description: "Tất cả dịch vụ: PDF sang Word, viết tay sang Word, ảnh sang Word, Word sang Excel, đánh máy LaTeX, công thức, văn bản pháp lý, định dạng, biên tập, chuyển âm.",
     url: SITE() + "/dich-vu", image: ogImage("default"),
     jsonld: [breadcrumb([["Trang chủ", "/"], ["Dịch vụ", "/dich-vu"]]), {
@@ -291,7 +291,7 @@ function renderService(slug) {
   </main>`;
 
   return shell({
-    title: s.title + " — Đánh máy 247 | Chỉ từ " + fmt(pf.value).replace(" đ", "đ") + "/" + pf.unit,
+    title: s.title + " - Đánh máy 247 | Chỉ từ " + fmt(pf.value).replace(" đ", "đ") + "/" + pf.unit,
     description: s.intro,
     url, image: ogImage("default"),
     fonts: s.service === "retyping" ? "Dancing+Script:wght@500;700&family=" : "",

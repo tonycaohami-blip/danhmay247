@@ -87,6 +87,20 @@ Thông báo được tổng hợp từ dữ liệu đơn hàng, không cần c�
 
 **Việc cần làm trên công cụ bên ngoài:** khai báo website và gửi `https://danhmay247.com/sitemap.xml` trong Google Search Console, Cốc Cốc Webmaster, Bing Webmaster Tools; kiểm tra ảnh xem trước khi chia sẻ bằng Facebook Sharing Debugger (developers.facebook.com/tools/debug).
 
+## Bảo mật
+
+Đã có sẵn trong code:
+
+- **Đăng nhập:** phiên lưu trong cookie ký số HMAC (`HttpOnly`, `SameSite=Lax`, `Secure` khi chạy HTTPS). Đổi `ADMIN_PASSWORD` là mọi phiên quản trị cũ hết hiệu lực. Mật khẩu nhân viên băm bằng scrypt; đổi mật khẩu hoặc khóa tài khoản là nhân viên bị đăng xuất ngay.
+- **Chống dò mật khẩu và spam:** giới hạn số lần thử theo IP cho đăng nhập quản trị/nhân viên, đặt hàng, tin nhắn, liên hệ, đánh giá.
+- **Chống CSRF:** mọi yêu cầu thay đổi dữ liệu phải đến từ chính website (kiểm tra Origin/Referer).
+- **Header bảo mật:** Content-Security-Policy (chỉ cho chạy mã của website, Google Fonts, ảnh VietQR; cấm nhúng trang vào website lạ), HSTS khi chạy HTTPS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy, ẩn phiên bản máy chủ.
+- **Tệp tải lên:** chặn tệp chạy được (.exe, .js, .html, .svg…), lưu ngoài thư mục website với tên ngẫu nhiên, chỉ tải được khi có quyền, luôn tải về dạng tệp đính kèm trong "hộp cát", tự xóa sau 30 ngày.
+- **Phân quyền:** khách chỉ xem đơn của mình (đăng nhập hoặc mã truy cập riêng của đơn); nhân viên chỉ thấy đơn được giao, không thấy thông tin khách và giá; webhook SePay cần khóa API.
+- **Dữ liệu:** mã truy cập đơn lưu dạng băm; tệp CSV xuất ra chặn công thức Excel độc hại; nội dung người dùng nhập luôn được mã hóa trước khi hiển thị (chống XSS).
+
+Việc bạn nên làm trên Hostinger: đặt `ADMIN_PASSWORD` **tối thiểu 12 ký tự** (máy chủ sẽ cảnh báo trong log nếu ngắn hơn), bật SSL cho tên miền, đặt thêm `NODE_ENV=production`, không chia sẻ mật khẩu quản trị qua tin nhắn, và định kỳ tải bản sao thư mục `danhmay247-data` về máy.
+
 ## Chạy trên máy
 
 Cần Node.js 20 trở lên.
@@ -94,7 +108,7 @@ Cần Node.js 20 trở lên.
 ```bash
 npm install
 npm start      # http://localhost:3000
-npm test       # 119 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
+npm test       # 126 kiểm thử tự động (dùng thư mục tạm, không đụng dữ liệu thật)
 ```
 
 Khi chạy trên máy, tạo tệp `.env` từ `.env.example` và đặt `ADMIN_PASSWORD` để vào được trang quản trị.

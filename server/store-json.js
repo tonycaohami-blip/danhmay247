@@ -1,5 +1,5 @@
 /**
- * Lưu trữ mặc định — KHÔNG cần cài đặt gì.
+ * Lưu trữ mặc định - KHÔNG cần cài đặt gì.
  *
  * - Toàn bộ dữ liệu (đơn hàng, khách, tin nhắn, liên hệ, đánh giá, giao dịch) nằm trong DATA_DIR/db.json
  * - Ghi nguyên tử (ghi tệp tạm rồi đổi tên) nên không hỏng dữ liệu khi máy chủ tắt đột ngột
@@ -61,7 +61,7 @@ async function init() {
       const last = fs.existsSync(BACKUP_DIR) ? fs.readdirSync(BACKUP_DIR).filter((n) => n.endsWith(".json")).sort().pop() : null;
       if (!last) throw new Error("db.json bị hỏng và không có bản sao lưu (đã giữ lại tại " + broken + ")");
       data = Object.assign(EMPTY(), JSON.parse(fs.readFileSync(path.join(BACKUP_DIR, last), "utf8")));
-      console.error("[store] db.json hỏng — đã khôi phục từ bản sao lưu " + last + ", bản hỏng giữ tại " + broken);
+      console.error("[store] db.json hỏng - đã khôi phục từ bản sao lưu " + last + ", bản hỏng giữ tại " + broken);
     }
   }
   // Dữ liệu từ phiên bản đầu tiên: users lưu theo dạng đối tượng, loginTokens có exp…

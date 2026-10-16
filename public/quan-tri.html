@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Quản trị — Đánh máy 247</title>
+  <title>Quản trị - Đánh máy 247</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,6 +47,7 @@
     function gate(msg) {
       clearInterval(timer);
       if (DM._notifier) DM._notifier.stop();
+      DM.setPortalUser(null);
       app.innerHTML = '<div class="order-card" style="max-width:420px;margin:40px auto"><h1 class="order-card__title">Khu vực quản trị</h1>' +
         '<form id="gate" novalidate><div id="g-msg">' + (msg ? '<div class="alert alert--error">' + DM.esc(msg) + "</div>" : "") + '</div>' +
         '<div class="field"><label class="field__label" for="g-pass">Mật khẩu quản trị</label><div class="password"><input class="input" id="g-pass" type="password" required autocomplete="current-password"><button type="button" class="password__eye" aria-label="Hiện mật khẩu">' + DM.icon.eye + '</button></div><div class="field__error"></div></div>' +
@@ -62,6 +63,7 @@
       return DM.api("/admin/summary").then(function (d) {
         data = d; render();
         if (!DM._notifier) startNotifier();
+        DM.setPortalUser({ name: "Quản trị", initials: "QT", sub: "Đang đăng nhập khu vực quản trị", color: "var(--red)", links: [["/quan-tri", "Bảng điều khiển"]], logout: logout });
         clearInterval(timer);
         timer = setInterval(function () {
           if ($(".modal.is-open")) return; // không làm gián đoạn khi đang thao tác
@@ -75,6 +77,7 @@
       if ($(".modal.is-open")) return;
       DM.api("/admin/summary").then(function (x) { data = x; render(); }, function () { /* bỏ qua */ });
     }
+    function logout() { DM.api("/admin/logout", { method: "POST" }).then(function () { gate(); DM.toast("Đã đăng xuất khu vực quản trị."); }); }
     function startNotifier() {
       DM.notifier({
         key: "admin", interval: 15000, empty: "Chưa có hoạt động nào.",
@@ -99,7 +102,7 @@
         '<h1 class="order-card__title" style="font-size:30px">Bảng điều khiển</h1>' +
         '<div class="sys">' +
         (data.email ? '<span class="chip chip--green">Email: đang hoạt động</span>' : '<span class="chip chip--red">Email: chưa cấu hình SMTP</span>') +
-        (data.sepay ? '<span class="chip chip--green">Đối soát tự động SePay: bật</span>' : '<span class="chip chip--amber">Đối soát tự động: tắt — xác nhận thủ công</span>') + "</div>" +
+        (data.sepay ? '<span class="chip chip--green">Đối soát tự động SePay: bật</span>' : '<span class="chip chip--amber">Đối soát tự động: tắt - xác nhận thủ công</span>') + "</div>" +
         '<div class="kpis">' +
         '<div class="kpi"><small>Tổng đơn</small><b>' + s.orders + "</b></div>" +
         '<div class="kpi' + (s.toVerify ? " warn" : "") + '"><small>Cần đối soát</small><b>' + s.toVerify + "</b></div>" +
@@ -108,12 +111,12 @@
         '<div class="kpi"><small>Doanh thu</small><b>' + DM.fmt(s.revenue) + "</b></div>" +
         '<div class="kpi' + (s.newContacts ? " warn" : "") + '"><small>Liên hệ mới</small><b>' + s.newContacts + "</b></div></div>" +
         '<div class="filter-pills" style="margin-bottom:20px">' +
-        [["orders", "Đơn hàng"], ["staff", "Nhân viên (" + data.staff.filter(function (x) { return x.active; }).length + ")"], ["payments", "Giao dịch ngân hàng"], ["contacts", "Liên hệ (" + data.contacts.length + ")"], ["reviews", "Đánh giá (" + s.pendingReviews + " chờ duyệt)"]].map(function (t) {
+        [["orders", "Đơn hàng (" + s.orders + ")"], ["staff", "Nhân viên (" + data.staff.filter(function (x) { return x.active; }).length + ")"], ["payments", "Giao dịch ngân hàng (" + data.payments.length + ")"], ["contacts", "Liên hệ (" + data.contacts.length + ")"], ["reviews", "Đánh giá (" + s.pendingReviews + " chờ duyệt)"]].map(function (t) {
           return '<button type="button" data-t="' + t[0] + '" class="' + (tab === t[0] ? "is-active" : "") + '">' + t[1] + "</button>";
         }).join("") +
         '<button type="button" data-out>Đăng xuất</button></div><div id="pane"></div>';
       $$("[data-t]").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.t; render(); }); });
-      $("[data-out]").addEventListener("click", function () { DM.api("/admin/logout", { method: "POST" }).then(function () { gate(); }); });
+      $("[data-out]").addEventListener("click", logout);
       ({ orders: orders, staff: staffPane, payments: payments, contacts: contacts, reviews: reviews })[tab]();
     }
 
@@ -137,7 +140,7 @@
             return "<tr><td><b>#" + o.id + '</b><br><small style="color:var(--muted)">' + DM.dateTime(o.created) + "</small></td>" +
               "<td>" + DM.esc(o.name) + "<br><small>" + DM.esc(o.email) + "<br>" + DM.esc(o.phone) + "</small></td>" +
               "<td>" + DM.esc(o.typeLabel) + "<br><small>" + o.qty + " " + o.unit + " · " + o.files.filter(function (f) { return f.by === "customer"; }).length + " tệp</small></td>" +
-              "<td>" + (o.deadline ? DM.dateTime(o.deadline) : "—") + "</td><td><b>" + DM.fmt(o.price.total) + "</b>" + (o.receivedAmount ? '<br><small style="color:var(--green)">Đã nhận ' + DM.fmt(o.receivedAmount) + "</small>" : "") + "</td>" +
+              "<td>" + (o.deadline ? DM.dateTime(o.deadline) : "-") + "</td><td><b>" + DM.fmt(o.price.total) + "</b>" + (o.receivedAmount ? '<br><small style="color:var(--green)">Đã nhận ' + DM.fmt(o.receivedAmount) + "</small>" : "") + "</td>" +
               "<td>" + (o.assignedTo ? DM.esc(staffName(o.assignedTo)) : '<small style="color:var(--muted)">Chưa giao</small>') + "</td>" +
               "<td>" + chip(o.status) + "</td>" +
               '<td><button type="button" class="button button--sm' + (o.status === "verifying" || o.status === "review" ? "" : " button--black") + '" data-manage="' + o.id + '">' + (o.status === "verifying" ? "Đối soát" : o.status === "review" ? "Kiểm tra" : "Quản lý") + "</button></td></tr>";
@@ -177,17 +180,17 @@
         '<h2 class="modal__title">Đơn #' + o.id + " " + chip(o.status) + "</h2>" +
         '<div class="detail-grid">' +
         "<div><span>Khách hàng</span><b>" + DM.esc(o.name) + "</b></div><div><span>Liên hệ</span><b>" + DM.esc(o.email) + "<br>" + DM.esc(o.phone) + "</b></div>" +
-        "<div><span>Dịch vụ</span><b>" + DM.esc(o.serviceLabel + " — " + o.typeLabel) + "</b></div><div><span>Khối lượng</span><b>" + o.qty + " " + o.unit + (o.speakers ? " · " + DM.esc(o.speakers) : "") + "</b></div>" +
+        "<div><span>Dịch vụ</span><b>" + DM.esc(o.serviceLabel + " - " + o.typeLabel) + "</b></div><div><span>Khối lượng</span><b>" + o.qty + " " + o.unit + (o.speakers ? " · " + DM.esc(o.speakers) : "") + "</b></div>" +
         "<div><span>Thời hạn</span><b>" + DM.esc(o.urgencyLabel) + (o.deadline ? " → " + DM.dateTime(o.deadline) : "") + "</b></div><div><span>Bổ sung</span><b>" + (o.extras.length ? DM.esc(o.extras.join(", ")) : "Không") + "</b></div>" +
         "<div><span>Tổng tiền</span><b>" + DM.fmt(o.price.total) + (o.promo ? " (mã " + DM.esc(o.promo) + ")" : "") + "</b></div><div><span>Đã nhận</span><b>" + (o.paidAt ? DM.fmt(o.paidAmount) + " lúc " + DM.dateTime(o.paidAt) + " (" + (o.paySource === "sepay" ? "tự động" : "thủ công") + ")" : o.receivedAmount ? DM.fmt(o.receivedAmount) + " (chưa đủ)" : "Chưa") + "</b></div>" +
         "</div>" +
         (unpaid ? '<div class="alert alert--info">Kiểm tra tài khoản ' + DM.esc(DM.site.bank.shortName) + " " + DM.esc(DM.site.bank.account) + " có giao dịch <b>" + DM.fmt(o.price.total) + "</b> nội dung <b>" + o.id + '</b>. <button type="button" class="button button--sm" data-confirm style="margin-top:10px">Xác nhận đã nhận tiền</button></div>' : "") +
-        '<div class="field" style="background:var(--bg-grey);border-radius:10px;padding:14px 16px"><label class="field__label" for="m-staff">Giao cho nhân viên <span class="tip" tabindex="0">?<span class="tip__text">Nhân viên chỉ thấy nội dung công việc, tệp khách gửi và hướng dẫn — không thấy tên, email, số điện thoại của khách và giá. Lưu ý: nếu khách ghi thông tin cá nhân trong phần hướng dẫn hoặc tên tệp, nhân viên vẫn đọc được.</span></span></label>' +
-        '<div style="display:flex;gap:10px;flex-wrap:wrap"><select class="select" id="m-staff" style="flex:1;min-width:200px"><option value="">— Chưa giao —</option>' +
+        '<div class="field" style="background:var(--bg-grey);border-radius:10px;padding:14px 16px"><label class="field__label" for="m-staff">Giao cho nhân viên <span class="tip" tabindex="0">?<span class="tip__text">Nhân viên chỉ thấy nội dung công việc, tệp khách gửi và hướng dẫn - không thấy tên, email, số điện thoại của khách và giá. Lưu ý: nếu khách ghi thông tin cá nhân trong phần hướng dẫn hoặc tên tệp, nhân viên vẫn đọc được.</span></span></label>' +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap"><select class="select" id="m-staff" style="flex:1;min-width:200px"><option value="">- Chưa giao -</option>' +
         data.staff.filter(function (x) { return x.active || x.id === o.assignedTo; }).map(function (x) { return '<option value="' + x.id + '"' + (x.id === o.assignedTo ? " selected" : "") + ">" + DM.esc(x.name) + (x.active ? "" : " (đã khóa)") + "</option>"; }).join("") +
         '</select><button type="button" class="button button--sm" data-assign>' + (o.assignedTo ? "Đổi người" : "Giao đơn") + "</button></div>" +
         (o.assignedAt ? '<div class="field__hint">Giao lúc ' + DM.dateTime(o.assignedAt) + "</div>" : "") +
-        (!data.staff.length ? '<div class="field__hint">Chưa có nhân viên — tạo ở tab “Nhân viên”.</div>' : "") + "</div>" +
+        (!data.staff.length ? '<div class="field__hint">Chưa có nhân viên - tạo ở tab “Nhân viên”.</div>' : "") + "</div>" +
         (o.instructions ? '<div class="field__label">Hướng dẫn của khách</div><div style="background:var(--bg-grey);border-radius:8px;padding:12px;font-size:14px;white-space:pre-wrap;margin-bottom:14px">' + DM.esc(o.instructions) + "</div>" : "") +
         '<div class="field__label">Tệp khách gửi</div>' + files("customer") +
         '<div class="field__label">Tệp nhân viên tải lên</div>' + staffFiles() +
@@ -281,7 +284,7 @@
         '<div class="order-card" style="padding:20px"><h2 class="order-card__title">Danh sách nhân viên</h2>' +
         (data.staff.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Nhân viên</th><th>Đăng nhập</th><th>Đang xử lý</th><th>Đã xong</th><th>Lần cuối đăng nhập</th><th></th></tr></thead><tbody>' +
           data.staff.map(function (x) {
-            return '<tr class="' + (x.active ? "" : "staff-off") + '"><td><b>' + DM.esc(x.name) + "</b>" + (x.active ? "" : ' <span class="chip chip--red">Đã khóa</span>') + "<br><small>" + DM.esc(x.email || "—") + "</small></td>" +
+            return '<tr class="' + (x.active ? "" : "staff-off") + '"><td><b>' + DM.esc(x.name) + "</b>" + (x.active ? "" : ' <span class="chip chip--red">Đã khóa</span>') + "<br><small>" + DM.esc(x.email || "-") + "</small></td>" +
               "<td>" + DM.esc(x.username) + "</td><td>" + count(x.id, ["paid", "progress", "review"]) + "</td><td>" + count(x.id, ["done"]) + "</td>" +
               "<td>" + (x.lastLogin ? DM.dateTime(x.lastLogin) : "Chưa đăng nhập") + "</td>" +
               '<td><div style="display:flex;gap:6px;flex-wrap:wrap;min-width:150px">' +
@@ -331,7 +334,7 @@
       pane.innerHTML = '<div class="order-card" style="padding:20px">' + (data.payments.length ?
         '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Thời gian</th><th>Số tiền</th><th>Nội dung</th><th>Mã đơn</th><th>Kết quả</th></tr></thead><tbody>' +
         data.payments.map(function (p) {
-          return "<tr><td>" + DM.dateTime(p.at) + "</td><td><b>" + DM.fmt(p.amount) + "</b></td><td>" + DM.esc(p.content) + "</td><td>" + (p.orderId ? "#" + DM.esc(p.orderId) : "—") + "</td><td>" + DM.esc(p.result) + "</td></tr>";
+          return "<tr><td>" + DM.dateTime(p.at) + "</td><td><b>" + DM.fmt(p.amount) + "</b></td><td>" + DM.esc(p.content) + "</td><td>" + (p.orderId ? "#" + DM.esc(p.orderId) : "-") + "</td><td>" + DM.esc(p.result) + "</td></tr>";
         }).join("") + "</tbody></table></div>"
         : '<div class="empty">' + DM.icon.layers + "<p>Chưa có giao dịch nào được ghi nhận qua webhook" + (data.sepay ? "" : " (SePay chưa được bật)") + ".</p></div>") + "</div>";
     }

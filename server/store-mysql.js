@@ -153,7 +153,7 @@ const SCHEMA = [
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS \`${T.payments}\` (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    tx_id VARCHAR(80) NULL COMMENT 'Mã giao dịch SePay — chống xử lý trùng',
+    tx_id VARCHAR(80) NULL COMMENT 'Mã giao dịch SePay - chống xử lý trùng',
     amount INT NOT NULL,
     content VARCHAR(300) NULL,
     account VARCHAR(40) NULL,
