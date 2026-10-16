@@ -1052,6 +1052,13 @@ kbd { display: inline-block; min-width: 26px; padding: 2px 8px; border: 1px soli
 .compare-grid .good { background: #eaf7ed; border: 1px solid #bfe6c6; }
 .compare-grid b { display: block; margin-bottom: 6px; color: #000; }
 .mono { font-family: "Courier New", monospace; overflow-wrap: anywhere; }
+.prose pre.code { background: #1d2040; color: #e7e8f6; border-radius: 12px; padding: 18px 20px; margin: 1.4em 0; overflow-x: auto; font: 14px/1.6 "Courier New", monospace; white-space: pre; }
+.prose pre.code code { font: inherit; color: inherit; }
+.post-faq { margin: .6em 0 1.4em; }
+.post-faq .accordion__item { background: var(--bg-grey); box-shadow: none; margin-bottom: 10px; }
+.post-faq .accordion__btn { font-size: 17px; padding: 16px 56px 16px 20px; font-weight: 700; font-family: inherit; }
+.post-faq .accordion__btn::after { right: 18px; background-color: #fff; }
+.post-faq .accordion__content { padding: 0 20px 18px; font-size: 16px; }
 .post-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 26px; }
 .post-tags span { background: var(--bg-grey); border-radius: 20px; padding: 5px 12px; font-size: 13px; color: var(--text); }
 .post-author { display: flex; gap: 16px; align-items: center; background: var(--bg-grey); border-radius: 16px; padding: 18px 20px; margin-top: 30px; }

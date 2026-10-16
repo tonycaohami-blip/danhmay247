@@ -278,6 +278,10 @@ async function cleanup() {
   ok("bài viết: og:type article + mô tả riêng", pg.h.includes('<meta property="og:type" content="article">') && /<meta name="description" content="Gõ mổ cò/.test(pg.h));
   const pld = ld(pg.h);
   ok("bài viết: JSON-LD BlogPosting + Breadcrumb hợp lệ", pld.some((x) => x["@type"] === "BlogPosting" && x.headline && x.datePublished) && pld.some((x) => x["@type"] === "BreadcrumbList" && x.itemListElement.length === 3));
+  pg = await getRaw("/blog/go-cong-thuc-hoa-hoc-trong-word");
+  const fld = ld(pg.h).find((x) => x["@type"] === "FAQPage");
+  ok("bài có hỏi đáp: tiêu đề SEO riêng + mục Câu hỏi thường gặp + JSON-LD FAQPage", /<title>Cách gõ công thức hóa học trong Word nhanh, chuẩn — Đánh máy 247<\/title>/.test(pg.h) &&
+    pg.h.includes('class="post-faq"') && fld && fld.mainEntity.length === 3 && fld.mainEntity.every((q) => q.name && q.acceptedAnswer.text));
   pg = await getRaw("/bai-viet?slug=telex-hay-vni");
   ok("đường dẫn cũ /bai-viet?slug= → 301 /blog/…", pg.s === 301 && pg.loc === "/blog/telex-hay-vni");
   ok("bài không tồn tại → 404", (await getRaw("/blog/khong-co-bai-nay")).s === 404);

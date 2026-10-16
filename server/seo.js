@@ -142,7 +142,9 @@ function renderPost(slug) {
   // Gắn id cho tiêu đề h2 để có mục lục và liên kết neo
   let n = 0;
   const heads = [];
-  const body = p.body.replace(/<h2>([\s\S]*?)<\/h2>/g, (m, inner) => { n++; heads.push(strip(inner)); return `<h2 id="muc-${n}">${inner}</h2>`; });
+  const faq = Array.isArray(p.faq) && p.faq.length ? p.faq : null;
+  const faqHtml = faq ? `<h2>Câu hỏi thường gặp</h2><div class="post-faq" data-accordion="multi">${faq.map((f, i) => faqItem(f, i === 0)).join("")}</div>` : "";
+  const body = (p.body + faqHtml).replace(/<h2>([\s\S]*?)<\/h2>/g, (m, inner) => { n++; heads.push(strip(inner)); return `<h2 id="muc-${n}">${inner}</h2>`; });
   const toc = heads.length >= 2 ? `<nav class="toc" id="toc" aria-label="Mục lục"><b>Nội dung bài viết</b><ol>${heads.map((h, i) => `<li><a href="#muc-${i + 1}">${esc(h)}</a></li>`).join("")}</ol></nav>` : "";
 
   const score = (x) => (x.cat === p.cat ? 3 : 0) + x.tags.filter((t) => p.tags.includes(t)).length;
@@ -186,7 +188,7 @@ addEventListener("scroll",s,{passive:true});s();
 var cp=document.getElementById("copy");cp.addEventListener("click",function(){var u=cp.getAttribute("data-url");if(navigator.clipboard)navigator.clipboard.writeText(u).then(function(){DM.toast("Đã sao chép liên kết bài viết.")},function(){DM.toast("Không thể sao chép, hãy copy từ thanh địa chỉ.","error")})});})();`;
 
   return shell({
-    title: p.title + " — Đánh máy 247", description: p.excerpt, url, image, type: "article",
+    title: (p.seoTitle || p.title) + " — Đánh máy 247", description: p.excerpt, url, image, type: "article",
     jsonld: [
       {
         "@context": "https://schema.org", "@type": "BlogPosting", "@id": url + "#bai-viet",
@@ -197,7 +199,10 @@ var cp=document.getElementById("copy");cp.addEventListener("click",function(){va
         mainEntityOfPage: { "@type": "WebPage", "@id": url }
       },
       breadcrumb([["Trang chủ", "/"], ["Blog", "/blog"], [p.title, "/blog/" + p.slug]])
-    ],
+    ].concat(faq ? [{
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: faq.map((f) => ({ "@type": "Question", name: strip(f.q), acceptedAnswer: { "@type": "Answer", text: strip(f.a) } }))
+    }] : []),
     body: html, script
   }).replace("<head>", `<head>\n  <meta property="article:published_time" content="${p.date}">\n  <meta property="article:section" content="${esc(p.cat)}">`);
 }
