@@ -412,7 +412,7 @@ router.get("/admin/summary", adminOnly, wrap(async (req, res) => {
 router.patch("/admin/orders/:id", adminOnly, wrap(async (req, res) => {
   const o = await getOrderOr404(req.params.id);
 
-  // Giao / đổi / bỏ giao nhân viên
+  // Giao/đổi/bỏ giao nhân viên
   if ("assignedTo" in req.body) {
     const sid = req.body.assignedTo ? String(req.body.assignedTo) : null;
     if (sid !== (o.assignedTo || null)) {
@@ -658,7 +658,7 @@ const cut = (s, n) => { s = String(s || "").replace(/\s+/g, " ").trim(); return 
 const evt = (o, kind, at, title, text) => ({ id: (o ? o.id : "x") + ":" + kind + ":" + at, orderId: o ? o.id : null, kind, at, title, text: cut(text, 160) });
 const newest = (list) => list.filter((e) => e.at).sort((a, b) => b.at - a.at).slice(0, NOTIF_LIMIT);
 
-/** Quản trị: đơn mới, khách báo chuyển khoản / nhắn tin / hủy đơn, tiền về tự động, nhân viên cập nhật, liên hệ & đánh giá mới. */
+/** Quản trị: đơn mới, khách báo chuyển khoản/nhắn tin/hủy đơn, tiền về tự động, nhân viên cập nhật, liên hệ & đánh giá mới. */
 function adminEvents(orders, contacts, reviews, affs) {
   const out = [];
   for (const o of orders) {
@@ -680,7 +680,7 @@ function adminEvents(orders, contacts, reviews, affs) {
   return newest(out);
 }
 
-/** Nhân viên: được giao đơn, quản trị nhắn, duyệt / thu hồi tệp, đơn được thanh toán / hoàn thành / hủy. Không có thông tin khách và giá. */
+/** Nhân viên: được giao đơn, quản trị nhắn, duyệt / thu hồi tệp, đơn được thanh toán/hoàn thành/hủy. Không có thông tin khách và giá. */
 function staffEvents(orders) {
   const out = [];
   for (const o of orders) {
@@ -744,7 +744,7 @@ router.post("/notifications", sec.rateLimit("notif", 120, 600e3), wrap(async (re
 affiliate.register(router, { wrap, HttpError, adminOnly, str, EMAIL_RE });
 
 /* =========================================================
-   Tự xóa tệp 30 ngày sau khi đơn hoàn thành / hủy (theo Chính sách bảo mật)
+   Tự xóa tệp 30 ngày sau khi đơn hoàn thành/hủy (theo Chính sách bảo mật)
    ========================================================= */
 const RETAIN_MS = 30 * 86400e3;
 async function purgeOldFiles() {

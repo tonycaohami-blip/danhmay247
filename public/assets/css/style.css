@@ -618,7 +618,7 @@ ul { margin: 0; padding: 0; }
 .page-hero h1 { font: 400 46px/1.25 var(--serif); margin-bottom: 18px; }
 .page-hero p { font-size: 18px; max-width: 720px; margin: 0 auto; color: var(--text); }
 .page-hero .button { margin-top: 30px; }
-.breadcrumbs { font-size: 13.5px; color: var(--muted); margin-bottom: 22px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.breadcrumbs { font-size: 13.5px; color: var(--muted); margin-bottom: 22px; display: flex; justify-content: center; gap: 3px; flex-wrap: wrap; }
 .breadcrumbs a:hover { color: var(--red); }
 .section { padding: 90px 0; }
 .section--grey { background: var(--bg-grey); }
@@ -1139,3 +1139,17 @@ kbd { display: inline-block; min-width: 26px; padding: 2px 8px; border: 1px soli
 .header__buttons > .button { white-space: nowrap; }
 @media (min-width: 1100px) and (max-width: 1320px) { .login__name { display: none; } .header .nav { gap: 14px; } .header__buttons { gap: 10px; } .header .container { gap: 16px; } }
 @media (min-width: 1100px) and (max-width: 1200px) { .nav__link { padding-left: 8px; padding-right: 8px; font-size: 14.5px; } .header__buttons > .button { padding: 8px 12px; } }
+/* Chat: câu trả lời chuyên sâu + gợi ý chủ đề */
+.chat-box__msgs .msg--bot ul, .chat-box__msgs .msg--bot ol { margin: 6px 0; padding-left: 18px; }
+.chat-box__msgs .msg--bot li { margin-bottom: 3px; }
+.chat-box__msgs .msg--bot a { color: var(--red); text-decoration: underline; }
+.chat-box__msgs .msg--bot { max-width: 92%; }
+.chat-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chat-chips button { border: 1px solid #f6c3c4; background: #fff5f5; color: var(--red-dark, #c62828); border-radius: 16px; padding: 4px 10px; font-size: 12.5px; cursor: pointer; }
+.chat-chips button:hover { background: var(--red); color: #fff; border-color: var(--red); }
+.chat-box__quick { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; }
+.chat-box__quick button { flex: 0 0 auto; white-space: nowrap; }
+.chat-box { height: 560px; }
+.ap-note { font-size: 12.5px; color: var(--muted); margin: 10px 0 0; }
+.transcript p.is-current { background: #fff5d6; border-radius: 6px; }
+.transcript--srt p { font-family: "Courier New", monospace; font-size: 13px; border-bottom: 1px dashed #e3e5ef; padding-bottom: 8px; }

@@ -73,7 +73,7 @@ seo.register(app, (req, res) => sendFile(req, res, 404, path.join(PUBLIC, "404.h
 app.get("/sitemap.xml", (req, res) => {
   const base = config.SITE_URL;
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
-  const pages = ["", "bang-gia", "dich-vu", "dich-vu-chuyen-am", "gioi-thieu", "danh-gia", "mau", "blog", "hoi-dap", "doi-tac", "lien-he"];
+  const pages = ["", "bang-gia", "dich-vu", "dich-vu-chuyen-am", "gioi-thieu", "danh-gia", "mau", "blog", "hoi-dap", "doi-tac", "dang-ky-doi-tac", "lien-he"];
   const posts = seo.posts();
   const services = Object.keys(DM.services || {});
   const today = new Date().toISOString().slice(0, 10);
@@ -92,7 +92,8 @@ const TYPES = {
   ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg", ".webp": "image/webp", ".ico": "image/x-icon", ".txt": "text/plain; charset=utf-8",
-  ".xml": "application/xml; charset=utf-8", ".woff2": "font/woff2"
+  ".xml": "application/xml; charset=utf-8", ".woff2": "font/woff2",
+  ".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".wav": "audio/wav", ".ogg": "audio/ogg"
 };
 const COMPRESSIBLE = /^(text\/|application\/(json|xml)|image\/svg)/;
 

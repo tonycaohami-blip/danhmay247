@@ -314,7 +314,7 @@ function renderService(slug) {
    ========================================================= */
 const PAGE_NAMES = {
   "/bang-gia": "Bảng giá", "/gioi-thieu": "Giới thiệu", "/danh-gia": "Đánh giá", "/mau": "Bài mẫu", "/blog": "Blog",
-  "/hoi-dap": "Hỏi đáp", "/lien-he": "Liên hệ", "/dich-vu-chuyen-am": "Chuyển âm", "/dat-hang": "Đặt hàng", "/doi-tac": "Đối tác"
+  "/hoi-dap": "Hỏi đáp", "/lien-he": "Liên hệ", "/dich-vu-chuyen-am": "Chuyển âm", "/dat-hang": "Đặt hàng", "/doi-tac": "Đối tác", "/dang-ky-doi-tac": "Đăng ký đối tác"
 };
 
 function transformHtml(urlPath, html) {

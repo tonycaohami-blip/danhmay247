@@ -18,7 +18,7 @@
       <div class="container">
         <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Trang chủ</a><span>/</span><span aria-current="page">Bài mẫu</span></nav>
         <h1>Bài mẫu: trước &amp; sau khi đánh máy</h1>
-        <p>Kéo thanh trượt trên mỗi tài liệu để so sánh bản gốc với bản đánh máy của chúng tôi. Tất cả mẫu đều đã được ẩn danh thông tin.</p>
+        <p>Kéo thanh trượt để so sánh bản gốc với bản đánh máy; bấm nút phát ở mẫu chuyển âm để nghe và xem bản chép lời. Tất cả mẫu đều đã được ẩn danh thông tin.</p>
       </div>
     </section>
 
@@ -52,11 +52,28 @@
       return '<article class="sample reveal" data-kind="' + (/công thức/i.test(s.tags.join(" ")) ? "doc formula" : "doc") + '"><h3>' + s.title + "</h3><p>" + s.desc + "</p>" + DM.compare(s) +
         '<div class="sample__meta">' + s.tags.map(function (t) { return '<span class="chip chip--grey">' + t + "</span>"; }).join("") + "</div></article>";
     }).join("");
-    var waves = ""; for (var i = 0; i < 56; i++) waves += '<i style="height:' + (20 + Math.round(Math.abs(Math.sin(i * 1.7) * 70 + Math.cos(i * .6) * 20))) % 100 + '%"></i>';
-    var audio = '<article class="sample reveal" data-kind="audio"><h3>Phỏng vấn nghiên cứu → Văn bản</h3><p>Chuyển âm làm sạch, phân biệt người nói, có mốc thời gian. <i>(Bản phát minh họa, không có âm thanh.)</i></p>' +
-      '<div class="audio-sample"><div class="audio-player"><button type="button" id="play" aria-label="Phát">' + DM.icon.play + '</button><div class="wave" id="wave" aria-hidden="true">' + waves + '</div><span id="time" style="font-size:13px;font-variant-numeric:tabular-nums">00:00</span></div>' +
-      '<div class="transcript" id="transcript">' + DM.transcriptSample.map(function (l, k) { return '<p data-k="' + k + '"><span class="ts">[' + l.ts + ']</span><span class="sp">' + l.sp + ":</span> " + l.text + "</p>"; }).join("") + "</div></div>" +
-      '<div class="sample__meta"><span class="chip chip--grey">Chuyển âm</span><span class="chip chip--grey">Mốc thời gian</span><span class="chip chip--grey">2 người nói</span></div></article>';
+    // Mẫu chuyển âm: mẫu phỏng vấn cũ + DM.audioSamples. Phát tiếng bằng giọng tiếng Việt có sẵn trên thiết bị (Web Speech API).
+    var strip = function (h) { return String(h).replace(/<br>/g, " ").replace(/<[^>]+>/g, ""); };
+    var spk = {};
+    var audioList = [{
+      title: "Phỏng vấn nghiên cứu → Văn bản", tags: ["Chuyển âm", "Mốc thời gian", "2 người nói"],
+      desc: "Chuyển âm làm sạch, phân biệt người nói, có mốc thời gian.",
+      lines: DM.transcriptSample.map(function (l) { if (!(l.sp in spk)) spk[l.sp] = Object.keys(spk).length; return { ts: l.ts, sp: l.sp, v: spk[l.sp], say: l.text, text: l.text }; })
+    }].concat(DM.audioSamples || []);
+    var waveHtml = function () { var w = ""; for (var i = 0; i < 56; i++) w += '<i style="height:' + (20 + Math.round(Math.abs(Math.sin(i * 1.7) * 70 + Math.cos(i * .6) * 20))) % 100 + '%"></i>'; return w; };
+    var audio = audioList.map(function (a, n) {
+      var line = function (l, k) {
+        return a.srt ? '<p data-k="' + k + '"><span class="ts" style="display:block">' + (k + 1) + "<br>" + l.ts + "</span>" + l.text + "</p>"
+          : '<p data-k="' + k + '"><span class="ts">[' + l.ts + ']</span><span class="sp">' + DM.esc(l.sp) + ":</span> " + l.text + "</p>";
+      };
+      return '<article class="sample reveal" data-kind="audio" data-audio="' + n + '"><h3>' + DM.esc(a.title) + "</h3><p>" + DM.esc(a.desc) + "</p>" +
+        '<div class="audio-sample"><div class="audio-player"><button type="button" class="ap-play" aria-label="Phát">' + DM.icon.play + '</button><div class="wave" aria-hidden="true">' + waveHtml() + '</div><span class="ap-time" style="font-size:13px;font-variant-numeric:tabular-nums;min-width:62px;text-align:right">' + a.lines.length + " câu</span></div>" +
+        '<div class="field__label" style="font-size:13px;margin:0 0 6px">' + (a.srt ? "Tệp phụ đề .srt" : "Bản chuyển âm") + "</div>" +
+        '<div class="transcript' + (a.srt ? " transcript--srt" : "") + '">' + a.lines.map(line).join("") + "</div>" +
+        (a.after ? '<div class="transcript" style="margin-top:10px;max-height:none">' + a.after + "</div>" : "") +
+        '<p class="ap-note">🔊 Âm thanh minh họa, đọc bằng giọng tiếng Việt có sẵn trên thiết bị của bạn. Nhân vật, nội dung là giả định.</p></div>' +
+        '<div class="sample__meta">' + a.tags.map(function (t) { return '<span class="chip chip--grey">' + DM.esc(t) + "</span>"; }).join("") + "</div></article>";
+    }).join("");
     $("#samples").innerHTML = docs + audio;
     DM.initCompare($("#samples"));
 
@@ -67,30 +84,86 @@
       });
     });
 
-    // Trình phát minh họa
-    var t = 0, timer = null, total = 34, bars = $$("#wave i"), lines = DM.transcriptSample;
-    function tick() {
-      t += 0.25;
-      if (t > total) { stop(); t = 0; }
-      $("#time").textContent = "00:" + String(Math.floor(t)).padStart(2, "0");
-      var on = Math.floor(t / total * bars.length);
-      bars.forEach(function (b, k) { b.classList.toggle("on", k < on); });
-      var cur = -1; lines.forEach(function (l, k) { if (t >= l.t) cur = k; });
-      $$("#transcript p").forEach(function (p, k) {
-        var is = k === cur; p.classList.toggle("is-current", is);
-        if (is && timer) { var box = $("#transcript"); box.scrollTop = p.offsetTop - box.offsetTop - 20; }
+    // Trình phát: đọc lần lượt từng câu, tô sáng câu đang đọc; không có giọng tiếng Việt thì phát mô phỏng theo thời gian
+    var synth = window.speechSynthesis, current = null;
+    var viVoices = function () { return synth ? synth.getVoices().filter(function (v) { return /^vi(-|_|$)/i.test(v.lang); }) : []; };
+    if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", function () { /* danh sách giọng tải chậm trên một số trình duyệt */ });
+    $$("[data-audio]").forEach(function (art) {
+      var a = audioList[+art.dataset.audio], btn = $(".ap-play", art), bars = $$(".wave i", art), timeEl = $(".ap-time", art), note = $(".ap-note", art);
+      var ps = $$(".transcript p[data-k]", art), box = $(".transcript", art), idx = 0, playing = false, timer = null, utter = null;
+      var paint = function (i) {
+        ps.forEach(function (p, k) { p.classList.toggle("is-current", k === i); });
+        if (ps[i]) box.scrollTop = ps[i].offsetTop - box.offsetTop - 20;
+        var on = Math.round((i + 1) / a.lines.length * bars.length);
+        bars.forEach(function (bb, k) { bb.classList.toggle("on", k < on); });
+        timeEl.textContent = (i + 1) + "/" + a.lines.length;
+      };
+      var setBtn = function () { btn.innerHTML = playing ? DM.icon.pause : DM.icon.play; btn.setAttribute("aria-label", playing ? "Tạm dừng" : "Phát"); };
+      var stop = function (reset) {
+        playing = false; clearTimeout(timer);
+        if (synth && current === api) synth.cancel();
+        if (reset) { idx = 0; ps.forEach(function (p) { p.classList.remove("is-current"); }); bars.forEach(function (bb) { bb.classList.remove("on"); }); timeEl.textContent = a.lines.length + " câu"; }
+        setBtn();
+      };
+      var next = function () { if (!playing) return; idx++; if (idx >= a.lines.length) return stop(true); speak(); };
+      var speak = function () {
+        var l = a.lines[idx], vs = viVoices();
+        paint(idx);
+        if (synth && vs.length) {
+          note.textContent = "🔊 Đang đọc bằng giọng tiếng Việt của thiết bị (" + vs.length + " giọng). Nhân vật, nội dung là giả định.";
+          utter = new SpeechSynthesisUtterance(strip(l.say || l.text));
+          utter.lang = "vi-VN";
+          utter.voice = vs[(l.v || 0) % vs.length];
+          utter.pitch = [1, 0.8, 1.25][(l.v || 0) % 3];
+          utter.rate = 1;
+          utter.onend = function () { if (utter && utter._me === idx) timer = setTimeout(next, 250); };
+          utter._me = idx;
+          synth.cancel();
+          synth.speak(utter);
+        } else {
+          note.textContent = "🔈 Thiết bị chưa có giọng đọc tiếng Việt - đang phát mô phỏng theo thời gian. Có thể nghe tiếng trên Microsoft Edge hoặc điện thoại iPhone, Android.";
+          timer = setTimeout(next, Math.max(2200, strip(l.say || l.text).length * 55));
+        }
+      };
+      var api = { stop: stop };
+      if (a.audio) {
+        // Có tệp ghi âm thật: phát tệp, tô sáng câu theo thời gian
+        var el = new Audio(a.audio);
+        el.preload = "none";
+        note.textContent = "🔊 Bản ghi âm minh họa. Nhân vật, nội dung là giả định.";
+        var lineAt = function (t) { var k = 0; a.lines.forEach(function (l, j) { if (t >= (l.t || 0)) k = j; }); return k; };
+        el.addEventListener("timeupdate", function () { var k = lineAt(el.currentTime); if (k !== idx) { idx = k; paint(k); } });
+        el.addEventListener("ended", function () { stop(true); });
+        el.addEventListener("error", function () { note.textContent = "Không tải được tệp âm thanh."; stop(true); });
+        api.stop = stop = function (reset) { playing = false; el.pause(); if (reset) { el.currentTime = 0; idx = 0; ps.forEach(function (p) { p.classList.remove("is-current"); }); } setBtn(); };
+        btn.addEventListener("click", function () {
+          if (playing) return stop(false);
+          if (current && current !== api) current.stop(true);
+          current = api; playing = true; setBtn(); el.play().catch(function () { stop(false); });
+        });
+        ps.forEach(function (p) {
+          p.style.cursor = "pointer";
+          p.addEventListener("click", function () {
+            if (current && current !== api) current.stop(true);
+            current = api; el.currentTime = a.lines[+p.dataset.k].t || 0; playing = true; setBtn(); el.play().catch(function () { stop(false); });
+          });
+        });
+        return;
+      }
+      btn.addEventListener("click", function () {
+        if (playing) return stop(false);
+        if (current && current !== api) current.stop(true);
+        current = api; playing = true; setBtn(); speak();
       });
-    }
-    function stop() { clearInterval(timer); timer = null; $("#play").innerHTML = DM.icon.play; $("#play").setAttribute("aria-label", "Phát"); }
-    $("#play").addEventListener("click", function () {
-      if (timer) return stop();
-      timer = setInterval(tick, 250);
-      this.innerHTML = DM.icon.pause; this.setAttribute("aria-label", "Tạm dừng");
+      ps.forEach(function (p) {
+        p.style.cursor = "pointer";
+        p.addEventListener("click", function () {
+          if (current && current !== api) current.stop(true);
+          current = api; idx = +p.dataset.k; playing = true; setBtn(); speak();
+        });
+      });
     });
-    $$("#transcript p").forEach(function (p) {
-      p.style.cursor = "pointer";
-      p.addEventListener("click", function () { t = lines[+p.dataset.k].t; tick(); });
-    });
+    window.addEventListener("pagehide", function () { if (synth) synth.cancel(); });
   })();
   </script>
 </body>

@@ -1,6 +1,6 @@
 /* =========================================================
    Đánh máy 247 - Dữ liệu dùng chung (giá, dịch vụ, nội dung)
-   Chỉnh sửa giá / nội dung tại đây, toàn bộ trang sẽ tự cập nhật.
+   Chỉnh sửa giá/nội dung tại đây, toàn bộ trang sẽ tự cập nhật.
    ========================================================= */
 window.DM = window.DM || {};
 
@@ -51,7 +51,7 @@ DM.prices = {
       { key: "excel-word", label: "Excel sang Word", k: 1.05 },
       { key: "word-excel", label: "Word sang Excel", k: 1.1 },
       { key: "survey-word", label: "Phiếu khảo sát sang Word/Excel", k: 1.1 },
-      { key: "equation", label: "Công thức toán / hóa học", k: 1.5 },
+      { key: "equation", label: "Công thức toán/hóa học", k: 1.5 },
       { key: "latex", label: "Đánh máy LaTeX", k: 1.6 },
       { key: "png-html", label: "Ảnh sang HTML", k: 1.4 }
     ],
@@ -60,13 +60,13 @@ DM.prices = {
       { key: "edit", label: "Tôi cần <b>biên tập, hiệu đính</b>", pct: 20, tip: "Biên tập viên rà soát chính tả, ngữ pháp, diễn đạt và tính nhất quán của văn bản." }
     ]
   },
-  transcription: { // đơn giá / phút
+  transcription: { // đơn giá/phút
     unit: "phút",
     base: { "6h": 35000, "12h": 28000, "24h": 25000, "48h": 24000, "3d": 22000, "5d": 20000, "7d": 18000, "10d": 17000 },
     types: [
       { key: "audio-text", label: "Âm thanh sang văn bản", k: 1 },
       { key: "video-text", label: "Video sang văn bản", k: 1 },
-      { key: "interview", label: "Phỏng vấn / Hội thảo / Tọa đàm", k: 1.1 },
+      { key: "interview", label: "Phỏng vấn/Hội thảo/Tọa đàm", k: 1.1 },
       { key: "subtitle", label: "Làm phụ đề (SRT) cho video", k: 1.2 }
     ],
     speakers: [
@@ -86,7 +86,7 @@ DM.prices = {
   }
 };
 
-DM.docTypes = ["Chung", "Học thuật / Luận văn", "Pháp lý / Hợp đồng", "Y tế", "Kinh doanh / Tài chính", "Kỹ thuật / CNTT", "Sách / Bản thảo", "Thư từ / Ghi chú cá nhân"];
+DM.docTypes = ["Chung", "Học thuật/Luận văn", "Pháp lý/Hợp đồng", "Y tế", "Kinh doanh/Tài chính", "Kỹ thuật/CNTT", "Sách/Bản thảo", "Thư từ/Ghi chú cá nhân"];
 
 /* ---------- Tính giá ---------- */
 DM.calcPrice = function (o) {
@@ -134,7 +134,7 @@ DM.services = {
   "anh-sang-word": { title: "Chuyển ảnh (PNG/JPEG) sang Word", service: "retyping", type: "img-word", icon: ["IMG", "#6c8cff"],
     intro: "Ảnh chụp điện thoại, ảnh màn hình, ảnh tài liệu cũ - chúng tôi chuyển tất cả thành văn bản Word sạch đẹp, dễ chỉnh sửa.",
     points: ["Nhận ảnh nghiêng, thiếu sáng, độ phân giải thấp", "Gộp nhiều ảnh thành một tài liệu thống nhất", "Giữ bảng biểu, danh sách, tiêu đề", "Bảo mật tuyệt đối hình ảnh của bạn"] },
-  "word-sang-excel": { title: "Chuyển Word / PDF sang Excel", service: "retyping", type: "word-excel", icon: ["XLS", "#1d7a45"],
+  "word-sang-excel": { title: "Chuyển Word/PDF sang Excel", service: "retyping", type: "word-excel", icon: ["XLS", "#1d7a45"],
     intro: "Nhập liệu từ văn bản, phiếu in, hóa đơn, danh sách sang bảng tính Excel có cấu trúc, sẵn sàng lọc, sắp xếp và tính toán.",
     points: ["Thiết kế cột, kiểu dữ liệu theo nhu cầu", "Kiểm tra chéo số liệu hai lần", "Có thể thêm công thức, định dạng có điều kiện", "Phù hợp cho kế toán, kho vận, khảo sát"] },
   "danh-may-sach": { title: "Đánh máy sách", service: "retyping", type: "pdf-word", icon: ["📖", "#2d3078"],
@@ -150,7 +150,7 @@ DM.services = {
     intro: "Rà soát chính tả, ngữ pháp, dấu câu, tính mạch lạc và nhất quán thuật ngữ - giúp văn bản của bạn chuyên nghiệp và dễ đọc hơn.",
     points: ["Biên tập viên có chuyên môn theo lĩnh vực", "Theo dõi thay đổi (Track Changes) minh bạch", "Góp ý cấu trúc và cách diễn đạt", "Chuẩn hóa trích dẫn APA, IEEE, Harvard…"] },
   "danh-may-cong-thuc": { title: "Đánh máy công thức, phương trình", service: "retyping", type: "equation", icon: ["∑", "#d03c3f"],
-    intro: "Gõ lại công thức toán, lý, hóa bằng Equation Editor / MathType hoặc LaTeX, chính xác đến từng chỉ số và ký hiệu.",
+    intro: "Gõ lại công thức toán, lý, hóa bằng Equation Editor/MathType hoặc LaTeX, chính xác đến từng chỉ số và ký hiệu.",
     points: ["Hỗ trợ Word Equation, MathType, LaTeX", "Đánh số và tham chiếu phương trình", "Vẽ lại sơ đồ, đồ thị đơn giản", "Phù hợp đề thi, giáo án, bài báo"] },
   "danh-may-hoc-thuat": { title: "Đánh máy tài liệu học thuật", service: "retyping", type: "pdf-word", icon: ["🎓", "#2d3078"],
     intro: "Luận văn, khóa luận, bài giảng, đề cương, tài liệu tham khảo - trình bày đúng quy định của trường và hội đồng.",
@@ -161,7 +161,7 @@ DM.services = {
   "dinh-dang-tai-lieu": { title: "Định dạng tài liệu", service: "retyping", type: "pdf-word", extras: ["format"], icon: ["¶", "#f24d50"],
     intro: "Chuẩn hóa font chữ, lề, giãn dòng, tiêu đề, mục lục, đầu/chân trang… để tài liệu trông chuyên nghiệp và nhất quán.",
     points: ["Áp dụng Styles để dễ chỉnh sửa về sau", "Mục lục, đánh số trang, ngắt phần tự động", "Chuẩn bị bản in hoặc bản PDF xuất bản", "Theo template thương hiệu của bạn"] },
-  "anh-sang-html": { title: "Chuyển ảnh / PDF sang HTML", service: "retyping", type: "png-html", icon: ["</>", "#141a27"],
+  "anh-sang-html": { title: "Chuyển ảnh/PDF sang HTML", service: "retyping", type: "png-html", icon: ["</>", "#141a27"],
     intro: "Chuyển nội dung từ ảnh hoặc PDF thành trang HTML sạch, chuẩn ngữ nghĩa, sẵn sàng đưa lên website hoặc hệ thống CMS.",
     points: ["HTML5 ngữ nghĩa, dễ truy cập", "Bảng, danh sách, tiêu đề đúng cấp", "Không chèn mã rác, inline style", "Có thể xuất XML/Markdown"] },
   "wav-sang-van-ban": { title: "Chuyển WAV sang văn bản", service: "transcription", type: "audio-text", icon: ["WAV", "#6c8cff"],
@@ -277,6 +277,44 @@ DM.samples = [
     desc: "Học bạ cũ chữ viết tay, có dấu đỏ và chữ ký - gõ nguyên văn, ghi chú vị trí dấu, chữ ký.",
     before: '<div class="doc-hand"><h6>Học bạ THCS - Lớp 9</h6><p>Họ tên: Nguyễn Hoàng Bảo Ng<span class="strike">ọ</span>c</p><p>Ngày sinh: 14/3/2010 &nbsp; Nơi sinh: Q. Hải Châu</p><table><tr><td>Toán</td><td>8,7</td><td>Ngữ văn</td><td>8,2</td></tr><tr><td>Tiếng Anh</td><td>9,4</td><td>Vật lí</td><td>8,0</td></tr></table><p>Xếp loại: Học lực Giỏi - Hạnh kiểm Tốt</p><p style="text-align:right">Hiệu trưởng (ký, đóng dấu)</p></div>',
     after: '<div class="doc-typed"><h6>Học bạ trung học cơ sở - Lớp 9</h6><p><b>Họ và tên:</b> Nguyễn Hoàng Bảo Ngọc &nbsp; <b>Ngày sinh:</b> 14/03/2010</p><p><b>Nơi sinh:</b> Quận Hải Châu</p><table><tr><th>Môn học</th><th>Điểm TB cả năm</th><th>Môn học</th><th>Điểm TB cả năm</th></tr><tr><td>Toán</td><td>8,7</td><td>Ngữ văn</td><td>8,2</td></tr><tr><td>Tiếng Anh</td><td>9,4</td><td>Vật lí</td><td>8,0</td></tr></table><p><b>Xếp loại:</b> Học lực: Giỏi - Hạnh kiểm: Tốt</p><p style="text-align:right"><b>HIỆU TRƯỞNG</b><br>[Chữ ký] [Dấu tròn đỏ của trường]</p><p style="font-size:11.5px;color:#666">Bản gõ giữ nguyên văn, sẵn sàng gửi đơn vị dịch thuật. Thông tin cá nhân trong mẫu là giả định.</p></div>'
+  }
+];
+
+/* ---------- Mẫu chuyển âm có tiếng (đọc bằng giọng tiếng Việt của trình duyệt; nhân vật, nội dung giả định) ----------
+   say: câu nói thực tế (văn nói, đọc thành tiếng) · text: bản chuyển âm đã biên tập · sp: người nói · v: giọng (0, 1, 2) */
+DM.audioSamples = [
+  {
+    title: "Cuộc họp nhóm dự án (3 người) → biên bản", tags: ["Họp trực tuyến", "3 người nói", "Mốc thời gian"],
+    desc: "Ghi âm họp trực tuyến: phân biệt từng người nói, lược từ đệm, giữ nguyên số liệu và hạn chót.",
+    lines: [
+      { ts: "00:00:03", sp: "Chị Lan (trưởng nhóm)", v: 0, say: "Rồi, mình bắt đầu nhé. Hôm nay mình chốt tiến độ tuần này với kế hoạch tuần sau.", text: "Mình bắt đầu nhé. Hôm nay chúng ta chốt tiến độ tuần này và kế hoạch tuần sau." },
+      { ts: "00:00:09", sp: "Anh Minh", v: 1, say: "Dạ, phần khảo sát em xong được một trăm tám mươi phiếu rồi, còn khoảng hai mươi phiếu nữa thôi chị.", text: "Phần khảo sát em đã xong 180 phiếu, còn khoảng 20 phiếu nữa." },
+      { ts: "00:00:17", sp: "Chị Thảo", v: 2, say: "Bên em nhập liệu Excel tới đâu thì gửi tới đó, thứ năm này em gửi bản tổng hợp đầu tiên.", text: "Bên em nhập liệu Excel đến đâu gửi đến đó; thứ Năm này em gửi bản tổng hợp đầu tiên." },
+      { ts: "00:00:25", sp: "Chị Lan (trưởng nhóm)", v: 0, say: "Ok, vậy hạn cuối là thứ sáu ngày hai mươi bốn nhé. Minh nhớ gửi danh sách phiếu thiếu thông tin.", text: "Vậy hạn cuối là thứ Sáu, ngày 24. Minh nhớ gửi danh sách phiếu thiếu thông tin." },
+      { ts: "00:00:33", sp: "Anh Minh", v: 1, say: "Dạ, chiều nay em gửi luôn ạ.", text: "Dạ, chiều nay em gửi ạ." }
+    ],
+    after: "<b>Biên bản tóm tắt kèm theo:</b> Khảo sát: 180/200 phiếu (Minh) · Bản tổng hợp Excel đầu tiên: thứ Năm (Thảo) · Hạn cuối: thứ Sáu, 24 · Việc cần làm: Minh gửi danh sách phiếu thiếu thông tin trong chiều nay."
+  },
+  {
+    title: "Bài giảng Vật lý → văn bản có công thức", tags: ["Bài giảng", "Công thức", "1 người nói"],
+    desc: "Giảng viên đọc công thức bằng lời; bản chuyển âm viết lại đúng ký hiệu, chỉ số, đơn vị SI.",
+    lines: [
+      { ts: "00:00:02", sp: "Giảng viên", v: 1, say: "Hôm nay mình học về động năng. Động năng của một vật bằng một phần hai nhân em nhân vê bình phương.", text: "Hôm nay chúng ta học về động năng. Động năng của một vật: <b><i>W</i><sub>đ</sub> = ½<i>mv</i><sup>2</sup></b>." },
+      { ts: "00:00:11", sp: "Giảng viên", v: 1, say: "Trong đó em là khối lượng tính bằng ki lô gam, vê là vận tốc tính bằng mét trên giây.", text: "Trong đó <i>m</i> là khối lượng (kg), <i>v</i> là vận tốc (m/s)." },
+      { ts: "00:00:18", sp: "Giảng viên", v: 1, say: "Ví dụ một ô tô một nghìn hai trăm ki lô gam chạy hai mươi mét trên giây thì động năng bằng hai trăm bốn mươi nghìn jun.", text: "Ví dụ: ô tô <i>m</i> = 1 200 kg, <i>v</i> = 20 m/s ⇒ <i>W</i><sub>đ</sub> = ½ · 1 200 · 20<sup>2</sup> = 240 000 J = 240 kJ." },
+      { ts: "00:00:29", sp: "Giảng viên", v: 1, say: "Các em lưu ý vận tốc tăng gấp đôi thì động năng tăng gấp bốn lần.", text: "Lưu ý: vận tốc tăng gấp đôi thì động năng tăng gấp bốn lần (<i>W</i><sub>đ</sub> ~ <i>v</i><sup>2</sup>)." }
+    ]
+  },
+  {
+    title: "Video hướng dẫn → phụ đề SRT", tags: ["Phụ đề SRT", "YouTube/TikTok", "2 người nói"],
+    desc: "Video ngắn dạy dùng Word: chép lời, ngắt dòng theo cụm nghĩa, căn thời gian, xuất tệp .srt.",
+    srt: true,
+    lines: [
+      { ts: "00:00:01,200 --> 00:00:04,300", sp: "Người dẫn", v: 0, say: "Xin chào các bạn, hôm nay mình hướng dẫn tạo mục lục tự động trong Word.", text: "Xin chào các bạn, hôm nay mình hướng dẫn<br>tạo mục lục tự động trong Word." },
+      { ts: "00:00:04,600 --> 00:00:08,100", sp: "Người dẫn", v: 0, say: "Đầu tiên, bôi đen tiêu đề chương và chọn kiểu Heading một.", text: "Đầu tiên, bôi đen tiêu đề chương<br>và chọn kiểu Heading 1." },
+      { ts: "00:00:08,400 --> 00:00:11,500", sp: "Khách mời", v: 1, say: "Còn mục nhỏ hơn thì mình chọn Heading hai đúng không anh?", text: "Còn mục nhỏ hơn thì mình chọn<br>Heading 2 đúng không anh?" },
+      { ts: "00:00:11,800 --> 00:00:15,000", sp: "Người dẫn", v: 0, say: "Đúng rồi. Cuối cùng vào References, chọn Table of Contents là xong.", text: "Đúng rồi. Cuối cùng vào References,<br>chọn Table of Contents là xong." }
+    ]
   }
 ];
 

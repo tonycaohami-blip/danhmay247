@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng ký đối tác cửa hàng photocopy - Đánh máy 247</title>
+  <meta name="description" content="Đăng ký miễn phí chương trình đối tác Đánh máy 247 dành cho cửa hàng photocopy, văn phòng phẩm, cộng tác viên: nhận mã QR giới thiệu, hoa hồng 30% mỗi đơn hoàn thành.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .reg-wrap { display: grid; grid-template-columns: 1fr 340px; gap: 32px; align-items: start; max-width: 1120px; margin: 0 auto; }
+    .reg { max-width: 820px; margin: 0 auto; }
+    .reg h3 { font: 400 20px var(--serif); margin: 18px 0 10px; color: #000; }
+    .terms { font-size: 14.5px; }
+    .terms li { margin-bottom: 8px; }
+    .reg-side { position: sticky; top: calc(var(--header-h) + 20px); background: linear-gradient(135deg, #2d3078, #4a4fb0); color: #e7e8f6; border-radius: 18px; padding: 26px; }
+    .reg-side b.big { display: block; font: 800 46px var(--sans); color: #fff; line-height: 1; margin: 6px 0 4px; }
+    .reg-side ul { padding-left: 20px; margin: 16px 0 0; line-height: 1.8; font-size: 15px; }
+    .reg-steps { counter-reset: s; list-style: none; padding: 0; margin: 18px 0 0; font-size: 14.5px; }
+    .reg-steps li { counter-increment: s; position: relative; padding-left: 34px; margin-bottom: 10px; }
+    .reg-steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--red); color: #fff; font: 700 13px/24px var(--sans); text-align: center; }
+    @media (max-width: 900px) { .reg-wrap { grid-template-columns: 1fr; } .reg-side { position: static; order: -1; } }
+  </style>
+</head>
+<body data-header="grey">
+  <div id="site-header"></div>
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Trang chủ</a><span>/</span><a href="/doi-tac">Đối tác</a><span>/</span><span aria-current="page">Đăng ký</span></nav>
+        <h1>Đăng ký đối tác Đánh máy 247</h1>
+        <p>Dành cho cửa hàng photocopy, in ấn, văn phòng phẩm, giáo viên, cộng tác viên. Miễn phí, không cần vốn, không cần người gõ.</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container reg-wrap">
+        <div class="order-card" style="margin:0">
+          <h2 class="order-card__title">Thông tin đăng ký</h2>
+          <p style="color:var(--muted);margin-top:-10px">Đã có tài khoản? <a href="/doi-tac-tai-khoan" style="color:var(--red)">Đăng nhập</a></p>
+          <form id="reg" novalidate>
+            <div id="reg-msg" aria-live="polite"></div>
+            <h3>Thông tin cửa hàng</h3>
+            <div class="order-row">
+              <div class="field"><label class="field__label" for="r-shop">Tên cửa hàng/đơn vị <span class="req">*</span></label><input class="input" id="r-shop" required maxlength="150" placeholder="VD: Photocopy Minh Anh"><div class="field__error"></div></div>
+              <div class="field"><label class="field__label" for="r-name">Người liên hệ <span class="req">*</span></label><input class="input" id="r-name" required maxlength="100" autocomplete="name"><div class="field__error"></div></div>
+              <div class="field"><label class="field__label" for="r-phone">Số điện thoại/Zalo <span class="req">*</span></label><input class="input" id="r-phone" type="tel" required maxlength="20" autocomplete="tel" data-pattern="^\+?[0-9 .\-]{8,20}$" data-pattern-msg="Số điện thoại không hợp lệ."><div class="field__error"></div></div>
+              <div class="field"><label class="field__label" for="r-email">Email (dùng để đăng nhập) <span class="req">*</span></label><input class="input" id="r-email" type="email" required maxlength="160" autocomplete="email"><div class="field__error"></div></div>
+              <div class="field"><label class="field__label" for="r-address">Địa chỉ cửa hàng</label><input class="input" id="r-address" maxlength="255" autocomplete="street-address"><div class="field__error"></div></div>
+              <div class="field"><label class="field__label" for="r-city">Tỉnh/thành phố</label><select class="select" id="r-city"></select></div>
+            </div>
+            <h3>Tài khoản nhận hoa hồng</h3>
+            <div class="order-row">
+              <div class="field"><label class="field__label" for="r-bank">Ngân hàng</label><input class="input" id="r-bank" maxlength="120" placeholder="VD: Vietcombank"><div class="field__error"></div></div>
+              <div class="field"><label class="field__label" for="r-acc">Số tài khoản</label><input class="input" id="r-acc" maxlength="40" inputmode="numeric"><div class="field__error"></div></div>
+              <div class="field"><label class="field__label" for="r-holder">Chủ tài khoản</label><input class="input" id="r-holder" maxlength="100" placeholder="VIẾT HOA KHÔNG DẤU"><div class="field__error"></div></div>
+              <div class="field"><label class="field__label" for="r-pass">Mật khẩu đăng nhập <span class="req">*</span></label><div class="password"><input class="input" id="r-pass" type="password" required minlength="8" autocomplete="new-password"><button type="button" class="password__eye" aria-label="Hiện mật khẩu"></button></div><div class="field__error"></div></div>
+            </div>
+            <p class="field__hint">Có thể bổ sung tài khoản ngân hàng sau trong trang đối tác.</p>
+            <div class="field"><label class="check"><input type="checkbox" id="r-agree" required><span class="check__box"></span><span>Tôi đồng ý với <button type="button" class="link" id="terms-open">điều khoản chương trình đối tác</button></span></label><div class="field__error"></div></div>
+            <button class="button" type="submit">Đăng ký đối tác</button>
+          </form>
+        </div>
+        <aside class="reg-side">
+          <small>Hoa hồng mỗi đơn hoàn thành</small>
+          <b class="big" id="rate-a">30%</b>
+          <small>giá trị đơn khách thanh toán</small>
+          <ol class="reg-steps">
+            <li>Gửi đăng ký (2 phút)</li>
+            <li>Chờ duyệt trong 24 giờ làm việc</li>
+            <li>In poster mã QR dán tại quầy</li>
+            <li>Nhận hoa hồng hằng tháng</li>
+          </ol>
+          <ul>
+            <li>Không thu hộ tiền của khách</li>
+            <li>Theo dõi từng đơn, từng khoản hoa hồng</li>
+            <li>Thông tin khách được bảo mật</li>
+          </ul>
+          <p style="margin:16px 0 0;font-size:14px">Cần hỗ trợ? Gọi <a id="aff-phone" style="color:#fff;text-decoration:underline"></a></p>
+        </aside>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+  (function () {
+    var $ = DM.$, P = DM.affiliate, pct = Math.round(P.rate * 100) + "%";
+    $("#rate-a").textContent = pct;
+    $("#aff-phone").textContent = DM.site.phone; $("#aff-phone").href = "tel:" + DM.site.phoneHref;
+    $("#r-city").innerHTML = '<option value="">- Chọn -</option>' + DM.cities.map(function (c) { return "<option>" + DM.esc(c) + "</option>"; }).join("");
+    var eye = $(".password__eye"); eye.innerHTML = DM.icon.eye; DM.bindEye(eye);
+
+    $("#terms-open").addEventListener("click", function () {
+      DM.modal.open('<h2 class="modal__title">Điều khoản chương trình đối tác</h2><ol class="terms">' +
+        "<li>Hoa hồng bằng <b>" + pct + "</b> giá trị đơn hàng (số tiền khách thanh toán) đối với đơn do khách bạn giới thiệu đặt và đã <b>hoàn thành</b>. Đơn hủy, hoàn tiền không tính hoa hồng.</li>" +
+        "<li>Khách được ghi nhận cho bạn khi quét mã QR/bấm liên kết giới thiệu (trong " + P.cookieDays + " ngày, lần bấm gần nhất được tính) hoặc tự nhập mã giới thiệu khi đặt hàng.</li>" +
+        "<li>Không tính hoa hồng cho đơn do chính đối tác đặt (cùng email hoặc số điện thoại).</li>" +
+        "<li>Chi trả bằng chuyển khoản vào ngày " + P.payoutDay + " hằng tháng khi số dư hoa hồng đã duyệt từ " + DM.fmt(P.minPayout) + ". Đối tác tự chịu trách nhiệm kê khai nghĩa vụ thuế thu nhập theo quy định.</li>" +
+        "<li>Không quảng cáo sai sự thật, không gửi tin nhắn rác, không giả danh Đánh máy 247. Không thu thêm tiền của khách dưới danh nghĩa Đánh máy 247.</li>" +
+        "<li>Đánh máy 247 có quyền khóa tài khoản và không chi trả hoa hồng phát sinh từ hành vi gian lận (tự tạo đơn ảo, đơn hủy hàng loạt…).</li>" +
+        "<li>Đối tác không được tiếp cận thông tin cá nhân của khách; trang đối tác chỉ hiển thị mã đơn, dịch vụ, giá trị và hoa hồng.</li>" +
+        "<li>Điều khoản có thể được điều chỉnh; thay đổi sẽ được thông báo qua email trước khi áp dụng.</li></ol>");
+    });
+
+
+    $("#reg").addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!DM.validate(this)) return;
+      var btn = $("button[type=submit]", this); btn.disabled = true;
+      DM.api("/aff/register", { body: {
+        shop: $("#r-shop").value.trim(), name: $("#r-name").value.trim(), phone: $("#r-phone").value.trim(), email: $("#r-email").value.trim(),
+        address: $("#r-address").value.trim(), city: $("#r-city").value, bankName: $("#r-bank").value.trim(), bankAccount: $("#r-acc").value.trim(),
+        bankHolder: $("#r-holder").value.trim(), password: $("#r-pass").value, agree: $("#r-agree").checked
+      } }).then(function () { location.href = "/doi-tac-tai-khoan?moi=1"; }, function (er) {
+        btn.disabled = false;
+        $("#reg-msg").innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + (er.status === 409 ? ' <a href="/doi-tac-tai-khoan" style="color:inherit;text-decoration:underline">Đăng nhập</a>' : "") + "</div>";
+        $("#reg-msg").scrollIntoView({ block: "center" });
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

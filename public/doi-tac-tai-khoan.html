@@ -53,7 +53,7 @@
         '<div class="field"><label class="field__label" for="lg-e">Email</label><input class="input" id="lg-e" type="email" required autocomplete="username"><div class="field__error"></div></div>' +
         '<div class="field"><label class="field__label" for="lg-p">Mật khẩu</label><div class="password"><input class="input" id="lg-p" type="password" required autocomplete="current-password"><button type="button" class="password__eye" aria-label="Hiện mật khẩu">' + DM.icon.eye + '</button></div><div class="field__error"></div></div>' +
         '<button class="button button--w100" type="submit">Đăng nhập</button></form>' +
-        '<p class="field__hint" style="margin-top:14px">Chưa có tài khoản? <a href="/doi-tac#dang-ky" style="color:var(--red)">Đăng ký đối tác miễn phí</a>. Quên mật khẩu? Gọi ' + DM.esc(DM.site.phone) + ".</p></div>";
+        '<p class="field__hint" style="margin-top:14px">Chưa có tài khoản? <a href="/dang-ky-doi-tac" style="color:var(--red)">Đăng ký đối tác miễn phí</a>. Quên mật khẩu? Gọi ' + DM.esc(DM.site.phone) + ".</p></div>";
       DM.bindEye($(".password__eye"));
       $("#lg").addEventListener("submit", function (e) {
         e.preventDefault(); if (!DM.validate(this)) return;
@@ -84,7 +84,7 @@
         (me.status === "pending" ? '<div class="alert alert--info"><b>Tài khoản đang chờ duyệt.</b> Mã giới thiệu sẽ hoạt động sau khi được duyệt - bạn có thể chuẩn bị poster QR trước.</div>' : "") +
         (!me.bank.account ? '<div class="alert alert--info">Bạn chưa khai báo tài khoản ngân hàng nhận hoa hồng. <button type="button" class="link" data-go="account">Bổ sung ngay</button></div>' : "") +
         '<div class="kpis">' +
-        '<div class="kpi"><small>Lượt quét / bấm liên kết</small><b>' + s.clicks + "</b></div>" +
+        '<div class="kpi"><small>Lượt quét/bấm liên kết</small><b>' + s.clicks + "</b></div>" +
         '<div class="kpi"><small>Đơn giới thiệu (hoàn thành)</small><b>' + s.orders + " (" + s.done + ")</b></div>" +
         '<div class="kpi"><small>Hoa hồng đang chờ</small><b>' + DM.fmt(s.waiting + s.processing) + "</b></div>" +
         '<div class="kpi hl"><small>Đã duyệt - chờ chi trả</small><b>' + DM.fmt(s.approved) + "</b></div></div>" +
@@ -131,7 +131,7 @@
         "img{width:95mm;height:95mm;margin:8px auto}.c{font:800 30px 'Courier New',monospace;letter-spacing:4px;background:#f3f4f9;border-radius:12px;padding:8px 20px;display:inline-block}" +
         ".f{font-size:16px;color:#555}.logo{font:700 28px Georgia,serif}.logo span{color:#f24d50}</style></head><body><div class=\"b\">" +
         '<div><div class="logo"><span>ĐÁNH MÁY</span> 247</div><h1>ĐÁNH MÁY THUÊ<br><span>NHANH - CHÍNH XÁC</span></h1><p class="s">Quét mã để gửi tài liệu và nhận báo giá ngay</p></div>' +
-        '<div class="l">✔ Viết tay, ảnh chụp, PDF scan → Word / Excel<br>✔ Gõ đề thi, công thức Toán - Lý - Hóa, LaTeX<br>✔ Định dạng luận văn, báo cáo<br>✔ Chuyển ghi âm, video thành văn bản<br>✔ Giao từ 6 giờ · Người thật đánh máy</div>' +
+        '<div class="l">✔ Viết tay, ảnh chụp, PDF scan → Word/Excel<br>✔ Gõ đề thi, công thức Toán - Lý - Hóa, LaTeX<br>✔ Định dạng luận văn, báo cáo<br>✔ Chuyển ghi âm, video thành văn bản<br>✔ Giao từ 6 giờ · Người thật đánh máy</div>' +
         '<div><img src="/api/aff/qr.svg" alt="QR"><br><div class="c">' + esc(me.code) + '</div><p class="f">Hoặc vào <b>' + esc(location.host) + "</b> và nhập mã giới thiệu <b>" + esc(me.code) + "</b> khi đặt hàng</p></div>" +
         '<p class="f">' + esc(me.shop) + (me.address ? " · " + esc(me.address) : "") + " · Hotline Đánh máy 247: " + esc(DM.site.phone) + "</p></div>" +
         "<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script></body></html>");
@@ -172,7 +172,7 @@
       $("#pane").innerHTML = '<div class="order-card"><h2 class="order-card__title">Thông tin đối tác</h2><form id="pf" novalidate><div class="order-row">' +
         f("a-shop", "Tên cửa hàng", me.shop, " required maxlength=\"150\"") + f("a-name", "Người liên hệ", me.name, " required maxlength=\"100\"") +
         f("a-phone", "Số điện thoại", me.phone, ' required data-pattern="^\\+?[0-9 .\\-]{8,20}$" data-pattern-msg="Số điện thoại không hợp lệ."') + f("a-email", "Email đăng nhập", me.email, " disabled") +
-        f("a-address", "Địa chỉ", me.address, ' maxlength="255"') + f("a-city", "Tỉnh / thành phố", me.city, ' maxlength="80"') +
+        f("a-address", "Địa chỉ", me.address, ' maxlength="255"') + f("a-city", "Tỉnh/thành phố", me.city, ' maxlength="80"') +
         f("a-bank", "Ngân hàng", me.bank.bankName, ' maxlength="120"') + f("a-acc", "Số tài khoản", me.bank.account, ' maxlength="40" inputmode="numeric"') +
         f("a-holder", "Chủ tài khoản", me.bank.holder, ' maxlength="100"') + "</div>" +
         '<button class="button button--sm" type="submit">Lưu thông tin</button></form></div>' +

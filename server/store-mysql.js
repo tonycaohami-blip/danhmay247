@@ -1,5 +1,5 @@
 /**
- * Lưu trữ MySQL / MariaDB cho Đánh máy 247.
+ * Lưu trữ MySQL/MariaDB cho Đánh máy 247.
  *
  * - Tự tạo bảng khi khởi động (CREATE TABLE IF NOT EXISTS), bảng mã utf8mb4 (tiếng Việt, emoji)
  * - Mọi thời gian lưu dạng DATETIME giờ Việt Nam (+07:00) để xem dễ trong phpMyAdmin

@@ -129,7 +129,7 @@ module.exports = {
       </table>${btn(SITE_URL + "/nhan-vien?order=" + encodeURIComponent(o.id), "Mở đơn hàng")}`);
   },
 
-  /** Nhân viên gửi ghi chú / gửi kiểm tra → báo quản trị. */
+  /** Nhân viên gửi ghi chú/gửi kiểm tra → báo quản trị. */
   staffUpdate(o, st, text) {
     send(ADMIN_EMAIL, `[Nhân viên] ${st.name} - đơn #${o.id}`, "Cập nhật từ nhân viên",
       `<p><b>${esc(st.name)}</b> cập nhật đơn <b>#${esc(o.id)}</b>:</p>

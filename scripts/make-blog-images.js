@@ -497,7 +497,125 @@ const covers = {
     ${pill(90, 490, 240, "Không cần vốn", GREEN)}${pill(350, 490, 260, "Mã QR in sẵn", NAVY)}
     ${card(800, 140, 300, 400)}${qrish(860, 230, 180)}
     ${txt(950, 200, "Quét để đặt hàng", { size: 20, weight: 700, anchor: "middle" })}
-    ${txt(950, 460, "MINHAN482", { size: 28, weight: 800, anchor: "middle", family: "Courier New,monospace", fill: NAVY })}`)
+    ${txt(950, 460, "MINHAN482", { size: 28, weight: 800, anchor: "middle", family: "Courier New,monospace", fill: NAVY })}`),
+
+  // Đợt 4: AI, họp online, CV, dữ liệu cá nhân, công thức, dịch thuật, bàn phím, podcast
+  "ai-va-liem-chinh-hoc-thuat": svg("#37474f", "#607d8b", `
+    ${paper(170, 110, 330, 430, { lines: 10 })}
+    <g filter="url(#sh)" transform="translate(560 180)"><rect width="200" height="200" rx="36" fill="#fff"/>${txt(100, 128, "AI", { size: 80, weight: 800, anchor: "middle", fill: "#5a3fd0" })}</g>
+    <g filter="url(#sh)" transform="translate(940 320)"><path d="M0 -150 L130 -100 V10 C130 100 70 140 0 170 C-70 140 -130 100 -130 10 V-100 Z" fill="#fff"/>
+      <path d="M-50 10 l35 35 l70 -80" fill="none" stroke="${GREEN}" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <rect x="210" y="300" width="240" height="14" rx="7" fill="${AMBER}" opacity=".6"/>
+    ${pill(560, 420, 200, "Liêm chính", RED)}`),
+  "bien-ban-hop-online": svg("#1565c0", "#42a5f5", `
+    ${card(140, 110, 560, 380, "#0b0d24")}
+    ${[0, 1, 2, 3].map((i) => { const x = 160 + (i % 2) * 270, y = 130 + Math.floor(i / 2) * 175; return `<rect x="${x}" y="${y}" width="260" height="165" rx="10" fill="${["#2c3070", "#3c4290", "#33528f", "#2f4a7a"][i]}"/><circle cx="${x + 130}" cy="${y + 70}" r="34" fill="${[AMBER, "#fff", RED, GREEN][i]}" opacity=".9"/><rect x="${x + 85}" y="${y + 115}" width="90" height="12" rx="6" fill="#fff" opacity=".6"/>`; }).join("")}
+    <circle cx="420" cy="510" r="22" fill="${RED}"/><rect x="412" y="500" width="16" height="20" rx="3" fill="#fff"/>
+    ${paper(760, 110, 330, 420, { lines: 9, head: "#ffffff" })}
+    ${txt(925, 165, "BIÊN BẢN HỌP", { size: 20, weight: 800, anchor: "middle" })}
+    ${check(1080, 120, 34)}`),
+  "cv-chuan-ats": svg("#00796b", "#4db6ac", `
+    ${card(170, 90, 380, 470)}
+    <circle cx="240" cy="160" r="38" fill="#cfe9e5"/><rect x="295" y="135" width="210" height="18" rx="9" fill="${INK}"/><rect x="295" y="165" width="150" height="12" rx="6" fill="#9cc9c2"/>
+    ${["KINH NGHIỆM", "HỌC VẤN", "KỸ NĂNG"].map((h, i) => txt(210, 250 + i * 105, h, { size: 17, weight: 800, fill: "#00796b" }) + [0, 1].map((k) => `<rect x="210" y="${268 + i * 105 + k * 24}" width="${k ? 220 : 300}" height="11" rx="5.5" fill="#d9dbe6"/>`).join("")).join("")}
+    ${arrow(580, 320, 680)}
+    <g filter="url(#sh)" transform="translate(700 170)"><rect width="300" height="300" rx="24" fill="#fff"/>
+      ${[0, 1, 2, 3, 4].map((i) => `<rect x="40" y="${50 + i * 46}" width="${i % 2 ? 170 : 220}" height="16" rx="8" fill="${i === 2 ? GREEN : "#d9dbe6"}"/>`).join("")}</g>
+    ${pill(740, 500, 220, "ATS đọc tốt", INK)}${check(1030, 170, 40)}`),
+  "bao-ve-du-lieu-ca-nhan-so-hoa": svg("#283593", "#5c6bc0", `
+    ${paper(170, 120, 300, 400, { lines: 9 })}
+    <rect x="210" y="230" width="170" height="16" rx="8" fill="${INK}"/><rect x="210" y="290" width="200" height="16" rx="8" fill="${INK}"/>
+    ${arrow(490, 320, 580)}
+    <g filter="url(#sh)" transform="translate(600 140)"><rect width="260" height="340" rx="20" fill="#fff"/>
+      ${[0, 1, 2, 3, 4, 5].map((i) => `<rect x="30" y="${40 + i * 46}" width="200" height="30" rx="6" fill="${i % 2 ? "#eef0f8" : "#e3e6f6"}"/>`).join("")}</g>
+    <g filter="url(#sh)" transform="translate(980 320)"><rect x="-80" y="-30" width="160" height="130" rx="20" fill="${AMBER}"/><path d="M-50 -30 v-40 a50 50 0 0 1 100 0 v40" fill="none" stroke="${AMBER}" stroke-width="22"/><circle cy="30" r="18" fill="#fff"/><rect x="-6" y="30" width="12" height="38" rx="5" fill="#fff"/></g>`),
+  "cong-thuc-google-docs": svg("#1a73e8", "#4c8df6", `
+    <g filter="url(#sh)"><rect x="300" y="80" width="420" height="480" rx="14" fill="#fff"/><path d="M640 80 h80 l-80 -0 z" fill="#c6dafc"/></g>
+    <rect x="300" y="80" width="420" height="64" rx="14" fill="#e8f0fe"/>
+    ${["Σ", "√", "π", "∫", "α"].map((c, i) => txt(345 + i * 70, 124, c, { size: 30, family: SERIF, anchor: "middle", fill: BLUE })).join("")}
+    ${chem(510, 240, "x = (−b ± √Δ)/2a", { size: 36, italic: true })}
+    ${chem(510, 330, "H_2SO_4 · Fe^{3+}", { size: 38 })}
+    ${[0, 1, 2, 3].map((i) => `<rect x="350" y="${390 + i * 34}" width="${i === 3 ? 180 : 320}" height="12" rx="6" fill="#d9dbe6"/>`).join("")}
+    ${[0, 1, 2].map((i) => `<circle cx="${860 + i * 60}" cy="200" r="34" fill="${[RED, AMBER, GREEN][i]}" stroke="#fff" stroke-width="6"/>`).join("")}
+    ${pill(820, 280, 220, "Soạn cùng nhau", INK)}`),
+  "phuong-trinh-oxi-hoa-khu": svg("#bf360c", "#ff7043", `
+    ${card(150, 120, 900, 390)}
+    ${chem(600, 255, "3Cu + 8HNO_3 → 3Cu(NO_3)_2 + 2NO + 4H_2O", { size: 38 })}
+    <path d="M200 300 H1000" stroke="#eef0f6" stroke-width="3"/>
+    ${chem(450, 370, "Cu^0 → Cu^{+2} + 2e", { size: 34, anchor: "middle" })}${txt(760, 370, "| × 3", { size: 32, weight: 700, fill: NAVY })}
+    ${chem(450, 445, "N^{+5} + 3e → N^{+2}", { size: 34, anchor: "middle" })}${txt(760, 445, "| × 2", { size: 32, weight: 700, fill: NAVY })}
+    ${pill(860, 60, 220, "Thăng bằng e", INK)}`),
+  "bang-bien-thien-word-latex": svg("#4a148c", "#8e24aa", `
+    ${card(180, 110, 840, 400)}
+    <path d="M180 190 H1020 M180 260 H1020 M300 110 V510" stroke="${INK}" stroke-width="3"/>
+    ${txt(240, 165, "x", { size: 34, family: SERIF, italic: true, anchor: "middle" })}${txt(240, 238, "y′", { size: 34, family: SERIF, italic: true, anchor: "middle" })}${txt(240, 400, "y", { size: 34, family: SERIF, italic: true, anchor: "middle" })}
+    ${[["−∞", 350], ["−1", 540], ["1", 760], ["+∞", 970]].map(([t, x]) => txt(x, 165, t, { size: 30, family: SERIF, anchor: "middle" })).join("")}
+    ${[["+", 445], ["0", 540], ["−", 650], ["0", 760], ["+", 865]].map(([t, x]) => txt(x, 238, t, { size: 30, family: SERIF, anchor: "middle", fill: t === "0" ? INK : RED })).join("")}
+    ${txt(540, 300, "2", { size: 30, family: SERIF, anchor: "middle" })}${txt(760, 495, "−2", { size: 30, family: SERIF, anchor: "middle" })}${txt(350, 495, "−∞", { size: 28, family: SERIF, anchor: "middle" })}${txt(970, 300, "+∞", { size: 28, family: SERIF, anchor: "middle" })}
+    <g stroke="${NAVY}" stroke-width="4" fill="none" stroke-linecap="round"><path d="M380 470 L515 310"/><path d="M570 310 L735 470"/><path d="M790 470 L945 310"/></g>
+    <g fill="${NAVY}"><path d="M515 310 l-20 4 l10 14 z"/><path d="M735 470 l-4 -20 l-14 10 z"/><path d="M945 310 l-20 4 l10 14 z"/></g>`),
+  "ky-hieu-hat-nhan-vat-ly": svg("#004d40", "#00897b", `
+    ${card(150, 130, 420, 380)}
+    ${txt(300, 220, "235", { size: 50, weight: 700, family: SERIF, anchor: "end", fill: RED })}${txt(300, 440, "92", { size: 50, weight: 700, family: SERIF, anchor: "end", fill: BLUE })}
+    ${txt(400, 380, "U", { size: 190, family: SERIF, anchor: "middle" })}
+    <g filter="url(#sh)" transform="translate(860 320)"><circle r="150" fill="#fff"/>
+      ${Array.from({ length: 14 }, (_, i) => { const a = i * 2.4, r = 18 + (i % 4) * 16; return `<circle cx="${(Math.cos(a) * r).toFixed(1)}" cy="${(Math.sin(a) * r).toFixed(1)}" r="16" fill="${i % 2 ? RED : BLUE}"/>`; }).join("")}
+      <ellipse rx="130" ry="44" fill="none" stroke="${AMBER}" stroke-width="5" transform="rotate(25)"/><ellipse rx="130" ry="44" fill="none" stroke="${AMBER}" stroke-width="5" transform="rotate(-35)"/></g>
+    ${pill(640, 520, 200, "A ở trên", RED)}${pill(860, 520, 200, "Z ở dưới", BLUE)}`),
+  "dich-hop-dong-anh-viet": svg("#3e2723", "#6d4c41", `
+    ${paper(140, 100, 330, 440, { lines: 10, head: "#ffffff" })}${txt(305, 150, "CONTRACT", { size: 20, weight: 800, anchor: "middle" })}
+    ${paper(560, 100, 330, 440, { lines: 10, head: "#ffffff" })}${txt(725, 150, "HỢP ĐỒNG", { size: 20, weight: 800, anchor: "middle" })}
+    ${arrow(480, 320, 550)}
+    <g filter="url(#sh)" transform="translate(1000 300)"><path d="M0 -120 v240" stroke="#fff" stroke-width="10"/><path d="M-90 -90 h180" stroke="#fff" stroke-width="10"/>
+      <path d="M-90 -90 l-40 90 a40 22 0 0 0 80 0 z M90 -90 l-40 90 a40 22 0 0 0 80 0 z" fill="#fff" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><rect x="-60" y="120" width="120" height="18" rx="9" fill="#fff"/></g>
+    ${pill(900, 470, 200, "shall = phải", AMBER)}`),
+  "ban-dia-hoa-website-phan-mem": svg("#0277bd", "#29b6f6", `
+    <g filter="url(#sh)"><rect x="160" y="110" width="560" height="380" rx="18" fill="#fff"/></g>
+    <rect x="160" y="110" width="560" height="48" rx="18" fill="#e3f2fd"/><circle cx="195" cy="134" r="8" fill="${RED}"/><circle cx="220" cy="134" r="8" fill="${AMBER}"/><circle cx="245" cy="134" r="8" fill="${GREEN}"/>
+    ${txt(200, 225, "Xin chào {name}!", { size: 34, weight: 800 })}
+    ${[0, 1, 2].map((i) => `<rect x="200" y="${260 + i * 34}" width="${i === 2 ? 260 : 440}" height="13" rx="6.5" fill="#d9dbe6"/>`).join("")}
+    ${pill(200, 400, 170, "Đăng nhập", BLUE)}${pill(390, 400, 170, "Giỏ hàng", RED)}
+    <g filter="url(#sh)" transform="translate(950 300)"><circle r="140" fill="#fff"/></g>
+    <g fill="none" stroke="${BLUE}" stroke-width="7" transform="translate(950 300)"><circle r="105"/><ellipse rx="48" ry="105"/><path d="M-105 0 H105 M-90 -50 H90 M-90 50 H90"/></g>
+    ${pill(870, 470, 160, "VI · EN", RED)}`),
+  "go-tieng-trung-han-nhat": svg("#b71c1c", "#e53935", `
+    ${["中", "한", "日", "あ", "文", "글"].map((c, i) => keycap(150 + (i % 3) * 170, 140 + Math.floor(i / 3) * 190, 140, 140, c, { size: 70, fill: i % 2 ? "#fff" : "#fff5f5", color: i % 2 ? INK : RED })).join("")}
+    ${arrow(680, 320, 770)}
+    ${card(800, 170, 300, 300)}
+    ${txt(950, 250, "学习", { size: 56, weight: 700, anchor: "middle", family: "Microsoft YaHei,SimSun,sans-serif" })}
+    ${txt(950, 330, "학습", { size: 52, weight: 700, anchor: "middle", family: "Malgun Gothic,sans-serif", fill: BLUE })}
+    ${txt(950, 410, "学習", { size: 52, weight: 700, anchor: "middle", family: "Yu Gothic,MS Gothic,sans-serif", fill: RED })}`),
+  "so-sach-hoa-don-sang-excel": svg("#1b5e20", "#43a047", `
+    <g transform="rotate(-5 300 330)"><rect x="140" y="130" width="320" height="400" rx="10" fill="#fffdf5" filter="url(#sh)"/>
+      ${txt(300, 185, "Sổ thu chi", { size: 28, weight: 700, family: "Segoe Script,cursive", anchor: "middle", fill: "#31407a" })}
+      ${scribble(170, 230, 260, "#31407a", 7, 40)}</g>
+    ${arrow(490, 330, 580)}
+    ${card(600, 120, 500, 400, "#fff", 16)}
+    <rect x="600" y="120" width="500" height="54" rx="16" fill="#1e7145"/><rect x="600" y="156" width="500" height="18" fill="#1e7145"/>
+    ${["Ngày", "Diễn giải", "Thu", "Chi"].map((c, i) => txt(650 + i * 120, 155, c, { size: 18, weight: 700, fill: "#fff" })).join("")}
+    ${Array.from({ length: 6 }, (_, r) => `<path d="M600 ${174 + (r + 1) * 55} H1100" stroke="#e3e5ef" stroke-width="2"/>` + [0, 1, 2, 3].map((c) => `<rect x="${650 + c * 120}" y="${194 + r * 55}" width="${c === 1 ? 90 : 60}" height="13" rx="6.5" fill="${c === 2 && r % 2 ? GREEN : c === 3 && r % 2 === 0 ? RED : "#cfd5e3"}" opacity="${c > 1 ? 0.75 : 1}"/>`).join("")).join("")}`),
+  "chuan-bi-ban-thao-sach": svg("#4e342e", "#a1887f", `
+    <g filter="url(#sh)"><path d="M300 150 Q450 120 600 150 V520 Q450 490 300 520 Z" fill="#fff"/><path d="M600 150 Q750 120 900 150 V520 Q750 490 600 520 Z" fill="#fffdf5"/></g>
+    <path d="M600 150 V520" stroke="#d7ccc8" stroke-width="4"/>
+    ${[0, 1, 2, 3, 4, 5, 6].map((i) => `<rect x="340" y="${200 + i * 40}" width="${i % 3 === 2 ? 140 : 220}" height="10" rx="5" fill="#d9dbe6"/><rect x="640" y="${200 + i * 40}" width="${i % 3 === 1 ? 150 : 220}" height="10" rx="5" fill="#e0d6cf"/>`).join("")}
+    ${txt(450, 185, "Chương 1", { size: 22, weight: 700, family: SERIF, anchor: "middle" })}
+    <g transform="rotate(30 1000 360)"><rect x="985" y="230" width="26" height="190" rx="6" fill="${AMBER}"/><path d="M985 420 l13 30 l13 -30 z" fill="${INK}"/></g>
+    ${pill(150, 470, 120, "Bông", RED)}`),
+  "chon-ban-phim-danh-may": svg("#212121", "#424242", (() => {
+    let g = `<g filter="url(#sh)"><rect x="140" y="200" width="920" height="300" rx="26" fill="#2b2b2b"/></g>`;
+    const rows = [14, 13, 12, 11];
+    rows.forEach((n, r) => { for (let i = 0; i < n; i++) g += `<rect x="${175 + r * 22 + i * 62}" y="${228 + r * 62}" width="54" height="52" rx="8" fill="${(r === 2 && (i === 3 || i === 6)) ? RED : "#f5f5f5"}" filter="url(#sh2)"/>`; });
+    g += `<rect x="380" y="476" width="420" height="16" rx="8" fill="#888" opacity=".5"/>`;
+    g += pill(150, 110, 200, "Tactile", AMBER) + pill(370, 110, 200, "Linear", GREEN) + pill(590, 110, 200, "Clicky", BLUE);
+    return g;
+  })()),
+  "podcast-video-thanh-bai-viet": svg("#6a1b9a", "#ab47bc", `
+    <g filter="url(#sh)"><circle cx="300" cy="300" r="150" fill="#fff"/></g>
+    <rect x="262" y="200" width="76" height="130" rx="38" fill="${INK}"/><path d="M230 300 a70 70 0 0 0 140 0 M300 370 v40 M260 410 h80" fill="none" stroke="${INK}" stroke-width="10" stroke-linecap="round"/>
+    ${Array.from({ length: 12 }, (_, i) => { const h = 20 + Math.abs(Math.sin(i * 1.1)) * 90; return `<rect x="${480 + i * 16}" y="${300 - h / 2}" width="9" height="${h}" rx="4.5" fill="#fff" opacity=".85"/>`; }).join("")}
+    ${arrow(690, 300, 770)}
+    ${paper(790, 110, 320, 420, { lines: 9, head: "#6a1b9a" })}
+    ${pill(820, 470, 120, "SEO", RED)}`)
 };
 
 /* ---------- HÌNH MINH HỌA TRONG BÀI ---------- */
@@ -717,7 +835,72 @@ const figures = {
   "fig-hau-bien-tap": flow([
     ["Bản gốc sạch", "Đánh máy, không\nngắt dòng cứng", "#8c877d"], ["Dịch máy", "Tạo bản nháp\nnhanh", "#5a3fd0"],
     ["Hậu biên tập", "Sửa nghĩa, bỏ sót,\nvăn phong", RED], ["Kiểm tra", "Thuật ngữ, số liệu,\ntên riêng", AMBER], ["Bản dịch cuối", "Trình bày khớp\nbản gốc", GREEN]
-  ], "Mức độ hậu biên tập (nhẹ hay đầy đủ) phụ thuộc mục đích sử dụng bản dịch")
+  ], "Mức độ hậu biên tập (nhẹ hay đầy đủ) phụ thuộc mục đích sử dụng bản dịch"),
+
+  // Đợt 4
+  "fig-bien-ban-hop": flow([
+    ["Ghi âm cuộc họp", "Thông báo người dự,\nbật ghi của nền tảng", BLUE], ["Chuyển âm", "Tên người nói,\nmốc thời gian", "#5a3fd0"],
+    ["Biên tập", "Lược từ đệm,\nsoát số liệu", AMBER], ["Biên bản", "Kết luận +\nviệc cần làm", GREEN], ["Lưu trữ", "Phân quyền,\nbảo mật", INK]
+  ], "Gửi biên bản trong ngày để mọi người xác nhận khi còn nhớ rõ nội dung"),
+  "fig-ban-thao-sach": flow([
+    ["Đánh máy", "Bản viết tay,\ntệp rời → Word", RED], ["Biên tập", "Cấu trúc, mạch,\ntên riêng", AMBER],
+    ["Hiệu đính", "Chính tả,\nvăn phong", BLUE], ["Dàn trang", "Khổ sách, lề,\nphông, ảnh", "#6a3fb5"], ["Đọc bông", "Sửa lỗi cuối\ntrước khi in", GREEN]
+  ], "Chốt nội dung ở bước biên tập - sửa lớn khi đã dàn trang sẽ làm xô lệch toàn bộ số trang"),
+  "fig-podcast-bai-viet": flow([
+    ["Podcast/Video", "Bản ghi gốc", "#6a1b9a"], ["Chuyển âm", "Người nói,\nmốc thời gian", BLUE],
+    ["Làm sạch", "Lược từ đệm,\ngiữ ý", AMBER], ["Dàn ý + viết", "H2, ví dụ,\nFAQ, SEO", RED], ["Phân phối", "Blog, email,\nmạng xã hội", GREEN]
+  ], "Bài viết tốt không phải bản chép lời dán lên web - hãy biên tập theo logic người đọc"),
+
+  // CV nhiều cột vs CV chuẩn ATS
+  "fig-cv-ats": (() => {
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" role="img" font-family="${FONT}"><rect width="960" height="460" rx="18" fill="#f6f7fb"/>`;
+    s += `<rect x="60" y="40" width="360" height="340" rx="8" fill="#fff" stroke="#f6c3c4" stroke-width="3"/><rect x="60" y="40" width="130" height="340" rx="8" fill="#2d3078"/>`;
+    s += `<circle cx="125" cy="100" r="34" fill="#fff" opacity=".3"/>` + ["📞", "✉", "📍"].map((c, i) => txt(85, 175 + i * 34, c, { size: 18, fill: "#fff" })).join("");
+    s += [0, 1, 2, 3].map((i) => `<rect x="85" y="${290 + i * 20}" width="80" height="6" rx="3" fill="#fff" opacity=".3"/><rect x="85" y="${290 + i * 20}" width="${30 + i * 12}" height="6" rx="3" fill="${AMBER}"/>`).join("");
+    s += [0, 1, 2, 3, 4, 5, 6].map((i) => `<rect x="210" y="${70 + i * 40}" width="${i % 3 === 0 ? 120 : 180}" height="${i % 3 === 0 ? 12 : 8}" rx="4" fill="${i % 3 === 0 ? INK : "#d9dbe6"}"/>`).join("");
+    s += `<rect x="540" y="40" width="360" height="340" rx="8" fill="#fff" stroke="#bfe6c6" stroke-width="3"/>`;
+    s += `<rect x="570" y="66" width="190" height="16" rx="8" fill="${INK}"/><rect x="570" y="92" width="280" height="8" rx="4" fill="#d9dbe6"/>`;
+    s += ["KINH NGHIỆM LÀM VIỆC", "HỌC VẤN", "KỸ NĂNG"].map((h, i) => txt(570, 140 + i * 82, h, { size: 13, weight: 800, fill: "#1f6f4a" }) + [0, 1, 2].map((k) => `<rect x="570" y="${152 + i * 82 + k * 16}" width="${k === 2 ? 180 : 300}" height="7" rx="3.5" fill="#d9dbe6"/>`).join("")).join("");
+    s += txt(240, 410, "Nhiều cột, biểu tượng, thanh kỹ năng", { size: 16, weight: 700, anchor: "middle", fill: RED }) + txt(720, 410, "Một cột, tiêu đề mục chuẩn", { size: 16, weight: 700, anchor: "middle", fill: "#1f6f4a" });
+    return s + txt(480, 442, "ATS đọc nội dung theo thứ tự - bố cục đơn giản giúp thông tin không bị lẫn cột hay bỏ sót", { size: 13.5, anchor: "middle", fill: "#7f8491" }) + "</svg>";
+  })(),
+
+  // Số oxi hóa và quá trình electron
+  "fig-oxi-hoa-khu": (() => {
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" font-family="${FONT}"><rect width="960" height="420" rx="18" fill="#f6f7fb"/>`;
+    s += `<rect x="40" y="30" width="880" height="140" rx="14" fill="#fff" stroke="#e3e5ef" stroke-width="2"/>`;
+    s += chem(480, 125, "3Cu + 8HNO_3 → 3Cu(NO_3)_2 + 2NO↑ + 4H_2O", { size: 34 });
+    s += `<rect x="40" y="190" width="880" height="190" rx="14" fill="#fff" stroke="#e3e5ef" stroke-width="2"/>`;
+    s += txt(70, 240, "Quá trình oxi hóa", { size: 17, weight: 800, fill: GREEN }) + txt(70, 330, "Quá trình khử", { size: 17, weight: 800, fill: BLUE });
+    s += chem(300, 280, "Cu^0 → Cu^{+2} + 2e", { size: 32, anchor: "start" }) + chem(300, 370, "N^{+5} + 3e → N^{+2}", { size: 32, anchor: "start" });
+    s += `<path d="M680 220 V390" stroke="#d9dbe6" stroke-width="3"/>` + txt(740, 285, "× 3", { size: 32, weight: 800, fill: NAVY }) + txt(740, 372, "× 2", { size: 32, weight: 800, fill: NAVY });
+    s += txt(880, 330, "6e nhường = 6e nhận", { size: 15, weight: 700, anchor: "end", fill: "#7f8491" });
+    return s + "</svg>";
+  })(),
+
+  // Bảng biến thiên y = x^3 - 3x
+  "fig-bang-bien-thien": (() => {
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" role="img" font-family="${FONT}"><rect width="960" height="380" rx="18" fill="#f6f7fb"/>`;
+    s += `<rect x="60" y="30" width="840" height="320" rx="6" fill="#fff" stroke="${INK}" stroke-width="2.5"/><path d="M60 95 H900 M60 160 H900 M170 30 V350" stroke="${INK}" stroke-width="2.5"/>`;
+    s += txt(115, 72, "x", { size: 28, family: SERIF, italic: true, anchor: "middle" }) + txt(115, 138, "y′", { size: 28, family: SERIF, italic: true, anchor: "middle" }) + txt(115, 265, "y", { size: 28, family: SERIF, italic: true, anchor: "middle" });
+    [["−∞", 220], ["−1", 400], ["1", 640], ["+∞", 850]].forEach(([t, x]) => { s += txt(x, 72, t, { size: 26, family: SERIF, anchor: "middle" }); });
+    [["+", 310], ["0", 400], ["−", 520], ["0", 640], ["+", 745]].forEach(([t, x]) => { s += txt(x, 138, t, { size: 26, family: SERIF, anchor: "middle", fill: t === "0" ? INK : RED }); });
+    s += txt(400, 192, "2", { size: 26, family: SERIF, anchor: "middle" }) + txt(640, 335, "−2", { size: 26, family: SERIF, anchor: "middle" }) + txt(220, 335, "−∞", { size: 24, family: SERIF, anchor: "middle" }) + txt(850, 192, "+∞", { size: 24, family: SERIF, anchor: "middle" });
+    s += `<defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="${NAVY}"/></marker></defs>`;
+    s += `<g stroke="${NAVY}" stroke-width="3" marker-end="url(#ar)"><path d="M245 315 L378 205"/><path d="M425 205 L612 315"/><path d="M670 315 L825 205"/></g>`;
+    return s + "</svg>";
+  })(),
+
+  // Ký hiệu hạt nhân A, Z
+  "fig-ky-hieu-hat-nhan": (() => {
+    let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" role="img" font-family="${FONT}"><rect width="960" height="380" rx="18" fill="#f6f7fb"/>`;
+    s += `<rect x="60" y="40" width="380" height="300" rx="14" fill="#fff" stroke="#e3e5ef" stroke-width="2"/>`;
+    s += txt(210, 140, "A", { size: 54, weight: 700, family: SERIF, italic: true, anchor: "end", fill: RED }) + txt(210, 300, "Z", { size: 54, weight: 700, family: SERIF, italic: true, anchor: "end", fill: BLUE }) + txt(300, 270, "X", { size: 150, family: SERIF, anchor: "middle" });
+    s += `<path d="M470 120 H530" stroke="${RED}" stroke-width="3"/>` + txt(545, 115, "Số khối A = số proton + số neutron", { size: 20, weight: 700, fill: RED });
+    s += `<path d="M470 280 H530" stroke="${BLUE}" stroke-width="3"/>` + txt(545, 285, "Nguyên tử số Z = số proton", { size: 20, weight: 700, fill: BLUE });
+    s += txt(545, 200, "X: ký hiệu nguyên tố, viết đứng", { size: 20, weight: 700 });
+    return s + txt(480, 365, "Ví dụ: uranium 235 có A = 235, Z = 92; hạt alpha có A = 4, Z = 2", { size: 14, anchor: "middle", fill: "#7f8491" }) + "</svg>";
+  })()
 };
 
 let n = 0;

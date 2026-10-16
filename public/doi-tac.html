@@ -53,7 +53,7 @@
           <span class="aff-badge">🤝 Hoa hồng <span id="rate-a">30%</span> mỗi đơn hoàn thành</span>
           <h1>Chương trình đối tác cho cửa hàng photocopy &amp; văn phòng phẩm</h1>
           <p>Mỗi ngày tiệm của bạn gặp khách cần gõ lại tài liệu viết tay, chuyển PDF sang Word, gõ đề thi, luận văn, chuyển ghi âm thành văn bản… Hãy giới thiệu họ đến Đánh máy 247 bằng mã QR riêng của tiệm - bạn nhận <b id="rate-b">30%</b> giá trị mỗi đơn hoàn thành, không phải tự làm, không cần vốn.</p>
-          <div class="aff-hero__ctas"><a href="#dang-ky" class="button">Đăng ký đối tác miễn phí</a><a href="/doi-tac-tai-khoan" class="button button--black">Đăng nhập đối tác</a></div>
+          <div class="aff-hero__ctas"><a href="/dang-ky-doi-tac" class="button">Đăng ký đối tác miễn phí</a><a href="/doi-tac-tai-khoan" class="button button--black">Đăng nhập đối tác</a></div>
         </div>
         <div class="aff-poster" aria-hidden="true">
           <small>Dán tại quầy - khách quét để đặt hàng</small>
@@ -120,34 +120,12 @@
       </div>
     </section>
 
-    <section class="section" id="dang-ky">
-      <div class="container reg">
-        <div class="order-card">
-          <h2 class="order-card__title">Đăng ký đối tác</h2>
-          <p style="color:var(--muted);margin-top:-10px">Đã có tài khoản? <a href="/doi-tac-tai-khoan" style="color:var(--red)">Đăng nhập</a></p>
-          <form id="reg" novalidate>
-            <div id="reg-msg" aria-live="polite"></div>
-            <h3>Thông tin cửa hàng</h3>
-            <div class="order-row">
-              <div class="field"><label class="field__label" for="r-shop">Tên cửa hàng / đơn vị <span class="req">*</span></label><input class="input" id="r-shop" required maxlength="150" placeholder="VD: Photocopy Minh Anh"><div class="field__error"></div></div>
-              <div class="field"><label class="field__label" for="r-name">Người liên hệ <span class="req">*</span></label><input class="input" id="r-name" required maxlength="100" autocomplete="name"><div class="field__error"></div></div>
-              <div class="field"><label class="field__label" for="r-phone">Số điện thoại / Zalo <span class="req">*</span></label><input class="input" id="r-phone" type="tel" required maxlength="20" autocomplete="tel" data-pattern="^\+?[0-9 .\-]{8,20}$" data-pattern-msg="Số điện thoại không hợp lệ."><div class="field__error"></div></div>
-              <div class="field"><label class="field__label" for="r-email">Email (dùng để đăng nhập) <span class="req">*</span></label><input class="input" id="r-email" type="email" required maxlength="160" autocomplete="email"><div class="field__error"></div></div>
-              <div class="field"><label class="field__label" for="r-address">Địa chỉ cửa hàng</label><input class="input" id="r-address" maxlength="255" autocomplete="street-address"><div class="field__error"></div></div>
-              <div class="field"><label class="field__label" for="r-city">Tỉnh / thành phố</label><select class="select" id="r-city"></select></div>
-            </div>
-            <h3>Tài khoản nhận hoa hồng</h3>
-            <div class="order-row">
-              <div class="field"><label class="field__label" for="r-bank">Ngân hàng</label><input class="input" id="r-bank" maxlength="120" placeholder="VD: Vietcombank"><div class="field__error"></div></div>
-              <div class="field"><label class="field__label" for="r-acc">Số tài khoản</label><input class="input" id="r-acc" maxlength="40" inputmode="numeric"><div class="field__error"></div></div>
-              <div class="field"><label class="field__label" for="r-holder">Chủ tài khoản</label><input class="input" id="r-holder" maxlength="100" placeholder="VIẾT HOA KHÔNG DẤU"><div class="field__error"></div></div>
-              <div class="field"><label class="field__label" for="r-pass">Mật khẩu đăng nhập <span class="req">*</span></label><div class="password"><input class="input" id="r-pass" type="password" required minlength="8" autocomplete="new-password"><button type="button" class="password__eye" aria-label="Hiện mật khẩu"></button></div><div class="field__error"></div></div>
-            </div>
-            <p class="field__hint">Có thể bổ sung tài khoản ngân hàng sau trong trang đối tác.</p>
-            <div class="field"><label class="check"><input type="checkbox" id="r-agree" required><span class="check__box"></span><span>Tôi đồng ý với <button type="button" class="link" id="terms-open">điều khoản chương trình đối tác</button></span></label><div class="field__error"></div></div>
-            <button class="button" type="submit">Đăng ký đối tác</button>
-          </form>
-        </div>
+    <section class="section section--grey" id="dang-ky">
+      <div class="container cta-band reveal">
+        <h2>Sẵn sàng có thêm thu nhập từ khách cần đánh máy?</h2>
+        <p>Đăng ký miễn phí trong 2 phút. Duyệt trong 24 giờ làm việc, nhận mã QR in poster ngay sau khi duyệt.</p>
+        <a href="/dang-ky-doi-tac" class="button">Đăng ký đối tác miễn phí</a>
+        <p style="margin-top:14px;font-size:14.5px">Đã có tài khoản? <a href="/doi-tac-tai-khoan" style="color:var(--red)">Đăng nhập đối tác</a></p>
       </div>
     </section>
   </main>
@@ -164,8 +142,6 @@
     $("#aff-faq").innerHTML = DM.affiliateFaq.map(function (f, i) {
       return '<div class="accordion__item' + (i ? "" : " is-open") + '"><button type="button" class="accordion__btn">' + DM.esc(f.q) + '</button><div class="accordion__panel" role="region"><div class="accordion__inner"><div class="accordion__content">' + DM.esc(f.a) + "</div></div></div></div>";
     }).join("");
-    $("#r-city").innerHTML = '<option value="">- Chọn -</option>' + DM.cities.map(function (c) { return "<option>" + DM.esc(c) + "</option>"; }).join("");
-    var eye = $(".password__eye"); eye.innerHTML = DM.icon.eye; DM.bindEye(eye);
 
     // Máy tính thu nhập
     function calc() {
@@ -175,32 +151,6 @@
     }
     $("#c-n").addEventListener("input", calc); $("#c-v").addEventListener("input", calc); calc();
 
-    $("#terms-open").addEventListener("click", function () {
-      DM.modal.open('<h2 class="modal__title">Điều khoản chương trình đối tác</h2><ol class="terms">' +
-        "<li>Hoa hồng bằng <b>" + pct + "</b> giá trị đơn hàng (số tiền khách thanh toán) đối với đơn do khách bạn giới thiệu đặt và đã <b>hoàn thành</b>. Đơn hủy, hoàn tiền không tính hoa hồng.</li>" +
-        "<li>Khách được ghi nhận cho bạn khi quét mã QR / bấm liên kết giới thiệu (trong " + P.cookieDays + " ngày, lần bấm gần nhất được tính) hoặc tự nhập mã giới thiệu khi đặt hàng.</li>" +
-        "<li>Không tính hoa hồng cho đơn do chính đối tác đặt (cùng email hoặc số điện thoại).</li>" +
-        "<li>Chi trả bằng chuyển khoản vào ngày " + P.payoutDay + " hằng tháng khi số dư hoa hồng đã duyệt từ " + DM.fmt(P.minPayout) + ". Đối tác tự chịu trách nhiệm kê khai nghĩa vụ thuế thu nhập theo quy định.</li>" +
-        "<li>Không quảng cáo sai sự thật, không gửi tin nhắn rác, không giả danh Đánh máy 247. Không thu thêm tiền của khách dưới danh nghĩa Đánh máy 247.</li>" +
-        "<li>Đánh máy 247 có quyền khóa tài khoản và không chi trả hoa hồng phát sinh từ hành vi gian lận (tự tạo đơn ảo, đơn hủy hàng loạt…).</li>" +
-        "<li>Đối tác không được tiếp cận thông tin cá nhân của khách; trang đối tác chỉ hiển thị mã đơn, dịch vụ, giá trị và hoa hồng.</li>" +
-        "<li>Điều khoản có thể được điều chỉnh; thay đổi sẽ được thông báo qua email trước khi áp dụng.</li></ol>");
-    });
-
-    $("#reg").addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (!DM.validate(this)) return;
-      var btn = $("button[type=submit]", this); btn.disabled = true;
-      DM.api("/aff/register", { body: {
-        shop: $("#r-shop").value.trim(), name: $("#r-name").value.trim(), phone: $("#r-phone").value.trim(), email: $("#r-email").value.trim(),
-        address: $("#r-address").value.trim(), city: $("#r-city").value, bankName: $("#r-bank").value.trim(), bankAccount: $("#r-acc").value.trim(),
-        bankHolder: $("#r-holder").value.trim(), password: $("#r-pass").value, agree: $("#r-agree").checked
-      } }).then(function () { location.href = "/doi-tac-tai-khoan?moi=1"; }, function (er) {
-        btn.disabled = false;
-        $("#reg-msg").innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + (er.status === 409 ? ' <a href="/doi-tac-tai-khoan" style="color:inherit;text-decoration:underline">Đăng nhập</a>' : "") + "</div>";
-        $("#reg-msg").scrollIntoView({ block: "center" });
-      });
-    });
   })();
   </script>
 </body>

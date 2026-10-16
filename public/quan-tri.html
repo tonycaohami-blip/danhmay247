@@ -72,7 +72,7 @@
       }, function (er) { if (er.status === 401) gate(); else app.innerHTML = '<div class="alert alert--error">' + DM.esc(er.message) + "</div>"; });
     }
 
-    /** Chuông thông báo: đơn mới, khách chuyển khoản / nhắn tin, nhân viên cập nhật, liên hệ, đánh giá. */
+    /** Chuông thông báo: đơn mới, khách chuyển khoản/nhắn tin, nhân viên cập nhật, liên hệ, đánh giá. */
     function refresh() {
       if ($(".modal.is-open")) return;
       DM.api("/admin/summary").then(function (x) { data = x; render(); }, function () { /* bỏ qua */ });
@@ -300,7 +300,7 @@
               "<td>" + (x.lastLogin ? DM.dateTime(x.lastLogin) : "Chưa đăng nhập") + "</td>" +
               '<td><div style="display:flex;gap:6px;flex-wrap:wrap;min-width:150px">' +
               '<button type="button" class="button button--sm button--black" data-orders="' + x.id + '">Xem đơn</button>' +
-              '<button type="button" class="button button--sm button--black" data-edit="' + x.id + '">Sửa / đặt lại mật khẩu</button>' +
+              '<button type="button" class="button button--sm button--black" data-edit="' + x.id + '">Sửa/đặt lại mật khẩu</button>' +
               '<button type="button" class="button button--sm' + (x.active ? " button--black" : "") + '" data-active="' + x.id + '" data-v="' + (x.active ? "0" : "1") + '">' + (x.active ? "Khóa" : "Mở khóa") + "</button></div></td></tr>";
           }).join("") + "</tbody></table></div>" : '<div class="empty">' + DM.icon.users + "<p>Chưa có nhân viên nào.</p></div>") + "</div>";
 
@@ -357,7 +357,7 @@
           '<div class="kpi"><small>Đã chi trả</small><b>' + DM.fmt(paid) + "</b></div></div>" +
           '<div class="order-card" style="padding:20px"><h2 class="order-card__title">Đối tác (' + list.length + ')</h2>' +
           '<p class="field__hint" style="margin-top:-10px">Tỷ lệ mặc định ' + Math.round(P.rate * 100) + "% · ghi nhận " + P.cookieDays + " ngày · chi trả ngày " + P.payoutDay + " hằng tháng khi từ " + DM.fmt(P.minPayout) + ' (sửa trong data.js). Trang giới thiệu: <a href="/doi-tac" target="_blank" style="color:var(--red)">/doi-tac</a></p>' +
-          (list.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Đối tác</th><th>Mã / tỷ lệ</th><th>Lượt bấm</th><th>Đơn (xong)</th><th>Chờ chi trả</th><th>Đã trả</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
+          (list.length ? '<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Đối tác</th><th>Mã/tỷ lệ</th><th>Lượt bấm</th><th>Đơn (xong)</th><th>Chờ chi trả</th><th>Đã trả</th><th>Trạng thái</th><th></th></tr></thead><tbody>' +
             list.map(function (a) {
               var st = AFF_ST[a.status] || [a.status, "chip--grey"];
               return "<tr><td><b>" + DM.esc(a.shop) + "</b><br><small>" + DM.esc(a.name) + " · " + DM.esc(a.phone) + "<br>" + DM.esc(a.email) + (a.city ? " · " + DM.esc(a.city) : "") + "</small></td>" +

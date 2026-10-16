@@ -71,7 +71,7 @@
       });
     }
 
-    /** Chuông thông báo: được giao đơn, quản trị nhắn, duyệt tệp, đơn thanh toán / hoàn thành / hủy. */
+    /** Chuông thông báo: được giao đơn, quản trị nhắn, duyệt tệp, đơn thanh toán/hoàn thành/hủy. */
     function logout() { DM.api("/staff/logout", { method: "POST" }).then(function () { login(); DM.toast("Đã đăng xuất."); }); }
     function startNotifier() {
       DM.notifier({

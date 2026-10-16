@@ -254,7 +254,7 @@ function register(router, h) {
     res.json({ payout: p });
   }));
 
-  /** Gắn / bỏ mã giới thiệu cho một đơn (khách quên nhập mã). Không đổi được khi hoa hồng đã chi trả. */
+  /** Gắn/bỏ mã giới thiệu cho một đơn (khách quên nhập mã). Không đổi được khi hoa hồng đã chi trả. */
   router.post("/admin/orders/:id/affiliate", adminOnly, wrap(async (req, res) => {
     const o = await db.orders.get(String(req.params.id).slice(0, 12));
     if (!o) throw new HttpError(404, "Không tìm thấy đơn.");

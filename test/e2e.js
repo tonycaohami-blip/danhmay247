@@ -202,7 +202,7 @@ async function cleanup() {
   ok("nhân viên KHÔNG thấy tên/email/SĐT khách", !("name" in sv) && !("email" in sv) && !("phone" in sv) && !/Trần Bí Mật|bimat@khach\.vn|0911222333/.test(svJson));
   ok("nhân viên KHÔNG thấy giá, mã giảm giá, tiền đã nhận", !("price" in sv) && !("promo" in sv) && !("paidAmount" in sv) && !("receivedAmount" in sv) && !/DANHMAY10|"total"|%\)/.test(svJson));
   ok("nhân viên KHÔNG thấy tin nhắn với khách và ghi chú riêng của quản trị", !("messages" in sv) && !("notes" in sv) && !("tokenHash" in sv));
-  ok("nhân viên thấy thông tin chuyên môn", sv.typeLabel === "Phỏng vấn / Hội thảo / Tọa đàm" && sv.qty === 30 && sv.instructions === "Gõ lại 3 trang đầu" && sv.extras[0] === "Gắn mốc thời gian" && !!sv.deadline);
+  ok("nhân viên thấy thông tin chuyên môn", sv.typeLabel === "Phỏng vấn/Hội thảo/Tọa đàm" && sv.qty === 30 && sv.instructions === "Gõ lại 3 trang đầu" && sv.extras[0] === "Gắn mốc thời gian" && !!sv.deadline);
   r = await fetch(B + "/api/staff/orders/" + id2 + "/files/" + sv.files[0].id, { headers: { Cookie: staffCk } });
   ok("nhân viên tải được tệp khách gửi", r.ok && (await r.text()) === "anh goc");
   ok("nhân viên khác không xem được đơn này", (await fetch(B + "/api/staff/orders/" + id2, { headers: { Cookie: minhCk } })).status === 404);
@@ -332,7 +332,7 @@ async function cleanup() {
   ok("hỏi đáp: JSON-LD FAQPage đủ câu hỏi", ld(pg.h).some((x) => x["@type"] === "FAQPage" && x.mainEntity.length >= 10 && !/<[a-z]/i.test(JSON.stringify(x))));
   ok("trang riêng tư không bị chèn thẻ SEO", !(await getRaw("/quan-tri")).h.includes("og:image") && !(await getRaw("/tai-khoan")).h.includes("canonical"));
   pg = await getRaw("/sitemap.xml");
-  ok("sitemap: đường dẫn sạch + ảnh PNG, không có trang riêng tư", pg.h.includes("/blog/telex-hay-vni") && pg.h.includes("/dich-vu/pdf-sang-word") && /og\/[a-z0-9-]+\.png/.test(pg.h) && !/bai-viet|\?slug=|dat-hang|tai-khoan/.test(pg.h));
+  ok("sitemap: đường dẫn sạch + ảnh PNG, không có trang riêng tư", pg.h.includes("/blog/telex-hay-vni") && pg.h.includes("/dich-vu/pdf-sang-word") && /og\/[a-z0-9-]+\.png/.test(pg.h) && !/\/bai-viet|\?slug=|\/dat-hang|\/tai-khoan|\/doi-tac-tai-khoan/.test(pg.h) && pg.h.includes("/dang-ky-doi-tac"));
 
   // --- Khóa phiên lưu trong MySQL (không đổi sau khi khởi động lại)
   // ================= ĐỐI TÁC (AFFILIATE) =================

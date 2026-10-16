@@ -61,11 +61,11 @@ const adminKey = () => sha256("admin:" + ADMIN_PASSWORD).slice(0, 16);
 function startAdminSession(res) {
   setCookie(res, ADMIN_COOKIE, sign({ admin: 1, k: adminKey(), exp: Date.now() + 12 * 3600e3 }), 12 * 3600);
 }
-/** Phiên nhân viên: ghi kèm "phiên bản" để đổi mật khẩu / khóa tài khoản là đăng xuất ngay. */
+/** Phiên nhân viên: ghi kèm "phiên bản" để đổi mật khẩu/khóa tài khoản là đăng xuất ngay. */
 function startStaffSession(res, staff) {
   setCookie(res, STAFF_COOKIE, sign({ s: staff.id, v: staff.sessionVersion || 1, exp: Date.now() + 7 * DAY }), 7 * 86400);
 }
-/** Phiên đối tác (affiliate): cũng gắn "phiên bản" để đổi mật khẩu / khóa là đăng xuất ngay. */
+/** Phiên đối tác (affiliate): cũng gắn "phiên bản" để đổi mật khẩu/khóa là đăng xuất ngay. */
 function startAffSession(res, a) {
   setCookie(res, AFF_COOKIE, sign({ f: a.id, v: a.sessionVersion || 1, exp: Date.now() + 30 * DAY }), 30 * 86400);
 }

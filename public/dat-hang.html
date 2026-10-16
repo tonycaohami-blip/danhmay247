@@ -199,7 +199,7 @@
       $("#s-qty-label").textContent = state.service === "retyping" ? "Số trang:" : "Số phút:";
       $("#s-qty").textContent = state.qty;
       $("#s-urgency").textContent = u.label + "; " + DM.dateLabel(DM.deadline(u.hours));
-      $("#s-unit").textContent = DM.fmt(r.unitPrice) + " / " + r.unit;
+      $("#s-unit").textContent = DM.fmt(r.unitPrice) + "/" + r.unit;
       $("#s-extras-row").classList.toggle("hidden", !state.extras.length);
       $("#s-extras").textContent = state.extras.map(function (k) { var e = s.extras.find(function (x) { return x.key === k; }); return "+" + e.pct + "%"; }).join(", ");
       $("#s-discount-row").classList.toggle("hidden", !r.discount);
@@ -290,7 +290,7 @@
       var o = $("#after-pay").classList.toggle("is-open"); this.setAttribute("aria-expanded", o);
     });
 
-    /* ---------- Khôi phục bản nháp / tài khoản ---------- */
+    /* ---------- Khôi phục bản nháp/tài khoản ---------- */
     $("#o-name").value = draft.name || "";
     $("#o-email").value = draft.email || "";
     $("#o-phone").value = draft.phone || "";

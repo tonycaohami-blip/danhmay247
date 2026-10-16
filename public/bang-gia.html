@@ -34,7 +34,7 @@
           <div class="price-depend__title">Giá phụ thuộc vào những yếu tố nào?</div>
           <ul class="price-depend__list">
             <li><div class="icon" id="ic-clock"></div><div class="title">Thời hạn hoàn thành</div>Đơn hàng có thời hạn 6–12 giờ thường có giá cao hơn so với đơn đặt trước nhiều ngày.</li>
-            <li><div class="icon" id="ic-layers"></div><div class="title">Khối lượng công việc</div>Loại dịch vụ đã chọn và số trang / số phút / số người nói cũng ảnh hưởng đến giá.</li>
+            <li><div class="icon" id="ic-layers"></div><div class="title">Khối lượng công việc</div>Loại dịch vụ đã chọn và số trang/số phút/số người nói cũng ảnh hưởng đến giá.</li>
             <li><div class="icon" id="ic-award"></div><div class="title">Dịch vụ bổ sung</div>Dịch vụ bổ sung làm tăng tổng giá 10–20% nhưng đảm bảo văn bản bàn giao đạt mọi tiêu chuẩn.</li>
           </ul>
         </div>
@@ -122,7 +122,7 @@
           : '<div class="line2">Từ 2 người nói <strong>' + DM.fmt(base * 1.08) + '</strong></div><div class="line2">Làm phụ đề SRT <strong>' + DM.fmt(base * 1.2) + "</strong></div>";
         return '<li class="products__item">' + (k === P.popular ? '<div class="popular">Phổ biến nhất</div>' : "") +
           '<div class="time">' + u.label + '</div><div class="price">' + DM.fmt(base) + '<span> /' + s.unit + "</span></div>" +
-          '<div class="description">' + (svc === "retyping" ? "PDF / Ảnh sang Word" : "1 người nói") + "</div>" + lines +
+          '<div class="description">' + (svc === "retyping" ? "PDF/Ảnh sang Word" : "1 người nói") + "</div>" + lines +
           '<a class="btn" href="/dat-hang?service=' + svc + "&urgency=" + k + '">Đặt hàng ngay</a></li>';
       }).join("");
       $("#products").innerHTML = html;
@@ -169,7 +169,7 @@
       var r = DM.calcPrice(o);
       if (!r) return;
       $("#c-total").textContent = DM.fmt(r.total);
-      $("#c-per").textContent = DM.fmt(r.unitPrice) + " / " + r.unit + (r.extrasPct ? " · đã gồm +" + r.extrasPct + "% dịch vụ bổ sung" : "");
+      $("#c-per").textContent = DM.fmt(r.unitPrice) + "/" + r.unit + (r.extrasPct ? " · đã gồm +" + r.extrasPct + "% dịch vụ bổ sung" : "");
       var u = DM.urgency(o.urgency);
       $("#c-deadline").textContent = "Nhận tài liệu dự kiến: " + DM.dateLabel(DM.deadline(u.hours)) + " (nếu đặt ngay)";
       var q = new URLSearchParams({ service: o.service, type: o.type, urgency: o.urgency, qty: Math.max(1, parseInt(o.qty, 10) || 1) });

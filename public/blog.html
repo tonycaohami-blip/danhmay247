@@ -68,7 +68,7 @@
       var showFeature = cat === "Tất cả" && !q && page === 1 && list.length > 1;
       $("#feature").innerHTML = showFeature ? feature(list[0]) : "";
       var rest = showFeature ? list.slice(1) : list;
-      var pages = Math.max(1, Math.ceil(rest.length / PER));
+      var pages = Math.max(1, Math.ceil(rest.length/PER));
       page = Math.min(page, pages);
       $("#posts").innerHTML = rest.slice((page - 1) * PER, page * PER).map(card).join("") ||
         (showFeature ? "" : '<div class="empty" style="grid-column:1/-1">' + DM.icon.search + "<p>Không tìm thấy bài viết phù hợp" + (q ? " với “" + DM.esc(q) + "”" : "") + ".</p></div>");

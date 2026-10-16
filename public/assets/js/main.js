@@ -244,7 +244,7 @@
     var u = DM.auth.current(), p = DM.portalUser;
     var wasOpen = box.classList.contains("is-open");
     if (p) {
-      // Trang quản trị / nhân viên: hiện người đang đăng nhập khu vực đó
+      // Trang quản trị/nhân viên: hiện người đang đăng nhập khu vực đó
       box.innerHTML =
         '<button class="login__toggle" aria-expanded="false" aria-controls="login-panel"><span class="login__avatar" style="background:' + (p.color || "var(--navy)") + '" aria-hidden="true">' + DM.esc(p.initials || DM.initials(p.name)) + "</span><span class=\"login__name\">" + DM.esc(p.name) + "</span></button>" +
         '<div class="login__panel login__menu" id="login-panel"><div class="login__email">' + DM.esc(p.sub || "") + "</div>" +
@@ -303,7 +303,7 @@
     if (form) form.addEventListener("submit", function (e) { e.preventDefault(); DM.loginSubmit(form, $(".login__msg", form)); });
   }
   DM.renderLogin = renderLogin;
-  /** Đặt / xóa người dùng khu vực quản trị hoặc nhân viên hiển thị trên thanh đầu trang. */
+  /** Đặt/xóa người dùng khu vực quản trị hoặc nhân viên hiển thị trên thanh đầu trang. */
   DM.setPortalUser = function (p) { DM.portalUser = p || null; renderLogin(); };
   document.addEventListener("click", function (e) {
     var box = $("#login");
@@ -519,7 +519,7 @@
     var msgs = $(".chat-box__msgs", chatBox);
     var history = [];
     try { history = JSON.parse(sessionStorage.getItem("dm247_chat") || "[]"); } catch (e) { history = []; }
-    if (!history.length) history.push({ me: false, text: "Xin chào 👋 Mình là trợ lý của Đánh máy 247. Bạn cần đánh máy, chuyển âm hay định dạng tài liệu? Hãy hỏi mình bất cứ điều gì nhé!", at: Date.now() });
+    if (!history.length) history.push({ me: false, text: "Xin chào 👋 Mình là trợ lý của Đánh máy 247. Bạn có thể hỏi về giá, thời hạn, cách đặt hàng, thanh toán, công thức Toán - Lý - Hóa, chuyển âm… hoặc gõ thử <i>“giá 20 trang viết tay 3 ngày”</i> để mình báo giá ngay.", at: Date.now() });
     var draw = function () {
       msgs.innerHTML = history.map(function (m) {
         return '<div class="msg ' + (m.me ? "msg--me" : "msg--bot") + '">' + m.text + "<time>" + DM.dateTime(m.at).slice(-5) + "</time></div>";
@@ -529,7 +529,7 @@
     };
     draw();
 
-    var reply = function (q) {
+    var simpleReply = function (q) {
       var s = q.toLowerCase();
       var r = DM.prices.retyping.base, t = DM.prices.transcription.base;
       if (/giá|bao nhiêu|chi phí|phí/.test(s)) return "Giá đánh máy lại chỉ từ <b>" + DM.fmt(r["30d"]) + "/trang</b>, chuyển âm từ <b>" + DM.fmt(t["10d"]) + "/phút</b>. Xem chi tiết tại <a href='/bang-gia' style='text-decoration:underline'>Bảng giá</a> nhé!";
@@ -543,17 +543,70 @@
       if (/cảm ơn|thanks|tks/.test(s)) return "Rất vui được hỗ trợ bạn! Chúc bạn một ngày tốt lành 😊";
       return "Cảm ơn bạn! Chuyên viên tư vấn sẽ phản hồi trong ít phút. Nếu cần gấp, hãy gọi <a href='tel:" + DM.site.phoneHref + "' style='text-decoration:underline'>" + DM.site.phone + "</a> hoặc nhắn Zalo nhé.";
     };
+    // Bộ tri thức đầy đủ (assets/js/chat-kb.js) - chỉ tải khi khách mở chat
+    var kbPromise = null;
+    var loadKb = function () {
+      if (DM.chatKb) return Promise.resolve(DM.chatKb);
+      if (!kbPromise) kbPromise = new Promise(function (ok) {
+        var sc = document.createElement("script");
+        sc.src = "/assets/js/chat-kb.js";
+        sc.onload = function () { ok(DM.chatKb || null); };
+        sc.onerror = function () { kbPromise = null; ok(null); };
+        document.head.appendChild(sc);
+      });
+      return kbPromise;
+    };
+    var chips = function (ids) {
+      if (!DM.chatKb || !ids || !ids.length) return "";
+      return '<span class="chat-chips">' + ids.map(function (id) { return '<button type="button" data-topic="' + id + '">' + DM.chatKb.title(id) + "</button>"; }).join("") + "</span>";
+    };
+    var fallback = function () {
+      return "Mình chưa chắc đã hiểu đúng câu hỏi. Bạn chọn một chủ đề bên dưới, hoặc để lại câu hỏi - chuyên viên tư vấn sẽ phản hồi sớm. Cần gấp: gọi <a href='tel:" + DM.site.phoneHref + "'>" + DM.site.phone + "</a> (Zalo cùng số).";
+    };
+    var botSay = function (html) {
+      var typing = document.createElement("div");
+      typing.className = "msg msg--bot";
+      typing.innerHTML = '<span class="typing-dots"><i></i><i></i><i></i></span>';
+      msgs.appendChild(typing); msgs.scrollTop = msgs.scrollHeight;
+      setTimeout(function () { history.push({ me: false, text: html, at: Date.now() }); draw(); }, 650);
+    };
+    var reply = function (q) {
+      return loadKb().then(function (kb) {
+        if (!kb) return simpleReply(q);
+        var r = kb.answer(q);
+        return r ? r.html + chips(r.next) : fallback() + chips(kb.menu.slice(0, 6));
+      });
+    };
     var send = function (text) {
       text = text.trim();
       if (!text) return;
       history.push({ me: true, text: DM.esc(text), at: Date.now() });
       draw();
-      var typing = document.createElement("div");
-      typing.className = "msg msg--bot";
-      typing.innerHTML = '<span class="typing-dots"><i></i><i></i><i></i></span>';
-      msgs.appendChild(typing); msgs.scrollTop = msgs.scrollHeight;
-      setTimeout(function () { history.push({ me: false, text: reply(text), at: Date.now() }); draw(); }, 900);
+      reply(text).then(botSay);
     };
+    var askTopic = function (id) {
+      loadKb().then(function (kb) {
+        var r = kb && kb.topic(id);
+        if (!r) return;
+        history.push({ me: true, text: DM.esc(kb.title(id)), at: Date.now() });
+        draw();
+        botSay(r.html + chips(r.next));
+      });
+    };
+    msgs.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-topic]");
+      if (b) askTopic(b.dataset.topic);
+    });
+    var quick = $(".chat-box__quick", chatBox);
+    var fillQuick = function () {
+      loadKb().then(function (kb) {
+        if (!kb || quick.dataset.kb) return;
+        quick.dataset.kb = "1";
+        quick.innerHTML = kb.menu.map(function (id) { return '<button type="button" data-topic-q="' + id + '">' + kb.title(id) + "</button>"; }).join("");
+        $$("[data-topic-q]", quick).forEach(function (b) { b.addEventListener("click", function () { askTopic(b.dataset.topicQ); }); });
+      });
+    };
+    chatBox._onopen = fillQuick;
     $("form", chatBox).addEventListener("submit", function (e) { e.preventDefault(); var i = $("#chat-input"); send(i.value); i.value = ""; });
     $$(".chat-box__quick button", chatBox).forEach(function (b) { b.addEventListener("click", function () { send(b.textContent); }); });
     fab.addEventListener("click", function () { toggleChat(); });
@@ -562,7 +615,7 @@
   function toggleChat(force) {
     var open = typeof force === "boolean" ? force : !chatBox.classList.contains("is-open");
     chatBox.classList.toggle("is-open", open);
-    if (open) setTimeout(function () { $("#chat-input").focus(); }, 100);
+    if (open) { if (chatBox._onopen) chatBox._onopen(); setTimeout(function () { $("#chat-input").focus(); }, 100); }
   }
   DM.openChat = function () { toggleChat(true); };
 
