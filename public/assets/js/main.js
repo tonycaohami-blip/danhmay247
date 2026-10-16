@@ -166,12 +166,14 @@
       { label: "Tất cả dịch vụ", href: "/dich-vu" }
     ] },
     { label: "Bảng giá", href: "/bang-gia" },
-    { label: "Giới thiệu", href: "/gioi-thieu" },
-    { label: "Đánh giá", href: "/danh-gia" },
     { label: "Bài mẫu", href: "/mau" },
     { label: "Blog", href: "/blog" },
     { label: "Đối tác", href: "/doi-tac" },
-    { label: "Liên hệ", href: "/lien-he" }
+    { label: "Giới thiệu", href: "/gioi-thieu", sub: [
+      { label: "Về chúng tôi", href: "/gioi-thieu" },
+      { label: "Đánh giá", href: "/danh-gia" },
+      { label: "Liên hệ", href: "/lien-he" }
+    ] }
   ];
   DM.logo = function (light) {
     return '<a href="/" class="logo' + (light ? " logo--light" : "") + '" aria-label="Đánh máy 247 - Trang chủ">' +

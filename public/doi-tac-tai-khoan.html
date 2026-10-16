@@ -80,7 +80,7 @@
       app.innerHTML =
         '<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px"><div><h1 class="order-card__title" style="font-size:30px;margin:0">' + DM.esc(me.shop) + "</h1>" +
         '<small style="color:var(--muted)">Đối tác Đánh máy 247 · hoa hồng ' + Math.round(me.rate * 100) + "% · mã <b>" + DM.esc(me.code) + "</b></small></div></div>" +
-        (DM.param("moi") ? '<div class="alert alert--success">Đăng ký thành công! Chúng tôi sẽ duyệt tài khoản trong 24 giờ làm việc và báo qua email.</div>' : "") +
+        (DM.param("moi") && me.status === "pending" ? '<div class="alert alert--success">Đăng ký thành công! Chúng tôi sẽ duyệt tài khoản trong 24 giờ làm việc và báo qua email.</div>' : "") +
         (me.status === "pending" ? '<div class="alert alert--info"><b>Tài khoản đang chờ duyệt.</b> Mã giới thiệu sẽ hoạt động sau khi được duyệt - bạn có thể chuẩn bị poster QR trước.</div>' : "") +
         (!me.bank.account ? '<div class="alert alert--info">Bạn chưa khai báo tài khoản ngân hàng nhận hoa hồng. <button type="button" class="link" data-go="account">Bổ sung ngay</button></div>' : "") +
         '<div class="kpis">' +
