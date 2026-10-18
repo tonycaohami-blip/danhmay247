@@ -6,6 +6,102 @@
 window.DM = window.DM || {};
 DM.posts = [
   {
+    "slug": "dich-vu-go-van-ban-thue",
+    "cat": "Kiến thức",
+    "date": "2026-10-18",
+    "tags": [
+      "Gõ văn bản thuê",
+      "Bảng giá",
+      "Đánh máy thuê",
+      "Dịch vụ"
+    ],
+    "title": "Dịch vụ gõ văn bản thuê: bảng giá 2026, cách tính trang và 7 tiêu chí chọn đơn vị uy tín",
+    "seoTitle": "Dịch vụ gõ văn bản thuê: bảng giá 2026 và cách chọn",
+    "excerpt": "Gõ văn bản thuê giá bao nhiêu một trang? Cách tính trang, các yếu tố làm giá tăng giảm, chi phí ẩn cần tránh và 7 tiêu chí chọn dịch vụ gõ thuê uy tín, bảo mật.",
+    "body": "<p class=\"lead\">“Gõ văn bản thuê bao nhiêu tiền một trang?” là câu hỏi đầu tiên của hầu hết khách hàng. Câu trả lời không chỉ là một con số: giá phụ thuộc thời hạn bạn cần, loại tài liệu gốc, yêu cầu trình bày - và cả những chi phí ẩn mà nhiều người chỉ phát hiện khi đã giao việc. Bài viết giúp bạn hiểu cách tính giá và chọn được đơn vị gõ thuê đáng tin cậy.</p>\n<figure><img src=\"/assets/img/blog/fig-gia-go-thue.svg\" alt=\"Giá gõ văn bản theo thời hạn\" loading=\"lazy\" width=\"960\"><figcaption>Thời hạn càng dài, đơn giá mỗi trang càng thấp. Số liệu minh họa theo bảng giá đánh máy lại của Đánh máy 247 tại thời điểm viết bài.</figcaption></figure>\n\n<h2>Giá gõ văn bản thuê được tính thế nào?</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Yếu tố</th><th>Ảnh hưởng đến giá</th></tr>\n  <tr><td><b>Thời hạn</b></td><td>Gấp 6-24 giờ cao nhất; 7-30 ngày rẻ nhất</td></tr>\n  <tr><td><b>Loại tài liệu gốc</b></td><td>Chữ in, PDF rõ: giá cơ bản; viết tay, ảnh mờ: hệ số cao hơn</td></tr>\n  <tr><td><b>Nội dung đặc biệt</b></td><td>Công thức Toán - Lý - Hóa, LaTeX, bảng biểu phức tạp</td></tr>\n  <tr><td><b>Yêu cầu thêm</b></td><td>Định dạng theo mẫu, biên tập, hiệu đính</td></tr>\n  <tr><td><b>Khối lượng</b></td><td>Đơn lớn, dài hạn có thể được báo giá riêng</td></tr>\n</table></div>\n\n<h2>Bảng giá tham khảo</h2>\n<p>Tại Đánh máy 247, đơn giá gõ lại tài liệu (chữ in, PDF, ảnh) theo trang tài liệu gốc:</p>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Thời hạn</th><th>Đơn giá/trang</th></tr>\n  <tr><td>Gấp 6 giờ</td><td>45.000 đ</td></tr>\n  <tr><td>24 giờ</td><td>33.000 đ</td></tr>\n  <tr><td>3 ngày</td><td>29.000 đ</td></tr>\n  <tr><td>7 ngày</td><td>24.000 đ</td></tr>\n  <tr><td>30 ngày</td><td>19.000 đ</td></tr>\n</table></div>\n<p>Chữ viết tay +15%, công thức Toán - Hóa +50%, LaTeX +60%; định dạng theo mẫu +10%, biên tập +20%. Giá có thể thay đổi theo thời điểm - luôn xem <a href=\"/bang-gia\">bảng giá hiện hành</a> hoặc chọn cấu hình ở <a href=\"/dat-hang\">trang đặt hàng</a> để thấy tổng tiền chính xác trước khi thanh toán.</p>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Không gấp? Chọn thời hạn 7-30 ngày có thể tiết kiệm gần một nửa chi phí so với giao trong ngày. Học sinh, sinh viên còn có mã giảm giá riêng.</div></div>\n\n<h2>Chi phí ẩn cần hỏi trước</h2>\n<ul>\n  <li><b>Phụ phí “bản khó”</b>: bản scan mờ, chữ xấu bị tính thêm sau khi đã nhận việc.</li>\n  <li><b>Phí chỉnh sửa</b>: sửa lỗi do bên gõ gây ra mà vẫn tính tiền.</li>\n  <li><b>Phí định dạng</b>: báo giá chỉ gõ chữ, muốn có bảng, mục lục phải trả thêm.</li>\n  <li><b>Cách đếm trang</b>: đếm theo trang bản Word đầu ra (thường nhiều hơn bản gốc).</li>\n</ul>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Hãy yêu cầu báo giá bằng văn bản ghi rõ: đơn giá, cách tính trang, thời hạn, số lần chỉnh sửa miễn phí và chính sách khi trễ hạn.</div></div>\n\n<h2>7 tiêu chí chọn dịch vụ gõ văn bản thuê</h2>\n<ol class=\"steps\">\n  <li><b>Báo giá minh bạch</b>, thấy tổng tiền trước khi thanh toán.</li>\n  <li><b>Người thật gõ và có khâu kiểm tra</b> - không chỉ chạy phần mềm nhận dạng.</li>\n  <li><b>Cam kết thời hạn</b> và chính sách hoàn tiền khi trễ.</li>\n  <li><b>Chỉnh sửa miễn phí</b> trong một khoảng thời gian rõ ràng.</li>\n  <li><b>Bảo mật</b>: cam kết NDA, xóa tệp sau khi hoàn thành - xem <a href=\"/blog/bao-mat-khi-thue-ngoai-danh-may\">5 câu hỏi về bảo mật</a>.</li>\n  <li><b>Theo dõi được đơn hàng</b>, trao đổi trực tiếp với người làm.</li>\n  <li><b>Có mẫu thực tế</b> để bạn đánh giá chất lượng - xem <a href=\"/mau\">bài mẫu trước và sau</a>.</li>\n</ol>\n\n<h2>Khi nào nên thuê thay vì tự gõ?</h2>\n<p>Khi tài liệu dài, chữ viết tay khó đọc, có công thức hoặc bảng biểu phức tạp, hay khi thời gian của bạn đáng giá hơn khoản phí gõ thuê. Bài <a href=\"/blog/tu-go-hay-thue-go-van-ban\">tự gõ hay thuê gõ</a> có cách tính cụ thể giúp bạn quyết định.</p>\n<div class=\"aside-cta\" style=\"margin:1.8em 0\"><b>Muốn biết chính xác chi phí cho tài liệu của bạn?</b>Chọn loại tài liệu, số trang, thời hạn - giá hiện ngay. <a href=\"/dat-hang\" class=\"button\">Nhận báo giá ngay</a></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Giá phụ thuộc thời hạn, loại tài liệu, nội dung đặc biệt và yêu cầu thêm.</li><li>Thời hạn dài giúp tiết kiệm đáng kể.</li><li>Hỏi rõ chi phí ẩn: phụ phí bản khó, phí chỉnh sửa, cách đếm trang.</li><li>Chọn đơn vị minh bạch, có kiểm tra, bảo mật và cam kết thời hạn.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Gõ văn bản thuê giá bao nhiêu một trang?",
+        "a": "Giá phụ thuộc thời hạn, loại tài liệu và yêu cầu định dạng. Tại Đánh máy 247, gõ lại tài liệu có giá từ 19.000 đ/trang (thời hạn 30 ngày) đến 45.000 đ/trang (gấp 6 giờ); chữ viết tay, công thức, LaTeX có hệ số riêng. Xem bảng giá hiện hành tại trang Bảng giá."
+      },
+      {
+        "q": "Một trang được tính như thế nào?",
+        "a": "Thường tính theo trang của tài liệu gốc (một mặt giấy A4 hoặc tương đương). Trang có mật độ chữ quá dày hoặc khổ lớn được báo giá lại trước khi làm."
+      },
+      {
+        "q": "Có phải trả thêm phí khi bản scan mờ, chữ khó đọc không?",
+        "a": "Ở Đánh máy 247, giá hiển thị khi đặt hàng là giá cuối cùng; phụ phí chỉ áp dụng theo loại chuyển đổi (ví dụ viết tay, công thức) được nêu rõ trước khi thanh toán."
+      }
+    ],
+    "cover": "/assets/img/blog/dich-vu-go-van-ban-thue.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
+    "slug": "thue-go-tai-lieu-online",
+    "cat": "Mẹo hay",
+    "date": "2026-10-17",
+    "tags": [
+      "Thuê gõ tài liệu",
+      "Gõ thuê online",
+      "Đặt hàng",
+      "File Word"
+    ],
+    "title": "Thuê gõ tài liệu online: quy trình 5 bước từ ảnh chụp điện thoại đến file Word hoàn chỉnh",
+    "seoTitle": "Thuê gõ tài liệu online: quy trình 5 bước nhận file Word",
+    "excerpt": "Chụp ảnh, tải lên, thanh toán và nhận file Word qua mạng: quy trình 5 bước thuê gõ tài liệu online và mẹo nhận kết quả nhanh, chính xác.",
+    "body": "<p class=\"lead\">Trước đây, thuê gõ văn bản nghĩa là mang xấp tài liệu đến tiệm, hẹn ngày quay lại lấy đĩa. Nay toàn bộ quy trình có thể làm online: chụp ảnh bằng điện thoại, tải lên, chuyển khoản và nhận file Word qua email. Tiện là vậy, nhưng chuẩn bị đúng cách sẽ quyết định bạn nhận được kết quả nhanh và chính xác đến đâu.</p>\n<figure><img src=\"/assets/img/blog/fig-quy-trinh-go-thue.svg\" alt=\"Quy trình 5 bước thuê gõ tài liệu online\" loading=\"lazy\" width=\"960\"><figcaption>Chụp/scan → tải lên và ghi yêu cầu → thanh toán → theo dõi, trao đổi → nhận file và kiểm tra.</figcaption></figure>\n\n<h2>Bước 1: Chụp hoặc scan tài liệu</h2>\n<ul>\n  <li>Chụp thẳng góc, đủ sáng, nền tương phản; mỗi ảnh một trang.</li>\n  <li>Dùng ứng dụng quét tài liệu để tự cắt viền, làm phẳng trang.</li>\n  <li>Đặt tên ảnh theo thứ tự trang (01, 02, 03…) hoặc gộp thành một PDF.</li>\n</ul>\n<p>Chi tiết xem <a href=\"/blog/meo-chup-tai-lieu-bang-dien-thoai\">7 mẹo chụp tài liệu bằng điện thoại</a>.</p>\n\n<h2>Bước 2: Tải lên và ghi yêu cầu rõ ràng</h2>\n<p>Phần hướng dẫn là nơi quyết định kết quả có đúng ý bạn hay không. Hãy ghi:</p>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Nội dung</th><th>Ví dụ</th></tr>\n  <tr><td>Trang cần gõ</td><td>“Chỉ gõ trang 3-18, bỏ phụ lục”</td></tr>\n  <tr><td>Định dạng</td><td>“Times New Roman 13, giãn dòng 1,5, giữ bảng như bản gốc”</td></tr>\n  <tr><td>Chữ khó đọc</td><td>“Chỗ không đọc được đánh dấu [?]”</td></tr>\n  <tr><td>Tên riêng, thuật ngữ</td><td>Danh sách tên người, địa danh, thuật ngữ chuyên ngành</td></tr>\n  <tr><td>Định dạng file</td><td>.docx, Google Docs, Excel</td></tr>\n</table></div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Tài liệu nhiều hơn số tệp cho phép hoặc quá nặng: nén thành ZIP hoặc gửi liên kết Google Drive (đã mở quyền xem) trong phần hướng dẫn.</div></div>\n\n<h2>Bước 3: Thanh toán và xác nhận</h2>\n<p>Tại Đánh máy 247, sau khi đặt hàng bạn quét mã VietQR - số tiền và nội dung đã điền sẵn. Thời hạn bắt đầu tính khi thanh toán được xác nhận, bạn nhận email kèm liên kết theo dõi đơn.</p>\n\n<h2>Bước 4: Theo dõi và trao đổi</h2>\n<ul>\n  <li>Xem tiến độ: đã thanh toán → đang thực hiện → kiểm tra → hoàn thành.</li>\n  <li>Nhắn tin bổ sung yêu cầu, gửi thêm tài liệu ngay trong trang đơn hàng.</li>\n  <li>Nhận thông báo khi có cập nhật - không cần gọi điện hỏi.</li>\n</ul>\n\n<h2>Bước 5: Nhận file và kiểm tra</h2>\n<p>Tải file từ email hoặc trang tài khoản, kiểm tra theo <a href=\"/blog/kiem-tra-file-go-thue-nghiem-thu\">checklist nghiệm thu</a>: đủ trang, đúng số liệu, đúng định dạng. Nếu cần sửa, nhắn cụ thể trang và dòng - bạn được chỉnh sửa miễn phí trong 14 ngày.</p>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Không gửi tài liệu chứa thông tin nhạy cảm (hợp đồng, hồ sơ cá nhân) qua nhóm chat, mạng xã hội hay cho người lạ “nhận gõ giá rẻ”. Hãy dùng kênh có bảo mật và cam kết xóa dữ liệu.</div></div>\n\n<h2>Mẹo nhận file nhanh hơn</h2>\n<ol class=\"steps\">\n  <li>Gửi đủ tài liệu ngay lần đầu, tránh bổ sung nhiều lần.</li>\n  <li>Ghi yêu cầu định dạng cụ thể, kèm file mẫu nếu có.</li>\n  <li>Chọn thời hạn phù hợp; với đơn gấp, xem <a href=\"/blog/go-van-ban-gap-trong-ngay\">cách chuẩn bị gõ văn bản gấp</a>.</li>\n  <li>Kiểm tra email (cả mục Spam) và bật thông báo trong trang đơn hàng.</li>\n</ol>\n<div class=\"aside-cta\" style=\"margin:1.8em 0\"><b>Sẵn sàng gửi tài liệu?</b>Tải lên tối đa 6 tệp, nhận file Word từ 6 giờ. <a href=\"/dat-hang\" class=\"button\">Nhận báo giá ngay</a></div>\n\n<h2>Câu hỏi khách hàng hay gặp khi đặt lần đầu</h2>\n<ul>\n  <li><b>Gửi tài liệu rồi mới biết giá được không?</b> Trên trang đặt hàng, bạn thấy tổng tiền ngay khi chọn loại tài liệu, số trang và thời hạn - trước khi thanh toán.</li>\n  <li><b>Không có tài khoản có theo dõi được đơn không?</b> Có, bằng liên kết trong email xác nhận; hoặc đăng nhập bằng email, không cần mật khẩu.</li>\n  <li><b>Muốn hỏi trước khi đặt?</b> Dùng khung chat “Hỗ trợ Đánh máy 247” ở góc phải - có thể gõ “giá 20 trang viết tay 3 ngày” để nhận báo giá nhanh.</li>\n</ul>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Ảnh chụp rõ, đúng thứ tự giúp gõ nhanh và chính xác.</li><li>Phần hướng dẫn chi tiết quyết định kết quả có đúng ý.</li><li>Theo dõi và trao đổi ngay trong trang đơn hàng.</li><li>Kiểm tra file khi nhận, yêu cầu sửa cụ thể trong 14 ngày.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Thuê gõ tài liệu online có an toàn không?",
+        "a": "An toàn nếu bạn chọn đơn vị có website, thông tin liên hệ rõ ràng, kết nối HTTPS, cam kết bảo mật và chính sách xóa tệp. Tránh gửi tài liệu nhạy cảm qua nhóm chat hoặc cho cá nhân không rõ danh tính."
+      },
+      {
+        "q": "Ảnh chụp bằng điện thoại có gõ được không?",
+        "a": "Được, miễn là ảnh rõ chữ. Chụp thẳng, đủ sáng, không bóng tay và không cắt mất mép chữ để người gõ đọc chính xác."
+      },
+      {
+        "q": "Bao lâu thì nhận được file?",
+        "a": "Tùy thời hạn bạn chọn, nhanh nhất từ 6 giờ. Thời hạn thường tính từ lúc thanh toán được xác nhận."
+      }
+    ],
+    "cover": "/assets/img/blog/thue-go-tai-lieu-online.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
+    "slug": "tu-go-hay-thue-go-van-ban",
+    "cat": "Kiến thức",
+    "date": "2026-10-16",
+    "tags": [
+      "Gõ văn bản thuê",
+      "Tiết kiệm thời gian",
+      "Chi phí",
+      "Năng suất"
+    ],
+    "title": "Tự gõ hay thuê gõ văn bản? Cách tính chi phí thời gian thực tế trước khi quyết định",
+    "seoTitle": "Tự gõ hay thuê gõ văn bản? Cách tính chi phí thực tế",
+    "excerpt": "Tự gõ 50 trang mất bao lâu? So sánh chi phí thời gian, công sức và độ chính xác khi tự gõ với thuê gõ văn bản, kèm công thức tính đơn giản để bạn tự quyết định.",
+    "body": "<p class=\"lead\">“Thôi tự gõ cho đỡ tốn tiền” - nhiều người nghĩ vậy, rồi mất cả tuần buổi tối để gõ xong một tập tài liệu, thêm vài buổi sửa lỗi định dạng. Tự gõ không miễn phí: bạn trả bằng thời gian, sức lực và đôi khi bằng lỗi sai. Bài viết giúp bạn tính toán cụ thể để quyết định tự gõ hay thuê gõ.</p>\n<figure><img src=\"/assets/img/blog/fig-tu-go-vs-thue.svg\" alt=\"So sánh thời gian tự gõ và thuê gõ 50 trang\" loading=\"lazy\" width=\"960\"><figcaption>Ví dụ minh họa với 50 trang tài liệu: thời gian bạn phải bỏ ra khi tự gõ so với thời gian chuẩn bị và kiểm tra khi thuê gõ.</figcaption></figure>\n\n<h2>Bước 1: Ước tính thời gian tự gõ</h2>\n<p>Thời gian thực tế không chỉ là thời gian gõ chữ:</p>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Công đoạn</th><th>Chiếm thời gian</th></tr>\n  <tr><td>Đọc bản gốc, gõ chữ</td><td>Phần lớn, chậm hẳn nếu chữ viết tay</td></tr>\n  <tr><td>Dựng bảng, công thức, tiêu đề</td><td>Có thể gấp đôi thời gian gõ với tài liệu kỹ thuật</td></tr>\n  <tr><td>Soát lỗi chính tả, số liệu</td><td>Thường bị bỏ qua - nguồn lỗi chính</td></tr>\n  <tr><td>Nghỉ, mất tập trung</td><td>Không thể tránh khi làm nhiều giờ</td></tr>\n</table></div>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Ví dụ minh họa: nếu mỗi trang chữ in mất khoảng 15-20 phút cả gõ, định dạng và soát, 50 trang cần khoảng 12-17 giờ làm việc. Bạn có thể đo chính xác bằng cách tự gõ thử 2-3 trang và bấm giờ.</div></div>\n\n<h2>Bước 2: Quy đổi thời gian thành tiền</h2>\n<p>Công thức đơn giản:</p>\n<p class=\"mono\" style=\"background:var(--bg-grey);padding:12px;border-radius:8px\">Chi phí tự gõ = Số giờ × Giá trị một giờ của bạn</p>\n<p>Giá trị một giờ có thể là thu nhập bạn có được nếu dùng thời gian đó làm việc chính, hoặc đơn giản là giá trị bạn đặt cho giờ nghỉ ngơi, học tập, ở bên gia đình. So sánh con số này với báo giá thuê gõ - xem <a href=\"/blog/dich-vu-go-van-ban-thue\">bảng giá gõ văn bản thuê</a>.</p>\n\n<h2>Bước 3: Tính đến độ chính xác</h2>\n<div class=\"compare-grid\">\n  <div class=\"bad\"><b>Tự gõ khi mệt</b>Dễ sai số liệu, bỏ dòng, lỗi dấu tiếng Việt; tự soát bài của mình thường không thấy lỗi.</div>\n  <div class=\"good\"><b>Thuê đơn vị có kiểm tra</b>Người gõ + biên tập viên soát lại; chữ khó đọc được đánh dấu để bạn xác nhận; có chỉnh sửa miễn phí.</div>\n</div>\n\n<h2>Khi nào nên tự gõ?</h2>\n<ul>\n  <li>Tài liệu ngắn (vài trang), chữ in rõ.</li>\n  <li>Bạn gõ 10 ngón nhanh - xem <a href=\"/blog/go-10-ngon-30-ngay\">lộ trình gõ 10 ngón</a>.</li>\n  <li>Bạn có thời gian rảnh thật sự và không có hạn chót gấp.</li>\n  <li>Nội dung đặc biệt nhạy cảm, quy định nội bộ không cho phép thuê ngoài.</li>\n</ul>\n\n<h2>Khi nào nên thuê gõ?</h2>\n<ul>\n  <li>Tài liệu dài, chữ viết tay, bản scan mờ, bản photo nhiều đời.</li>\n  <li>Có công thức, bảng biểu phức tạp - xem <a href=\"/blog/go-bang-bieu-bieu-mau-thue\">gõ bảng biểu thuê</a>.</li>\n  <li>Hạn chót gần, cần nhiều người làm song song.</li>\n  <li>Bạn cần thời gian cho phần việc chuyên môn: viết nội dung, phân tích, giảng dạy.</li>\n</ul>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Cách lai hiệu quả: tự gõ phần ngắn, phần bạn cần suy nghĩ khi gõ; thuê gõ phần dài, phần chỉ cần chép lại chính xác.</div></div>\n\n<h2>Đừng quên chi phí “vô hình”</h2>\n<p>Mỏi mắt, đau cổ tay, trễ hạn công việc chính, căng thẳng vì tài liệu chưa xong - những chi phí này không hiện trên hóa đơn nhưng rất thật. Nếu tự gõ nhiều, hãy chú ý <a href=\"/blog/tu-the-ngoi-go-phim\">tư thế ngồi đúng</a> và nghỉ ngắn thường xuyên.</p>\n\n<h2>Bảng quyết định nhanh</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Tình huống</th><th>Gợi ý</th></tr>\n  <tr><td>Dưới 5 trang chữ in, không gấp</td><td>Tự gõ</td></tr>\n  <tr><td>10-50 trang, chữ viết tay hoặc scan mờ</td><td>Thuê gõ, thời hạn 3-7 ngày</td></tr>\n  <tr><td>Có công thức, bảng phức tạp</td><td>Thuê gõ, ghi rõ yêu cầu định dạng</td></tr>\n  <tr><td>Cần trong ngày</td><td>Thuê gõ gấp, tách phần không gấp</td></tr>\n</table></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Tự gõ không miễn phí: tính cả thời gian định dạng và soát lỗi.</li><li>Quy đổi số giờ thành tiền rồi so với báo giá thuê gõ.</li><li>Tài liệu dài, khó đọc, gấp - thuê gõ thường hiệu quả hơn.</li><li>Có thể kết hợp: tự gõ phần ngắn, thuê phần dài.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Một người gõ được bao nhiêu trang mỗi giờ?",
+        "a": "Tùy kỹ năng và tài liệu. Với tài liệu chữ in, người gõ 10 ngón thành thạo có thể làm vài trang mỗi giờ kể cả định dạng và soát lỗi; chữ viết tay, bảng biểu, công thức chậm hơn nhiều."
+      },
+      {
+        "q": "Khi nào nên tự gõ?",
+        "a": "Khi tài liệu ngắn, chữ rõ, bạn gõ nhanh và có thời gian rảnh, hoặc nội dung cần giữ hoàn toàn bí mật trong nội bộ."
+      },
+      {
+        "q": "Thuê gõ có rẻ hơn tự làm không?",
+        "a": "Nếu tính đúng giá trị thời gian của bạn và thời gian sửa lỗi, thuê gõ thường hiệu quả hơn với tài liệu dài, khó đọc hoặc cần gấp."
+      }
+    ],
+    "cover": "/assets/img/blog/tu-go-hay-thue-go-van-ban.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
     "slug": "cua-hang-photocopy-tang-thu-nhap",
     "cat": "Đối tác",
     "date": "2026-10-16",
@@ -68,6 +164,38 @@ DM.posts = [
     "cover": "/assets/img/blog/lam-danh-may-tai-nha-tranh-lua-dao.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 5
+  },
+  {
+    "slug": "go-van-ban-gap-trong-ngay",
+    "cat": "Mẹo hay",
+    "date": "2026-10-15",
+    "tags": [
+      "Gõ văn bản gấp",
+      "Gõ thuê lấy ngay",
+      "Thời hạn",
+      "Đánh máy nhanh"
+    ],
+    "title": "Cần gõ văn bản gấp trong ngày: chuẩn bị thế nào để nhận file nhanh nhất mà vẫn chính xác?",
+    "seoTitle": "Cần gõ văn bản gấp trong ngày: cách nhận file nhanh nhất",
+    "excerpt": "Cần gõ văn bản gấp trong 6-24 giờ? Cách tách phần cần gấp, gửi đủ tài liệu một lần, ghi yêu cầu rõ và kiểm tra nhanh khi nhận file.",
+    "body": "<p class=\"lead\">Ngày mai nộp hồ sơ dự thầu, chiều nay phải có bản Word của biên bản họp, tối nay cần đề cương để in - những tình huống “gõ gấp trong ngày” xảy ra thường xuyên hơn ta nghĩ. Dịch vụ gõ thuê có thể giao trong vài giờ, nhưng tốc độ thực tế phụ thuộc rất nhiều vào cách bạn chuẩn bị.</p>\n\n<h2>1. Xác định phần nào thật sự cần gấp</h2>\n<p>Hiếm khi cả tập tài liệu đều cần ngay. Hãy tách:</p>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Nhóm</th><th>Ví dụ</th><th>Thời hạn gợi ý</th></tr>\n  <tr><td>Cần ngay</td><td>Trang nộp kèm hồ sơ, phần trình chiếu sáng mai</td><td>6-12 giờ</td></tr>\n  <tr><td>Cần trong tuần</td><td>Phụ lục, tài liệu tham khảo</td><td>3-7 ngày</td></tr>\n  <tr><td>Lưu trữ</td><td>Bản nháp, tài liệu cũ</td><td>14-30 ngày</td></tr>\n</table></div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Chia thành hai đơn với hai thời hạn khác nhau vừa giúp phần gấp xong nhanh hơn, vừa tiết kiệm đáng kể chi phí cho phần còn lại.</div></div>\n\n<h2>2. Gửi đủ tài liệu trong một lần</h2>\n<ul>\n  <li>Chụp tất cả trang cần gõ, kiểm tra không thiếu trang, không mờ.</li>\n  <li>Đánh số thứ tự ảnh hoặc gộp PDF.</li>\n  <li>Gửi kèm file mẫu định dạng (nếu có) và danh sách tên riêng.</li>\n</ul>\n<p>Mỗi lần bổ sung tài liệu sau khi đã bắt đầu đều làm chậm tiến độ và dễ sai thứ tự.</p>\n\n<h2>3. Ghi yêu cầu cụ thể, tránh hỏi đi hỏi lại</h2>\n<p>Với đơn gấp, mỗi câu hỏi qua lại tốn thời gian. Ghi sẵn: phông chữ, cỡ chữ, lề, cách xử lý chữ không đọc được, có cần giữ nguyên ngắt dòng như bản gốc không. Xem mẫu cách ghi yêu cầu trong bài <a href=\"/blog/thue-go-tai-lieu-online\">thuê gõ tài liệu online</a>.</p>\n\n<h2>4. Thanh toán ngay để bắt đầu tính giờ</h2>\n<p>Thời hạn tính từ khi thanh toán được xác nhận. Chuyển khoản đúng nội dung (mã đơn) để hệ thống đối soát nhanh; bấm “Tôi đã chuyển khoản” sau khi chuyển.</p>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Đơn gấp lúc đêm khuya hoặc cuối tuần với khối lượng lớn: hãy gọi trước để xác nhận khả năng nhận đơn, tránh trường hợp đặt xong mới biết không kịp.</div></div>\n\n<h2>5. Kiểm tra nhanh khi nhận file</h2>\n<ol class=\"steps\">\n  <li>Đếm số trang, đối chiếu tiêu đề đầu - cuối với bản gốc.</li>\n  <li>Kiểm tra số liệu quan trọng: số tiền, ngày tháng, tên người.</li>\n  <li>Tìm các chỗ đánh dấu [?] để xác nhận.</li>\n  <li>Xuất PDF thử để chắc định dạng không vỡ khi in.</li>\n</ol>\n<p>Danh sách kiểm tra đầy đủ: <a href=\"/blog/kiem-tra-file-go-thue-nghiem-thu\">checklist nghiệm thu file gõ thuê</a>.</p>\n\n<h2>Đơn gấp được xử lý thế nào ở phía dịch vụ?</h2>\n<p>Với tài liệu dài, đơn vị chuyên nghiệp chia tài liệu cho nhiều chuyên viên gõ song song, sau đó biên tập viên ghép lại, thống nhất phông chữ, tiêu đề, cách viết số. Vì vậy tài liệu càng được đánh số trang và ghi yêu cầu rõ, việc chia - ghép càng nhanh và chính xác.</p>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Thời hạn ngắn nhất tại Đánh máy 247 là 6 giờ. Bạn có thể xem ngày giờ giao dự kiến ngay khi chọn thời hạn ở trang đặt hàng, hoặc hỏi nhanh trong khung chat “Hỗ trợ Đánh máy 247”.</div></div>\n<div class=\"aside-cta\" style=\"margin:1.8em 0\"><b>Cần gõ gấp trong ngày?</b>Chọn thời hạn 6, 12 hoặc 24 giờ, xem ngay giờ giao dự kiến. <a href=\"/dat-hang\" class=\"button\">Nhận báo giá ngay</a></div>\n\n<h2>Ví dụ tách đơn để tiết kiệm</h2>\n<p>Giả sử bạn có 40 trang, nhưng chỉ 10 trang cần nộp sáng mai. Gửi 10 trang với thời hạn 12 giờ, 30 trang còn lại chọn 5-7 ngày. Tổng chi phí thấp hơn đáng kể so với đặt cả 40 trang gấp, trong khi phần quan trọng vẫn kịp hạn. Bạn có thể thử các phương án ngay ở trang đặt hàng hoặc hỏi khung chat để so sánh.</p>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Tách phần cần gấp và phần không gấp để tiết kiệm.</li><li>Gửi đủ tài liệu và yêu cầu trong một lần.</li><li>Thanh toán ngay vì thời hạn tính từ lúc xác nhận.</li><li>Kiểm tra nhanh số trang, số liệu, chỗ đánh dấu khi nhận.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Gõ văn bản gấp nhanh nhất bao lâu?",
+        "a": "Tại Đánh máy 247, thời hạn nhanh nhất là 6 giờ kể từ khi thanh toán được xác nhận. Với khối lượng lớn cần gấp hơn, hãy gọi hotline để kiểm tra khả năng nhận đơn."
+      },
+      {
+        "q": "Đơn gấp có kém chính xác hơn không?",
+        "a": "Không nên. Tài liệu dài cần gấp được chia cho nhiều chuyên viên làm song song và biên tập viên thống nhất định dạng, vẫn giữ khâu kiểm tra."
+      },
+      {
+        "q": "Làm sao để giảm chi phí khi gấp?",
+        "a": "Chỉ gửi phần thật sự cần gấp với thời hạn ngắn, phần còn lại chọn thời hạn dài hơn để có đơn giá thấp hơn."
+      }
+    ],
+    "cover": "/assets/img/blog/go-van-ban-gap-trong-ngay.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
   },
   {
     "slug": "ai-va-liem-chinh-hoc-thuat",
@@ -134,6 +262,38 @@ DM.posts = [
     "read": 5
   },
   {
+    "slug": "go-van-ban-thue-cho-sinh-vien",
+    "cat": "Học thuật",
+    "date": "2026-10-14",
+    "tags": [
+      "Sinh viên",
+      "Gõ văn bản thuê",
+      "Luận văn",
+      "Tiểu luận"
+    ],
+    "title": "Thuê gõ văn bản cho sinh viên: luận văn, tiểu luận, vở ghi - làm sao cho đúng và tiết kiệm?",
+    "seoTitle": "Thuê gõ văn bản cho sinh viên: luận văn, tiểu luận, vở ghi",
+    "excerpt": "Sinh viên nên thuê gõ phần nào, tự làm phần nào? Hướng dẫn thuê gõ luận văn, tiểu luận, vở ghi tiết kiệm và đúng quy định học thuật.",
+    "body": "<p class=\"lead\">Mùa luận văn, mùa thi là lúc sinh viên “ngập” trong việc gõ: chương tổng quan viết tay, số liệu khảo sát, vở ghi cả học kỳ cần thành đề cương. Thuê gõ văn bản đúng cách giúp bạn có thêm thời gian cho phần quan trọng nhất - nội dung và ôn tập - mà vẫn đúng quy định học thuật và không tốn kém.</p>\n\n<h2>Phần nào nên thuê, phần nào tự làm?</h2>\n<div class=\"compare-grid\">\n  <div class=\"good\"><b>Nên thuê</b>Gõ lại bản viết tay của chính bạn; gõ công thức, bảng số liệu; định dạng theo mẫu của trường (mục lục, đánh số trang, trích dẫn); số hóa vở ghi để ôn thi.</div>\n  <div class=\"bad\"><b>Phải tự làm</b>Nội dung, lập luận, phân tích, kết luận; thu thập và xử lý số liệu; đọc và trích dẫn tài liệu tham khảo.</div>\n</div>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Thuê gõ, định dạng không thay đổi nội dung học thuật - giống như nhờ in ấn, đóng gáy. Xem thêm <a href=\"/blog/ai-va-liem-chinh-hoc-thuat\">ranh giới liêm chính học thuật khi dùng công cụ hỗ trợ</a>.</div></div>\n\n<h2>Thuê gõ luận văn, khóa luận</h2>\n<ol class=\"steps\">\n  <li>Gửi kèm <b>mẫu trình bày của trường</b> (lề, phông, cỡ chữ, cách đánh số chương).</li>\n  <li>Ghi rõ kiểu trích dẫn (APA, IEEE…) - xem <a href=\"/blog/trich-dan-apa-ieee-word\">trích dẫn trong Word</a>.</li>\n  <li>Chương có nhiều công thức: ghi rõ dùng Equation, MathType hay LaTeX.</li>\n  <li>Yêu cầu dùng Heading để có <a href=\"/blog/tao-muc-luc-tu-dong-word\">mục lục tự động</a>.</li>\n</ol>\n\n<h2>Số hóa vở ghi, đề cương ôn thi</h2>\n<p>Không cần gõ toàn bộ vở. Chụp và sắp xếp theo chủ đề, chỉ thuê gõ phần cốt lõi: định nghĩa, định lý, công thức, ví dụ mẫu. Quy trình chi tiết: <a href=\"/blog/so-hoa-vo-ghi-bai-giang\">số hóa vở ghi bài giảng</a>.</p>\n\n<h2>Tiết kiệm chi phí cho sinh viên</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Cách</th><th>Lý do tiết kiệm</th></tr>\n  <tr><td>Đặt sớm, chọn thời hạn dài</td><td>Đơn giá 30 ngày thấp hơn nhiều so với gấp trong ngày</td></tr>\n  <tr><td>Dùng mã ưu đãi sinh viên</td><td>Giảm trực tiếp trên tổng đơn</td></tr>\n  <tr><td>Chỉ gửi phần cần gõ</td><td>Ghi rõ trang cần làm, bỏ phần đã có file</td></tr>\n  <tr><td>Gộp nhóm</td><td>Cả nhóm tiểu luận gửi chung một đơn, thống nhất định dạng</td></tr>\n</table></div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Lên lịch ngược từ hạn nộp: gửi gõ phần viết tay trước 2-3 tuần, dành tuần cuối để đọc lại, chỉnh nội dung và in ấn.</div></div>\n\n<h2>Kiểm tra trước khi nộp</h2>\n<ul>\n  <li>Đọc lại toàn bộ: bạn là người hiểu nội dung nhất để phát hiện chữ gõ nhầm nghĩa.</li>\n  <li>Kiểm tra số liệu trong bảng khớp với dữ liệu gốc.</li>\n  <li>Cập nhật mục lục, danh mục bảng hình trước khi xuất PDF.</li>\n  <li>Kiểm tra lỗi chính tả - xem <a href=\"/blog/loi-chinh-ta-tieng-viet\">12 lỗi chính tả phổ biến</a>.</li>\n</ul>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Không đưa dữ liệu khảo sát có thông tin cá nhân người tham gia khi chưa ẩn danh. Gán mã phiếu thay cho họ tên trước khi gửi nhập liệu.</div></div>\n\n<h2>Đơn nhỏ cũng đáng thuê?</h2>\n<p>Một bài tiểu luận vài trang viết tay có thể tự gõ. Nhưng khi trùng tuần thi, vài trang ấy chiếm cả buổi tối - thời gian bạn cần để ôn bài. Hãy tính theo cách trong bài <a href=\"/blog/tu-go-hay-thue-go-van-ban\">tự gõ hay thuê gõ</a>.</p>\n\n<h2>Lịch gợi ý cho mùa luận văn</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Thời điểm</th><th>Việc nên làm</th></tr>\n  <tr><td>4-6 tuần trước hạn</td><td>Gửi gõ chương viết tay, bảng số liệu (thời hạn dài, giá tốt)</td></tr>\n  <tr><td>2-3 tuần trước hạn</td><td>Định dạng toàn bài theo mẫu trường, mục lục, trích dẫn</td></tr>\n  <tr><td>Tuần cuối</td><td>Đọc lại, sửa nội dung, kiểm tra đạo văn, in thử</td></tr>\n</table></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Thuê gõ, định dạng; tự làm nội dung, số liệu, lập luận.</li><li>Gửi mẫu trình bày của trường và yêu cầu kiểu trích dẫn.</li><li>Đặt sớm, thời hạn dài, dùng mã sinh viên để tiết kiệm.</li><li>Luôn tự đọc lại và kiểm tra số liệu trước khi nộp.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Thuê gõ luận văn có vi phạm quy định không?",
+        "a": "Thuê người gõ lại bản viết tay của chính bạn hoặc định dạng theo mẫu của trường không thay đổi nội dung học thuật. Nội dung, lập luận, số liệu phải là của bạn; hãy tìm hiểu quy định của trường."
+      },
+      {
+        "q": "Sinh viên có được giảm giá không?",
+        "a": "Tại Đánh máy 247 có mã ưu đãi dành cho học sinh, sinh viên. Xem danh sách mã đang áp dụng trong khung chat hoặc tại trang đặt hàng."
+      },
+      {
+        "q": "Nên gửi bản viết tay hay bản đã gõ một phần?",
+        "a": "Gửi bản gốc rõ nhất bạn có. Nếu đã gõ một phần, gửi kèm file Word để người làm thống nhất định dạng với phần còn lại."
+      }
+    ],
+    "cover": "/assets/img/blog/go-van-ban-thue-cho-sinh-vien.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
     "slug": "dich-vu-an-theo-tiem-photocopy",
     "cat": "Đối tác",
     "date": "2026-10-14",
@@ -178,6 +338,38 @@ DM.posts = [
     "excerpt": "Gõ mổ cò bằng hai ngón vừa chậm vừa mỏi. Lộ trình 4 tuần, mỗi ngày 20 phút, giúp bạn gõ không nhìn bàn phím và nhanh gấp đôi.",
     "body": "\n<p class=\"lead\">Phần lớn người dùng máy tính ở Việt Nam tự học gõ phím theo kiểu “mổ cò”: nhìn bàn phím, dùng hai đến bốn ngón. Cách này vẫn đạt khoảng 25–35 từ/phút, nhưng khó vượt lên và làm mỏi mắt vì phải liên tục nhìn xuống. Tin vui là chỉ cần một tháng luyện tập có phương pháp, bạn hoàn toàn có thể gõ 10 ngón ở tốc độ 50–60 từ/phút.</p>\n\n<h2>Vì sao nên học gõ 10 ngón?</h2>\n<ul>\n  <li><b>Nhanh hơn:</b> người gõ 10 ngón thành thạo thường đạt 60–80 từ/phút, gấp đôi gõ mổ cò.</li>\n  <li><b>Chính xác hơn:</b> mỗi ngón phụ trách một vùng cố định, tay không phải “đi tìm” phím nên ít gõ nhầm.</li>\n  <li><b>Đỡ mỏi:</b> mắt nhìn màn hình thay vì đảo liên tục giữa màn hình và bàn phím, cổ cũng ít phải cúi.</li>\n  <li><b>Tập trung vào nội dung:</b> khi ngón tay tự động, đầu óc dành cho việc suy nghĩ câu chữ.</li>\n</ul>\n\n<h2>Nền tảng: hàng phím cơ sở</h2>\n<p>Mọi thứ bắt đầu từ <b>hàng phím cơ sở</b>: tay trái đặt trên <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd>, tay phải đặt trên <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>;</kbd>, hai ngón cái đặt nhẹ lên phím cách. Sau mỗi lần gõ, ngón tay luôn quay về vị trí này.</p>\n<figure><img src=\"/assets/img/blog/fig-ban-phim-10-ngon.svg\" alt=\"Sơ đồ phân công ngón tay trên bàn phím QWERTY\" loading=\"lazy\" width=\"960\"><figcaption>Mỗi màu là vùng phụ trách của một ngón. Hai phím F và J có gờ nổi để bạn đặt tay đúng chỗ mà không cần nhìn.</figcaption></figure>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Hãy sờ hai gờ nổi trên phím <kbd>F</kbd> và <kbd>J</kbd>. Đây là “mỏ neo” giúp bạn về đúng hàng cơ sở trong bóng tối.</div></div>\n\n<h2>Lộ trình 4 tuần, mỗi ngày 20 phút</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Tuần</th><th>Mục tiêu</th><th>Bài tập chính</th><th>Tốc độ kỳ vọng</th></tr>\n  <tr><td><b>1</b></td><td>Thuộc hàng cơ sở và hàng trên</td><td>Gõ chậm, không nhìn phím, đúng ngón. Che bàn phím bằng một tờ giấy nếu cần.</td><td>10–20 từ/phút</td></tr>\n  <tr><td><b>2</b></td><td>Thêm hàng dưới, chữ hoa với <kbd>Shift</kbd></td><td>Gõ các từ tiếng Việt ngắn, luyện kết hợp phím dấu của bộ gõ.</td><td>20–30 từ/phút</td></tr>\n  <tr><td><b>3</b></td><td>Gõ câu và đoạn văn</td><td>Chép lại một trang báo mỗi ngày, ưu tiên độ chính xác trên 95%.</td><td>30–45 từ/phút</td></tr>\n  <tr><td><b>4</b></td><td>Tăng tốc và tạo nhịp</td><td>Bài kiểm tra 1–3 phút, ghi lại kết quả, tập trung vào các phím hay sai.</td><td>45–60 từ/phút</td></tr>\n</table></div>\n\n<h2>Năm nguyên tắc vàng khi luyện tập</h2>\n<ol class=\"steps\">\n  <li><b>Chính xác trước, tốc độ sau.</b> Gõ sai rồi sửa tốn nhiều thời gian hơn gõ chậm mà đúng. Khi độ chính xác ổn định trên 95% mới tăng tốc.</li>\n  <li><b>Không nhìn bàn phím.</b> Đây là thói quen khó bỏ nhất. Lúc đầu bạn sẽ chậm hơn, nhưng đó là cái giá cần trả.</li>\n  <li><b>Luyện đều đặn mỗi ngày.</b> 20 phút mỗi ngày hiệu quả hơn hẳn 2 giờ vào cuối tuần.</li>\n  <li><b>Giữ nhịp đều.</b> Gõ đều tay như nhịp đồng hồ thay vì lúc nhanh lúc chậm.</li>\n  <li><b>Ngồi đúng tư thế.</b> Cổ tay thẳng, khuỷu tay khoảng 90°, vai thả lỏng.</li>\n</ol>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Có nhiều trang luyện gõ miễn phí cho phép chọn bài tiếng Việt và đo tốc độ, độ chính xác theo thời gian thực. Hãy chọn một trang và gắn bó với nó để dễ theo dõi tiến bộ.</div></div>\n\n<h2>Gõ tiếng Việt: thêm một lớp kỹ năng</h2>\n<p>Với tiếng Việt, bạn còn phải gõ thêm dấu thanh và dấu mũ qua bộ gõ (Telex hoặc VNI). Đừng học song song quá sớm: hãy thành thạo vị trí chữ cái trong tuần đầu, sang tuần thứ hai mới kết hợp gõ dấu. Với Telex, các phím dấu (<kbd>s</kbd> <kbd>f</kbd> <kbd>r</kbd> <kbd>x</kbd> <kbd>j</kbd>) đều nằm trong vùng ngón tay quen thuộc, nên chuyển sang rất tự nhiên.</p>\n\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Luôn đặt tay ở hàng cơ sở A S D F - J K L ;, dùng gờ nổi trên F và J để định vị.</li><li>Chính xác trên 95% rồi mới tăng tốc.</li><li>20 phút mỗi ngày trong 4 tuần là đủ để đạt 45–60 từ/phút.</li><li>Không nhìn bàn phím, kể cả khi thấy chậm lúc đầu.</li></ul></div>\n<p>Nếu bạn đang có một chồng tài liệu cần gõ gấp mà chưa kịp luyện, đội ngũ chuyên viên của chúng tôi (tốc độ trên 70 từ/phút) luôn sẵn sàng. <a href=\"/dat-hang\">Đặt hàng ngay</a> và nhận tài liệu chỉ từ 6 giờ.</p>",
     "cover": "/assets/img/blog/go-10-ngon-30-ngay.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
+    "slug": "go-van-ban-hanh-chinh-thue",
+    "cat": "Kiến thức",
+    "date": "2026-10-13",
+    "tags": [
+      "Văn bản hành chính",
+      "Gõ văn bản thuê",
+      "Doanh nghiệp",
+      "Nghị định 30"
+    ],
+    "title": "Gõ văn bản hành chính thuê cho cơ quan, doanh nghiệp: thể thức, bảo mật và tiến độ",
+    "seoTitle": "Gõ văn bản hành chính thuê cho cơ quan, doanh nghiệp",
+    "excerpt": "Thuê gõ công văn, quyết định, hồ sơ lưu trữ: yêu cầu thể thức Nghị định 30, bảo mật, chia lô tiến độ và nghiệm thu cho cơ quan, doanh nghiệp.",
+    "body": "<p class=\"lead\">Văn thư cơ quan, phòng hành chính doanh nghiệp thường gặp khối lượng lớn văn bản cần gõ lại: công văn cũ chỉ còn bản giấy, quyết định soạn bằng phông chữ cũ lỗi hiển thị, hồ sơ lưu trữ cần số hóa. Thuê gõ giúp giải phóng nhân sự, nhưng văn bản hành chính có yêu cầu riêng về thể thức và bảo mật mà bên nhận việc phải đáp ứng.</p>\n\n<h2>Những loại văn bản thường thuê gõ</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Loại</th><th>Đặc điểm cần lưu ý</th></tr>\n  <tr><td>Công văn, tờ trình, thông báo</td><td>Đúng thể thức: quốc hiệu, số ký hiệu, nơi nhận</td></tr>\n  <tr><td>Quyết định, quy chế</td><td>Đánh số điều, khoản, điểm chính xác</td></tr>\n  <tr><td>Biên bản họp, biên bản nghiệm thu</td><td>Thành phần, nội dung, chữ ký - xem <a href=\"/blog/bien-ban-hop-online\">biên bản họp</a></td></tr>\n  <tr><td>Hồ sơ lưu trữ cũ</td><td>Giữ nguyên văn, ghi chú [Dấu], [Chữ ký]</td></tr>\n  <tr><td>Văn bản lỗi phông TCVN3, VNI</td><td>Chuyển sang Unicode - xem <a href=\"/blog/sua-loi-font-tcvn3-vni-unicode\">sửa lỗi font</a></td></tr>\n</table></div>\n\n<h2>Yêu cầu về thể thức</h2>\n<p>Văn bản hành chính hiện trình bày theo Nghị định 30/2020/NĐ-CP. Khi thuê gõ, hãy gửi kèm một văn bản mẫu đúng chuẩn của đơn vị để bên gõ làm theo:</p>\n<ul>\n  <li>Khổ A4, lề trái 30-35 mm, lề phải 15-20 mm, lề trên - dưới 20-25 mm.</li>\n  <li>Phông Times New Roman (Unicode), cỡ chữ nội dung 13-14.</li>\n  <li>Bố cục quốc hiệu, tiêu ngữ, tên cơ quan, số ký hiệu, địa danh ngày tháng đúng vị trí.</li>\n</ul>\n<p>Chi tiết xem <a href=\"/blog/the-thuc-van-ban-nghi-dinh-30\">thể thức văn bản theo Nghị định 30</a>.</p>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Lập sẵn một “bộ mẫu” Word (công văn, quyết định, tờ trình) có Styles đúng chuẩn và gửi cho bên gõ thuê. Mọi văn bản trả về sẽ đồng bộ, không phải chỉnh lại.</div></div>\n\n<h2>Bảo mật: điều kiện bắt buộc</h2>\n<ol class=\"steps\">\n  <li><b>Hợp đồng</b> nêu rõ phạm vi, nghĩa vụ bảo mật, thời hạn và cách xóa dữ liệu.</li>\n  <li><b>Kênh truyền tệp</b> an toàn (HTTPS, liên kết có thời hạn), không dùng nhóm chat chung.</li>\n  <li><b>Phân quyền</b>: người gõ chỉ thấy phần tài liệu cần làm.</li>\n  <li><b>Xác nhận xóa</b> tệp sau khi bàn giao.</li>\n</ol>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Văn bản có dữ liệu cá nhân (hồ sơ nhân sự, danh sách người lao động) cần tuân thủ quy định bảo vệ dữ liệu cá nhân - xem <a href=\"/blog/bao-ve-du-lieu-ca-nhan-so-hoa\">lưu ý khi số hóa</a>.</div></div>\n\n<h2>Tiến độ với khối lượng lớn</h2>\n<p>Dự án hàng nghìn trang nên chia theo lô (ví dụ mỗi lô 200-500 trang), nghiệm thu từng lô trước khi làm lô tiếp theo. Cách này giúp phát hiện sớm sai lệch định dạng, điều chỉnh yêu cầu kịp thời và thanh toán theo tiến độ.</p>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Giai đoạn</th><th>Việc cần thống nhất</th></tr>\n  <tr><td>Khởi động</td><td>Mẫu thể thức, quy tắc đặt tên tệp, đầu mối liên hệ</td></tr>\n  <tr><td>Lô thử</td><td>10-20 trang đại diện để chốt chất lượng</td></tr>\n  <tr><td>Thực hiện theo lô</td><td>Lịch giao, cách báo lỗi, xử lý chữ không đọc được</td></tr>\n  <tr><td>Nghiệm thu</td><td>Danh sách kiểm tra, biên bản bàn giao, xóa dữ liệu</td></tr>\n</table></div>\n\n<h2>Nghiệm thu văn bản</h2>\n<p>Kiểm tra ngẫu nhiên một tỷ lệ trang trong mỗi lô: số ký hiệu, ngày tháng, tên người, số tiền, đánh số điều khoản. Dùng <a href=\"/blog/kiem-tra-file-go-thue-nghiem-thu\">checklist nghiệm thu</a> để thống nhất tiêu chí giữa hai bên.</p>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Đánh máy 247 nhận dự án văn bản hành chính theo lô, ký hợp đồng bảo mật riêng. Gửi mô tả và vài trang mẫu qua <a href=\"/lien-he\">trang Liên hệ</a> để nhận báo giá dự án.</div></div>\n\n<h2>Quy tắc đặt tên tệp cho hồ sơ số hóa</h2>\n<p>Thống nhất trước một quy tắc, ví dụ <span class=\"mono\">2026_CV_025_UBND-VP.docx</span> (năm - loại văn bản - số - ký hiệu). Tên tệp nhất quán giúp tra cứu, sắp xếp và đối chiếu khi nghiệm thu, nhất là với hàng nghìn văn bản.</p>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Gửi văn bản mẫu đúng thể thức Nghị định 30 cho bên gõ.</li><li>Hợp đồng bảo mật, kênh truyền tệp an toàn, xác nhận xóa dữ liệu.</li><li>Dự án lớn: chia lô, làm lô thử, nghiệm thu từng lô.</li><li>Kiểm tra số ký hiệu, ngày tháng, tên người, số tiền.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Thuê gõ văn bản hành chính cần cung cấp gì?",
+        "a": "Bản gốc rõ ràng (scan/ảnh), mẫu thể thức đơn vị đang áp dụng, danh sách tên cơ quan, chức danh, ký hiệu văn bản và yêu cầu về định dạng file đầu ra."
+      },
+      {
+        "q": "Văn bản hành chính trình bày theo quy định nào?",
+        "a": "Văn bản hành chính của cơ quan, tổ chức hiện trình bày theo Nghị định 30/2020/NĐ-CP về công tác văn thư; doanh nghiệp thường áp dụng tương tự hoặc theo quy chế nội bộ."
+      },
+      {
+        "q": "Có ký hợp đồng bảo mật được không?",
+        "a": "Có. Với hồ sơ có thông tin nội bộ hoặc dữ liệu cá nhân, nên ký hợp đồng nêu rõ phạm vi xử lý, bảo mật và thời hạn xóa dữ liệu."
+      }
+    ],
+    "cover": "/assets/img/blog/go-van-ban-hanh-chinh-thue.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 4
   },
@@ -262,6 +454,38 @@ DM.posts = [
     "read": 4
   },
   {
+    "slug": "go-tai-lieu-tieng-anh-thue",
+    "cat": "Dịch thuật",
+    "date": "2026-10-12",
+    "tags": [
+      "Tiếng Anh",
+      "Song ngữ",
+      "Gõ tài liệu thuê",
+      "Chính tả"
+    ],
+    "title": "Thuê gõ tài liệu tiếng Anh và song ngữ Anh - Việt: lưu ý về chính tả, thuật ngữ và định dạng",
+    "seoTitle": "Thuê gõ tài liệu tiếng Anh và song ngữ: lưu ý quan trọng",
+    "excerpt": "Thuê gõ tài liệu tiếng Anh, song ngữ: lưu ý dấu thập phân, ngày tháng, chính tả Anh - Mỹ, ký tự đặc biệt, thuật ngữ và cách ghi yêu cầu.",
+    "body": "<p class=\"lead\">Tài liệu tiếng Anh cần gõ lại ngày càng nhiều: giáo trình nước ngoài chỉ có bản photo, hồ sơ xin học bổng viết tay, catalogue kỹ thuật, hợp đồng song ngữ. Gõ ngoại ngữ không chỉ cần gõ nhanh mà còn cần hiểu chính tả, thuật ngữ và quy ước trình bày khác với tiếng Việt.</p>\n\n<h2>Những khác biệt khi gõ tiếng Anh</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Nội dung</th><th>Tiếng Anh</th><th>Tiếng Việt</th></tr>\n  <tr><td>Dấu thập phân</td><td>3.5</td><td>3,5</td></tr>\n  <tr><td>Phân cách hàng nghìn</td><td>1,250,000</td><td>1.250.000</td></tr>\n  <tr><td>Ngày tháng (Mỹ)</td><td>10/18/2026 hoặc October 18, 2026</td><td>18/10/2026</td></tr>\n  <tr><td>Dấu ngoặc kép</td><td>“ ” và ‘ ’ (dấu nháy đơn trong từ: don’t)</td><td>“ ”</td></tr>\n  <tr><td>Viết hoa tiêu đề</td><td>Title Case hoặc Sentence case theo quy ước</td><td>Viết hoa chữ đầu câu</td></tr>\n</table></div>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Nhầm dấu thập phân là lỗi nguy hiểm nhất khi gõ bảng số liệu tiếng Anh: 3.500 trong tiếng Anh là ba phẩy năm, trong tiếng Việt là ba nghìn năm trăm. Luôn giữ nguyên quy ước của bản gốc.</div></div>\n\n<h2>Chính tả Anh - Anh và Anh - Mỹ</h2>\n<p>colour/color, organisation/organization, centre/center… Người gõ cần giữ đúng chuẩn của bản gốc. Hãy tắt tự động sửa chính tả hoặc đặt ngôn ngữ kiểm tra đúng (English (US) hay English (UK)) để Word không tự “sửa” sai.</p>\n\n<h2>Ký tự đặc biệt thường gặp</h2>\n<ul>\n  <li>Dấu gạch dài (—), gạch nối số (–) trong khoảng 10–20, ký hiệu ©, ®, ™, §.</li>\n  <li>Chữ có dấu trong tên riêng: café, naïve, Zürich.</li>\n  <li>Đơn vị đo lường Anh - Mỹ: in, ft, lb, °F.</li>\n</ul>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Khi bản gốc có thuật ngữ chuyên ngành, gửi kèm danh sách thuật ngữ hoặc tài liệu tham khảo. Người gõ đọc chính xác hơn những từ hiếm gặp trên bản photo mờ.</div></div>\n\n<h2>Tài liệu song ngữ Anh - Việt</h2>\n<p>Với hợp đồng, quy trình, tài liệu đào tạo song ngữ, cần thống nhất bố cục: hai cột song song hay xen kẽ từng đoạn. Hướng dẫn chi tiết: <a href=\"/blog/trinh-bay-ban-dich-song-ngu\">trình bày bản dịch song ngữ</a>. Đặt ngôn ngữ kiểm tra chính tả riêng cho từng phần để Word không gạch đỏ sai.</p>\n\n<h2>Chuẩn bị yêu cầu khi thuê gõ</h2>\n<ol class=\"steps\">\n  <li>Ghi rõ: giữ nguyên văn hay sửa lỗi chính tả, chuẩn Anh - Anh hay Anh - Mỹ.</li>\n  <li>Gửi danh sách tên riêng, thuật ngữ, từ viết tắt.</li>\n  <li>Nêu định dạng: phông, cỡ chữ, cách trình bày tiêu đề.</li>\n  <li>Với tài liệu chuẩn bị dịch thuật, yêu cầu không ngắt dòng cứng - xem <a href=\"/blog/danh-may-ban-goc-truoc-khi-dich\">đánh máy bản gốc trước khi dịch</a>.</li>\n</ol>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Tài liệu tiếng Trung, Hàn, Nhật có yêu cầu riêng về bộ gõ và phông chữ - xem <a href=\"/blog/go-tieng-trung-han-nhat\">gõ tiếng Trung, Hàn, Nhật</a>.</div></div>\n<div class=\"aside-cta\" style=\"margin:1.8em 0\"><b>Có tài liệu tiếng Anh cần gõ lại?</b>Gửi ảnh chụp hoặc PDF, ghi rõ yêu cầu - nhận file Word chính xác. <a href=\"/dat-hang\" class=\"button\">Nhận báo giá ngay</a></div>\n\n<h2>Kiểm tra bản gõ tiếng Anh</h2>\n<ol class=\"steps\">\n  <li>Chạy kiểm tra chính tả với đúng ngôn ngữ (English US/UK); xem kỹ các từ bị gạch đỏ là tên riêng hay lỗi thật.</li>\n  <li>Soát số liệu trong bảng, chú ý dấu thập phân và đơn vị.</li>\n  <li>Kiểm tra dấu nháy trong từ (don’t, it’s) không bị đổi thành ký tự lạ.</li>\n  <li>Đối chiếu tiêu đề, mục với bản gốc để không sót phần nào.</li>\n</ol>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Với tài liệu học thuật tiếng Anh, giữ nguyên định dạng trích dẫn của bản gốc (APA, IEEE…) - xem <a href=\"/blog/trich-dan-apa-ieee-word\">trích dẫn trong Word</a>.</div></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Giữ nguyên quy ước dấu thập phân, ngày tháng của bản gốc.</li><li>Thống nhất chuẩn chính tả Anh - Anh hay Anh - Mỹ.</li><li>Gửi kèm danh sách thuật ngữ, tên riêng.</li><li>Tài liệu song ngữ cần thống nhất bố cục và ngôn ngữ kiểm tra chính tả.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Gõ tài liệu tiếng Anh có giữ nguyên lỗi trong bản gốc không?",
+        "a": "Mặc định nên giữ nguyên văn bản gốc, đặc biệt với tài liệu pháp lý, học thuật. Nếu muốn sửa lỗi chính tả, hãy ghi rõ yêu cầu và chọn thêm dịch vụ biên tập."
+      },
+      {
+        "q": "Chọn chính tả Anh - Anh hay Anh - Mỹ?",
+        "a": "Giữ theo bản gốc. Nếu tài liệu trộn lẫn, hãy chọn một chuẩn theo mục đích sử dụng (ví dụ nộp hồ sơ cho trường Mỹ dùng Anh - Mỹ)."
+      },
+      {
+        "q": "Gõ thuê có kèm dịch sang tiếng Việt không?",
+        "a": "Đánh máy 247 nhận gõ tài liệu tiếng Anh và trình bày bản song ngữ bạn cung cấp, không cung cấp dịch vụ dịch thuật."
+      }
+    ],
+    "cover": "/assets/img/blog/go-tai-lieu-tieng-anh-thue.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
     "slug": "tao-muc-luc-tu-dong-word",
     "cat": "Mẹo hay",
     "date": "2026-10-12",
@@ -290,6 +514,38 @@ DM.posts = [
       }
     ],
     "cover": "/assets/img/blog/tao-muc-luc-tu-dong-word.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
+    "slug": "go-lai-sach-cu-tai-lieu-co",
+    "cat": "Kiến thức",
+    "date": "2026-10-11",
+    "tags": [
+      "Sách cũ",
+      "Tài liệu cổ",
+      "Số hóa",
+      "Gõ văn bản thuê"
+    ],
+    "title": "Gõ lại sách cũ, tài liệu xưa, bản đánh máy cũ: kinh nghiệm xử lý chữ mờ và chính tả thời trước",
+    "seoTitle": "Gõ lại sách cũ, tài liệu xưa: kinh nghiệm xử lý chữ mờ",
+    "excerpt": "Kinh nghiệm gõ lại sách cũ, bản đánh máy xưa: xử lý chữ mờ, giữ hay sửa chính tả thời trước, chụp tài liệu cũ an toàn và lưu trữ lâu dài.",
+    "body": "<p class=\"lead\">Một cuốn sách gia đình giữ từ thời ông bà, tập tài liệu đánh máy bằng máy chữ của cơ quan, giáo trình in roneo đã ố vàng - những tài liệu ấy đang xuống cấp từng năm. Gõ lại thành bản số giúp lưu giữ lâu dài và tra cứu dễ dàng. Nhưng tài liệu xưa có những thách thức riêng mà người gõ cần biết cách xử lý.</p>\n<figure><img src=\"/assets/img/blog/fig-sach-cu.svg\" alt=\"Gõ lại sách cũ: giữ nguyên văn, đánh dấu chữ mờ\" loading=\"lazy\" width=\"960\"><figcaption>Bản gốc ố vàng, chữ mờ → bản gõ giữ nguyên văn, chữ không đọc được đánh dấu [?] để người hiểu nội dung xác nhận.</figcaption></figure>\n\n<h2>Những thách thức thường gặp</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Vấn đề</th><th>Cách xử lý</th></tr>\n  <tr><td>Chữ mờ, nhòe mực, giấy rách</td><td>Đánh dấu [?] hoặc [không rõ], không đoán</td></tr>\n  <tr><td>Chính tả thời trước</td><td>Giữ nguyên hoặc chuẩn hóa theo nguyên tắc thống nhất</td></tr>\n  <tr><td>Bản đánh máy cũ thiếu dấu</td><td>Bổ sung dấu theo ngữ cảnh nếu được yêu cầu, ghi chú nguyên tắc</td></tr>\n  <tr><td>Chữ Hán, chữ Pháp xen kẽ</td><td>Giữ nguyên, gõ đúng ký tự hoặc đánh dấu để chuyên gia xử lý</td></tr>\n  <tr><td>Chú thích, số trang cũ</td><td>Giữ dạng chú thích chân trang, ghi số trang gốc nếu cần trích dẫn</td></tr>\n</table></div>\n\n<h2>Giữ hay sửa chính tả xưa?</h2>\n<div class=\"compare-grid\">\n  <div class=\"good\"><b>Giữ nguyên văn</b>Phù hợp lưu trữ, nghiên cứu, gia phả, tài liệu có giá trị lịch sử. Người đọc sau có thể tin cậy rằng bản số giống bản gốc.</div>\n  <div class=\"good\"><b>Chuẩn hóa</b>Phù hợp bản đọc cho con cháu, tái bản phổ thông. Cần ghi rõ ở đầu tài liệu: đã chuẩn hóa chính tả theo nguyên tắc nào.</div>\n</div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Có thể làm cả hai: bản gõ nguyên văn để lưu trữ, sau đó biên tập thành bản đọc. Lưu cả hai tệp, đặt tên rõ ràng.</div></div>\n\n<h2>Chụp tài liệu xưa mà không làm hỏng</h2>\n<ul>\n  <li>Không ép phẳng gáy sách cũ quá mạnh; chụp từng trang, chấp nhận chút cong ở gáy.</li>\n  <li>Ánh sáng tự nhiên tán xạ, tránh đèn flash chiếu thẳng gây lóa trên giấy bóng.</li>\n  <li>Đặt thước hoặc tờ giấy màu bên cạnh để giữ tỷ lệ, màu sắc khi cần lưu trữ ảnh.</li>\n  <li>Đeo găng tay sạch hoặc rửa tay khô ráo trước khi lật trang giấy giòn.</li>\n</ul>\n<p>Xem thêm <a href=\"/blog/meo-chup-tai-lieu-bang-dien-thoai\">7 mẹo chụp tài liệu</a>.</p>\n\n<h2>Bản đánh máy bằng máy chữ</h2>\n<p>Tài liệu đánh máy cũ thường thiếu dấu tiếng Việt (gõ dấu bằng tay hoặc bỏ dấu), dùng ký tự thay thế, gạch đè sửa lỗi. Người gõ cần đọc theo ngữ cảnh, giữ phần gạch đè nếu có giá trị (bản thảo) hoặc bỏ đi theo yêu cầu. Với văn bản đã số hóa bằng phông cũ bị lỗi hiển thị, xem <a href=\"/blog/sua-loi-font-tcvn3-vni-unicode\">sửa lỗi font TCVN3, VNI</a>.</p>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Sách còn trong thời hạn bảo hộ quyền tác giả: số hóa để dùng cá nhân, gia đình khác với việc in lại hay đăng lên mạng. Hãy tìm hiểu quy định về quyền tác giả trước khi phát hành bản gõ lại.</div></div>\n\n<h2>Sau khi gõ: biên tập và lưu trữ</h2>\n<ol class=\"steps\">\n  <li>Người am hiểu nội dung (con cháu, chuyên gia) đọc lại, xác nhận các chỗ [?].</li>\n  <li>Dùng Heading cho chương mục để có mục lục; giữ chú thích chân trang.</li>\n  <li>Lưu bản Word, bản PDF và ảnh chụp gốc trên ít nhất hai nơi.</li>\n  <li>Nếu muốn in thành sách, xem <a href=\"/blog/chuan-bi-ban-thao-sach\">quy trình chuẩn bị bản thảo</a>.</li>\n</ol>\n<div class=\"aside-cta\" style=\"margin:1.8em 0\"><b>Có sách cũ, tài liệu xưa cần gõ lại?</b>Chúng tôi giữ nguyên văn, đánh dấu chữ khó đọc để bạn xác nhận. <a href=\"/dat-hang\" class=\"button\">Nhận báo giá ngay</a></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Đánh dấu chữ mờ thay vì đoán.</li><li>Chọn giữ nguyên văn hay chuẩn hóa và ghi rõ nguyên tắc.</li><li>Chụp nhẹ tay, ánh sáng tán xạ, không ép gáy sách.</li><li>Lưu cả bản gõ, PDF và ảnh gốc ở nhiều nơi.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Gõ lại sách cũ có nên sửa chính tả theo chuẩn hiện nay không?",
+        "a": "Tùy mục đích. Với lưu trữ, nghiên cứu nên giữ nguyên chính tả gốc; với bản đọc phổ thông có thể chuẩn hóa nhưng cần ghi chú rõ nguyên tắc đã áp dụng."
+      },
+      {
+        "q": "Chữ mờ không đọc được thì xử lý thế nào?",
+        "a": "Đánh dấu rõ ràng như [không rõ] hoặc [?] kèm vị trí, không tự đoán. Người có hiểu biết về nội dung sẽ xác nhận sau."
+      },
+      {
+        "q": "Gõ lại sách cũ có vấn đề bản quyền không?",
+        "a": "Có thể có. Tác phẩm còn trong thời hạn bảo hộ cần sự cho phép của chủ sở hữu quyền khi sao chép, phát hành. Số hóa để sử dụng cá nhân, gia đình hay lưu trữ nội bộ khác với việc xuất bản lại."
+      }
+    ],
+    "cover": "/assets/img/blog/go-lai-sach-cu-tai-lieu-co.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 4
   },
@@ -358,6 +614,38 @@ DM.posts = [
     "read": 4
   },
   {
+    "slug": "go-bang-bieu-bieu-mau-thue",
+    "cat": "Mẹo hay",
+    "date": "2026-10-10",
+    "tags": [
+      "Bảng biểu",
+      "Biểu mẫu",
+      "Excel",
+      "Gõ văn bản thuê"
+    ],
+    "title": "Thuê gõ bảng biểu, biểu mẫu phức tạp sang Word, Excel: giữ đúng cấu trúc, không vỡ khi sửa",
+    "seoTitle": "Thuê gõ bảng biểu, biểu mẫu phức tạp sang Word, Excel",
+    "excerpt": "Thuê gõ bảng biểu, biểu mẫu sang Word, Excel đúng cấu trúc: Table thật, ô gộp, bảng nhiều trang, số liệu tính toán được và cách kiểm tra.",
+    "body": "<p class=\"lead\">Bảng biểu là phần “khó nhằn” nhất khi gõ lại tài liệu: báo cáo tài chính nhiều cột, biểu mẫu hành chính có ô gộp, bảng thống kê dài hàng chục trang. Gõ cho “nhìn giống” thì dễ, nhưng gõ đúng cấu trúc để sau này sửa không vỡ mới là điều khách hàng cần. Đây là những gì bạn nên yêu cầu khi thuê gõ bảng biểu.</p>\n\n<h2>Word hay Excel?</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Nhu cầu</th><th>Nên dùng</th></tr>\n  <tr><td>Bảng trong báo cáo, hợp đồng, luận văn</td><td>Word (Table)</td></tr>\n  <tr><td>Số liệu cần cộng, lọc, vẽ biểu đồ</td><td>Excel</td></tr>\n  <tr><td>Biểu mẫu in ra để điền tay</td><td>Word, bảng có viền</td></tr>\n  <tr><td>Phiếu khảo sát cần tổng hợp</td><td>Excel, mỗi phiếu một dòng - xem <a href=\"/blog/nhap-lieu-excel-chinh-xac\">nhập liệu Excel</a></td></tr>\n</table></div>\n\n<h2>Tiêu chuẩn một bảng gõ đúng</h2>\n<ul>\n  <li>Dựng bằng <b>Table thật</b>, không dùng phím cách, Tab hay khung văn bản để căn cột.</li>\n  <li>Hàng tiêu đề lặp lại ở mỗi trang (<b>Repeat Header Rows</b>) với bảng dài.</li>\n  <li>Ô gộp chỉ dùng khi bản gốc có, không gộp để “cho đẹp”.</li>\n  <li>Số căn phải, chữ căn trái; định dạng số thống nhất.</li>\n  <li>Bảng có chú thích (Insert Caption) để vào danh mục bảng tự động.</li>\n</ul>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Bảng rộng nhiều cột: xoay trang ngang riêng cho trang đó bằng Section Break thay vì thu nhỏ chữ đến mức không đọc được.</div></div>\n\n<h2>Excel: cấu trúc để còn tính toán được</h2>\n<div class=\"compare-grid\">\n  <div class=\"bad\"><b>Sai</b>Gộp ô tiêu đề nhiều tầng giữa vùng dữ liệu; số gõ kèm “đ”, “%”; dòng tổng chen giữa dữ liệu; một ô chứa hai thông tin.</div>\n  <div class=\"good\"><b>Đúng</b>Mỗi cột một loại dữ liệu, một hàng tiêu đề; số là số thật, định dạng hiển thị sau; dòng tổng ở cuối bằng công thức.</div>\n</div>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Bảng số liệu có tổng cộng: hãy yêu cầu bên gõ đối chiếu tổng với bản gốc. Tổng lệch là tín hiệu có ô gõ sai - phát hiện sớm tránh sai cả báo cáo.</div></div>\n\n<h2>Biểu mẫu có ô điền</h2>\n<ol class=\"steps\">\n  <li>Nói rõ biểu mẫu để in ra điền tay hay điền trên máy.</li>\n  <li>In ra điền tay: bảng có viền, dòng kẻ chấm hoặc ô trống đủ rộng.</li>\n  <li>Điền trên máy: dùng trường nhập liệu (content control) và khóa phần cố định.</li>\n  <li>Ô đánh dấu: dùng ký hiệu ☐ thống nhất.</li>\n</ol>\n\n<h2>Cách ghi yêu cầu khi thuê gõ bảng</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Nên ghi</th><th>Ví dụ</th></tr>\n  <tr><td>Phần mềm và định dạng</td><td>“Bảng 3-7 làm trong Excel, còn lại trong Word”</td></tr>\n  <tr><td>Giữ bố cục</td><td>“Giữ đúng số cột, ô gộp như bản gốc”</td></tr>\n  <tr><td>Định dạng số</td><td>“Dấu chấm phân cách hàng nghìn, 2 chữ số thập phân”</td></tr>\n  <tr><td>Kiểm tra</td><td>“Đối chiếu dòng tổng cộng với bản gốc”</td></tr>\n</table></div>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Phụ phí chuyển PDF sang Excel, viết tay sang Excel được hiển thị rõ khi chọn loại chuyển đổi ở <a href=\"/dat-hang\">trang đặt hàng</a>. Xem thêm dịch vụ <a href=\"/dich-vu/word-sang-excel\">nhập liệu sang Excel</a>.</div></div>\n\n<h2>Bảng dài nhiều trang trong Word</h2>\n<ul>\n  <li>Bật <b>Repeat Header Rows</b> cho hàng tiêu đề để mỗi trang đều có tên cột.</li>\n  <li>Tắt <b>Allow row to break across pages</b> với hàng ngắn để không bị cắt đôi; bật với hàng có nội dung dài.</li>\n  <li>Đặt độ rộng cột cố định để bảng không tự co giãn khi sửa nội dung.</li>\n  <li>Dùng Table Styles thống nhất cho mọi bảng trong tài liệu.</li>\n</ul>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Bảng số liệu viết tay (sổ sách, phiếu điều tra) có phụ phí riêng do cần đọc kỹ từng con số. Xem bài <a href=\"/blog/so-sach-hoa-don-sang-excel\">số hóa sổ sách sang Excel</a> để biết cách chuẩn bị.</div></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Bảng trình bày ở Word, số liệu cần tính toán ở Excel.</li><li>Table thật, lặp hàng tiêu đề, không căn bằng phím cách.</li><li>Excel: mỗi cột một loại dữ liệu, số là số thật.</li><li>Yêu cầu đối chiếu tổng cộng với bản gốc.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Nên gõ bảng vào Word hay Excel?",
+        "a": "Bảng để trình bày trong văn bản (báo cáo, hợp đồng) nên ở Word. Bảng số liệu cần tính toán, lọc, tổng hợp nên ở Excel; có thể dán sang Word khi cần trình bày."
+      },
+      {
+        "q": "Vì sao bảng tôi nhận được bị vỡ khi sửa?",
+        "a": "Thường do bảng được dựng bằng phím cách, Tab hoặc khung văn bản thay vì chức năng Table thật, hoặc dùng nhiều ô gộp không cần thiết."
+      },
+      {
+        "q": "Biểu mẫu có ô để điền thì gõ thế nào?",
+        "a": "Dùng bảng có viền cho các ô điền, hoặc trường nhập liệu (form field/content control) nếu cần điền trên máy. Ghi rõ yêu cầu khi thuê gõ."
+      }
+    ],
+    "cover": "/assets/img/blog/go-bang-bieu-bieu-mau-thue.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
     "slug": "go-ma-tran-he-phuong-trinh-word",
     "cat": "Học thuật",
     "date": "2026-10-10",
@@ -386,6 +674,38 @@ DM.posts = [
       }
     ],
     "cover": "/assets/img/blog/go-ma-tran-he-phuong-trinh-word.svg",
+    "author": "Ban biên tập Đánh máy 247",
+    "read": 4
+  },
+  {
+    "slug": "kiem-tra-file-go-thue-nghiem-thu",
+    "cat": "Mẹo hay",
+    "date": "2026-10-09",
+    "tags": [
+      "Nghiệm thu",
+      "Kiểm tra chất lượng",
+      "Gõ văn bản thuê",
+      "Checklist"
+    ],
+    "title": "Nhận file gõ thuê: checklist 10 điểm kiểm tra chất lượng trước khi nghiệm thu",
+    "seoTitle": "Checklist 10 điểm kiểm tra file gõ thuê trước khi nghiệm thu",
+    "excerpt": "Checklist 10 điểm kiểm tra file gõ thuê trước khi nghiệm thu: số trang, số liệu, tên riêng, chính tả, định dạng, bảng, công thức, mục lục.",
+    "body": "<p class=\"lead\">File Word gõ thuê đã về hộp thư. Mở ra trông gọn gàng - nhưng liệu số tiền trong hợp đồng có đúng, có trang nào bị sót, mục lục có khớp số trang? Dành 15-30 phút kiểm tra theo danh sách dưới đây giúp bạn yên tâm trước khi nộp, in hay gửi đi, và yêu cầu sửa kịp thời trong thời gian được chỉnh sửa miễn phí.</p>\n<figure><img src=\"/assets/img/blog/fig-checklist-nghiem-thu.svg\" alt=\"Checklist 10 điểm kiểm tra file gõ thuê\" loading=\"lazy\" width=\"960\"><figcaption>10 điểm kiểm tra: từ số trang, số liệu, tên riêng đến định dạng, mục lục và khả năng mở file trên máy khác.</figcaption></figure>\n\n<h2>Checklist 10 điểm</h2>\n<ol class=\"steps\">\n  <li><b>Đủ trang, đúng thứ tự</b>: đối chiếu tiêu đề đầu - cuối mỗi chương với bản gốc.</li>\n  <li><b>Số liệu</b>: số tiền, ngày tháng, số hiệu văn bản, số điện thoại - đối chiếu từng con số quan trọng.</li>\n  <li><b>Tên riêng</b>: tên người, địa danh, tên cơ quan, thương hiệu đúng chính tả.</li>\n  <li><b>Chính tả, dấu tiếng Việt</b>: chạy kiểm tra chính tả, đọc lướt tìm lỗi hỏi/ngã, dấu sai vị trí.</li>\n  <li><b>Chỗ đánh dấu [?]</b>: tìm (<kbd>Ctrl</kbd> + <kbd>F</kbd>) “[?]”, “[không rõ]” và điền thông tin đúng.</li>\n  <li><b>Định dạng</b>: phông, cỡ chữ, lề, giãn dòng đúng yêu cầu; tiêu đề dùng Heading.</li>\n  <li><b>Bảng biểu</b>: dựng bằng Table thật, đủ cột, tổng cộng khớp bản gốc.</li>\n  <li><b>Công thức</b>: chỉ số trên - dưới, ký hiệu, phân số đúng; công thức sửa được (không phải ảnh).</li>\n  <li><b>Mục lục, đánh số trang</b>: cập nhật (<kbd>F9</kbd>) và kiểm tra khớp nội dung.</li>\n  <li><b>File mở được</b> trên máy khác, xuất PDF không lỗi phông.</li>\n</ol>\n\n<h2>Kiểm tra nhanh mà hiệu quả</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Mẹo</th><th>Cách làm</th></tr>\n  <tr><td>Kiểm tra ngẫu nhiên</td><td>Chọn 3-5 trang rải rác, đối chiếu từng dòng với bản gốc</td></tr>\n  <tr><td>Soát số bằng tổng</td><td>Cộng một cột số trong Excel/Word so với tổng trên bản gốc</td></tr>\n  <tr><td>Hiện ký tự ẩn</td><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>8</kbd> để thấy ngắt dòng, khoảng trắng thừa</td></tr>\n  <tr><td>Navigation Pane</td><td>View → Navigation Pane để thấy cấu trúc tiêu đề</td></tr>\n</table></div>\n<div class=\"callout callout--tip\"><span class=\"callout__ic\">✓</span><div>Bật hiện ký tự ẩn giúp phát hiện ngay những “lỗi trình bày ngầm”: căn lề bằng phím cách, Enter giữa câu - những thứ khiến tài liệu vỡ khi sửa sau này.</div></div>\n\n<h2>Cách yêu cầu chỉnh sửa hiệu quả</h2>\n<ol class=\"steps\">\n  <li>Gom tất cả lỗi vào một lần gửi, tránh gửi lắt nhắt.</li>\n  <li>Ghi vị trí cụ thể: “Trang 12, dòng 5: 1.750.000 → 1.250.000”.</li>\n  <li>Gửi ảnh chụp bản gốc ở chỗ có tranh cãi.</li>\n  <li>Yêu cầu sửa ngoài phạm vi ban đầu (thêm định dạng mới) nên tách riêng để được báo giá.</li>\n</ol>\n<div class=\"callout callout--warn\"><span class=\"callout__ic\">!</span><div>Đừng đợi đến sát hạn nộp mới mở file kiểm tra. Kiểm tra ngay khi nhận để còn thời gian sửa - thời hạn chỉnh sửa miễn phí thường có giới hạn.</div></div>\n\n<h2>Tài liệu quan trọng: kiểm tra kỹ hơn</h2>\n<p>Hợp đồng, hồ sơ pháp lý, báo cáo tài chính nên đối chiếu toàn bộ phần số liệu và điều khoản, tốt nhất do hai người làm độc lập. Với bản dịch, xem thêm <a href=\"/blog/dich-hop-dong-anh-viet\">lỗi dịch hợp đồng hay gặp</a>. Với văn bản hành chính, đối chiếu thể thức theo <a href=\"/blog/go-van-ban-hanh-chinh-thue\">hướng dẫn gõ văn bản hành chính thuê</a>.</p>\n<div class=\"callout callout--info\"><span class=\"callout__ic\">i</span><div>Tại Đánh máy 247, mọi đơn đều qua biên tập viên kiểm tra trước khi giao; bạn vẫn nên tự kiểm tra theo checklist vì bạn hiểu nội dung tài liệu của mình nhất. Yêu cầu sửa gửi ngay trong trang đơn hàng.</div></div>\n\n<h2>Mẫu ghi lỗi gửi bên gõ</h2>\n<div class=\"table-wrap\"><table class=\"tbl\">\n  <tr><th>Trang/dòng</th><th>Đang là</th><th>Sửa thành</th></tr>\n  <tr><td>Tr. 12, dòng 5</td><td>1.750.000</td><td>1.250.000</td></tr>\n  <tr><td>Tr. 20, tiêu đề</td><td>Chương 3 (thiếu Heading)</td><td>Gán Heading 1</td></tr>\n</table></div>\n<div class=\"takeaways\"><b class=\"t\">Điểm chính cần nhớ</b><ul><li>Kiểm tra đủ trang, số liệu, tên riêng trước tiên.</li><li>Tìm các chỗ đánh dấu [?] để xác nhận.</li><li>Bật ký tự ẩn để phát hiện lỗi trình bày ngầm.</li><li>Gom lỗi, ghi vị trí cụ thể, gửi sớm trong thời hạn chỉnh sửa.</li></ul></div>",
+    "faq": [
+      {
+        "q": "Kiểm tra file gõ thuê mất bao lâu?",
+        "a": "Với tài liệu vài chục trang, kiểm tra theo checklist và đối chiếu ngẫu nhiên thường mất khoảng 15-30 phút. Tài liệu pháp lý, số liệu quan trọng nên đối chiếu kỹ hơn."
+      },
+      {
+        "q": "Phát hiện lỗi thì yêu cầu sửa thế nào?",
+        "a": "Ghi cụ thể trang, dòng, nội dung sai và nội dung đúng (có thể gửi ảnh chụp). Tại Đánh máy 247, bạn được chỉnh sửa miễn phí trong 14 ngày trong phạm vi yêu cầu ban đầu."
+      },
+      {
+        "q": "Có nên kiểm tra toàn bộ từng chữ?",
+        "a": "Với tài liệu thông thường, kiểm tra ngẫu nhiên kết hợp các điểm trọng yếu (số liệu, tên riêng) là đủ. Văn bản pháp lý, tài chính nên đối chiếu toàn bộ phần số liệu."
+      }
+    ],
+    "cover": "/assets/img/blog/kiem-tra-file-go-thue-nghiem-thu.svg",
     "author": "Ban biên tập Đánh máy 247",
     "read": 4
   },
