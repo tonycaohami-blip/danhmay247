@@ -355,6 +355,12 @@ async function cleanup() {
   const aff = d.affiliate || {};
   ok("đối tác đăng ký → chờ duyệt, có mã giới thiệu, đăng nhập luôn", r.status === 201 && aff.status === "pending" && /^[A-Z0-9]{4,12}$/.test(aff.code) && affCk.startsWith("dm_aff=") && !("passHash" in aff) && aff.bank.account === "0123456789" && aff.bank.holder === "TRAN MINH ANH");
   ok("đối tác: không cho trùng email", (await j("POST", "/api/aff/register", affReg)).status === 409);
+  d = await (await fetch(B + "/api/me", { headers: { Cookie: [admin, minhCk, affCk].join("; ") } })).json();
+  ok("/api/me: thanh đầu trang biết quản trị, nhân viên, đối tác đang đăng nhập", d.accounts.admin === true && d.accounts.staff && d.accounts.staff.username === "minh.nv" && d.accounts.aff && d.accounts.aff.name === aff.shop && d.accounts.aff.code === "" && !("passHash" in d.accounts.aff));
+  d = await (await fetch(B + "/api/me", { headers: { Cookie: staffCk } })).json();
+  ok("/api/me: nhân viên đã bị khóa thì không hiện", !d.accounts.staff);
+  d = await (await fetch(B + "/api/me")).json();
+  ok("/api/me: chưa đăng nhập thì trống", !d.user && !d.accounts.admin && !d.accounts.staff && !d.accounts.aff);
   ok("đối tác: bắt buộc đồng ý điều khoản, mật khẩu đủ dài", (await j("POST", "/api/aff/register", Object.assign({}, affReg, { email: "x@y.vn", agree: false }))).status === 400 && (await j("POST", "/api/aff/register", Object.assign({}, affReg, { email: "x@y.vn", password: "123" }))).status === 400);
   d = await (await fetch(B + "/api/admin/notifications", { headers: { Cookie: admin } })).json();
   ok("thông báo quản trị: có đối tác mới chờ duyệt", d.events.some((e) => e.kind === "aff:" + aff.id && /Photocopy Minh Anh/.test(e.title)));

@@ -63,7 +63,7 @@
       return DM.api("/admin/summary").then(function (d) {
         data = d; render();
         if (!DM._notifier) startNotifier();
-        DM.setPortalUser({ name: "Quản trị", initials: "QT", sub: "Đang đăng nhập khu vực quản trị", color: "var(--red)", links: [["/quan-tri", "Bảng điều khiển"]], logout: logout });
+        DM.setPortalUser({ key: "admin", name: "Quản trị", initials: "QT", sub: "Đang đăng nhập khu vực quản trị", color: "var(--red)", links: [["/quan-tri", "Bảng điều khiển"]], logout: logout });
         clearInterval(timer);
         timer = setInterval(function () {
           if ($(".modal.is-open")) return; // không làm gián đoạn khi đang thao tác

@@ -1153,3 +1153,13 @@ kbd { display: inline-block; min-width: 26px; padding: 2px 8px; border: 1px soli
 .ap-note { font-size: 12.5px; color: var(--muted); margin: 10px 0 0; }
 .transcript p.is-current { background: #fff5d6; border-radius: 6px; }
 .transcript--srt p { font-family: "Courier New", monospace; font-size: 13px; border-bottom: 1px dashed #e3e5ef; padding-bottom: 8px; }
+
+/* Thanh đầu trang: người đang đăng nhập (khách / nhân viên / đối tác / quản trị) */
+.login__menu .login__who { padding: 0 12px 10px; border-bottom: 1px solid var(--line); margin-bottom: 6px; }
+.login__who b { display: block; font-size: 15px; color: #000; word-break: break-word; }
+.login__who small { display: block; font-size: 13px; color: var(--muted); word-break: break-all; }
+.login__more { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); padding: 12px 12px 4px; border-top: 1px solid var(--line); margin-top: 6px; }
+.login__menu a.login__alt { display: flex; align-items: center; gap: 10px; }
+.login__alt .login__avatar { flex: 0 0 30px; }
+.login__alt b { display: block; font-size: 14px; }
+.login__alt small { display: block; font-size: 12px; color: var(--muted); }

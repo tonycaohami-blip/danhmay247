@@ -70,10 +70,11 @@
 
   /* ---------- Tài khoản (đăng nhập bằng liên kết gửi qua email) ---------- */
   DM.me = null;
+  DM.accounts = {};
   DM.auth = {
     current: function () { return DM.me; },
     load: function () {
-      return DM.api("/me").then(function (d) { DM.me = d.user; DM.emailReady = d.emailReady; return d.user; }, function () { DM.me = null; return null; });
+      return DM.api("/me").then(function (d) { DM.me = d.user; DM.accounts = d.accounts || {}; DM.emailReady = d.emailReady; return d.user; }, function () { DM.me = null; DM.accounts = {}; return null; });
     },
     requestLink: function (email) { return DM.api("/auth/request-link", { body: { email: email } }); },
     logout: function () { return DM.api("/auth/logout", { method: "POST" }).then(function () { DM.me = null; }); }
@@ -238,24 +239,38 @@
   }
 
   /* ---------- Widget đăng nhập (liên kết qua email, không cần mật khẩu) ---------- */
+  /** Mọi tài khoản đang đăng nhập trên trình duyệt này (khách, nhân viên, đối tác, quản trị) - cookie phiên được lưu nên chuyển trang vẫn giữ. */
+  function identities() {
+    var u = DM.auth.current(), a = DM.accounts || {}, out = [];
+    if (u) out.push({ key: "user", name: u.name, short: u.name.split(" ").slice(-1)[0], sub: u.email, color: "var(--navy)",
+      links: [["/tai-khoan", "Đơn hàng của tôi"], ["/tai-khoan#profile", "Hồ sơ cá nhân"], ["/dat-hang", "Đặt hàng mới"]], logout: "/auth/logout" });
+    if (a.staff) out.push({ key: "staff", name: a.staff.name, short: a.staff.name.split(" ").slice(-1)[0], sub: "Nhân viên · " + a.staff.username, color: "var(--green)",
+      links: [["/nhan-vien", "Đơn được giao"]], logout: "/staff/logout" });
+    if (a.aff) out.push({ key: "aff", name: a.aff.name, sub: "Đối tác" + (a.aff.code ? " · mã " + a.aff.code : " · chờ duyệt"), color: "var(--amber, #f3a33b)",
+      links: [["/doi-tac-tai-khoan", "Trang đối tác"], ["/doi-tac", "Chương trình đối tác"]], logout: "/aff/logout" });
+    if (a.admin) out.push({ key: "admin", name: "Quản trị", initials: "QT", sub: "Khu vực quản trị", color: "var(--red)",
+      links: [["/quan-tri", "Bảng điều khiển quản trị"]], logout: "/admin/logout" });
+    return out;
+  }
+  DM.identities = identities;
+
   function renderLogin() {
     var box = $("#login");
     if (!box) return;
-    var u = DM.auth.current(), p = DM.portalUser;
+    var ids = identities(), p = DM.portalUser;
     var wasOpen = box.classList.contains("is-open");
-    if (p) {
-      // Trang quản trị/nhân viên: hiện người đang đăng nhập khu vực đó
+    // Trang quản trị/nhân viên/đối tác hiện người của khu vực đó; trang khác hiện tài khoản ưu tiên (khách → nhân viên → đối tác → quản trị)
+    var main = p ? (ids.filter(function (x) { return x.key === p.key; })[0] || Object.assign({ key: "portal" }, p)) : ids[0];
+    if (main) {
+      var others = ids.filter(function (x) { return x !== main && x.key !== main.key; });
       box.innerHTML =
-        '<button class="login__toggle" aria-expanded="false" aria-controls="login-panel"><span class="login__avatar" style="background:' + (p.color || "var(--navy)") + '" aria-hidden="true">' + DM.esc(p.initials || DM.initials(p.name)) + "</span><span class=\"login__name\">" + DM.esc(p.name) + "</span></button>" +
-        '<div class="login__panel login__menu" id="login-panel"><div class="login__email">' + DM.esc(p.sub || "") + "</div>" +
-        (p.links || []).map(function (l) { return '<a href="' + l[0] + '">' + DM.esc(l[1]) + "</a>"; }).join("") +
-        '<button type="button" data-portal-logout>Đăng xuất</button></div>';
-    } else if (u) {
-      box.innerHTML =
-        '<button class="login__toggle" aria-expanded="false" aria-controls="login-panel"><span class="login__avatar" aria-hidden="true">' + DM.esc(DM.initials(u.name)) + "</span>" + DM.esc(u.name.split(" ").slice(-1)[0]) + "</button>" +
-        '<div class="login__panel login__menu" id="login-panel"><div class="login__email">' + DM.esc(u.email) + "</div>" +
-        '<a href="/tai-khoan">Đơn hàng của tôi</a><a href="/tai-khoan#profile">Hồ sơ cá nhân</a><a href="/dat-hang">Đặt hàng mới</a>' +
-        '<button type="button" data-logout>Đăng xuất</button></div>';
+        '<button class="login__toggle" aria-expanded="false" aria-controls="login-panel" title="' + DM.esc(main.name + " - " + main.sub) + '"><span class="login__avatar" style="background:' + (main.color || "var(--navy)") + '" aria-hidden="true">' + DM.esc(main.initials || DM.initials(main.name)) + '</span><span class="login__name">' + DM.esc(main.short || main.name) + "</span></button>" +
+        '<div class="login__panel login__menu" id="login-panel"><div class="login__who"><b>' + DM.esc(main.name) + "</b><small>" + DM.esc(main.sub || "") + "</small></div>" +
+        (main.links || []).map(function (l) { return '<a href="' + l[0] + '">' + DM.esc(l[1]) + "</a>"; }).join("") +
+        '<button type="button" data-out="' + main.key + '">Đăng xuất</button>' +
+        (others.length ? '<div class="login__more">Cũng đang đăng nhập</div>' + others.map(function (x) {
+          return '<a class="login__alt" href="' + x.links[0][0] + '"><span class="login__avatar" style="background:' + x.color + '" aria-hidden="true">' + DM.esc(x.initials || DM.initials(x.name)) + "</span><span><b>" + DM.esc(x.name) + "</b><small>" + DM.esc(x.sub) + "</small></span></a>";
+        }).join("") : "") + "</div>";
     } else {
       box.innerHTML =
         '<button class="login__toggle" aria-expanded="false" aria-controls="login-panel">Đăng nhập</button>' +
@@ -290,13 +305,17 @@
     });
     var close = $(".login__close", box);
     if (close) close.addEventListener("click", function () { box.classList.remove("is-open"); toggle.focus(); });
-    var plo = $("[data-portal-logout]", box);
-    if (plo) plo.addEventListener("click", function () { box.classList.remove("is-open"); if (DM.portalUser && DM.portalUser.logout) DM.portalUser.logout(); });
-    var lo = $("[data-logout]", box);
-    if (lo) lo.addEventListener("click", function () {
-      DM.auth.logout().then(function () {
-        box.classList.remove("is-open"); renderLogin(); DM.toast("Bạn đã đăng xuất.");
-        document.dispatchEvent(new CustomEvent("dm:auth"));
+    var out = $("[data-out]", box);
+    if (out) out.addEventListener("click", function () {
+      var key = out.dataset.out, id = identities().filter(function (x) { return x.key === key; })[0];
+      box.classList.remove("is-open");
+      // Đang ở trang khu vực đó: để trang tự đăng xuất (dừng thông báo, về màn hình đăng nhập)
+      if (DM.portalUser && DM.portalUser.key === key && DM.portalUser.logout) return DM.portalUser.logout();
+      if (!id) return;
+      DM.api(id.logout, { method: "POST" }).then(function () {
+        if (key === "user") DM.me = null; else DM.accounts[key] = key === "admin" ? false : null;
+        renderLogin(); DM.toast("Đã đăng xuất " + (key === "user" ? "tài khoản khách hàng." : id.sub.split(" · ")[0].toLowerCase() + "."));
+        if (key === "user") document.dispatchEvent(new CustomEvent("dm:auth"));
       }, function (err) { DM.toast(err.message, "error"); });
     });
     var form = $("form", box);
@@ -304,7 +323,12 @@
   }
   DM.renderLogin = renderLogin;
   /** Đặt/xóa người dùng khu vực quản trị hoặc nhân viên hiển thị trên thanh đầu trang. */
-  DM.setPortalUser = function (p) { DM.portalUser = p || null; renderLogin(); };
+  DM.setPortalUser = function (p) {
+    DM.portalUser = p || null;
+    // Đồng bộ với phiên thật: trang khu vực vừa đăng nhập/đăng xuất thì tải lại danh sách tài khoản
+    DM.auth.load().then(renderLogin);
+    renderLogin();
+  };
   document.addEventListener("click", function (e) {
     var box = $("#login");
     if (box && box.classList.contains("is-open") && !box.contains(e.target) && window.innerWidth > 1099) {

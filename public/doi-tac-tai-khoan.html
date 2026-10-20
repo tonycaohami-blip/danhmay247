@@ -65,7 +65,7 @@
     function load() {
       return DM.api("/aff/me").then(function (d) {
         data = d; me = d.affiliate; render();
-        DM.setPortalUser({ name: me.shop, initials: DM.initials(me.shop), sub: "Đối tác · mã " + me.code, color: "var(--amber, #f3a33b)", links: [["/doi-tac-tai-khoan", "Trang đối tác"], ["/doi-tac", "Chương trình đối tác"]], logout: logout });
+        DM.setPortalUser({ key: "aff", name: me.shop, initials: DM.initials(me.shop), sub: "Đối tác · mã " + me.code, color: "var(--amber, #f3a33b)", links: [["/doi-tac-tai-khoan", "Trang đối tác"], ["/doi-tac", "Chương trình đối tác"]], logout: logout });
         if (!DM._notifier) DM.notifier({
           key: "aff_" + me.id, interval: 30000, empty: "Chưa có thông báo. Khi khách đặt đơn bằng mã của bạn, thông báo sẽ hiện ở đây.",
           fetch: function () { return DM.api("/aff/notifications"); },

@@ -299,9 +299,21 @@ router.post("/auth/logout", (req, res) => {
   res.json({ ok: true });
 });
 
+/**
+ * Ai đang đăng nhập trên trình duyệt này: khách hàng (user) và các khu vực quản trị / nhân viên / đối tác (accounts),
+ * để thanh đầu trang ở mọi trang hiện đúng tên người đăng nhập. Phiên nhân viên/đối tác đã khóa hoặc đổi mật khẩu bị bỏ qua.
+ */
 router.get("/me", wrap(async (req, res) => {
   const u = req.userEmail && (await db.users.get(req.userEmail));
-  res.json({ user: u ? { email: u.email, name: u.name, phone: u.phone || "" } : null, emailReady: mail.ready });
+  const accounts = { admin: !!req.isAdmin, staff: null, aff: null };
+  const s = req.staffSession;
+  const st = s && (await db.staff.get(s.id));
+  if (st && st.active && (st.sessionVersion || 1) === s.v) accounts.staff = { name: st.name, username: st.username };
+  const f = req.affSession;
+  const a = f && (await db.affiliates.get(f.id));
+  if (a && a.status !== "locked" && (a.sessionVersion || 1) === f.v) accounts.aff = { name: a.shop || a.name, code: a.status === "active" ? a.code : "" };
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ user: u ? { email: u.email, name: u.name, phone: u.phone || "" } : null, accounts, emailReady: mail.ready });
 }));
 
 router.patch("/me", wrap(async (req, res) => {

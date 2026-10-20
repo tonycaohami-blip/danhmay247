@@ -94,7 +94,7 @@
     function render() {
       clearInterval(timer);
       if (!DM._notifier) startNotifier();
-      DM.setPortalUser({ name: me.name, sub: "Nhân viên · " + me.username, color: "var(--green)", links: [["/nhan-vien", "Đơn được giao"]], logout: logout });
+      DM.setPortalUser({ key: "staff", name: me.name, sub: "Nhân viên · " + me.username, color: "var(--green)", links: [["/nhan-vien", "Đơn được giao"]], logout: logout });
       app.innerHTML =
         '<div class="account"><aside class="account__side">' +
         '<div class="account__user"><span class="login__avatar" style="background:var(--green)" aria-hidden="true">' + DM.esc(DM.initials(me.name)) + "</span><div><b>" + DM.esc(me.name) + "</b><small>Nhân viên · " + DM.esc(me.username) + "</small></div></div>" +
