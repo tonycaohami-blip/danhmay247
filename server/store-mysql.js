@@ -315,6 +315,23 @@ const orders = {
     }
   },
 
+  /** Xóa hẳn đơn cùng tệp, tin nhắn, lịch sử, ghi chú nội bộ (bảng giao dịch ngân hàng giữ nguyên làm nhật ký). */
+  async remove(id) {
+    const conn = await pool.getConnection();
+    try {
+      await conn.beginTransaction();
+      for (const t of [T.files, T.messages, T.history, T.internal]) await conn.query(`DELETE FROM \`${t}\` WHERE order_id = ?`, [id]);
+      const [r] = await conn.query(`DELETE FROM \`${T.orders}\` WHERE id = ?`, [id]);
+      await conn.commit();
+      return r.affectedRows > 0;
+    } catch (e) {
+      await conn.rollback();
+      throw e;
+    } finally {
+      conn.release();
+    }
+  },
+
   async get(id) {
     const rows = await q(`SELECT * FROM \`${T.orders}\` WHERE id = ?`, [id]);
     return rows.length ? (await hydrate(rows))[0] : null;

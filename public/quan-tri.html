@@ -154,6 +154,28 @@
       $$("[data-manage]").forEach(function (b) { b.addEventListener("click", function () { manage(b.dataset.manage); }); });
     }
 
+    /** Hộp xác nhận trước khi xóa: phải bấm "Xác nhận xóa" mới gửi yêu cầu. */
+    function confirmDelete(o, parent) {
+      var c = DM.modal.open(
+        '<h2 class="modal__title">Xóa đơn #' + o.id + "?</h2>" +
+        '<p>Đơn của <b>' + DM.esc(o.name) + "</b> (" + DM.esc(o.typeLabel) + ", " + DM.fmt(o.price.total) + ") cùng toàn bộ tệp, tin nhắn và lịch sử sẽ bị <b>xóa vĩnh viễn</b>, không thể khôi phục.</p>" +
+        (o.paidAt ? '<div class="alert alert--info">Lưu ý: đơn này <b>đã thanh toán</b>. Hãy chắc chắn bạn đã xử lý hoàn tiền hoặc lưu chứng từ trước khi xóa.</div>' : "") +
+        '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px"><button type="button" class="button button--sm button--black" data-no>Hủy</button><button type="button" class="button button--sm" data-yes>Xác nhận xóa</button></div>',
+        { small: true });
+      $("[data-no]", c).addEventListener("click", function () { DM.modal.close(c); });
+      $("[data-yes]", c).addEventListener("click", function () {
+        var b = this;
+        b.disabled = true; b.textContent = "Đang xóa…";
+        DM.api("/admin/orders/" + o.id, { method: "DELETE" }).then(function () {
+          data.orders = data.orders.filter(function (x) { return x.id !== o.id; });
+          DM.modal.close(c);
+          parent._onclose = null; DM.modal.close(parent);
+          DM.toast("Đã xóa đơn #" + o.id + ".");
+          load();
+        }, function (er) { b.disabled = false; b.textContent = "Xác nhận xóa"; DM.toast(er.message, "error"); });
+      });
+    }
+
     function updateOrder(o) {
       var i = data.orders.findIndex(function (x) { return x.id === o.id; });
       if (i > -1) data.orders[i] = o;
@@ -202,7 +224,8 @@
         '<div class="field"><label class="field__label" for="m-status">Trạng thái</label><select class="select" id="m-status">' +
         Object.keys(ST).map(function (k) { return '<option value="' + k + '"' + (k === o.status ? " selected" : "") + ">" + ST[k].label + "</option>"; }).join("") + "</select></div>" +
         '<div class="field"><label class="field__label" for="m-notes">Ghi chú riêng của quản trị (khách và nhân viên đều không thấy)</label><textarea class="textarea" id="m-notes" style="min-height:70px">' + DM.esc(o.notes || "") + "</textarea></div>" +
-        '<button type="button" class="button button--sm button--black" data-save>Lưu trạng thái &amp; ghi chú</button>' +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between"><button type="button" class="button button--sm button--black" data-save>Lưu trạng thái &amp; ghi chú</button>' +
+        '<button type="button" class="button button--sm" data-delete>Xóa đơn hàng</button></div>' +
         '<div class="field__label" style="margin-top:22px">Gửi tệp hoàn thành cho khách</div>' +
         '<form id="m-up" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><input type="file" id="m-file" multiple class="input" style="padding:8px;flex:1;min-width:200px">' +
         '<label class="check"><input type="checkbox" id="m-done" checked><span class="check__box"></span><span>Đánh dấu hoàn thành</span></label>' +
@@ -229,6 +252,7 @@
       draw(); drawInternal();
       var reopen = function (x) { updateOrder(x); m._onclose = null; DM.modal.close(m); manage(x.id); };
       var fail = function (er) { DM.toast(er.message, "error"); };
+      $("[data-delete]", m).addEventListener("click", function () { confirmDelete(o, m); });
       $("[data-assign]", m).addEventListener("click", function () {
         var sid = $("#m-staff", m).value;
         DM.api("/admin/orders/" + o.id, { method: "PATCH", body: { assignedTo: sid || null } }).then(function (d) {

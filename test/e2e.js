@@ -243,6 +243,18 @@ async function cleanup() {
   d = await (await fetch(B + "/api/orders/" + id2, { headers: { "X-Order-Token": token2 } })).json();
   ok("khách thấy tệp như do Đánh máy 247 gửi", d.order.files.some((f) => f.name === "Kết quả nhân viên.docx" && f.by === "admin"));
 
+  // Xóa đơn
+  const f3 = mk({ name: "Đơn Thử Xóa", email: "xoa@khach.vn" }); f3.append("files", new Blob(["xoa"]), "Xoa.pdf");
+  d = await (await fetch(B + "/api/orders", { method: "POST", headers: H, body: f3 })).json();
+  const id3 = d.order.id, dir3 = path.join(config.UPLOAD_DIR, id3);
+  r = await j("DELETE", "/api/admin/orders/" + id3, null, {});
+  ok("xóa đơn cần đăng nhập quản trị", r.status === 401 && !!(await db.orders.get(id3)));
+  r = await j("DELETE", "/api/admin/orders/" + id3, null, { Cookie: admin });
+  await new Promise((ok2) => setTimeout(ok2, 150));
+  ok("quản trị xóa đơn (kèm tệp)", r.ok && !(await db.orders.get(id3)) && !fs.existsSync(dir3));
+  r = await j("DELETE", "/api/admin/orders/" + id3, null, { Cookie: admin });
+  ok("xóa đơn không tồn tại → 404", r.status === 404);
+
   // --- Thông báo
   await j("POST", "/api/admin/orders/" + id2 + "/internal", { text: "Cảm ơn Lan, bản rất tốt" }, { Cookie: admin });
   r = await fetch(B + "/api/admin/notifications", { headers: { Cookie: admin } });

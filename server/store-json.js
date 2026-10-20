@@ -108,6 +108,13 @@ const orders = {
     save();
     return true;
   },
+  async remove(id) {
+    const i = data.orders.findIndex((o) => o.id === id);
+    if (i < 0) return false;
+    data.orders.splice(i, 1);
+    flush();
+    return true;
+  },
   async addReceived(id, amount) { const o = find(id); if (o) { o.receivedAmount = (o.receivedAmount || 0) + amount; save(); } },
   async addHistory(id, status, at) { const o = find(id); if (o) { o.history.push({ status, at: at || Date.now() }); save(); } },
   async addMessage(id, me, from, text, at) { const o = find(id); if (o) { o.messages.push({ me: !!me, from, text, at: at || Date.now() }); save(); } },

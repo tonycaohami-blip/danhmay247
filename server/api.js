@@ -437,6 +437,16 @@ router.patch("/admin/orders/:id", adminOnly, wrap(async (req, res) => {
   res.json({ order: publicOrder(await db.orders.get(o.id), true) });
 }));
 
+/** Xóa vĩnh viễn một đơn (kèm toàn bộ tệp trên máy chủ). Không cho xóa đơn đã chi trả hoa hồng để giữ khớp sổ chi trả đối tác. */
+router.delete("/admin/orders/:id", adminOnly, wrap(async (req, res) => {
+  const o = await getOrderOr404(req.params.id);
+  if (o.affPaidAt) throw new HttpError(409, "Đơn này đã được chi trả hoa hồng cho đối tác nên không thể xóa (để giữ đúng sổ chi trả). Hãy chuyển sang trạng thái “Đã hủy” nếu cần.");
+  if (!(await db.orders.remove(o.id))) throw new HttpError(404, "Không tìm thấy đơn hàng.");
+  const dir = path.join(config.UPLOAD_DIR, o.id);
+  if (/^[A-Za-z0-9_-]+$/.test(o.id) && dir.startsWith(config.UPLOAD_DIR + path.sep)) fs.rm(dir, { recursive: true, force: true }, () => {});
+  res.json({ ok: true });
+}));
+
 router.post("/admin/orders/:id/messages", adminOnly, wrap(async (req, res) => {
   const o = await getOrderOr404(req.params.id);
   const text = str(req.body && req.body.text, 2000);
