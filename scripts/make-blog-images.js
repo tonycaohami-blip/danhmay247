@@ -744,6 +744,22 @@ const covers = {
     });
     return g + pill(450, 470, 300, "Đối tác Đánh máy 247", INK);
   })()),
+  "huong-dan-chuong-trinh-doi-tac-danh-may-247": svg("#b71c1c", "#ef5350", `
+    ${txt(80, 150, "CẨM NANG ĐỐI TÁC", { size: 30, weight: 800, fill: "#ffe0e0" })}
+    ${txt(80, 225, "Từng bước", { size: 64, weight: 800, fill: "#fff" })}
+    ${txt(80, 290, "có ảnh thực tế", { size: 40, weight: 700, fill: "#fff" })}
+    ${pill(80, 345, 250, "Đăng ký → In QR", INK)}${pill(80, 405, 250, "Theo dõi đơn", BLUE)}${pill(80, 465, 250, "Nhận hoa hồng", GREEN)}
+    ${card(560, 90, 560, 440)}
+    <rect x="560" y="90" width="560" height="44" rx="18" fill="#eceef5"/><rect x="560" y="116" width="560" height="18" fill="#eceef5"/>
+    <circle cx="588" cy="112" r="7" fill="${RED}"/><circle cx="612" cy="112" r="7" fill="${AMBER}"/><circle cx="636" cy="112" r="7" fill="${GREEN}"/>
+    ${txt(600, 186, "Photocopy của bạn", { size: 26, weight: 800 })}
+    ${[["Lượt quét", "24", INK], ["Đơn", "8", INK], ["Chờ chi trả", "+30%", GREEN]].map(([k, v, c], i) => `<rect x="${600 + i * 165}" y="210" width="150" height="86" rx="12" fill="#f5f6fa"/>` + txt(614 + i * 165, 240, k, { size: 15, fill: "#6b6e80" }) + txt(614 + i * 165, 280, v, { size: 30, weight: 800, fill: c })).join("")}
+    ${qrish(600, 320, 170)}
+    ${txt(800, 360, "Mã giới thiệu", { size: 16, fill: "#6b6e80" })}
+    ${txt(800, 400, "MINHAN261", { size: 32, weight: 800, fill: "#283593" })}
+    <rect x="800" y="430" width="140" height="40" rx="8" fill="${RED}"/>${txt(870, 456, "In poster A4", { size: 16, weight: 700, anchor: "middle", fill: "#fff" })}
+    <rect x="952" y="430" width="128" height="40" rx="8" fill="#fff" stroke="${INK}" stroke-width="2"/>${txt(1016, 456, "Tải mã QR", { size: 16, weight: 700, anchor: "middle" })}
+  `),
   "marketing-tiem-photocopy-ma-qr-zalo": svg("#c2185b", "#ec407a", `
     ${card(150, 90, 330, 450)}
     ${txt(315, 150, "ĐÁNH MÁY THUÊ", { size: 26, weight: 800, anchor: "middle", fill: RED })}
